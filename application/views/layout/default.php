@@ -54,7 +54,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<?php if(!empty($this->session->userdata('empresa'))): ?>
+				<?php $empresa=$this->session->userdata('empresa'); if(!empty($empresa)): ?>
 					<a id="logo" class="navbar-brand" href="<?= base_url(); ?>"><img style="max-height:30px" class="logo" 
 						src="<?= base_url('assets/images/'.$this->session->userdata("empresa").'.png'); ?>"></a>
 				<?php else: ?>
