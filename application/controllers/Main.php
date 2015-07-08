@@ -32,7 +32,8 @@ class Main extends CI_Controller {
 
 		// Send Client Request
 		$objOAuthService = new Google_Service_OAuth2($client);
-    	if(empty($this->session->userdata('id'))){
+		$idU=$this->session->userdata('id');
+    	if(empty($idU)){
 			// Add Access Token to Session
 			if (isset($_GET['code'])) {
 				$client->authenticate($_GET['code']);
@@ -145,8 +146,8 @@ class Main extends CI_Controller {
 			$this->layout->title('Advanzer - Login');
 			$re="main/login";
 		}
-		if (!empty($this->input->post('email'))) {
-    		$email = $this->input->post('email');
+		$email = $this->input->post('email');
+		if (!empty($email)) {
     		$password = $this->input->post('password');
     		$result = $this->user_model->do_login($email,$password);
 
@@ -171,7 +172,8 @@ class Main extends CI_Controller {
     }
 
     private function verify_session(){
-    	if (!empty($this->session->userdata('id')))
+    	$idU=$this->session->userdata('id');
+    	if (!empty($idU))
     		redirect(base_url('main'));
     	/*if (empty($this->session->userdata('id')))
     		redirect(base_url('main/login'));*/
