@@ -1,0 +1,102 @@
+img.user_img{
+	border-radius:50% 50% 50% 50%;
+	border:3px solid white;
+}
+img.logo{
+	/*-webkit-filter: drop-shadow(0px 0px 2px #fff);
+	filter: drop-shadow(2px 2px 2px #fff);
+    /*-webkit-filter: drop-shadow(0px 0px 2px #fff);
+    filter:drop-shadow(0px 0px 2px #fff);
+    filter: url(#drop-shadow);*/
+    -ms-filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=12, OffY=12, Color='#FFF')";
+    -webkit-filter: drop-shadow(0px 0px 2px #fff);
+    -webkit-filter: box-shadow(0px 0px 2px #fff);
+    filter: drop-shadow(0px 0px 2px #fff);
+}
+a.ghost{
+    /* utilizamos estas propiedades para centrar el botón */
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    -ms-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+
+    /* definimos los estilos del texto */
+    font-family: Tahoma, Verdana, Segoe, sans-serif;
+    font-size: 1.5em;
+    letter-spacing: 0.1em;
+    color: #000;
+    text-decoration: none;
+    text-transform: uppercase;
+
+    /* agregamos un borde y lo separamos del texto */
+    border: 0.15em solid #fff;
+    padding: 0.2em 0.3em;
+
+    /* animamos el cambio de colores */
+    -webkit-transition: color 300ms, background 500ms, border-color 700ms;
+    transition: color 300ms, background 500ms, border-color 700ms;
+}
+
+a.ghost:hover {
+    background: #828282;
+    border-color: #FFFFFF;
+    color: black;
+    text-transform: uppercase;
+}
+div.iframe{
+    padding:10px;
+    background:#000;
+    webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+    width:80%;
+    height:500px;
+    margin:0 
+    auto;overflow:hidden;
+}
+.dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-submenu>.dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -6px;
+    margin-left: -1px;
+    -webkit-border-radius: 0 6px 6px 6px;
+    -moz-border-radius: 0 6px 6px;
+    border-radius: 0 6px 6px 6px;
+}
+
+.dropdown-submenu:hover>.dropdown-menu {
+    display: block;
+}
+
+.dropdown-submenu>a:after {
+    display: block;
+    content: " ";
+    float: right;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+    border-width: 5px 0 5px 5px;
+    border-left-color: #ccc;
+    margin-top: 5px;
+    margin-right: -10px;
+}
+
+.dropdown-submenu:hover>a:after {
+    border-left-color: #fff;
+}
+
+.dropdown-submenu.pull-left {
+    float: none;
+}
+
+.dropdown-submenu.pull-left>.dropdown-menu {
+    left: -100%;
+    margin-left: 10px;
+    -webkit-border-radius: 6px 0 6px 6px;
+    -moz-border-radius: 6px 0 6px 6px;
+    border-radius: 6px 0 6px 6px;
+}
