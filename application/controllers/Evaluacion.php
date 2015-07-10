@@ -69,11 +69,8 @@ class Evaluacion extends CI_Controller {
                     break;
             }
     		$valor = $this->input->post('valor');
-<<<<<<< HEAD
     		$resultados = $this->evaluacion_model->getByText($valor,$tipo);
-=======
     		$resultados = $this->evaluacion_model->getByText($valor);
->>>>>>> 01ed01f4ec342ba3dbe36292789a3beb593a2028
     		foreach ($resultados as $ev) : ?>
     			<tr>
 		          <td><img height="25px" src="<?= base_url('assets/images/fotos')."/".$ev->foto;?>"></td>
@@ -149,11 +146,8 @@ class Evaluacion extends CI_Controller {
         if($this->input->post('evaluador')) {
             $evaluador = $this->input->post('evaluador');
             $asignados = $this->evaluacion_model->getByEvaluador($evaluador,$tipo);
-<<<<<<< HEAD
             $colaboradores = $this->evaluacion_model->getNotByEvaluador($evaluador,$asignados,$tipo);
-=======
             $colaboradores = $this->evaluacion_model->getNotByEvaluador($evaluador,$asignados);
->>>>>>> 01ed01f4ec342ba3dbe36292789a3beb593a2028
             foreach($colaboradores as $colaborador) : ?>
                 <option value="<?= $colaborador->id;?>"><?= $colaborador->nombre ." - ". $colaborador->posicion;?></option>
           <?php endforeach;
@@ -182,11 +176,8 @@ class Evaluacion extends CI_Controller {
             $data['err_msg']=$err_msg;
         $data['evaluador']=$this->user_model->searchById($evaluador);
         $data['asignados']=$this->evaluacion_model->getByEvaluador($evaluador,1);
-<<<<<<< HEAD
         $data['no_asignados'] = $this->evaluacion_model->getNotByEvaluador($evaluador,$data['asignados'],1);
-=======
         $data['no_asignados'] = $this->evaluacion_model->getNotByEvaluador($evaluador,$data['asignados']);
->>>>>>> 01ed01f4ec342ba3dbe36292789a3beb593a2028
         $this->layout->title('Capital Humano - Asigna Colaboradores');
         $this->layout->view('evaluacion/asignar_colaborador360',$data);
     }
@@ -242,16 +233,13 @@ class Evaluacion extends CI_Controller {
             $data['err_msg'] = $err_msg;
         if($msg!=null)
             $data['msg'] = $msg;
-<<<<<<< HEAD
         $data['evaluadores'] = $this->user_model->getAll(1);
         $this->layout->title('Capital Humano - Nuevo Evaluador 360');
         $this->layout->view('evaluacion/nuevo_evaluador360',$data);
     }
 }
-=======
         $data['evaluadores'] = $this->user_model->getAll();
         $this->layout->title('Capital Humano - Nuevo Evaluador 360');
         $this->layout->view('evaluacion/nuevo_evaluador360',$data);
     }
 }
->>>>>>> 01ed01f4ec342ba3dbe36292789a3beb593a2028
