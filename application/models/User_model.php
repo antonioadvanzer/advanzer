@@ -106,9 +106,16 @@ class User_model extends CI_Model{
 		return $this->db->get('Users')->result();
 	}
 
+<<<<<<< HEAD
 	function getAll($tipo=null) {
 		if($tipo == 1)
 			$this->db->where_in('posicion',array('Gerente / Master','Gerente Sr / Experto','Director'));
 		return $this->db->order_by('nombre','asc')->get('Users')->result();
 	}
 }
+=======
+	function getAll() {
+		return $this->db->order_by('nombre','asc')->get('Users')->result();
+	}
+}
+>>>>>>> 01ed01f4ec342ba3dbe36292789a3beb593a2028
