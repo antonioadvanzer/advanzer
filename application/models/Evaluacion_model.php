@@ -53,6 +53,7 @@ class Evaluacion_model extends CI_Model{
 		$this->db->join('Users Us','Ev.evaluado = Us.id');
 		return $this->db->get()->result();
 	}
+
 	function getNotByEvaluador($evaluador,$ignore,$tipo) {
 		if(count($ignore)>0){
 			$array_temp=array();
@@ -80,6 +81,39 @@ class Evaluacion_model extends CI_Model{
 	function delColaboradorFromEvaluador($evaluador,$colaborador,$tipo) {
 		$this->db->where(array('evaluador'=>$evaluador,'evaluado'=>$colaborador,'tipo'=>$tipo));
 		$this->db->delete('Evaluadores');
+		if($this->db->affected_rows() == 1)
+			return true;
+		else
+			return false;
+	}
+
+	function getEvaluacionesSinAplicar() {
+		$this->db->where('estatus',0);
+		$this->db->order_by('nombre','desc');
+		return $this->db->get('Evaluaciones')->result();
+	}
+
+	function gestionar($evaluacion,$inicio,$fin) {
+		$this->db->where('id',$evaluacion);
+		$this->db->update('Evaluaciones',array('inicio'=>$inicio,'fin'=>$fin));
+		if($this->db->affected_rows() == 1)
+			return true;
+		else
+			return false;
+	}
+
+	function getEvaluacionById($id) {
+		$this->db->where('id',$id);
+		return $this->db->get('Evaluaciones')->first_row();
+	}
+
+	function create($nombre,$descripcion,$inicio,$fin) {
+		$datos=array('nombre'=>$nombre,'descripcion'=>$descripcion);
+		if($inicio!="")
+			$datos['inicio']=$inicio;
+		if($fin!="")
+			$datos['fin']=$fin;
+		$this->db->insert('Evaluaciones',$datos);
 		if($this->db->affected_rows() == 1)
 			return true;
 		else

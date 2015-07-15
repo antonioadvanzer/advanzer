@@ -64,7 +64,7 @@ class User_model extends CI_Model{
 			return FALSE;
 	}
 
-	function create($nombre,$email,$empresa,$tipo,$area,$posicion,$estatus) {
+	function create($nombre,$email,$empresa,$tipo,$area,$posicion,$estatus,$password,$requisicion,$admin) {
 		$datos=array(
 			'nombre'=>$nombre,
 			'email'=>$email,
@@ -72,7 +72,10 @@ class User_model extends CI_Model{
 			'tipo'=>$tipo,
 			'area'=>$area,
 			'estatus'=>$estatus,
-			'posicion'=>$posicion
+			'posicion'=>$posicion,
+			'password'=>$password,
+			'requisicion'=>$requisicion,
+			'admin'=>$admin
 		);
 		try {
 			$this->db->insert('Users',$datos);

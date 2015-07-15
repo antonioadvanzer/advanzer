@@ -62,6 +62,7 @@ $route['administrar_dominios'] = 'dominio';
 $route['administrar_dominios/(:num)'] = 'dominio/index/(:num)';
 $route['evaluadores360'] = 'evaluacion/evaluadores360';
 $route['evaluadores360/(:num)'] = 'evaluacion/evaluadores360/(:num)';
+$route['gestion_evaluaciones'] = 'evaluacion/gestion';
 /*
 $route['estructura_organizacional'] = 'info/estructura';
 $route['cartas_constancias'] = 'info/cartas_constancias';

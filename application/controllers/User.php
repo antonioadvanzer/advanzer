@@ -71,7 +71,6 @@ class User extends CI_Controller {
     	//set preferences
     	$config['upload_path'] = './assets/images/fotos/';
         $config['allowed_types'] = 'jpg|png|jpeg|gif';
-        $config['max_size']    = '100';
         $ext = explode(".", $_FILES['foto']['name']);
         $config['file_name'] = $id.'.'.end($ext);
         $config['overwrite'] = TRUE;
@@ -101,6 +100,8 @@ class User extends CI_Controller {
     	$area = $this->input->post('area');
     	$posicion = $this->input->post('posicion');
     	$estatus = $this->input->post('estatus');
+        $requisicion=$this->inout->post('requisicion');
+        $admin=$this->input->post('admin');
     	if($this->user_model->update($id,$nombre,$email,$tipo,$area,$posicion,$estatus)){
     		$msg = "Perfil actualizado correctamente";
     		$this->index($msg);
@@ -170,7 +171,11 @@ class User extends CI_Controller {
     	$area = $this->input->post('area');
     	$posicion = $this->input->post('posicion');
     	$estatus = $this->input->post('estatus');
-    	if($id = $this->user_model->create($nombre,$email,$empresa,$tipo,$area,$posicion,$estatus)){
+        $temp=explode('.',$email);
+        $password=$temp[0];
+        $requisicion=$this->input->post('requisicion');
+        $admin=$this->input->post('admin');
+    	if($id = $this->user_model->create($nombre,$email,$empresa,$tipo,$area,$posicion,$estatus,$password,$requisicion,$admin)){
     		$msg="Perfil: <b>$nombre</b> agregado correctamente";
     		$this->ver($id,null,$msg);
     	}else{

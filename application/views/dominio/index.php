@@ -20,9 +20,15 @@
       </div>
     <?php endif; ?>
   </div>
-  <div>
-    <span style="cursor:pointer" class="glyphicon glyphicon-plus" 
-        onclick="location.href='<?= base_url('objetivo/nuevo/');?>'"></span>
+  <div class="row">
+    <div class="col-md-6">
+      <span style="cursor:pointer" class="glyphicon glyphicon-plus" 
+        onclick="location.href='<?= base_url('objetivo/nuevo/');?>'">Nuevo Objetivo</span>
+    </div>
+    <div class="col-md-6">
+      <span style="cursor:pointer" class="glyphicon glyphicon-plus" 
+        onclick="location.href='<?= base_url('dominio/nuevo/');?>'">Nuevo Dominio</span>
+    </div>
   </div>
   <div class="row">
     <div class="col-md-12">

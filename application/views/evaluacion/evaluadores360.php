@@ -22,7 +22,7 @@
   </div>
   <div>
     <span style="cursor:pointer" class="glyphicon glyphicon-plus" 
-        onclick="location.href='<?= base_url('evaluacion/nuevo_evaluador360');?>'"></span>
+        onclick="location.href='<?= base_url('evaluacion/nuevo_evaluador360');?>'">Nuevo Evaluador 360</span>
   </div>
   <div class="row">
     <div class="col-md-12">

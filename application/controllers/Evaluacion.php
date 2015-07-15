@@ -53,7 +53,7 @@ class Evaluacion extends CI_Controller {
 
         $data['pagination'] = $this->pagination->create_links();
     	
-        $this->layout->title('Capital Humano - Evaluadores');
+        $this->layout->title('Advanzer - Evaluadores');
     	$this->layout->view('evaluacion/evaluadores',$data);
     }
 
@@ -103,7 +103,7 @@ class Evaluacion extends CI_Controller {
         if($msg!=null)
             $data['msg'] = $msg;
         $data['evaluadores'] = $this->user_model->getAll();
-        $this->layout->title('Capital Humano - Nuevo Evaluador');
+        $this->layout->title('Advanzer - Nuevo Evaluador');
         $this->layout->view('evaluacion/nuevo_evaluador',$data);
     }
 
@@ -164,7 +164,7 @@ class Evaluacion extends CI_Controller {
         $data['evaluador']=$this->user_model->searchById($evaluador);
         $data['asignados']=$this->evaluacion_model->getByEvaluador($evaluador);
         $data['no_asignados'] = $this->evaluacion_model->getNotByEvaluador($evaluador,$data['asignados']);
-        $this->layout->title('Capital Humano - Asigna Colaboradores');
+        $this->layout->title('Advanzer - Asigna Colaboradores');
         $this->layout->view('evaluacion/asignar_colaborador',$data);
     }
 
@@ -178,7 +178,7 @@ class Evaluacion extends CI_Controller {
         $data['asignados']=$this->evaluacion_model->getByEvaluador($evaluador,1);
         $data['no_asignados'] = $this->evaluacion_model->getNotByEvaluador($evaluador,$data['asignados'],1);
         $data['no_asignados'] = $this->evaluacion_model->getNotByEvaluador($evaluador,$data['asignados']);
-        $this->layout->title('Capital Humano - Asigna Colaboradores');
+        $this->layout->title('Advanzer - Asigna Colaboradores');
         $this->layout->view('evaluacion/asignar_colaborador360',$data);
     }
 
@@ -223,7 +223,7 @@ class Evaluacion extends CI_Controller {
 
         $data['pagination'] = $this->pagination->create_links();
         
-        $this->layout->title('Capital Humano - Evaluadores 360');
+        $this->layout->title('Advanzer - Evaluadores 360');
         $this->layout->view('evaluacion/evaluadores360',$data);
     }
 
@@ -234,12 +234,64 @@ class Evaluacion extends CI_Controller {
         if($msg!=null)
             $data['msg'] = $msg;
         $data['evaluadores'] = $this->user_model->getAll(1);
-        $this->layout->title('Capital Humano - Nuevo Evaluador 360');
+        $this->layout->title('Advanzer - Nuevo Evaluador 360');
         $this->layout->view('evaluacion/nuevo_evaluador360',$data);
     }
-}
-        $data['evaluadores'] = $this->user_model->getAll();
-        $this->layout->title('Capital Humano - Nuevo Evaluador 360');
-        $this->layout->view('evaluacion/nuevo_evaluador360',$data);
+
+    public function gestion($msg=null,$err=null) {
+        $data=array();
+        if($msg!=null)
+            $data['msg']=$msg;
+        if($err!=null)
+            $data['err_msg']=$err;
+        $data['evaluaciones'] = $this->evaluacion_model->getEvaluacionesSinAplicar();
+        $this->layout->title('Advanzer - Gestión de Evaluaciones');
+        $this->layout->view('evaluacion/gestion',$data);
+    }
+
+    public function gestionar() {
+        $evaluacion=$this->input->post('evaluacion');
+        $inicio=$this->input->post('inicio');
+        $fin=$this->input->post('fin');
+        if($this->evaluacion_model->gestionar($evaluacion,$inicio,$fin))
+            $this->gestion("Exito al gestionar la evaluación");
+        else{ 
+            $this->gestion(null,"Error al gestionar la evaluación. Intente nuevamente");
+        }
+    }
+
+    public function load_info_evaluacion() {
+        $evaluacion=$this->input->post('evaluacion');
+        $info=$this->evaluacion_model->getEvaluacionById($evaluacion);
+        ?>
+        <label for="inicio">Inicia:</label>
+        <input data-provide="datepicker" data-date-format="yyyy-mm-dd" name="inicio" id="inicio" onchange="setFin(this);" 
+            value="<?php if($info->inicio!=null) echo $info->inicio; else echo date('Y-m-d');?>" class="form-control" style="max-width:300px;text-align:center;">
+        <label for="inicio">Termina:</label>
+        <input data-provide="datepicker" data-date-format="yyyy-mm-dd" name="fin" id="fin" 
+            value="<?php if($info->fin!=null) echo $info->fin; else{$fecha=date('Y-m-d'); $fecha=date_create($fecha); 
+                echo date_add($fecha,date_interval_create_from_date_string('1 month'));}?>" 
+            class="form-control" style="max-width:300px;text-align:center;">
+        <?php
+    }
+
+    public function nueva($err=null) {
+        $data=array();
+        if($err!=null)
+            $data['err_msg']=$err;
+        $this->layout->title('Advanzer - Nueva Evaluación');
+        $this->layout->view('evaluacion/nueva',$data);
+    }
+
+    public function registrar() {
+        $nombre=$this->input->post('nombre');
+        $descripcion=$this->input->post('descripcion');
+        $inicio=$this->input->post('inicio');
+        $fin=$this->input->post('fin');
+
+        if($this->evaluacion_model->create($nombre,$descripcion,$inicio,$fin))
+            $this->gestion("Evaluación creada.");
+        else
+            $this->nueva("Error al crear evaluación. Intenta de nuevo");
     }
 }

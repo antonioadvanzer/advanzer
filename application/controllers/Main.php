@@ -19,7 +19,7 @@ class Main extends CI_Controller {
 		// Store values in variables from project created in Google Developer Console
 		$client_id = '577890901025-gathucvdkhl9tbg8878skn7ae5i3rguk.apps.googleusercontent.com';
 		$client_secret = 'ZkPs2AbhoY3llDEQRb4nW23R';
-		$redirect_uri = 'http://localhost:8080/advanzer/auth';
+		$redirect_uri = base_url('auth');
 		$simple_api_key = 'AIzaSyDR_DGouvoZkW4v4lt54yMIReQeYKXy6A4';
 
 		// Create Client Request to access Google API
@@ -89,7 +89,7 @@ class Main extends CI_Controller {
 		// Store values in variables from project created in Google Developer Console
 		$client_id = '577890901025-gathucvdkhl9tbg8878skn7ae5i3rguk.apps.googleusercontent.com';
 		$client_secret = 'ZkPs2AbhoY3llDEQRb4nW23R';
-		$redirect_uri = 'http://localhost:8080/advanzer/auth';
+		$redirect_uri = base_url('auth');
 		$simple_api_key = 'AIzaSyDR_DGouvoZkW4v4lt54yMIReQeYKXy6A4';
 
 		// Create Client Request to access Google API

@@ -55,4 +55,38 @@ class Dominio extends CI_Controller {
             <script type="text/javascript">document.location.href="<?= base_url('dominio');?>";</script>
     	<?php endif;
     }
+
+    public function nuevo($err=null,$msg=null) {
+      $data=array();
+      if ($err != null)
+        $data['err_msg'] = $err;
+      if ($msg != null)
+        $data['msg'] = $msg;
+      $data['dominios']=$this->dominio_model->getAll(null);
+      $this->layout->title('Capital Humano - Nuevo Dominio');
+      $this->layout->view('dominio/nuevo',$data);
+    }
+
+    public function create() {
+        $nombre=$this->input->post('nombre');
+        if($id = $this->dominio_model->create($nombre))
+            $this->nuevo(null,"Dominio registrado satisfactoriamente");
+        else
+            $this->nuevo("Error al agregar objetivo. Intenta de nuevo");
+    }
+
+    public function ch_estatus($id) {
+      switch($this->dominio_model->getEstatusById($id)){
+        case 1:
+          $estatus=0;
+          break;
+        case 0:
+          $estatus=1;
+          break;
+      }
+      if($this->dominio_model->ch_estatus($id,$estatus))
+        $this->nuevo(null,"Se ha realizado el cambio de estatus");
+      else
+        $this->nuevo("Error al intentar hacer el cambio de estatus. Intenta de nuevo");
+    }
 }

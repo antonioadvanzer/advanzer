@@ -9,7 +9,9 @@ class Dominio_model extends CI_Model{
 		$this->load->model('area_model');
 	}
 
-	function getAll(){
+	function getAll($estatus=1){
+		if($estatus!=null)
+			$this->db->where('estatus',$estatus);
 		return $this->db->get('Dominios')->result();
 	}
 
@@ -17,5 +19,28 @@ class Dominio_model extends CI_Model{
 		$this->db->limit($limit,$start);
 		$this->db->order_by('nombre','asc');
 		return $this->db->get('Dominios')->result();
+	}
+
+	function create($nombre) {
+		$this->db->insert('Dominios',array('nombre'=>$nombre));
+		if($this->db->affected_rows() == 1)
+			return true;
+		else
+			return false;
+	}
+
+	function getEstatusById($id) {
+		$this->db->select('estatus');
+		$this->db->where('id',$id);
+		return $this->db->get('Dominios')->first_row()->estatus;
+	}
+
+	function ch_estatus($id,$estatus) {
+		$this->db->where('id',$id);
+		$this->db->update('Dominios',array('estatus'=>$estatus));
+		if($this->db->affected_rows() == 1)
+			return true;
+		else
+			return false;
 	}
 }

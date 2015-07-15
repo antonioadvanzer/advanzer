@@ -23,7 +23,7 @@
   </div>
   <div>
     <span style="cursor:pointer" class="glyphicon glyphicon-plus" 
-        onclick="location.href='<?= base_url('area/nueva/');?>'"></span>
+        onclick="location.href='<?= base_url('area/nueva/');?>'">Nueva Área</span>
   </div>
   <div class="row">
     <div class="col-md-12">

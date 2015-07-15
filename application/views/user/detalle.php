@@ -32,7 +32,7 @@
 		  	<img height="200px" src="<?= base_url("assets/images/fotos/$user->foto");?>">
 		  </div>
 	  </div>
-	  <div class="col-md-6" align="left">
+	  <div class="col-md-3" align="center">
 		  <div class="form-group">
 		  	<label for="foto" class="control-label">Elige la foto</label>
 		  </div>
