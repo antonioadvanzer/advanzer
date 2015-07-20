@@ -253,7 +253,8 @@ class Evaluacion extends CI_Controller {
         $evaluacion=$this->input->post('evaluacion');
         $inicio=$this->input->post('inicio');
         $fin=$this->input->post('fin');
-        if($this->evaluacion_model->gestionar($evaluacion,$inicio,$fin))
+        $tipo=$this->input->post('tipo');
+        if($this->evaluacion_model->gestionar($evaluacion,$inicio,$fin,$tipo))
             $this->gestion("Exito al gestionar la evaluación");
         else{ 
             $this->gestion(null,"Error al gestionar la evaluación. Intente nuevamente");
@@ -264,14 +265,32 @@ class Evaluacion extends CI_Controller {
         $evaluacion=$this->input->post('evaluacion');
         $info=$this->evaluacion_model->getEvaluacionById($evaluacion);
         ?>
-        <label for="inicio">Inicia:</label>
-        <input data-provide="datepicker" data-date-format="yyyy-mm-dd" name="inicio" id="inicio" onchange="setFin(this);" 
-            value="<?php if($info->inicio!=null) echo $info->inicio; else echo date('Y-m-d');?>" class="form-control" style="max-width:300px;text-align:center;">
-        <label for="inicio">Termina:</label>
-        <input data-provide="datepicker" data-date-format="yyyy-mm-dd" name="fin" id="fin" 
-            value="<?php if($info->fin!=null) echo $info->fin; else{$fecha=date('Y-m-d'); $fecha=date_create($fecha); 
-                echo date_add($fecha,date_interval_create_from_date_string('1 month'));}?>" 
-            class="form-control" style="max-width:300px;text-align:center;">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="tipo">Tipo</label>
+            <select class="form-control" style="max-width:300px;text-align:center;" id="tipo" name="tipo">
+              <option value="0" <?php if($info->tipo == 0) echo "selected";?>>Por Responsabilidades</option>
+              <option value="1"  <?php if($info->tipo == 1) echo "selected";?>>360</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="inicio">Inicia:</label>
+        <input data-provide="datepicker" data-date-format="yyyy-mm-dd" name="inicio" id="inicio" 
+            onchange="setFin(this);" value="<?php if($info->inicio!=null) echo $info->inicio; else 
+                echo date('Y-m-d');?>" class="form-control" style="max-width:300px;text-align:center;">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="inicio">Termina:</label>
+              <input data-provide="datepicker" data-date-format="yyyy-mm-dd" name="fin" id="fin" 
+                value="<?php if($info->fin!=null) echo $info->fin; else{$fecha=date('Y-m-d'); $fecha=date_create($fecha); 
+                    echo date_add($fecha,date_interval_create_from_date_string('1 month'));}?>" 
+                class="form-control" style="max-width:300px;text-align:center;">
+          </div>
+        </div>
         <?php
     }
 

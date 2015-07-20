@@ -43,4 +43,18 @@ class Dominio_model extends CI_Model{
 		else
 			return false;
 	}
+
+	function searchById($id) {
+		$this->db->where('id',$id);
+		return $this->db->get('Dominios')->first_row();
+	}
+
+	function update($id,$nombre,$descripcion) {
+		$this->db->where('id',$id);
+		$this->db->update('Dominios',array('nombre'=>$nombre,'descripcion'=>$descripcion));
+		if($this->db->affected_rows() == 1)
+			return true;
+		else
+			return false;
+	}
 }

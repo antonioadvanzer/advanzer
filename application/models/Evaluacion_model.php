@@ -54,7 +54,7 @@ class Evaluacion_model extends CI_Model{
 		return $this->db->get()->result();
 	}
 
-	function getNotByEvaluador($evaluador,$ignore,$tipo) {
+	function getNotByEvaluador($evaluador,$ignore,$tipo=0) {
 		if(count($ignore)>0){
 			$array_temp=array();
 			foreach ($ignore as $temp) 
@@ -93,9 +93,9 @@ class Evaluacion_model extends CI_Model{
 		return $this->db->get('Evaluaciones')->result();
 	}
 
-	function gestionar($evaluacion,$inicio,$fin) {
+	function gestionar($evaluacion,$inicio,$fin,$tipo) {
 		$this->db->where('id',$evaluacion);
-		$this->db->update('Evaluaciones',array('inicio'=>$inicio,'fin'=>$fin));
+		$this->db->update('Evaluaciones',array('inicio'=>$inicio,'fin'=>$fin,'tipo'=>$tipo));
 		if($this->db->affected_rows() == 1)
 			return true;
 		else

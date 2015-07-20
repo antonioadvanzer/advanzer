@@ -87,8 +87,21 @@
 		</script>
 	<?php endif; ?>
 	<form onsubmit="return valida_fechas(this);" role="form" method="post" action="<?= base_url('evaluacion/registrar');?>" class="form-signin">
-	  <div class="form-group" align="center">
-	    <label for="nombre">Año de Evaluación: <?= date('Y')-1;?></label>
+	  <div align="center" class="row">
+		<div class="col-md-4">
+		  <div class="form-group" align="center">
+			<label for="nombre">Año de Evaluación: <?= date('Y')-1;?></label>
+		  </div>
+		</div>
+		<div class="col-md-4">
+		  <div class="form-group" align="center">
+			<label for="tipo">Tipo</label>
+			<select class="form-control" style="max-width:300px;text-align:center" name="tipo">
+			  <option value="0">Por Responsabilidades</option>
+			  <option value="1">360</option>
+			</select>
+		  </div>
+		</div>
 	  </div>
 	  <div class="row" align="center">
 	  	<div class="col-md-3">

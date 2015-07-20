@@ -18,6 +18,13 @@
         <span class="sr-only">Error:</span>
         <?= $msg;?>
       </div>
+      <script>
+      $(document).ready(function() {
+        setTimeout(function() {
+          window.location="<?= base_url('dominio');?>"
+        },3000);
+      });
+    </script>
     <?php endif; ?>
   </div>
   <div class="row">

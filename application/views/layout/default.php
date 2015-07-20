@@ -11,11 +11,13 @@
 	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/bootstrap-theme.min.css');?>">
 	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/style.css');?>">
 	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/datepicker/css/bootstrap-datepicker.min.css');?>">
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 	<script src="<?= base_url('assets/js/jquery.min.js');?>"></script>
 	<script src="<?= base_url('assets/js/bootstrap.min.js');?>"></script>
 	<script src="<?= base_url('assets/js/bootstrap-table.js');?>"></script>
 	<script src="<?= base_url('assets/js/docs.min.js');?>"></script>
 	<script src="<?= base_url('assets/datepicker/js/bootstrap-datepicker.min.js');?>"></script>
+	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 	<title><?=$title_for_layout?></title>
 	<style type="text/css">
 		body {
@@ -94,7 +96,7 @@
 							<li role="separator" class="divider"></li>
 							<li class="dropdown-submenu"><a tabindex="-1" href="#">Carga Masiva</a>
 								<ul class="dropdown-menu">
-									<li><a href="<?= base_url('carga_comp_resp');?>">Competencias y Areas</a></li>
+									<li><a href="<?= base_url('carga_comp_resp');?>">Competencias y Responsabilidades</a></li>
 								</ul>
 							</li>
 						</ul>

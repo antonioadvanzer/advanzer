@@ -21,7 +21,7 @@ class Objetivo extends CI_Controller {
     	$data['dominios'] = $this->dominio_model->getAll();
     	$data['areas_asignadas'] = $this->area_model->getByObjetivo($data['objetivo']->id);
         $data['areas_no_asignadas'] = $this->area_model->getNotObjetivo($data['areas_asignadas']);
-    	$this->layout->title('Capital Humano - Info Objetivo');
+    	$this->layout->title('Advanzer - Info Objetivo');
     	$this->layout->view('objetivo/detalle',$data);
     }
 
@@ -43,22 +43,22 @@ class Objetivo extends CI_Controller {
         <?php
     }
 
-    function add_area() {
-    	$area = $this->input->post('area');
+    function add_areas() {
     	$objetivo = $this->input->post('objetivo');
-    	if($this->objetivo_model->add_area($objetivo,$area))
-    		redirect("objetivo/ver/$objetivo");
-    	else
-    		$this->ver($objetivo,'Error al agregar area. Intenta de nuevo');
+        $opciones=$this->input->post('selected');
+        foreach ($opciones as $area) {
+            if(!$this->objetivo_model->add_area($objetivo,$area))
+                break;
+        }
     }
 
-    function del_area() {
-        $area = $this->input->post('area');
+    function del_areas() {
         $objetivo = $this->input->post('objetivo');
-        if($this->objetivo_model->del_area($objetivo,$area))
-            redirect("objetivo/ver/$objetivo");
-        else
-            $this->ver($objetivo,'Error al eliminar area. Intenta de nuevo');
+        $opciones=$this->input->post('selected');
+        foreach ($opciones as $area) {
+            if(!$this->objetivo_model->del_area($objetivo,$area))
+                break;
+        }
     }
 
     function update() {
@@ -76,7 +76,7 @@ class Objetivo extends CI_Controller {
         if ($msg != null)
             $data['err_msg'] = $msg;
         $data['dominios'] = $this->dominio_model->getAll();
-        $this->layout->title('Capital Humano - Nuevo Objetivo');
+        $this->layout->title('Advanzer - Nuevo Objetivo');
         $this->layout->view('objetivo/nuevo',$data);
     }
 

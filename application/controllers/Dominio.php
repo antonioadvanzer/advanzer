@@ -13,7 +13,9 @@ class Dominio extends CI_Controller {
     	$this->load->model('porcentaje_objetivo_model');
     }
 
-    public function index() {
+    public function index($msg=null) {
+      if($msg!=null)
+        $data['msg']=$msg;
     	$data['dominios'] = $this->dominio_model->getAll();
     	
       $this->layout->title('Capital Humano - Objetivos');
@@ -63,7 +65,7 @@ class Dominio extends CI_Controller {
       if ($msg != null)
         $data['msg'] = $msg;
       $data['dominios']=$this->dominio_model->getAll(null);
-      $this->layout->title('Capital Humano - Nuevo Dominio');
+      $this->layout->title('Advanzer - Nuevo Dominio');
       $this->layout->view('dominio/nuevo',$data);
     }
 
@@ -88,5 +90,22 @@ class Dominio extends CI_Controller {
         $this->nuevo(null,"Se ha realizado el cambio de estatus");
       else
         $this->nuevo("Error al intentar hacer el cambio de estatus. Intenta de nuevo");
+    }
+
+    public function ver($id,$err=null) {
+      if($err != null)
+        $data['err_msg']=$err;
+      $data['dominio']=$this->dominio_model->searchById($id);
+      $this->layout->title('Advanzer - Detalle Dominio');
+      $this->layout->view('dominio/detalle',$data);
+    }
+
+    public function update($id) {
+      $nombre=$this->input->post('nombre');
+      $descripcion=$this->input->post('descripcion');
+      if($this->dominio_model->update($id,$nombre,$descripcion))
+        $this->index("Se ha registrado un nuevo dominio");
+      else
+        $this->ver($id,"Error al agregar dominio");
     }
 }

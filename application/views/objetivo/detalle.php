@@ -123,44 +123,34 @@
 	</div>
   </div>
   <div class="row" align="center">
-  	<div class="col-md-6">
+  	<div class="col-md-5">
   	  <div class="panel panel-primary">
-  	  <div class="panel-heading">Áreas Asignadas</div>
-  	  <table class="table table-striped">
-  	  	<tbody>
-  	  	  <?php foreach($areas_asignadas as $area) : ?>
-  	  	  	<form onsubmit="if(!confirm('Seguro que desea eliminar el área: \n <?= $area->nombre;?>')) return false;" 
-  	  	  		role="form" method="post" action="<?= base_url('objetivo/del_area');?>" class="form-signin">
-  	  	  		<input type="hidden" name="area" value="<?= $area->id;?>">
-  	  	  		<input type="hidden" name="objetivo" value="<?= $objetivo->id;?>">
-	  	  		<tr>
-				  <td><?= $area->nombre;?></td>
-	  	  		  <td><button type="submit" class="form-control" style="max-width:55px;">&raquo;</button></td>
-	  	  		</tr>
-	  	  	</form>
-  	  	  <?php endforeach; ?>
-  	  	</tbody>
-  	  </table>
+		<div class="panel-heading">Áreas Asignadas</div>
+		<select id="quitar" name="quitar" multiple class="form-control" style="min-height:300px;max-height:700px">
+		  <?php foreach($areas_asignadas as $area) : ?>
+			<option value="<?= $area->id;?>"><?= $area->nombre;?></option>
+		  <?php endforeach; ?>
+		</select>
   	  </div>
   	</div>
-  	<div class="col-md-6">
+  	<div class="col-md-2">
+	  <div class="form-group">&nbsp;</div>
+	  <div class="form-group">
+		<button id="btnQuitar" class="form-control" style="max-width:100px;">Quitar&raquo;</button>
+	  </div>
+	  <div class="form-group">
+		<button id="btnAgregar" class="form-control" style="max-width:100px;">&laquo;Agregar</button>
+	  </div>
+	  <div class="form-group">&nbsp;</div>
+  	</div>
+  	<div class="col-md-5">
   	  <div class="panel panel-primary">
-  	  <div class="panel-heading">Áreas Sin Asignar</div>
-  	  <table class="table table-striped">
-  	  	<tbody>
-  	  	  <?php foreach($areas_no_asignadas as $area) : ?>
-  	  	  	<form onsubmit="if(!confirm('Seguro que desea asignar el área: \n <?= $area->nombre;?>')) return false;" 
-  	  	  		role="form" method="post" action="<?= base_url('objetivo/add_area');?>" class="form-signin">
-  	  	  		<input type="hidden" name="area" value="<?= $area->id;?>">
-  	  	  		<input type="hidden" name="objetivo" value="<?= $objetivo->id;?>">
-	  	  		<tr>
-	  	  		  <td><button type="submit" class="form-control" style="max-width:55px;">&laquo;</button></td>
-	  	  		  <td><?= $area->nombre;?></td>
-	  	  		</tr>
-	  	  	</form>
-  	  	  <?php endforeach; ?>
-  	  	</tbody>
-  	  </table>
+		<div class="panel-heading">Áreas Sin Asignar</div>
+		<select id="agregar" name="agregar" multiple class="form-control" style="min-height:300px;max-height:700px">
+		  <?php foreach($areas_no_asignadas as $area) : ?>
+			<option value="<?= $area->id;?>"><?= $area->nombre;?></option>
+		  <?php endforeach; ?>
+		</select>
   	  </div>
   	</div>
   </div>
@@ -181,10 +171,8 @@
 						$("#metrica").html(data);
 					});
 				});
-			})
-		});
+			});
 
-		$(document).ready(function() {
 			$("#posicion").change(function() {
 				$("#posicion option:selected").each(function() {
 					posicion = $('#posicion').val();
@@ -194,6 +182,45 @@
 						$("#pesos").html(data);
 					});
 				});
-			})
+			});
+
+			$('#btnAgregar').click(function() {
+				if($('#agregar :selected').length > 0){
+					var selected = [];
+					var objetivo = <?= $objetivo->id;?>;
+					$('#agregar :selected').each(function(i,select) {
+						selected[i] = $(select).val();
+					});
+					$.ajax({
+						url:'<?= base_url("objetivo/add_areas");?>',
+						data:{'selected':selected,'objetivo':objetivo},
+						type:'POST',
+						success:function(data) {
+							$('body').html(data);
+							alert('Se han agregado!');
+							window.location.reload();
+						}
+					});
+				}
+			});
+			$('#btnQuitar').click(function() {
+				if($('#quitar :selected').length > 0){
+					var selected = [];
+					var objetivo = <?= $objetivo->id;?>;
+					$('#quitar :selected').each(function(i,select) {
+						selected[i] = $(select).val();
+					});
+					$.ajax({
+						url:'<?= base_url("objetivo/del_areas");?>',
+						data:{'selected':selected,'objetivo':objetivo},
+						type:'POST',
+						success:function(data) {
+							$('body').html(data);
+							alert('Se han eliminado!');
+							window.location.reload();
+						}
+					});
+				}
+			});
 		});
 	</script>

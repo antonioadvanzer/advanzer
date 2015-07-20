@@ -110,7 +110,7 @@
   <div>&nbsp;</div>
 	<form onsubmit="return valida_fechas(this);" role="form" method="post" action="<?= base_url('evaluacion/gestionar');?>" class="form-signin">
 	  <div class="row" align="center">
-	  	<div class="col-md-6">
+	  	<div class="col-md-12">
 		  <div align="center" class="form-group">
 		    <label for="nombre">Año de Evaluación: <?= date('Y')-1;?></label>
 		  </div>
@@ -124,18 +124,33 @@
 			</select>
 		  </div>
 		</div>
-		<div class="col-md-6">
-		  <div class="form-group" id="datos">
+	  </div>
+	  <div class="row" align="center" id="datos">
+		<!--<div class="col-md-4">
+		  <div class="form-group">
+			<label for="tipo">Tipo</label>
+			<select class="form-control" style="max-width:300px;text-align:center;" id="tipo" name="tipo">
+			  <option value="0">Por Responsabilidades</option>
+			  <option value="1">360</option>
+			</select>
+		  </div>
+		</div>
+		<div class="col-md-4">
+		  <div class="form-group">
 		    <label for="inicio">Inicia:</label>
 		    <input data-provide="datepicker" data-date-format="yyyy-mm-dd" name="inicio" id="inicio" onchange="setFin(this);" 
 		    	value="<?= date('Y-m-d');?>" class="form-control" style="max-width:300px;text-align:center;">
+		  </div>
+		</div>
+		<div class="col-md-4">
+		  <div class="form-group">
 		    <label for="fin">Termina:</label>
 		    <input data-provide="datepicker" data-date-format="yyyy-mm-dd" name="fin" id="fin" 
 		    	value="<?= $fecha=date('Y-m-d'); $fecha=date_create($fecha); 
 		    		date_add($fecha,date_interval_create_from_date_string('1 month'));?>" 
 		    	class="form-control" style="max-width:300px;text-align:center;">
 		  </div>
-		</div>
+		</div>-->
 	  </div>
 	  <div class="row" align="center">
 		<div class="col-md-12">
