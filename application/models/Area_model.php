@@ -94,4 +94,12 @@ class Area_model extends CI_Model{
 		return $this->db->get('Areas Re')->result();
 	}
 
+	function searchByObjetivo($obj) {
+		$this->db->select('A.id,A.nombre');
+		$this->db->from('Areas A');
+		$this->db->join('Objetivos_Areas OA','A.id = OA.area');
+		$this->db->where('OA.objetivo',$obj);
+		return $this->db->get()->first_row();
+	}
+
 }

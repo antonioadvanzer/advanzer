@@ -11,6 +11,7 @@ class Dominio extends CI_Controller {
     	$this->load->model('objetivo_model');
     	$this->load->model('metrica_model');
     	$this->load->model('porcentaje_objetivo_model');
+      $this->load->model('area_model');
     }
 
     public function index($msg=null) {
@@ -27,6 +28,7 @@ class Dominio extends CI_Controller {
     		$dominio = $this->input->post('dominio');
     		$objetivos = $this->objetivo_model->getByDominio($dominio);
     		foreach ($objetivos as $obj): 
+          $area = $this->area_model->searchByObjetivo($obj->id);
     	?>
             <tr>
               <td><span class="glyphicon glyphicon-eye-open" style="cursor:pointer" onclick="
@@ -42,9 +44,11 @@ class Dominio extends CI_Controller {
                   endforeach; ?>
                 </span></td>
               <td><span style="cursor:pointer" onclick="location.href='<?= base_url('objetivo/ver/');?>/'+
+                <?= $obj->id;?>"><?= $area->nombre;?></span></td>
+              <td><span style="cursor:pointer" onclick="location.href='<?= base_url('objetivo/ver/');?>/'+
                 <?= $obj->id;?>">
                   <?php foreach ($this->porcentaje_objetivo_model->getByObjetivo($obj->id) as $porc) : 
-                  	echo $porc->valor ."% - ". $porc->posicion ."<br>";
+                  	echo $porc->posicion." - ". $porc->valor ."%<br>";
                   endforeach; ?>
                 </span></td>
               <td align="right"><span style="cursor:pointer;" onclick="

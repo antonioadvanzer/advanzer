@@ -53,22 +53,16 @@
       <table width="90%" align="center" class="table table-striped " data-toggle="table">
         <thead>
           <tr>
-            <th data-halign="center" data-field="nombre" data-sortable="true">Objetivo</th>
-            <th data-halign="center" data-field="descripcion">Descripción</th>
-            <th data-halign="center" data-field="metrica">Métrica</th>
-            <th data-halign="center" data-field="porcentaje">Porcentaje</th>
-            <th></th>
+            <th class="col-md-2" data-halign="center" data-field="nombre" data-sortable="true">Objetivo</th>
+            <th class="col-md-2" data-halign="center" data-field="descripcion">Descripción</th>
+            <th class="col-md-4" data-halign="center" data-field="metrica">Métrica</th>
+            <th class="col-md-1" data-halign="center" data-field="area">Área</th>
+            <th class="col-md-2" data-halign="center" data-field="porcentaje">Porcentaje</th>
+            <th class="col-md-1"></th>
           </tr>
         </thead>
-        <tbody id="result" class="searchable">
-          
-        </tbody>
+        <tbody id="result" class="searchable"></tbody>
       </table>
-      <!--<div id="pagination" class="row">
-        <div class="col-md-12 text-center">
-            <?php echo $pagination; ?>
-        </div>
-      </div>-->
     </div>
   </div>
 

@@ -64,7 +64,7 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => '192.168.0.103',
+	'hostname' => '192.168.0.104',
 	'username' => 'advanzer_ch',
 	'password' => 'advanzer_ch',
 	'database' => 'advanzer_ch',
