@@ -3,7 +3,7 @@
   <div class="container">
     <h1>Bienvenido</h1>
     <p>Aquí encontrarás los objetivos y las competencias que tu(s) evaluador(es) utilizarán para 
-      medir tu desempeño durante 2014.</p>
+      medir tu desempeño durante <?= date('Y');?>.</p>
     <p>Además de otros servicios dependiendo de tu perfil.</p>
   </div>
 </div>
