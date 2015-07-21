@@ -147,7 +147,6 @@ class Evaluacion extends CI_Controller {
             $evaluador = $this->input->post('evaluador');
             $asignados = $this->evaluacion_model->getByEvaluador($evaluador,$tipo);
             $colaboradores = $this->evaluacion_model->getNotByEvaluador($evaluador,$asignados,$tipo);
-            $colaboradores = $this->evaluacion_model->getNotByEvaluador($evaluador,$asignados);
             foreach($colaboradores as $colaborador) : ?>
                 <option value="<?= $colaborador->id;?>"><?= $colaborador->nombre ." - ". $colaborador->posicion;?></option>
           <?php endforeach;
@@ -233,7 +232,7 @@ class Evaluacion extends CI_Controller {
             $data['err_msg'] = $err_msg;
         if($msg!=null)
             $data['msg'] = $msg;
-        $data['evaluadores'] = $this->user_model->getAll(1);
+        $data['evaluadores'] = $this->user_model->getAll();
         $this->layout->title('Advanzer - Nuevo Evaluador 360');
         $this->layout->view('evaluacion/nuevo_evaluador360',$data);
     }
