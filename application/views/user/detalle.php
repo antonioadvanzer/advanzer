@@ -73,8 +73,8 @@
 		    <label for="posicion">Posición:</label>
 		    <select class="form-control" style="max-width:300px; text-align:center;" name="posicion">
 		    	<option <?php if($user->posicion == "Analista") echo "selected"; ?>>Analista</option>
-		    	<option <?php if($user->posicion == "Consultor / Especialista") echo "selected"; ?>>Consultor / Especialista</option>
-		    	<option <?php if($user->posicion == "Consultor Sr / Especialista Sr") echo "selected"; ?>>Consultor Sr / Especialista Sr</option>
+		    	<option <?php if($user->posicion == "Consultor") echo "selected"; ?>>Consultor</option>
+		    	<option <?php if($user->posicion == "Consultor Sr") echo "selected"; ?>>Consultor Sr</option>
 		    	<option <?php if($user->posicion == "Gerente / Master") echo "selected"; ?>>Gerente / Master</option>
 		    	<option <?php if($user->posicion == "Gerente Sr / Experto") echo "selected"; ?>>Gerente Sr / Experto</option>
 		    	<option <?php if($user->posicion == "Director") echo "selected"; ?>>Director</option>

@@ -1,7 +1,7 @@
 <!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron">
   <div class="container">
-    <h2>Nuevo Dominio</h2>
+    <h2>Nuevo Indicador</h2>
   </div>
 </div>
 <div class="container">
@@ -22,13 +22,13 @@
 		<script>
 			$(document).ready(function() {
 				setTimeout(function() {
-					window.location="<?= base_url('dominio/nuevo');?>"
+					window.location="<?= base_url('indicador/nuevo');?>"
 				},3000);
 			});
 		</script>
 	<?php endif; ?>
   </div>
-  <form role="form" method="post" action="<?= base_url('dominio/create');?>" class="form-signin">
+  <form role="form" method="post" action="<?= base_url('indicador/create');?>" class="form-signin">
   	<div class="row" align="center">
     <div class="col-md-2"></div>
   	  <div class="col-md-4">
@@ -47,12 +47,12 @@
   </form>
   <div class="row" align="center">
   	<div class="col-md-12">
-	  <a href="<?= base_url('administrar_dominios');?>">&laquo;Regresar</a>
+	  <a href="<?= base_url('administrar_indicadores');?>">&laquo;Regresar</a>
   	</div>
   </div>
   <div class="row">
     <div class="col-md-12">
-      <h3><b>Dominios:</b></h3>
+      <h3><b>Indicadores:</b></h3>
       <table width="90%" align="center" class="table table-striped " data-toggle="table">
         <thead>
           <tr>
@@ -61,16 +61,16 @@
           </tr>
         </thead>
         <tbody id="result" class="searchable">
-          <?php foreach ($dominios as $dominio): ?>
+          <?php foreach ($indicadores as $indicador): ?>
           <tr>
             <td><span class="glyphicon glyphicon-eye-open" style="cursor:pointer" onclick="
-              location.href='<?= base_url('dominio/ver/');?>/'+<?= $dominio->id;?>"></span> 
-              <span style="cursor:pointer" onclick="location.href='<?= base_url('dominio/ver/');?>/'+
-              <?= $dominio->id;?>"><?= $dominio->nombre;?></span></td>
+              location.href='<?= base_url('indicador/ver/');?>/'+<?= $indicador->id;?>"></span> 
+              <span style="cursor:pointer" onclick="location.href='<?= base_url('indicador/ver/');?>/'+
+              <?= $indicador->id;?>"><?= $indicador->nombre;?></span></td>
             <td align="right"><span style="cursor:pointer;" onclick="
-              if(confirm('Seguro que desea cambiar el estatus del dominio: \n <?= $dominio->nombre;?>'))location.href=
-              '<?= base_url('dominio/ch_estatus/');?>/'+<?= $dominio->id;?>;" class="glyphicon 
-              <?php if($dominio->estatus ==1 ) echo "glyphicon-ok"; else echo "glyphicon-ban-circle"; ?>"></span></td>
+              if(confirm('Seguro que desea cambiar el estatus del indicador: \n <?= $indicador->nombre;?>'))location.href=
+              '<?= base_url('indicador/ch_estatus/');?>/'+<?= $indicador->id;?>;" class="glyphicon 
+              <?php if($indicador->estatus ==1 ) echo "glyphicon-ok"; else echo "glyphicon-ban-circle"; ?>"></span></td>
           </tr>
           <?php endforeach; ?>
         </tbody>

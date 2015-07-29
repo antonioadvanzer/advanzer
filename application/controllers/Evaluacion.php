@@ -7,9 +7,80 @@ class Evaluacion extends CI_Controller {
 
     function __construct(){
     	parent::__construct();
+        $this->valida_sesion();
     	$this->load->model('evaluacion_model');
+        $this->load->model('area_model');
         $this->load->model('user_model');
     	$this->load->library('pagination');
+    }
+
+    public function load_competencias() {
+        $posicion = $this->input->post('posicion');
+        foreach ($this->evaluacion_model->getIndicadoresByPosicion($posicion) as $indicador) : ?>
+            <h1><?= $indicador->nombre;?></h1>
+            <div> <?php 
+                foreach ($this->evaluacion_model->getCompetenciasByIndicador($indicador->id,$posicion) as $comp) : ?>
+                    <h2><?= $comp->nombre;?><span style="float:right;"><?= $comp->puntuacion;?></span></h2>
+                    <div>
+                        <label><?= $comp->descripcion;?></label>
+                        <p><ul> <?php
+                            foreach ($this->evaluacion_model->getComportamientoByCompetencia($comp->id) as $comportamiento) : ?>
+                                <li><?= $comportamiento->descripcion;?></li>
+                                <?php
+                            endforeach; ?>
+                        </ul></p>
+                    </div> <?php
+                endforeach; ?>
+            </div> <?php
+        endforeach;
+    }
+
+    public function load_perfil() {
+        $area = $this->input->post('area');
+        $posicion = $this->input->post('posicion');
+        foreach ($this->evaluacion_model->getResponsabilidadByArea($area) as $dominio) : ?>
+            <h1><?= $dominio->nombre;?></h1>
+            <div>
+            <?php foreach ($this->evaluacion_model->getObjetivosByDominio($dominio->id,$area,$posicion) as $responsabilidad) { ?>
+                <h2><?= $responsabilidad->nombre;?><span style="float:right;"><?= $responsabilidad->valor;?>%</span></h2>
+                    <div>
+                        <label><?= $responsabilidad->descripcion;?></label>
+                        <p><ol reversed>
+                            <?php foreach ($this->evaluacion_model->getMetricaByObjetivo($responsabilidad->id) as $metrica) { ?>
+                                <li><?= $metrica->descripcion;?></li>
+                            <?php } ?>
+                        </ol></p>
+                    </div>
+            <?php } ?>
+            </div>
+        <?php endforeach;
+    }
+
+    public function perfil() {
+        $data=array();
+        $area = $this->session->userdata('area');
+        $posicion = $this->session->userdata('posicion');
+        if(!empty($area) && !empty($posicion)){
+            //get perfil de evaluación de responsabilidades
+            $data['dominios'] = $this->evaluacion_model->getResponsabilidadByArea($area);
+            foreach ($data['dominios'] as $dominio) :
+                $dominio->responsabilidades = $this->evaluacion_model->getObjetivosByDominio($dominio->id,$area,$posicion);
+                foreach ($dominio->responsabilidades as $responsabilidad) :
+                    $responsabilidad->metricas = $this->evaluacion_model->getMetricaByObjetivo($responsabilidad->id);
+                endforeach;
+            endforeach;
+            //get perfil de evaluacion de competencias
+            $data['indicadores'] = $this->evaluacion_model->getIndicadoresByPosicion($posicion);
+            foreach ($data['indicadores'] as $indicador) :
+                $indicador->competencias = $this->evaluacion_model->getCompetenciasByIndicador($indicador->id,$posicion);
+                foreach ($indicador->competencias as $competencia) : 
+                    $competencia->comportamientos = $this->evaluacion_model->getComportamientoByCompetencia($competencia->id);
+                endforeach;
+            endforeach;
+        }
+        $data['areas']=$this->area_model->getAll(1);
+        $this->layout->title('Advanzer - Perfil de Evaluación');
+        $this->layout->view('evaluacion/perfil',$data);
     }
 
     public function evaluadores($msg=null) {
@@ -311,5 +382,10 @@ class Evaluacion extends CI_Controller {
             $this->gestion("Evaluación creada.");
         else
             $this->nueva("Error al crear evaluación. Intenta de nuevo");
+    }
+
+    private function valida_sesion() {
+        if($this->session->userdata('id') == "")
+            redirect('login');
     }
 }

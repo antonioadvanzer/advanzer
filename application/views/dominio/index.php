@@ -1,11 +1,11 @@
 <!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron">
   <div class="container">
-    <h2>Administrar Objetivos</h2>
+    <h2>Administrar Responsabilidades</h2>
     <p>Por medio de éste módulo podrás realizar las siguentes operaciones:<br>
       <ol type="1">
-        <li>Realizar Cambios a los Objetivos Definidos</li>
-        <li>Agregar nuevos cuando sea necesario</li>
+        <li>Realizar Cambios a las Responsabilidades Definidas</li>
+        <li>Agregar nuevas cuando sea necesario</li>
       </ol>
     </p>
   </div>
@@ -30,7 +30,7 @@
   <div class="row">
     <div class="col-md-6">
       <span style="cursor:pointer" class="glyphicon glyphicon-plus" 
-        onclick="location.href='<?= base_url('objetivo/nuevo/');?>'">Nuevo Objetivo</span>
+        onclick="location.href='<?= base_url('objetivo/nuevo/');?>'">Nueva Responsabilidad</span>
     </div>
     <div class="col-md-6">
       <span style="cursor:pointer" class="glyphicon glyphicon-plus" 
@@ -39,56 +39,66 @@
   </div>
   <div class="row">
     <div class="col-md-12">
-      <h3><b>Objetivos:</b></h3>
+      <h3 style="cursor:default"><b>Responsabilidades:</b></h3>
       <div class="input-group">
+        <span class="input-group-addon">Dominio</span>
         <select name="dominio" id="dominio" class="form-control">
           <option selected disabled>-- Selecciona un dominio --</option>
           <?php foreach ($dominios as $dominio) : ?>
             <option value="<?= $dominio->id;?>"><?= $dominio->nombre;?></option>
           <?php endforeach; ?>
         </select>
-        <span class="input-group-addon">Filtrar Resultados</span>
-        <input id="filter" type="text" class="form-control" placeholder="Filtrar...">
+        <span class="input-group-addon">Área</span>
+        <select name="area" id="area" class="form-control">
+          <?php foreach ($areas as $area) : ?>
+            <option value="<?= $area->id;?>"><?= $area->nombre;?></option>
+          <?php endforeach; ?>
+        </select>
       </div>
-      <table width="90%" align="center" class="table table-striped " data-toggle="table">
+      <table width="90%" align="center" class="table">
         <thead>
           <tr>
-            <th class="col-md-2" data-halign="center" data-field="nombre" data-sortable="true">Objetivo</th>
-            <th class="col-md-2" data-halign="center" data-field="descripcion">Descripción</th>
-            <th class="col-md-4" data-halign="center" data-field="metrica">Métrica</th>
-            <th class="col-md-1" data-halign="center" data-field="area">Área</th>
-            <th class="col-md-2" data-halign="center" data-field="porcentaje">Porcentaje</th>
+            <th class="col-md-3">Responsabilidad</th>
+            <th class="col-md-2">Descripción</th>
+            <th class="col-md-4">Métrica</th>
+            <th class="col-md-2">Porcentaje</th>
             <th class="col-md-1"></th>
           </tr>
         </thead>
-        <tbody id="result" class="searchable"></tbody>
+        <tbody id="result"></tbody>
       </table>
     </div>
   </div>
 
   <script type="text/javascript">
-    $(document).ready(function () {
-      (function ($) {
-          $('#filter').keyup(function () {
-              var rex = new RegExp($(this).val(), 'i');
-              $('.searchable tr').hide();
-              $('.searchable tr').filter(function () {
-                  return rex.test($(this).text());
-              }).show();
-          })
-      }(jQuery));
-    });
-
     $(document).ready(function() {
       $("#dominio").change(function() {
         $("#dominio option:selected").each(function() {
+          $("#area option:selected").each(function() {
+            area = $('#area').val();
+          });
           dominio = $('#dominio').val();
           $.post("<?= base_url('dominio/load_objetivos');?>", {
-            dominio : dominio
+            dominio : dominio,
+            area : area
           }, function(data) {
             $("#result").html(data);
           });
         });
-      })
+      });
+      $("#area").change(function() {
+        $("#area option:selected").each(function() {
+          $("#dominio option:selected").each(function() {
+            dominio = $('#dominio').val();
+          });
+          area = $('#area').val();
+          $.post("<?= base_url('dominio/load_objetivos');?>", {
+            dominio : dominio,
+            area : area
+          }, function(data) {
+            $("#result").html(data);
+          });
+        });
+      });
     });
   </script>

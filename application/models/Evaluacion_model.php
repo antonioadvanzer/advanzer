@@ -8,6 +8,78 @@ class Evaluacion_model extends CI_Model{
 		parent::__construct();
 	}
 
+	function getComportamientoByCompetencia($competencia) {
+		$this->db->where('competencia',$competencia);
+		$this->db->order_by('valor');
+		return $this->db->get('Comportamientos')->result();
+	}
+
+	function getCompetenciasByIndicador($indicador,$posicion) {
+		$this->db->distinct();
+		$this->db->select('C.id,C.nombre,C.descripcion');
+		$this->db->from('Competencias C');
+		$this->db->join('Comportamientos Co','Co.competencia = C.id');
+		$this->db->join('Comportamiento_Posicion CP','CP.comportamiento = Co.id');
+		$this->db->where(array('C.estatus'=>1,'C.indicador'=>$indicador,'CP.posicion'=>$posicion));
+		return $this->db->get()->result();
+	}
+
+	function getIndicadoresByPosicion($posicion) {
+		$this->db->distinct();
+		$this->db->select('I.id,I.nombre');
+		$this->db->from('Indicadores I');
+		$this->db->join('Competencias C','C.indicador = I.id');
+		$this->db->join('Comportamientos Co','Co.competencia = C.id');
+		$this->db->join('Comportamiento_Posicion CP','Co.id = CP.comportamiento');
+		$this->db->order_by('I.nombre');
+		$this->db->where(array('I.estatus'=>1,'C.estatus'=>1,'CP.posicion'=>$posicion));
+		return $this->db->get()->result();
+	}
+
+	function getObjetivosByDominio($dominio,$area,$posicion) {
+		$this->db->select('O.id,O.nombre,PO.valor,O.descripcion');
+		$this->db->from('Objetivos O');
+		$this->db->join('Objetivos_Areas OA','OA.objetivo = O.id');
+		$this->db->join('Porcentajes_Objetivos PO','PO.objetivo = O.id');
+		$this->db->where(array('O.dominio'=>$dominio,'OA.area'=>$area,'PO.posicion'=>$posicion,'O.estatus'=>1));
+		return $this->db->get()->result();
+	}
+
+	function getMetricaByObjetivo($obj) {
+		$this->db->from('Metricas');
+		$this->db->where('objetivo',$obj);
+		$this->db->order_by('valor','desc');
+		return $this->db->get()->result();
+	}
+
+	function getResponsabilidadByArea($area) {
+		$this->db->distinct();
+		$this->db->select('D.id, D.nombre');
+		$this->db->from('Areas A');
+		$this->db->join('Objetivos_Areas OA','OA.area = A.id');
+		$this->db->join('Objetivos O','O.id = OA.objetivo');
+		$this->db->join('Dominios D','O.dominio = D.id');
+		$this->db->order_by('D.nombre');
+		$this->db->where(array('A.id'=>$area,'D.estatus'=>1,'A.estatus'=>1,'O.estatus'=>1));
+		return $this->db->get()->result();
+	}
+
+	function getPerfil($area,$posicion) {
+		$this->db->select('D.nombre dominio,O.descripcion,A.nombre area,O.nombre objetivo,O.id id_objetivo,PO.valor');
+		$this->db->from('Areas A');
+		$this->db->join('Objetivos_Areas OA','OA.area = A.id');
+		$this->db->join('Objetivos O','OA.objetivo = O.id');
+		$this->db->join('Dominios D','O.dominio = D.id');
+		$this->db->join('Porcentajes_Objetivos PO','PO.objetivo = O.id');
+		$this->db->where('O.estatus',1);
+		if($posicion != null)
+			$this->db->where('PO.posicion',$posicion);
+		if($area != null)
+			$this->db->where('A.id',$area);
+		return $this->db->get()->result();
+
+	}
+
 	function getEvaluadores($tipo=0) {
 		$this->db->select('Us.foto,Ev.id id,Us.nombre nombre,count(Ev.evaluado) as cantidad');
 		$this->db->join('Users as Us','Us.id = Ev.evaluador');

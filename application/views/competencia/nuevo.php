@@ -1,7 +1,7 @@
 <!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron">
   <div class="container">
-    <h2>Nueva Responsabiidad</h2>
+    <h2>Nueva Competencia</h2>
   </div>
 </div>
 <div class="container">
@@ -14,36 +14,40 @@
 		</div>
 	<?php endif; ?>
   </div>
-  <form role="form" method="post" action="<?= base_url('objetivo/create');?>" class="form-signin">
+  <form role="form" method="post" action="<?= base_url('competencia/create');?>" class="form-signin">
   	<div class="row" align="center">
-	  <div class="col-md-6">
+	  <div class="col-md-2"></div>
+	  <div class="col-md-4">
 		<div class="form-group">
 		  <label for="nombre">Nombre:</label>
 		  <input name="nombre" type="text" class="form-control" style="max-width:300px; text-align:center;" 
 			id="nombre" required value="" placeholder="Nombre">
 		</div>
 		<div class="form-group">
-		  <label for="dominio">Dominio:</label>
-		  <select name="dominio" class="form-control" style="max-width:300px; text-align:center">
-		  	<?php foreach ($dominios as $dominio) : ?>
-			  <option value="<?= $dominio->id;?>"><?= $dominio->nombre;?></option>
+		  <label for="dominio">Indicador:</label>
+		  <select name="indicador" class="form-control" style="max-width:300px; text-align:center">
+		  	<?php foreach ($indicadores as $indicador) : ?>
+			  <option value="<?= $indicador->id;?>"><?= $indicador->nombre;?></option>
 			<?php endforeach; ?>
 		  </select>
 		</div>
 	  </div>
-	  <div class="col-md-6">
+	  <div class="col-md-4">
 		<div class="form-group">
-		  <label for="nombre">Descripción:</label>
-		  <textarea name="descripcion" class="form-control" style="max-width:300px;text-align:center" rows="5" 
+		  <label for="descripcion">Descripción:</label>
+		  <textarea name="descripcion" class="form-control" style="max-width:300px;text-align:center" rows="3" 
 		  	required placeholder="Agrega una descripción"></textarea>
+		  <label for="puntuacion">Puntuación</label>
+		  <input type="text" class="form-control" style="max-width:300px;text-align:center" name="puntuacion" 
+		  	required placeholder="Puntuación">
 		</div>
 	  </div>
 	</div>
 	<div style="height:60px" class="row" align="center">
 	  <div class="col-md-12">
 		  <button type="submit" class="btn btn-lg btn-primary btn-block" style="max-width:200px; text-align:center;">
-		  	Registrar Datos</button>
+		  	Registrar</button>
 	  </div>
 	</div>
   </form>
-  <div align="center"><a href="<?= base_url('administrar_dominios');?>">&laquo;Regresar</a></div>
+  <div align="center"><a href="<?= base_url('administrar_indicadores');?>">&laquo;Regresar</a></div>

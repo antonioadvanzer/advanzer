@@ -8,7 +8,9 @@ class Area_model extends CI_Model{
 		parent::__construct();
 	}
 
-	function getAll() {
+	function getAll($estatus=null) {
+		if($estatus!=null)
+			$this->db->where('estatus',$estatus);
 		return $this->db->get('Areas')->result();
 	}
 
@@ -88,6 +90,7 @@ class Area_model extends CI_Model{
 			endforeach;
 			$this->db->where_not_in('Re.id',$array_temp);
 		endif;
+		$this->db->distinct();
 		$this->db->select('Re.id,Re.nombre');
 		$this->db->join('Objetivos_Areas Ob_R','Ob_R.area = Re.id','LEFT OUTER');
 		$this->db->join('Objetivos O','O.id = Ob_R.objetivo','LEFT OUTER');
@@ -99,7 +102,7 @@ class Area_model extends CI_Model{
 		$this->db->from('Areas A');
 		$this->db->join('Objetivos_Areas OA','A.id = OA.area');
 		$this->db->where('OA.objetivo',$obj);
-		return $this->db->get()->first_row();
+		return $this->db->get()->result();
 	}
 
 }

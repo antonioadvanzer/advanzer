@@ -1,7 +1,7 @@
 <!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron">
   <div class="container">
-    <h2>Detalle del Dominio</h2>
+    <h2>Detalle del Indicador</h2>
   </div>
 </div>
 <div class="container">
@@ -13,14 +13,15 @@
 			<?= $err_msg;?>
 		</div>
 	<?php endif; ?>
-	<form role="form" method="post" action="<?= base_url('dominio/update');?>/<?= $dominio->id;?>" class="form-signin">
+	<form role="form" method="post" action="<?= base_url('indicador/update');?>" class="form-signin">
+	  <input type="hidden" name="id" value="<?= $indicador->id;?>">
 	  <div align="center" class="row">
 		<div class="col-md-2"></div>
 		<div class="col-md-4">
 		  <div class="form-group">
 		    <label for="nombre">Nombre:</label>
 		    <input name="nombre" type="text" class="form-control" style="max-width:300px; text-align:center;" 
-		    id="nombre" required value="<?= $dominio->nombre; ?>">
+		    id="nombre" required value="<?= $indicador->nombre; ?>">
 		  </div>
 		</div>
 		<div class="col-md-4">
@@ -32,5 +33,6 @@
 		</div>
 	  </div>
 	</form>
-	<a href="<?= base_url('dominio/nuevo');?>">&laquo;Regresar</a>
+	<a href="<?= base_url('indicador/nuevo');?>">&laquo;Regresar</a>
   </div>
+ 

@@ -8,14 +8,89 @@ class Masiva_model extends CI_Model{
 		parent::__construct();
 	}
 
-	function dropTables() {
-		if($this->db->truncate('Porcentajes_Objetivos'))
-			if($this->db->truncate('Metricas'))
-				if($this->db->truncate('Objetivos_Areas'))
-					if($this->db->truncate('Objetivos'))
-						if($this->db->truncate('Areas'))
-							if($this->db->truncate('Dominios'))
+	function dropTables($tipo) {
+		switch ($tipo) {
+			case 1:
+				if($this->db->truncate('Porcentajes_Objetivos'))
+					if($this->db->truncate('Metricas'))
+						if($this->db->truncate('Objetivos_Areas'))
+							if($this->db->truncate('Objetivos'))
+								if($this->db->truncate('Areas'))
+									if($this->db->truncate('Dominios'))
+										return true;
+				break;
+			case 2:
+				if($this->db->truncate('Comportamiento_Posicion'))
+					if($this->db->truncate('Comportamientos'))
+						if($this->db->truncate('Competencias'))
+							if($this->db->truncate('Indicadores'))
 								return true;
+				break;
+		}
+		return false;
+	}
+
+	function registraCompetencias($rows,$head) {
+		foreach ($rows as $key => $val) :
+			foreach ($val as $row => $value) :
+				switch ($row) {
+					case 'A':
+						$result=$this->db->select('id')->where('nombre',$value)->get('Indicadores');
+						if($result->num_rows() == 1)
+							$indicador=$result->first_row()->id;
+						else{
+							$this->db->insert('Indicadores',array('nombre'=>$value));
+							if($this->db->affected_rows() == 1)
+								$indicador=$this->db->insert_id();
+							else
+								return false;
+						}
+						break;
+					case 'C':
+						$result=$this->db->select('id')->where('nombre',$value)->get('Competencias');
+						if($result->num_rows() == 1)
+							$competencia=$result->first_row()->id;
+						else{
+							$this->db->insert('Competencias',array('nombre'=>$value,'indicador'=>$indicador));
+							if($this->db->affected_rows() == 1)
+								$competencia=$this->db->insert_id();
+							else
+								return false;
+						}
+						break;
+					case 'D':
+						$result=$this->db->select('descripcion')->where('id',$competencia)->get('Competencias')->first_row()->descripcion;
+						if(!$result){
+							$this->db->where('id',$competencia)->update('Competencias',array('descripcion'=>$value));
+							if($this->db->affected_rows() != 1)
+								return false;
+						}
+						break;
+					case 'E':
+						$comportamiento=explode('.', $value);
+						$this->db->insert('Comportamientos',array('descripcion'=>$comportamiento[1],
+							'valor'=>$comportamiento[0],'competencia'=>$competencia));
+						if($this->db->affected_rows() == 1)
+							$comportamiento=$this->db->insert_id();
+						break;
+					case 'G':
+					case 'H':
+					case 'I':
+					case 'J':
+					case 'K':
+					case 'L':
+						if($value == 'ü'){
+							$this->db->insert('Comportamiento_Posicion',array('posicion'=>$head[$row],
+								'comportamiento'=>$comportamiento));
+						}
+						break;
+					default:
+						# code...
+						break;
+				}
+			endforeach;
+		endforeach;
+		return true;
 	}
 
 	function registraObjetivos($rows,$head) {
@@ -72,7 +147,7 @@ class Masiva_model extends CI_Model{
 							$this->db->insert('Porcentajes_Objetivos',array('objetivo'=>$objetivo,'valor'=>$valor,
 								'posicion'=>$head[$row]));
 							if($this->db->affected_rows() != 1)
-								return false;
+								exit();
 							break;
 						case 'AD':
 							break;

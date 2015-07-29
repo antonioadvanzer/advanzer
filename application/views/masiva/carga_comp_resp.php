@@ -25,11 +25,21 @@
 			</div>
 		</div>
 	</div>
-	<div align="center" class="row">
-		<form id="frmCarga2" role="form" action="javascript:;" method="post" enctype="multipart/form-data" class="form-signin">
+	<form id="frmCarga2" role="form" action="javascript:;" method="post" enctype="multipart/form-data" class="form-signin">
+		<div align="center" class="row">
+			<div class="col-md-10" align="center">
+				<div class="form-group">
+					<select class="form-control" onchange="$('#datos').show();" style="max-width:300px;text-align:center" name="tipo">
+						<option disabled selected>-- Selecciona un tipo de carga --</option>
+						<option value="1">Responsabilidades</option>
+						<option value="2">Competencias</option>
+					</select>
+				</div>
+			</div>
+		</div>
+		<div align="center" class="row" id="datos" style="display:none">
 			<div class="col-md-6" align="center">
 				<div class="form-group">
-					<label for="foto" class="control-label">Selecciona el archivo</label>
 					<input class="form-control" type="file" id="file" name="file" size="40" style="max-width:300px; text-align:center;" required/>
 				</div>
 			</div>
@@ -39,8 +49,8 @@
 						<span class="glyphicon glyphicon-upload" aria-hidden="true"></span> Cargar Archivo</button>
 				</div>
 			</div>
-		</form>
-	</div>
+		</div>
+	</form>
 	<div class="row" align="center">
 		<div class="col-md-12">
 			<div class="loading-progress" style="width:80%;"></div>
@@ -55,9 +65,7 @@
 				formData = new FormData($('#frmCarga2')[0]);
 
 				//var progress = $(".loading-progress").progressTimer();
-				$( ".loading-progress" ).progressbar({
-					value: false
-				});
+				$( ".loading-progress" ).progressbar({ value: false });
 				$.ajax({
 					url:'<?= base_url("masiva/upload_comp_resp");?>',
 					type:'POST',

@@ -9,7 +9,7 @@ class User_model extends CI_Model{
 	}
 
 	function do_login($email,$password){
-		$this->db->select('id,email,nombre,foto,empresa');
+		$this->db->select('id,email,nombre,foto,empresa,posicion,area');
 		$this->db->from('Users');
 		$this->db->where('email',$email);
 		$this->db->where('estatus',1);

@@ -18,17 +18,18 @@ class Dominio extends CI_Controller {
       if($msg!=null)
         $data['msg']=$msg;
     	$data['dominios'] = $this->dominio_model->getAll();
+      $data['areas'] = $this->area_model->getAll();
     	
-      $this->layout->title('Capital Humano - Objetivos');
+      $this->layout->title('Capital Humano - Responsabilidades');
     	$this->layout->view('dominio/index',$data);
     }
 
     public function load_objetivos() {
     	if($this->input->post('dominio')) :
     		$dominio = $this->input->post('dominio');
-    		$objetivos = $this->objetivo_model->getByDominio($dominio);
-    		foreach ($objetivos as $obj): 
-          $area = $this->area_model->searchByObjetivo($obj->id);
+        $area = $this->input->post('area');
+    		$objetivos = $this->objetivo_model->getByDominioArea($dominio,$area);
+    		foreach ($objetivos as $obj):
     	?>
             <tr>
               <td><span class="glyphicon glyphicon-eye-open" style="cursor:pointer" onclick="
@@ -44,15 +45,13 @@ class Dominio extends CI_Controller {
                   endforeach; ?>
                 </span></td>
               <td><span style="cursor:pointer" onclick="location.href='<?= base_url('objetivo/ver/');?>/'+
-                <?= $obj->id;?>"><?= $area->nombre;?></span></td>
-              <td><span style="cursor:pointer" onclick="location.href='<?= base_url('objetivo/ver/');?>/'+
                 <?= $obj->id;?>">
                   <?php foreach ($this->porcentaje_objetivo_model->getByObjetivo($obj->id) as $porc) : 
                   	echo $porc->posicion." - ". $porc->valor ."%<br>";
                   endforeach; ?>
                 </span></td>
               <td align="right"><span style="cursor:pointer;" onclick="
-	              if(confirm('Seguro que desea cambiar el estatus del objetivo: \n <?= $obj->nombre;?>'))location.href=
+	              if(confirm('Seguro que desea cambiar el estatus de la responsabilidad: \n <?= $obj->nombre;?>'))location.href=
 	              '<?= base_url('objetivo/del/');?>/'+<?= $obj->id;?>;" class="glyphicon 
 	              <?php if($obj->estatus ==1 ) echo "glyphicon-ok"; else echo "glyphicon-ban-circle"; ?>"></span></td>
             </tr>
@@ -106,9 +105,8 @@ class Dominio extends CI_Controller {
 
     public function update($id) {
       $nombre=$this->input->post('nombre');
-      $descripcion=$this->input->post('descripcion');
-      if($this->dominio_model->update($id,$nombre,$descripcion))
-        $this->index("Se ha registrado un nuevo dominio");
+      if($this->dominio_model->update($id,$nombre))
+        $this->nuevo(null,"Se ha actualizado el dominio");
       else
         $this->ver($id,"Error al agregar dominio");
     }

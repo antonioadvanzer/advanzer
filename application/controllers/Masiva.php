@@ -17,11 +17,12 @@ class Masiva extends CI_Controller {
 	}
 
 	function upload_comp_resp() {
+		$tipo=$this->input->post('tipo');
 		$status="";$msg="";$file_name='file';
 
 		$config['upload_path'] = './assets/docs/';
 		$config['allowed_types'] = 'xls|xlsx';
-		$config['file_name'] = 'Carga_Masiva_'.date('Y-m-d');
+		$config['file_name'] = $tipo.'_Carga_Masiva_'.date('Y-m-d');
 		$config['overwrite'] = TRUE;
 
 		$this->load->library('upload', $config);
@@ -50,20 +51,33 @@ class Masiva extends CI_Controller {
 			}
 
 			$this->db->trans_begin();
-
 			//vaciar tablas
-			if(!$this->masiva_model->dropTables())
+			if(!$this->masiva_model->dropTables($tipo))
 				exit();
-			
-			//valido
-			foreach ($header as $h => $valores) :
-				if(!$this->masiva_model->registraAreas($valores))
-					exit();
-				$head=$valores;
-			endforeach;
-			
-			if(!$this->masiva_model->registraObjetivos($arr_data,$head))
-				exit();
+			//llenar tablas en base al tipo(1=responsabilidades, 2=competencias)
+			switch ($tipo) {
+				case 1:
+					foreach ($header as $h => $valores) :
+						if(!$this->masiva_model->registraAreas($valores))
+							exit();
+						$head=$valores;
+					endforeach;
+					
+					if(!$this->masiva_model->registraObjetivos($arr_data,$head))
+						exit();
+					break;
+				case 2:
+					foreach ($header as $h => $valores) {
+						$head=$valores;
+					}
+					if(!$this->masiva_model->registraCompetencias($arr_data,$head))
+						exit();
+					break;
+
+				default:
+					# code...
+					break;
+			}
 			
 			if($this->db->trans_status() === FALSE){
 				$this->db->trans_rollback();

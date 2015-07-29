@@ -100,7 +100,7 @@ class User extends CI_Controller {
     	$area = $this->input->post('area');
     	$posicion = $this->input->post('posicion');
     	$estatus = $this->input->post('estatus');
-        $requisicion=$this->inout->post('requisicion');
+        $requisicion=$this->input->post('requisicion');
         $admin=$this->input->post('admin');
     	if($this->user_model->update($id,$nombre,$email,$tipo,$area,$posicion,$estatus)){
     		$msg = "Perfil actualizado correctamente";

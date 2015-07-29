@@ -61,8 +61,8 @@
 		    <label for="posicion">Posición:</label>
 		    <select class="form-control" style="max-width:300px; text-align:center;" name="posicion">
 		    	<option>Analista</option>
-		    	<option>Consultor / Especialista</option>
-		    	<option>Consultor Sr / Especialista Sr</option>
+		    	<option>Consultor</option>
+		    	<option>Consultor Sr</option>
 		    	<option>Gerente / Master</option>
 		    	<option>Gerente Sr / Experto</option>
 		    	<option>Director</option>

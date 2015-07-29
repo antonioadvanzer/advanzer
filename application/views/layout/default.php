@@ -85,11 +85,12 @@
 							<li role="separator" class="divider"></li>
 							<li class="dropdown-submenu"><a tabindex="-1" href="#">ABC</a>
 								<ul class="dropdown-menu">
-									<li><a href="<?= base_url('area');?>">Areas</a></li>
+									<li><a href="<?= base_url('area');?>">Administración de Areas</a></li>
 									<li><a href="<?= base_url('administrar_usuarios'); ?>">Administración de Usuarios</a></li>
-									<li><a href="<?= base_url('evaluadores'); ?>">Evaluadores</a></li>
-									<li><a href="<?= base_url('evaluadores360');?>">Evaluadores 360</a></li>
-									<li><a href="<?= base_url('administrar_dominios');?>">Administración de Objetivos</a></li>
+									<li><a href="<?= base_url('evaluadores'); ?>">Administración de Evaluadores</a></li>
+									<li><a href="<?= base_url('evaluadores360');?>">Administración de Evaluadores 360</a></li>
+									<li><a href="<?= base_url('administrar_dominios');?>">Administración de Responsabilidades</a></li>
+									<li><a href="<?= base_url('administrar_indicadores');?>">Administración de Competencias</a></li>
 									<li><a href="<?= base_url('administrar_cursos');?>">Administración de Cursos</a></li>
 								</ul>
 							</li>
@@ -112,8 +113,7 @@
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
 							Evaluación<span class="caret"></span></a>
 						<ul class="dropdown-menu">
-							<li><a href="<?= base_url('competencias');?>">Competencias</a></li>
-							<li><a href="<?= base_url('competencias');?>">Responsabilidades</a></li>
+							<li><a href="<?= base_url('evaluacion/perfil');?>">Perfil de Evaluación</a></li>
 						</ul>
 					</li>
 					<!--

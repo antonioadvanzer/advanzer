@@ -8,9 +8,11 @@ class Objetivo_model extends CI_Model{
 		parent::__construct();
 	}
 
-	function getByDominio($dominio) {
-		$this->db->where('dominio',$dominio);
-		return $this->db->get('Objetivos')->result();
+	function getByDominioArea($dominio,$area) {
+		$this->db->select('O.id,O.nombre,O.descripcion,O.estatus');
+		$this->db->join('Objetivos_Areas OA','O.id = OA.objetivo');
+		$this->db->where(array('O.dominio'=>$dominio,'OA.area'=>$area));
+		return $this->db->get('Objetivos O')->result();
 	}
 
 	function searchById($id) {

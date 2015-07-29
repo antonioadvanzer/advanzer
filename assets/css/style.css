@@ -3,39 +3,26 @@ img.user_img{
 	border:3px solid white;
 }
 img.logo{
-	/*-webkit-filter: drop-shadow(0px 0px 2px #fff);
-	filter: drop-shadow(2px 2px 2px #fff);
-    /*-webkit-filter: drop-shadow(0px 0px 2px #fff);
-    filter:drop-shadow(0px 0px 2px #fff);
-    filter: url(#drop-shadow);*/
     -ms-filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=12, OffY=12, Color='#FFF')";
     -webkit-filter: drop-shadow(0px 0px 2px #fff);
     -webkit-filter: box-shadow(0px 0px 2px #fff);
     filter: drop-shadow(0px 0px 2px #fff);
 }
 a.ghost{
-    /* utilizamos estas propiedades para centrar el botón */
     -webkit-transform: translateX(-50%) translateY(-50%);
     -ms-transform: translateX(-50%) translateY(-50%);
     transform: translateX(-50%) translateY(-50%);
-
-    /* definimos los estilos del texto */
     font-family: Tahoma, Verdana, Segoe, sans-serif;
     font-size: 1.5em;
     letter-spacing: 0.1em;
     color: #000;
     text-decoration: none;
     text-transform: uppercase;
-
-    /* agregamos un borde y lo separamos del texto */
     border: 0.15em solid #fff;
     padding: 0.2em 0.3em;
-
-    /* animamos el cambio de colores */
     -webkit-transition: color 300ms, background 500ms, border-color 700ms;
     transition: color 300ms, background 500ms, border-color 700ms;
 }
-
 a.ghost:hover {
     background: #828282;
     border-color: #FFFFFF;
@@ -66,11 +53,9 @@ div.iframe{
     -moz-border-radius: 0 6px 6px;
     border-radius: 0 6px 6px 6px;
 }
-
 .dropdown-submenu:hover>.dropdown-menu {
     display: block;
 }
-
 .dropdown-submenu>a:after {
     display: block;
     content: " ";
@@ -84,15 +69,12 @@ div.iframe{
     margin-top: 5px;
     margin-right: -10px;
 }
-
 .dropdown-submenu:hover>a:after {
     border-left-color: #fff;
 }
-
 .dropdown-submenu.pull-left {
     float: none;
 }
-
 .dropdown-submenu.pull-left>.dropdown-menu {
     left: -100%;
     margin-left: 10px;
@@ -100,27 +82,72 @@ div.iframe{
     -moz-border-radius: 6px 0 6px 6px;
     border-radius: 6px 0 6px 6px;
 }
-
-#progressbox {
-border: 1px solid #0099CC;
-padding: 1px; 
-position:relative;
-width:400px;
-border-radius: 3px;
-margin: 10px;
-display:none;
-text-align:left;
+.accordion {
+  margin: auto auto;
 }
-#progressbar {
-height:20px;
-border-radius: 3px;
-background-color: #003333;
-width:1%;
+.accordion h1, h2, h3, h4 {
+  cursor: pointer;
 }
-#statustxt {
-top:3px;
-left:50%;
-position:absolute;
-display:inline-block;
-color: #000000;
+.accordion h1 {
+  padding: 15px 20px;
+  background-color: #444;
+  /*font-family: Lobster;*/
+  font-size: 2rem;
+  font-weight: normal;
+  color: #FFF;
+  text-transform: uppercase;
+}
+.accordion h1:hover {
+  color: #999;
+}
+.accordion h1:first-child {
+  border-radius: 10px 10px 0 0;
+}
+.accordion h1:last-of-type {
+  border-radius: 0 0 10px 10px;
+}
+.accordion h1:not(:last-of-type) {
+  border-bottom: 1px dotted #FFF;
+}
+.accordion div, .accordion p {
+  display: none;
+}
+.accordion h2 {
+  padding: 5px 25px;
+  background: -webkit-gradient(linear, left bottom, left top, from(#B0B914), to(#FFF));
+  /*background-color: #B0B914;*/
+  font-size: 1.2rem;
+  color: #666666;
+  text-transform: uppercase;
+}
+.accordion h2:hover {
+  color: #000;
+}
+.accordion label {
+  width: 100%;
+  padding: 5px 30px;
+  background-color: #dadada;
+  font-size: 1.4rem;
+  color: #000; 
+}
+.accordion h3:hover {
+  background-color: #000;
+  color: #FFF;
+}
+.accordion h4 {
+  padding: 5px 35px;
+  background-color: #ffc25a;
+  font-size: .9rem;
+  color: #af720a; 
+}
+.accordion h4:hover {
+  background-color: #e0b040;
+}
+.accordion p {
+  padding: 15px 35px;
+  background-color: #ddd;
+  font-family: "Georgia";
+  font-size: .8rem;
+  color: #333;
+  line-height: 1.3rem;
 }
