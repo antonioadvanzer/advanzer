@@ -50,12 +50,12 @@
         </select>
         <span class="input-group-addon">Posición</span>
         <select name="posicion" id="posicion" class="form-control">
-          <option>Analista</option>
-          <option>Consultor</option>
-          <option>Consultor Sr</option>
-          <option>Gerente / Master</option>
-          <option>Gerente Sr / Experto</option>
-          <option>Director</option>
+          <option value="8">Nivel 8 o Superior (Analista)</option>
+          <option value="7">Nivel 7 (Consultor / Especialista)</option>
+          <option value="6">Nivel 6 (Consultor Sr / Especialista Sr)</option>
+          <option value="5">Nivel 5 (Gerente / Master)</option>
+          <option value="4">Nivel 4 (Gerente Sr / Experto)</option>
+          <option value="3">Nivel 3 o Inferior (Director)</option>
         </select>
       </div>
       <table width="90%" align="center" class="table">
@@ -64,7 +64,6 @@
             <th class="col-md-2">Competencia</th>
             <th class="col-md-3">Descripción</th>
             <th class="col-md-4">Comportamientos</th>
-            <th class="col-md-2">Puntuación esperada</th>
           </tr>
         </thead>
         <tbody id="result"></tbody>

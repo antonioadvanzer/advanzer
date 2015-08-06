@@ -8,8 +8,8 @@ class Competencia_model extends CI_Model{
 		parent::__construct();
 	}
 
-	function create($nombre,$indicador,$descripcion,$puntuacion) {
-		$this->db->insert('Competencias',array('nombre'=>$nombre,'indicador'=>$indicador,'descripcion'=>$descripcion,'puntuacion'=>$puntuacion));
+	function create($nombre,$indicador,$descripcion) {
+		$this->db->insert('Competencias',array('nombre'=>$nombre,'indicador'=>$indicador,'descripcion'=>$descripcion));
 		if($this->db->affected_rows() == 1)
 			return $this->db->insert_id();
 		else
@@ -19,9 +19,6 @@ class Competencia_model extends CI_Model{
 	function searchById($id) {
 		$result=$this->db->where('id',$id)->get('Competencias')->first_row();
 		$result->comportamientos=$this->db->where('competencia',$id)->get('Comportamientos')->result();
-		foreach ($result->comportamientos as $comportamiento) :
-			$comportamiento->posiciones = $this->db->where('comportamiento',$comportamiento->id)->get('Comportamiento_Posicion')->result();
-		endforeach;
 		return $result;
 	}
 
@@ -34,7 +31,7 @@ class Competencia_model extends CI_Model{
 	}
 
 	function addPosicionToComportamiento($comportamiento,$posicion) {
-		$this->db->insert('Comportamiento_Posicion',array('posicion'=>$posicion,'comportamiento'=>$comportamiento));
+		$this->db->insert('Comportamiento_Posicion',array('nivel_posicion'=>$posicion,'comportamiento'=>$comportamiento));
 	}
 
 	function delComportamiento($comportamiento) {
@@ -42,8 +39,8 @@ class Competencia_model extends CI_Model{
 			$this->db->where('id',$comportamiento)->delete('Comportamientos');
 	}
 
-	function update($id,$nombre,$descripcion,$puntuacion,$indicador) {
-		$this->db->where('id',$id)->update('Competencias',array('nombre'=>$nombre,'descripcion'=>$descripcion,'puntuacion'=>$puntuacion,'indicador'=>$indicador));
+	function update($id,$nombre,$descripcion,$indicador) {
+		$this->db->where('id',$id)->update('Competencias',array('nombre'=>$nombre,'descripcion'=>$descripcion,'indicador'=>$indicador));
 		if($this->db->affected_rows() == 1)
 			return true;
 		else

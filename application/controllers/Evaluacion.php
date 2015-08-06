@@ -247,7 +247,6 @@ class Evaluacion extends CI_Controller {
         $data['evaluador']=$this->user_model->searchById($evaluador);
         $data['asignados']=$this->evaluacion_model->getByEvaluador($evaluador,1);
         $data['no_asignados'] = $this->evaluacion_model->getNotByEvaluador($evaluador,$data['asignados'],1);
-        $data['no_asignados'] = $this->evaluacion_model->getNotByEvaluador($evaluador,$data['asignados']);
         $this->layout->title('Advanzer - Asigna Colaboradores');
         $this->layout->view('evaluacion/asignar_colaborador360',$data);
     }

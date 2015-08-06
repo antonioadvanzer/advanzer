@@ -57,15 +57,15 @@ class Objetivo_model extends CI_Model{
 	}
 
 	function getPesoByPosicion($objetivo,$posicion) {
-		$this->db->where(array('objetivo'=>$objetivo,'posicion'=>$posicion));
+		$this->db->where(array('objetivo'=>$objetivo,'nivel_posicion'=>$posicion));
 		return $this->db->get('Porcentajes_Objetivos')->first_row();
 	}
 
 	function update_peso($objetivo,$posicion,$valor) {
-		if($this->db->from('Porcentajes_Objetivos')->where(array('objetivo'=>$objetivo,'posicion'=>$posicion))->get()->num_rows() == 0)
-			$this->db->insert('Porcentajes_Objetivos',array('objetivo'=>$objetivo,'posicion'=>$posicion,'valor'=>$valor));
+		if($this->db->from('Porcentajes_Objetivos')->where(array('objetivo'=>$objetivo,'nivel_posicion'=>$posicion))->get()->num_rows() == 0)
+			$this->db->insert('Porcentajes_Objetivos',array('objetivo'=>$objetivo,'nivel_posicion'=>$posicion,'valor'=>$valor));
 		else{
-			$this->db->where(array('objetivo'=>$objetivo,'posicion'=>$posicion));
+			$this->db->where(array('objetivo'=>$objetivo,'nivel_posicion'=>$posicion));
 			$this->db->update('Porcentajes_Objetivos',array('valor'=>$valor));
 		}
 		if($this->db->affected_rows() == 1)

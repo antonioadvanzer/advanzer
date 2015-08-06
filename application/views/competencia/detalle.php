@@ -24,12 +24,14 @@
   <form role="form" method="post" action="<?= base_url('competencia/update');?>" class="form-signin">
   	<input type="hidden" name="id" value="<?= $competencia->id;?>">
   	<div class="row" align="center">
-	  <div class="col-md-6">
+	  <div class="col-md-4">
 		<div class="form-group">
 		  <label for="nombre">Nombre:</label>
 		  <input name="nombre" type="text" class="form-control" style="max-width:300px; text-align:center;" 
 			id="nombre" required value="<?= $competencia->nombre; ?>">
 		</div>
+	  </div>
+	  <div class="col-md-4">
 		<div class="form-group">
 		  <label for="indicador">Indicador:</label>
 		  <select name="indicador" class="form-control" style="max-width:300px; text-align:center">
@@ -40,14 +42,11 @@
 		  </select>
 		</div>
 	  </div>
-	  <div class="col-md-6">
+	  <div class="col-md-4">
 		<div class="form-group">
 		  <label for="descripcion">Descripción:</label>
 		  <textarea name="descripcion" class="form-control" style="max-width:300px;text-align:center" rows="3" 
 		  	required><?= $competencia->descripcion;?></textarea>
-		  <label for="puntuacion">Puntuación</label>
-		  <input type="text" class="form-control" style="mmax-width:300px;text-align:center" name="puntuacion"
-		  	value="<?= $competencia->puntuacion;?>">
 		</div>
 	  </div>
 	</div>
@@ -70,11 +69,7 @@
 		<div class="panel-heading">Comportamientos Asignados</div>
 		<select id="quitar" name="quitar" multiple class="form-control" style="overflow-y:auto;overflow-x:auto;min-height:160px;max-height:300px">
 		  <?php foreach($competencia->comportamientos as $comportamiento) : ?>
-			<option value="<?= $comportamiento->id;?>"><?= $comportamiento->descripcion;?> ( |
-				<?php foreach ($comportamiento->posiciones as $posicion) :
-					echo "$posicion->posicion | ";
-				endforeach; ?>
-			)</option>
+			<option value="<?= $comportamiento->id;?>"><?= $comportamiento->descripcion;?></option>
 		  <?php endforeach; ?>
 		</select>
   	  </div>
@@ -96,12 +91,12 @@
 			<span class="input-group-addon">Comportamiento</span>
 			<input id="comportamiento" type="text" class="form-control" value="" placeholder="Descripción">
 			<select id="posicion" name="posicion" multiple class="form-control" style="overflow-y:auto;overflow-x:auto;min-height:130px;max-height:300px">
-				<option>Analista</option>
-				<option>Consultor</option>
-				<option>Consultor Sr</option>
-				<option>Gerente / Master</option>
-				<option>Gerente Sr / Experto</option>
-				<option>Director</option>
+				<option value="8">Nivel 8 o Superior (Analista)</option>
+				<option value="7">Nivel 7 (Consultor / Especialista)</option>
+				<option value="6">Nivel 6 (Consultor Sr / Especialista Sr)</option>
+				<option value="5">Nivel 5 (Gerente / Master)</option>
+				<option value="4">Nivel 4 (Gerente Sr / Experto)</option>
+				<option value="3">Nivel 3 o Inferior (Director)</option>
 			</select>
 		</div>
   	  </div>

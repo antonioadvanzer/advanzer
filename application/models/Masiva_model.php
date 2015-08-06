@@ -69,7 +69,7 @@ class Masiva_model extends CI_Model{
 					case 'E':
 						$comportamiento=explode('.', $value);
 						$this->db->insert('Comportamientos',array('descripcion'=>$comportamiento[1],
-							'valor'=>$comportamiento[0],'competencia'=>$competencia));
+							'competencia'=>$competencia));
 						if($this->db->affected_rows() == 1)
 							$comportamiento=$this->db->insert_id();
 						break;
@@ -79,10 +79,12 @@ class Masiva_model extends CI_Model{
 					case 'J':
 					case 'K':
 					case 'L':
-						if($value == 'ü'){
-							$this->db->insert('Comportamiento_Posicion',array('posicion'=>$head[$row],
-								'comportamiento'=>$comportamiento));
-						}
+						if($value == 'ü')
+							$value=1;
+						else
+							$value=0;
+						$this->db->insert('Comportamiento_Posicion',array('nivel_posicion'=>$head[$row],
+							'comportamiento'=>$comportamiento,'evalua'=>$value));
 						break;
 					default:
 						# code...
@@ -145,7 +147,7 @@ class Masiva_model extends CI_Model{
 						case 'AC':
 							$valor=$value*100;
 							$this->db->insert('Porcentajes_Objetivos',array('objetivo'=>$objetivo,'valor'=>$valor,
-								'posicion'=>$head[$row]));
+								'nivel_posicion'=>$head[$row]));
 							if($this->db->affected_rows() != 1)
 								exit();
 							break;

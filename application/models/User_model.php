@@ -9,12 +9,16 @@ class User_model extends CI_Model{
 	}
 
 	function do_login($email,$password){
-		$this->db->select('id,email,nombre,foto,empresa,posicion,area');
-		$this->db->from('Users');
-		$this->db->where('email',$email);
-		$this->db->where('estatus',1);
+		$this->db->select('U.id,U.email,U.nombre,U.foto,U.empresa,P.nombre posicion,A.nombre area,T.nombre track');
+		$this->db->from('Users U');
+		$this->db->join('Areas A','A.id = U.area','LEFT OUTER');
+		$this->db->join('Posicion_Track PT','PT.id = U.posicion_track','LEFT OUTER');
+		$this->db->join('Posiciones P','P.id = PT.posicion','LEFT OUTER');
+		$this->db->join('Tracks T','T.id = PT.track','LEFT OUTER');
+		$this->db->where('U.email',$email);
+		$this->db->where('U.estatus',1);
 		if($password != "google")
-			$this->db->where('password',md5($password));
+			$this->db->where('U.password',md5($password));
 		$this->db->limit(1);
 
 		$query=$this->db->get();
@@ -29,8 +33,12 @@ class User_model extends CI_Model{
 	}
 
 	function getPagination($limit,$start) {
-		$this->db->select('U.id,U.nombre,U.email,U.foto,U.empresa,U.tipo,U.posicion,U.estatus,A.nombre area');
+		$this->db->select('U.id,U.nomina,U.categoria,U.plaza,U.nombre,U.email,U.foto,U.empresa,U.estatus,A.nombre area,
+			T.nombre track,P.nombre posicion');
 		$this->db->join('Areas A','U.area = A.id','LEFT OUTER');
+		$this->db->join('Posicion_Track PT','PT.id = U.posicion_track','LEFT OUTER');
+		$this->db->join('Tracks T','PT.track = T.id','LEFT OUTER');
+		$this->db->join('Posiciones P','P.id = PT.posicion','LEFT OUTER');
 		$this->db->limit($limit,$start);
 		$this->db->order_by('nombre','asc');
 		//$this->db->where('estatus',1);
@@ -39,7 +47,36 @@ class User_model extends CI_Model{
 
 	function searchById($id) {
 		$this->db->where('id',$id);
-		return $this->db->get('Users')->first_row();
+		$result = $this->db->get('Users')->first_row();
+		
+		$this->db->select('T.id');
+		$this->db->join('Posicion_Track PT','PT.track = T.id');
+		$this->db->join('Users U','U.posicion_track = PT.id');
+		$track="";
+		if($res=$this->db->get('Tracks T')->first_row())
+			$track = $res->id;
+		$result->track = $track;
+
+		$this->db->select('P.id');
+		$this->db->join('Posicion_Track PT','PT.posicion = P.id');
+		$this->db->join('Users U','U.posicion_track = PT.id');
+		$posicion="";
+		if($res=$this->db->get('Posiciones P')->first_row())
+			$posicon = $res->id;
+		$result->posicion = $posicion;
+
+		return $result;
+	}
+
+	function getTrackByUser($user) {
+		$this->db->select('T.id');
+		$this->db->from('Tracks T');
+		$this->db->join('Posicion_Track PT','PT.track = T.id');
+		$this->db->join('Users U','U.posicion_track = PT.id');
+		$this->db->where('U.id',$user);
+		$result = $this->db->get();
+		if($result->num_rows() > 0)
+			return $result->first_row()->id;
 	}
 
 	function update_foto($id,$nombre) {
@@ -47,15 +84,7 @@ class User_model extends CI_Model{
 		$this->db->update('Users',array('foto'=>$nombre));
 	}
 
-	function update($id,$nombre,$email,$tipo,$area,$posicion,$estatus) {
-		$datos=array(
-			'nombre'=>$nombre,
-			'email'=>$email,
-			'tipo'=>$tipo,
-			'area'=>$area,
-			'estatus'=>$estatus,
-			'posicion'=>$posicion
-		);
+	function update($id,$datos) {
 		$this->db->where('id',$id);
 		$this->db->update('Users',$datos);
 		if($this->db->affected_rows() == 1)
@@ -64,25 +93,11 @@ class User_model extends CI_Model{
 			return FALSE;
 	}
 
-	function create($nombre,$email,$empresa,$tipo,$area,$posicion,$estatus,$password,$requisicion,$admin) {
-		$datos=array(
-			'nombre'=>$nombre,
-			'email'=>$email,
-			'empresa'=>$empresa,
-			'tipo'=>$tipo,
-			'area'=>$area,
-			'estatus'=>$estatus,
-			'posicion'=>$posicion,
-			'password'=>$password,
-			'requisicion'=>$requisicion,
-			'admin'=>$admin
-		);
-		try {
-			$this->db->insert('Users',$datos);
-			return $this->db->insert_id();
-		} catch (Exception $e) {
-			return false;
-		}
+	function create($datos) {
+		$this->db->insert('Users',$datos);
+		if($this->db->affected_rows() == 1)
+			return true;
+		return false;
 	}
 
 	function getStatus($id) {
@@ -101,12 +116,19 @@ class User_model extends CI_Model{
 	}
 
 	function getByText($valor) {
+		$this->db->select('U.id,U.nomina,U.categoria,U.plaza,U.nombre,U.email,U.foto,U.empresa,U.estatus,
+			A.nombre area,T.nombre track,P.nombre posicion');
+		$this->db->join('Areas A','U.area = A.id','LEFT OUTER');
+		$this->db->join('Posicion_Track PT','PT.id = U.posicion_track','LEFT OUTER');
+		$this->db->join('Tracks T','PT.track = T.id','LEFT OUTER');
+		$this->db->join('Posiciones P','P.id = PT.posicion','LEFT OUTER');
+		$this->db->like('U.nombre',$valor,'both');
+		$this->db->or_like('U.email',$valor);
+		$this->db->or_like('P.nombre',$valor);
+		$this->db->or_like('T.nombre',$valor);
 		$this->db->order_by('nombre','asc');
-		$this->db->like('nombre',$valor,'both');
-		$this->db->or_like('email',$valor);
-		$this->db->or_like('posicion',$valor);
-		$this->db->or_like('tipo',$valor);
-		return $this->db->get('Users')->result();
+		//$this->db->where('estatus',1);
+		return $this->db->get('Users U')->result();
 	}
 	function getAll($tipo=null) {
 		if($tipo == 1)

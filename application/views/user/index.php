@@ -29,7 +29,7 @@
       <h3><b>Usuarios:</b></h3>
       <div class="input-group">
         <input name="nombre" type="text" class="form-control" id="nombre" 
-          placeholder="Buscar por nombre, email, tipo o posición">
+          placeholder="Buscar por nombre, email, track o posición">
         <span class="input-group-addon">Filtrar Resultados</span>
         <input id="filter" type="text" class="form-control" placeholder="Filtrar...">
       </div>
@@ -37,11 +37,15 @@
         <thead>
           <tr>
             <th data-halign="center" data-align="center"></th>
+            <th data-halign="center" data-field="nomina" data-sortable="true">Nómina</th>
             <th data-halign="center" data-field="nombre" data-sortable="true">Nombre</th>
             <th data-halign="center" data-field="email">E-Mail</th>
             <th data-halign="center" data-field="empresa">Empresa</th>
+            <th data-halign="center" data-field="track">Track</th>
             <th data-halign="center" data-field="posición">Posición</th>
             <th data-halign="center" data-field="area">Área</th>
+            <th data-halign="center" data-field="categoria">Categoría</th>
+            <th data-halign="center" data-field="plaza">Plaza</th>
             <th data-halign="center" data-align="center"></th>
           </tr>
         </thead>
@@ -52,16 +56,24 @@
             <td><span class="glyphicon glyphicon-eye-open" style="cursor:pointer" onclick="
               location.href='<?= base_url('user/ver/');?>/'+<?= $user->id;?>"></span> 
               <span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
+              <?= $user->id;?>"><?= $user->nomina;?></span></td>
+            <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
               <?= $user->id;?>"><?= $user->nombre;?></span></td>
             <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
               <?= $user->id;?>"><?= $user->email;?></span></td>
             <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
               <?= $user->id;?>"><?php if($user->empresa == 1) echo "Advanzer"; 
               elseif($user->empresa == 2) echo "Entuizer";?></span></td>
+            <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver');?>/'+
+              <?= $user->id;?>"><?= $user->track;?></span></td>
             <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
               <?= $user->id;?>"><?= $user->posicion;?></span></td>
             <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
-              <?= $user->id;?>"><?= $user->tipo ." - ". $user->area;?></span></td>
+              <?= $user->id;?>"><?= $user->area;?></span></td>
+            <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
+              <?= $user->id;?>"><?= $user->categoria;?></span></td>
+            <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
+              <?= $user->id;?>"><?= $user->plaza;?></span></td>
             <td align="right"><span style="cursor:pointer;" onclick="
               if(confirm('Seguro que desea cambiar el estatus del usuario: \n <?= $user->nombre;?>'))location.href=
               '<?= base_url('user/del/');?>/'+<?= $user->id;?>;" class="glyphicon 

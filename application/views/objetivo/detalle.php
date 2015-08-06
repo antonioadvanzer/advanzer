@@ -1,7 +1,7 @@
 <!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron">
   <div class="container">
-    <h2>Detalle del Objetivo</h2>
+    <h2>Detalle de la Responsabilidad</h2>
   </div>
 </div>
 <div class="container">
@@ -69,8 +69,8 @@
 	  </div>
 	  <div class="col-md-4">
 		<div id="metrica" class="form-group">
-		  <textarea name="descripcion" class="form-control" rows="2" style="max-width:300px;text-align:center;" required 
-            placeholder="Agrega una descripción"></textarea>
+		  <textarea name="descripcion" class="form-control" rows="3" style="max-width:300px;text-align:center;" 
+		  	required placeholder="Agrega una descripción"></textarea>
 		</div>
 	  </div>
 	  <div id="boton" class="col-md-4">
@@ -94,12 +94,12 @@
 		<div class="form-group">
 		  <select id="posicion" name="posicion" class="form-control" style="max-width:210px;text-align:center;">
 		  	<option selected disabled>-- Selecciona un valor --</option>
-		  	<option>Analista</option>
-		    <option>Consultor / Especialista</option>
-		    <option>Consultor Sr / Especialista Sr</option>
-		    <option>Gerente / Master</option>
-		    <option>Gerente Sr / Experto</option>
-		    <option>Director</option>
+		  	<option value="8">Nivel 8 o Superior (Analista)</option>
+		    <option value="7">Nivel 7 (Consultor / Especialista)</option>
+		    <option value="6">Nivel 6 (Consultor Sr / Especialista Sr)</option>
+		    <option value="5">Nivel 5 (Gerente / Master)</option>
+		    <option value="4">Nivel 4 (Gerente Sr / Experto)</option>
+		    <option value="3">Nivel 3 o Inferior (Director)</option>
 		  </select>
 		</div>
 	  </div>

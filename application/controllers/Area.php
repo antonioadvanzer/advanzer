@@ -14,9 +14,8 @@ class Area extends CI_Controller {
     	$data = array();
     	if (!empty($msg))
     		$data['msg'] = $msg;
-    	$data['areaes'] = $this->area_model->getAll();
     	$data['areas'] = $this->area_model->getAll();
-    	$this->layout->title('Capital Humano - Áreas');
+    	$this->layout->title('Advanzer - Áreas');
     	$this->layout->view('area/index',$data);
     }
 
@@ -25,7 +24,7 @@ class Area extends CI_Controller {
     	if (!empty($msg))
     		$data['err_msg'] = $msg;
     	$data['area'] = $this->area_model->searchById($id);
-    	$this->layout->title('Capital Humano - Info Área');
+    	$this->layout->title('Advanzer - Info Área');
     	$this->layout->view('area/detalle',$data);
     }
 

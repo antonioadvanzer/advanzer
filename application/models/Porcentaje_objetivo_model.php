@@ -10,6 +10,10 @@ class Porcentaje_objetivo_model extends CI_Model{
 
 	function getByObjetivo($obj) {
 		$this->db->where('objetivo',$obj);
-		return $this->db->get('Porcentajes_Objetivos')->result();
+		$result = $this->db->get('Porcentajes_Objetivos')->result();
+		foreach ($result as $porc) :
+			$porc->posiciones = $this->db->where('nivel',$porc->nivel_posicion)->get('Posiciones')->result();
+		endforeach;
+		return $result;
 	}
 }

@@ -35,12 +35,14 @@ class Indicador extends CI_Controller {
 						<?= $competencia->id;?>">
 						<ul>
 						<?php foreach ($this->indicador_model->getComportamientosByCompetenciaPosicion($competencia->id,$posicion) as $comportamiento) : 
-							echo "<li>$comportamiento->descripcion</li>";
+							if($comportamiento->evalua == 1)
+								$span="<span class='glyphicon glyphicon-ok-circle'></span>";
+							else
+								$span="<span class='glyphicon glyphicon-remove-circle'></span>";
+							echo "$span $comportamiento->descripcion<br><br>";
 						endforeach; ?>
 						</ul>
 					</span></td>
-					<td><span style="cursor:pointer" onclick="location.href='<?= base_url('competencia/ver/');?>/'+
-						<?= $competencia->id;?>"><?= $competencia->puntuacion;?></span></td>
 				</tr>
     			<?php
     		endforeach;

@@ -5,36 +5,6 @@
   </div>
 </div>
 <div class="container">
-  <!--<div align="center">
-	<form role="form" method="post" enctype="multipart/form-data" action="<?= base_url('user/upload_photo');?>/<?= $user->id;?>" class="form-signin">
-	  <div class="form-group">
-	  	<img height="200px" src="<?= base_url("assets/images/fotos/$user->foto");?>">
-	  </div>
-	  <div class="form-group">
-	  	<label for="foto" class="control-label">Elige la foto</label>
-	  	<input type="file" name="foto" size="40" required/>
-		<input type="submit" value="Subir Foto" class="btn btn-primary"/>
-	  </div>
-	  <div class="form-group">
-		<div align="center">
-	    <?php if(isset($err_msg)): ?>
-	      <div id="alert" class="alert alert-danger" role="alert" style="max-width:400px;">
-	        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-	        <span class="sr-only">Error:</span>
-	        <?= $err_msg;?>
-	      </div>
-	    <?php endif; ?>
-	    <?php if(isset($msg)): ?>
-	      <div id="alert" class="alert alert-success" role="alert" style="max-width:400px;">
-	        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-	        <span class="sr-only">Error:</span>
-	        <?= $msg;?>
-	      </div>
-	    <?php endif; ?>
-	  	</div>
-	  </div>
-	</form>
-  </div>-->
   <form role="form" method="post" action="<?= base_url('user/create');?>" class="form">
   	<div class="row" align="center">
 	  <div class="col-md-4">
@@ -55,26 +25,34 @@
 		    	<option value="2">Entuizer</option>
 		    </select>
 		  </div>
+		  <div class="form-group">
+			<label for="nomina"># Nómina:</label>
+			<input class="form-control" style="max-width:300px;text-align:center" name="nomina" value="" required>
+		  </div>  
 	  </div>
 	  <div class="col-md-4">
 	  	  <div class="form-group">
-		    <label for="posicion">Posición:</label>
-		    <select class="form-control" style="max-width:300px; text-align:center;" name="posicion">
-		    	<option>Analista</option>
-		    	<option>Consultor</option>
-		    	<option>Consultor Sr</option>
-		    	<option>Gerente / Master</option>
-		    	<option>Gerente Sr / Experto</option>
-		    	<option>Director</option>
-		    </select>
+		    <label for="plaza">Plaza:</label>
+		    <input name="plaza" type="text" class="form-control" style="max-width:300px; text-align:center;" 
+		    	required value="">
+		  </div>
+		  <div class="form-group">
+			<label for="track">Track</label>
+			<select class="form-control" style="max-width:300px;text-align:center" name="track" id="track">
+			  <option disabled selected>-- Selecciona un track --</option>
+				<?php foreach ($tracks as $track) : ?>
+				  <option value="<?= $track->id;?>"><?= $track->nombre;?></option>
+				<?php endforeach; ?>
+			</select>
 		  </div>
 	  	  <div class="form-group">
-		    <label for="tipo">Tipo:</label>
-		    <select id="tipo" class="form-control" style="max-width:300px; text-align:center;" name="tipo">
-		    	<option>Consultoría</option>
-		    	<option>Soporte de Negocio</option>
-		    	<option>Telecomunicaciones</option>
-		    </select>
+			<label for="posicion">Posición:</label>
+			<select id="posicion" class="form-control" style="max-width:300px; text-align:center;" name="posicion">
+				<option disabled selected>-- Selecciona una posición --</option>
+				<?php foreach ($posiciones as $posicion) : ?>
+					<option value="<?= $posicion->id;?>"><?= $posicion->nombre;?></option>
+				<?php endforeach; ?>
+			</select>
 		  </div>
 		  <div class="form-group">
 		    <label for="area">Área:</label>
@@ -86,6 +64,11 @@
 		  </div>
 	  </div>
 	  <div class="col-md-4">
+		  <div class="form-group">
+		    <label for="categoria">Categoría:</label>
+		    <input name="categoria" type="text" class="form-control" style="max-width:300px; text-align:center;" 
+		    	required value="">
+		  </div>
 		  <div class="form-group">
 		    <label for="requisicion">Requisiciones:</label>
 		    <select class="form-control" style="max-width:300px; text-align:center;" name="requisicion">
@@ -126,17 +109,17 @@
 	<?php endif; ?>
   </div>
 
-<script type="text/javascript">
-		$(document).ready(function() {
-			$("#tipo").change(function() {
-				$("#tipo option:selected").each(function() {
-					tipo = $('#tipo').val();
-					$.post("<?= base_url('user/load_areas');?>", {
-						tipo : tipo
-					}, function(data) {
-						$("#area").html(data);
-					});
+  <script type="text/javascript">
+	$(document).ready(function() {
+		$("#track").change(function() {
+			$("#track option:selected").each(function() {
+				track = $('#track').val();
+				$.post("<?= base_url('user/load_posiciones');?>", {
+					track : track
+				}, function(data) {
+					$("#posicion").html(data);
 				});
-			})
-		});
-	</script>
+			});
+		})
+	});
+  </script>

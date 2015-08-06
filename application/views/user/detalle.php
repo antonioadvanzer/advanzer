@@ -55,7 +55,7 @@
 		    id="nombre" required value="<?= $user->nombre; ?>">
 		  </div>
 		  <div class="form-group">
-		    <label for="nombre">E-Mail:</label>
+		    <label for="email">E-Mail:</label>
 		    <input name="email" type="email" class="form-control" style="max-width:300px; text-align:center;" 
 		    	required value="<?= $user->email; ?>">
 		  </div>
@@ -66,38 +66,51 @@
 		    	<option value="1" <?php if($user->empresa == 1) echo "selected"; ?>>Advanzer</option>
 		    	<option value="2" <?php if($user->empresa == 2) echo "selected"; ?>>Entuizer</option>
 		    </select>
-		  </div>
+		</div>
+		<div class="form-group">
+		  <label for="nomina"># Nómina:</label>
+		  <input class="form-control" style="max-width:300px;text-align:center" name="nomina" required 
+		  	value="<?= $user->nomina;?>">
+		</div>  
 	  </div>
 	  <div class="col-md-4">
-	  	  <div class="form-group">
-		    <label for="posicion">Posición:</label>
-		    <select class="form-control" style="max-width:300px; text-align:center;" name="posicion">
-		    	<option <?php if($user->posicion == "Analista") echo "selected"; ?>>Analista</option>
-		    	<option <?php if($user->posicion == "Consultor") echo "selected"; ?>>Consultor</option>
-		    	<option <?php if($user->posicion == "Consultor Sr") echo "selected"; ?>>Consultor Sr</option>
-		    	<option <?php if($user->posicion == "Gerente / Master") echo "selected"; ?>>Gerente / Master</option>
-		    	<option <?php if($user->posicion == "Gerente Sr / Experto") echo "selected"; ?>>Gerente Sr / Experto</option>
-		    	<option <?php if($user->posicion == "Director") echo "selected"; ?>>Director</option>
-		    </select>
-		  </div>
-	  	  <div class="form-group">
-		    <label for="tipo">Tipo:</label>
-		    <select id="tipo" class="form-control" style="max-width:300px; text-align:center;" name="tipo">
-		    	<option <?php if($user->tipo == "Consultoría") echo "selected"; ?>>Consultoría</option>
-		    	<option <?php if($user->tipo == "Soporte de Negocio") echo "selected"; ?>>Soporte de Negocio</option>
-		    	<option <?php if($user->tipo == "Telecomunicaciones") echo "selected"; ?>>Telecomunicaciones</option>
-		    </select>
-		  </div>
+		<div class="form-group">
+		    <label for="plaza">Plaza:</label>
+		    <input name="plaza" type="text" class="form-control" style="max-width:300px; text-align:center;" 
+		    	required value="<?= $user->plaza; ?>">
+		</div>
+		<div class="form-group">
+		  <label for="track">Track</label>
+		  <select class="form-control" style="max-width:300px;text-align:center" name="track" id="track">
+		  	<option disabled selected>-- Selecciona un track --</option>
+		  	<?php foreach ($tracks as $track) : ?>
+		  		<option value="<?= $track->id;?>" <?php if($user->track==$track->id) echo "selected" ?>><?= $track->nombre;?></option>
+		  	<?php endforeach; ?>
+		  </select>
+		</div>
+		<div class="form-group">
+		  <label for="posicion">Posición:</label>
+		  <select id="posicion" class="form-control" style="max-width:300px; text-align:center;" name="posicion">
+		  	<?php foreach ($posiciones as $posicion) : ?>
+		  		<option value="<?= $posicion->id;?>" <?php if($user->posicion==$posicion->id) echo "selected" ?>><?= $posicion->nombre;?></option>
+		  	<?php endforeach; ?>
+		  </select>
+		</div>
+		<div class="form-group">
+		  <label for="area">Área:</label>
+		  <select id="area" class="form-control" style="max-width:300px; text-align:center;" name="area">
+			<?php foreach ($areas as $area) : ?>
+			  <option value="<?= $area->id;?>" <?php if($area->id == $user->area) echo "selected"; ?>><?= $area->nombre;?></option>
+			<?php endforeach; ?>
+		</select>
+		</div>
+	  </div>
+	  <div class="col-md-4">
 		  <div class="form-group">
-		    <label for="area">Área:</label>
-		    <select id="area" class="form-control" style="max-width:300px; text-align:center;" name="area">
-		    	<?php foreach ($areas as $area) : ?>
-		    		<option value="<?= $area->id;?>" <?php if($area->id == $user->area) echo "selected"; ?>><?= $area->nombre;?></option>
-		    	<?php endforeach; ?>
-		    </select>
+		    <label for="categoria">Categoría:</label>
+		    <input name="categoria" type="text" class="form-control" style="max-width:300px; text-align:center;" 
+		    	required value="<?= $user->categoria; ?>">
 		  </div>
-	  </div>
-	  <div class="col-md-4">
 		  <div class="form-group">
 		    <label for="requisicion">Requisiciones:</label>
 		    <select class="form-control" style="max-width:300px; text-align:center;" name="requisicion">
@@ -137,3 +150,17 @@
 		</div>
 	<?php endif; ?>
   </div>
+  <script type="text/javascript">
+	$(document).ready(function() {
+		$("#track").change(function() {
+			$("#track option:selected").each(function() {
+				track = $('#track').val();
+				$.post("<?= base_url('user/load_posiciones');?>", {
+					track : track
+				}, function(data) {
+					$("#posicion").html(data);
+				});
+			});
+		})
+	});
+  </script>

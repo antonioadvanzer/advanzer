@@ -1,7 +1,7 @@
 <!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron">
   <div class="container">
-    <h2>Nueva Competencia</h2>
+    <h2>Nueva Posición</h2>
   </div>
 </div>
 <div class="container">
@@ -14,38 +14,33 @@
 		</div>
 	<?php endif; ?>
   </div>
-  <form role="form" method="post" action="<?= base_url('competencia/create');?>" class="form-signin">
+  <form role="form" method="post" action="<?= base_url('posicion/create');?>" class="form-signin">
   	<div class="row" align="center">
-	  <div class="col-md-4">
+	  <div class="col-md-6">
 		<div class="form-group">
 		  <label for="nombre">Nombre:</label>
 		  <input name="nombre" type="text" class="form-control" style="max-width:300px; text-align:center;" 
 			id="nombre" required value="" placeholder="Nombre">
 		</div>
 	  </div>
-	  <div class="col-md-4">
+	  <div class="col-md-6">
 		<div class="form-group">
-		  <label for="dominio">Indicador:</label>
-		  <select name="indicador" class="form-control" style="max-width:300px; text-align:center">
-		  	<?php foreach ($indicadores as $indicador) : ?>
-			  <option value="<?= $indicador->id;?>"><?= $indicador->nombre;?></option>
-			<?php endforeach; ?>
+		  <label for="track">Track(s):</label>
+		  <select multiple name="track[]" id="track" style="max-width:300px;min-height:100px;max-height:200px" 
+		  	class="form-control">
+		  	<option disabled>--Selecciona al menos un track --</option>
+		  	<?php foreach ($tracks as $track) : ?>
+		  		<option value="<?= $track->id;?>"><?= $track->nombre;?></option>
+		  	<?php endforeach; ?>
 		  </select>
-		</div>
-	  </div>
-	  <div class="col-md-4">
-		<div class="form-group">
-		  <label for="descripcion">Descripción:</label>
-		  <textarea name="descripcion" class="form-control" style="max-width:300px;text-align:center" rows="3" 
-		  	required placeholder="Agrega una descripción"></textarea>
 		</div>
 	  </div>
 	</div>
 	<div style="height:60px" class="row" align="center">
 	  <div class="col-md-12">
 		  <button type="submit" class="btn btn-lg btn-primary btn-block" style="max-width:200px; text-align:center;">
-		  	Registrar</button>
+		  	Registrar Datos</button>
 	  </div>
 	</div>
   </form>
-  <div align="center"><a href="<?= base_url('administrar_indicadores');?>">&laquo;Regresar</a></div>
+  <div align="center"><a href="<?= base_url('track');?>">&laquo;Regresar</a></div>

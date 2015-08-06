@@ -16,18 +16,18 @@ class Indicador_model extends CI_Model{
 
 	function getCompetenciasByIndicadorPosicion($indicador,$posicion) {
 		$this->db->distinct();
-		$this->db->select('C.id,C.nombre,C.descripcion,C.estatus,C.puntuacion');
+		$this->db->select('C.id,C.nombre,C.descripcion,C.estatus');
 		$this->db->from('Competencias C');
 		$this->db->join('Comportamientos Co','Co.competencia = C.id');
 		$this->db->join('Comportamiento_Posicion CP','CP.comportamiento = Co.id');
-		$this->db->where(array('C.indicador'=>$indicador,'CP.posicion'=>$posicion));
+		$this->db->where(array('C.indicador'=>$indicador,'CP.nivel_posicion'=>$posicion));
 		return $this->db->get()->result();
 	}
 
 	function getComportamientosByCompetenciaPosicion($competencia,$posicion) {
-		$this->db->select('C.descripcion');
+		$this->db->select('C.descripcion,CP.evalua');
 		$this->db->join('Comportamiento_Posicion CP','CP.comportamiento = C.id');
-		$this->db->where(array('C.competencia'=>$competencia,'CP.posicion'=>$posicion));
+		$this->db->where(array('C.competencia'=>$competencia,'CP.nivel_posicion'=>$posicion));
 		return $this->db->get('Comportamientos C')->result();
 	}
 

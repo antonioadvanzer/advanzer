@@ -86,6 +86,7 @@
 							<li class="dropdown-submenu"><a tabindex="-1" href="#">ABC</a>
 								<ul class="dropdown-menu">
 									<li><a href="<?= base_url('area');?>">Administración de Areas</a></li>
+									<li><a href="<?= base_url('track');?>">Administración de Tracks y Posiciones</a></li>
 									<li><a href="<?= base_url('administrar_usuarios'); ?>">Administración de Usuarios</a></li>
 									<li><a href="<?= base_url('evaluadores'); ?>">Administración de Evaluadores</a></li>
 									<li><a href="<?= base_url('evaluadores360');?>">Administración de Evaluadores 360</a></li>

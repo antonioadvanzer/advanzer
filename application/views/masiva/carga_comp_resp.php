@@ -26,6 +26,7 @@
 		</div>
 	</div>
 	<form id="frmCarga2" role="form" action="javascript:;" method="post" enctype="multipart/form-data" class="form-signin">
+	<!--<form role="form" action="<?= base_url("masiva/upload_comp_resp");?>" method="post" enctype="multipart/form-data" class="form-signin">-->
 		<div align="center" class="row">
 			<div class="col-md-10" align="center">
 				<div class="form-group">
@@ -65,7 +66,7 @@
 				formData = new FormData($('#frmCarga2')[0]);
 
 				//var progress = $(".loading-progress").progressTimer();
-				$( ".loading-progress" ).progressbar({ value: false });
+				$( ".loading-progress" ).show().progressbar({ value: false });
 				$.ajax({
 					url:'<?= base_url("masiva/upload_comp_resp");?>',
 					type:'POST',

@@ -26,8 +26,7 @@ class Competencia extends CI_Controller {
 		$nombre=$this->input->post('nombre');
 		$indicador=$this->input->post('indicador');
 		$descripcion=$this->input->post('descripcion');
-		$puntuacion=$this->input->post('puntuacion');
-		$competencia=$this->competencia_model->create($nombre,$indicador,$descripcion,$puntuacion);
+		$competencia=$this->competencia_model->create($nombre,$indicador,$descripcion);
 		if($competencia)
 			$this->ver($competencia);
 		else
@@ -83,9 +82,8 @@ class Competencia extends CI_Controller {
 		$id=$this->input->post('id');
 		$nombre=$this->input->post('nombre');
 		$descripcion=$this->input->post('descripcion');
-		$puntuacion=$this->input->post('puntuacion');
 		$indicador=$this->input->post('indicador');
-		if($this->competencia_model->update($id,$nombre,$descripcion,$puntuacion,$indicador))
+		if($this->competencia_model->update($id,$nombre,$descripcion,$indicador))
 			$this->ver($id,"Se ha actualizado la competencia");
 		else
 			$this->ver($id,null,"Error al actualizar la competencia. Intente de nuevo");

@@ -9,6 +9,8 @@ class User extends CI_Controller {
     	parent::__construct();
     	$this->load->model('user_model');
     	$this->load->model('area_model');
+        $this->load->model('track_model');
+        $this->load->model('posicion_model');
     	$this->load->library('pagination');
     }
 
@@ -51,7 +53,7 @@ class User extends CI_Controller {
 
         if($msg!=null)
         	$data['msg']=$msg;
-        $this->layout->title('Capital Humano - Perfiles');
+        $this->layout->title('Advanzer - Perfiles');
         $this->layout->view('user/index',$data);
     }
 
@@ -62,7 +64,9 @@ class User extends CI_Controller {
     	if (!empty($msg))
     		$data['msg'] = $msg;
     	$data['user'] = $this->user_model->searchById($id);
-    	$data['areas'] = $this->area_model->getAll($data['user']->tipo);
+        $data['tracks'] = $this->track_model->getAll();
+    	$data['areas'] = $this->area_model->getAll();
+        $data['posiciones'] = $this->posicion_model->getByTrack($this->user_model->getTrackByUser($id));
     	$this->layout->title('Capital Humano - Detalle Perfil');
     	$this->layout->view('user/detalle',$data);
     }
@@ -93,16 +97,23 @@ class User extends CI_Controller {
     }
 
     public function update($id) {
-    	$nombre = $this->input->post('nombre');
-    	$email = $this->input->post('email');
-    	$empresa = $this->input->post('empresa');
-    	$tipo = $this->input->post('tipo');
-    	$area = $this->input->post('area');
-    	$posicion = $this->input->post('posicion');
-    	$estatus = $this->input->post('estatus');
-        $requisicion=$this->input->post('requisicion');
-        $admin=$this->input->post('admin');
-    	if($this->user_model->update($id,$nombre,$email,$tipo,$area,$posicion,$estatus)){
+        $array=array(
+        	'nombre' => $this->input->post('nombre'),
+        	'email' => $this->input->post('email'),
+        	'empresa' => $this->input->post('empresa'),
+        	'area' => $this->input->post('area'),
+        	'estatus' => $this->input->post('estatus'),
+            'requisicion' => $this->input->post('requisicion'),
+            'admin' => $this->input->post('admin'),
+            'nomina' => $this->input->post('nomina'),
+            'plaza' => $this->input->post('plaza'),
+            'categoria' => $this->input->post('categoria')
+        );
+
+        $track = $this->input->post('track');
+        $posicion = $this->input->post('posicion');
+        $array['posicion_track']=$this->posicion_model->getPosicionTrack($posicion,$track);
+    	if($this->user_model->update($id,$array)){
     		$msg = "Perfil actualizado correctamente";
     		$this->index($msg);
     	}else{
@@ -111,15 +122,12 @@ class User extends CI_Controller {
     	}
     }
 
-    public function load_areas() {
-    	$options="";
-    	if($this->input->post('tipo')) {
-    		$tipo = $this->input->post('tipo');
-    		$areas = $this->area->getAll($tipo);
-    		foreach ($areas as $area) { ?>
-    			<option value="<?= $area->id;?>"><?= $area->nombre;?></option>
-    		<?php }
-    	}
+    public function load_posiciones() {
+        $track=$this->input->post('track');
+        $posiciones = $this->posicion_model->getByTrack($track);
+        foreach ($posiciones as $posicion) : ?>
+            <option value="<?= $posicion->id;?>"><?= $posicion->nombre;?></option>
+        <?php endforeach;
     }
 
     public function searchByText() {
@@ -128,25 +136,33 @@ class User extends CI_Controller {
     		$resultados = $this->user_model->getByText($valor);
     		foreach ($resultados as $user) : ?>
     			<tr>
-		          <td><img height="25px" src="<?= base_url('assets/images/fotos')."/".$user->foto;?>"></td>
-		          <td><span class="glyphicon glyphicon-eye-open" style="cursor:pointer" onclick="
-		            location.href='<?= base_url('user/ver/');?>/'+<?= $user->id;?>"></span> 
-		            <span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
-		            <?= $user->id;?>"><?= $user->nombre;?></span></td>
-		          <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
-		            <?= $user->id;?>"><?= $user->email;?></span></td>
-		          <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
-		            <?= $user->id;?>"><?php if($user->empresa == 1) echo "Advanzer"; 
-		            elseif($user->empresa == 2) echo "Entuizer";?></span></td>
-		          <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
-		            <?= $user->id;?>"><?= $user->tipo;?></span></td>
-		          <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
-		            <?= $user->id;?>"><?= $user->posicion;?></span></td>
-		          <td align="right"><span style="cursor:pointer;" onclick="
-		            if(confirm('Seguro que desea cambiar el estatus del usuario: \n <?= $user->nombre;?>'))location.href=
-		            '<?= base_url('user/del/');?>/'+<?= $user->id;?>;" class="glyphicon 
-		            <?php if($user->estatus ==1 ) echo "glyphicon-ok"; else echo "glyphicon-ban-circle"; ?>"></span></td>
-		        </tr>
+                    <td><img height="25px" src="<?= base_url('assets/images/fotos')."/".$user->foto;?>"></td>
+                    <td><span class="glyphicon glyphicon-eye-open" style="cursor:pointer" onclick="
+                      location.href='<?= base_url('user/ver/');?>/'+<?= $user->id;?>"></span> 
+                      <span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
+                      <?= $user->id;?>"><?= $user->nomina;?></span></td>
+                    <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
+                      <?= $user->id;?>"><?= $user->nombre;?></span></td>
+                    <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
+                      <?= $user->id;?>"><?= $user->email;?></span></td>
+                    <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
+                      <?= $user->id;?>"><?php if($user->empresa == 1) echo "Advanzer"; 
+                      elseif($user->empresa == 2) echo "Entuizer";?></span></td>
+                    <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver');?>/'+
+                      <?= $user->id;?>"><?= $user->track;?></span></td>
+                    <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
+                      <?= $user->id;?>"><?= $user->posicion;?></span></td>
+                    <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
+                      <?= $user->id;?>"><?= $user->area;?></span></td>
+                    <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
+                      <?= $user->id;?>"><?= $user->categoria;?></span></td>
+                    <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
+                      <?= $user->id;?>"><?= $user->plaza;?></span></td>
+                    <td align="right"><span style="cursor:pointer;" onclick="
+                      if(confirm('Seguro que desea cambiar el estatus del usuario: \n <?= $user->nombre;?>'))location.href=
+                      '<?= base_url('user/del/');?>/'+<?= $user->id;?>;" class="glyphicon 
+                      <?php if($user->estatus ==1 ) echo "glyphicon-ok"; else echo "glyphicon-ban-circle"; ?>"></span></td>
+                </tr>
 		        <script type="text/javascript">$("#pagination").hide('slow');</script>
     		<?php endforeach;
     	else:?>
@@ -158,24 +174,33 @@ class User extends CI_Controller {
     	$data=array();
     	if($msg!=null)
     		$data['err_msg'] = $msg;
+        $data['tracks'] = $this->track_model->getAll();
     	$data['areas'] = $this->area_model->getAll();
     	$this->layout->title('Capital Humano - Nuevo Perfil');
     	$this->layout->view('user/nuevo',$data);
     }
 
     public function create() {
-    	$nombre = $this->input->post('nombre');
-    	$email = $this->input->post('email');
-    	$empresa = $this->input->post('empresa');
-    	$tipo = $this->input->post('tipo');
-    	$area = $this->input->post('area');
-    	$posicion = $this->input->post('posicion');
-    	$estatus = $this->input->post('estatus');
-        $temp=explode('.',$email);
-        $password=$temp[0];
-        $requisicion=$this->input->post('requisicion');
-        $admin=$this->input->post('admin');
-    	if($id = $this->user_model->create($nombre,$email,$empresa,$tipo,$area,$posicion,$estatus,$password,$requisicion,$admin)){
+        $array=array(
+        	'nombre' => $this->input->post('nombre'),
+        	'email' => $this->input->post('email'),
+        	'empresa' => $this->input->post('empresa'),
+            'nomina' => $this->input->post('nomina'),
+        	'plaza' => $this->input->post('plaza'),
+        	'area' => $this->input->post('area'),
+        	'estatus' => $this->input->post('estatus'),
+            'requisicion' => $this->input->post('requisicion'),
+            'admin' => $this->input->post('admin'),
+            'categoria' => $this->input->post('categoria')
+        );
+        $temp=explode('@',$email);
+        $temp=explode('.',$temp);
+        $array['password'] = $temp[0];
+        $posicion=$this->input->post('posicion');
+        $track=$this->input->post('track');
+        $array['posicion_track'] = $this->posicion_model->getPosicionTrack($posicion,$track);
+
+    	if($id = $this->user_model->create($array)){
     		$msg="Perfil: <b>$nombre</b> agregado correctamente";
     		$this->ver($id,null,$msg);
     	}else{
