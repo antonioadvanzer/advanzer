@@ -96,7 +96,7 @@
 					});
 					var evaluador = <?= $evaluador->id;?>;
 					$.ajax({
-						url:'<?= base_url("evaluacion/del_colaboradores360");?>',
+						url:'<?= base_url("evaluacion/del_colaboradores");?>',
 						data:{'selected':selected,'evaluador':evaluador,'tipo':3},
 						type:'POST',
 						success:function(data) {
