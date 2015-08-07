@@ -38,7 +38,7 @@
   	<div class="col-md-5">
   	  <div class="panel panel-primary">
   	  <div class="panel-heading">Colaboradores Asignados</div>
-		<select id="quitar" name="quitar" multiple class="form-control" style="min-height:300px;max-height:700px">
+		<select id="quitar" name="quitar" multiple class="form-control" style="overflow-y:auto;overflow-x:auto;min-height:300px;max-height:700px">
 		  <?php foreach($asignados as $colaborador) : ?>
 			<option value="<?= $colaborador->id;?>"><?= $colaborador->nombre ." - ". $colaborador->posicion;?></option>
 		  <?php endforeach; ?>
@@ -58,7 +58,7 @@
   	<div class="col-md-5">
   	  <div class="panel panel-primary">
   	  <div class="panel-heading">Colaboradores Sin Asignar</div>
-		<select id="agregar" name="agregar" multiple class="form-control" style="min-height:300px;max-height:700px">
+		<select id="agregar" name="agregar" multiple class="form-control" style="overflow-y:auto;overflow-x:auto;min-height:300px;max-height:700px">
   	  	  <?php foreach($no_asignados as $colaborador) : ?>
             <option value="<?= $colaborador->id;?>"><?= $colaborador->nombre ." - ". $colaborador->posicion;?></option>
           <?php endforeach; ?>
@@ -75,9 +75,10 @@
 					$('#agregar :selected').each(function(i,select) {
 						selected[i] = $(select).val();
 					});
+					var evaluador = <?= $evaluador->id;?>;
 					$.ajax({
-						url:'<?= base_url("evaluacion/add_colaboradores/$evaluador->id/1");?>',
-						data:{'selected':selected},
+						url:'<?= base_url("evaluacion/add_colaboradores360");?>',
+						data:{'selected':selected,'evaluador':evaluador},
 						type:'POST',
 						success:function(data) {
 							$('body').html(data);
@@ -93,9 +94,10 @@
 					$('#quitar :selected').each(function(i,select) {
 						selected[i] = $(select).val();
 					});
+					var evaluador = <?= $evaluador->id;?>;
 					$.ajax({
-						url:'<?= base_url("evaluacion/del_colaboradores/$evaluador->id/1");?>',
-						data:{'selected':selected},
+						url:'<?= base_url("evaluacion/del_colaboradores360");?>',
+						data:{'selected':selected,'evaluador':evaluador},
 						type:'POST',
 						success:function(data) {
 							$('body').html(data);

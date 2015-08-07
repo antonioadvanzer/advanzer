@@ -29,14 +29,24 @@
 	<?php endif; ?>
   </div>
   <div class="row" align="center">
-	<div class="col-md-12">
+	<div class="col-md-2"></div>
+	<div class="col-md-4">
 	  <div class="form-group">
-	    <label for="nombre">Evaluador:</label>
+	    <label for="evaluador">Evaluador:</label>
 	    <select id="evaluador" name="evaluador" class="form-control" style="max-width:300px;text-align:center">
 		  <option disabled selected>-- Selecciona un evaluador --</option>
 		  <?php foreach($evaluadores as $ev) : ?>
-		  	<option value="<?= $ev->id;?>"><?= $ev->nombre ." - ". $ev->posicion;?></option>
+		  	<option value="<?= $ev->id;?>"><?= "$ev->nombre - $ev->posicion ($ev->track)";?></option>
 		  <?php endforeach; ?>
+	    </select>
+	  </div>
+	</div>
+	<div class="col-md-4">
+	  <div class="form-group">
+	    <label for="tipo">Tipo de Evaluación:</label>
+	    <select id="tipo" name="tipo" class="form-control" style="max-width:300px;text-align:center">
+		  <option value="0">De Responsabilidades</option>
+		  <option value="1">De Competencias</option>
 	    </select>
 	  </div>
 	</div>
@@ -51,7 +61,7 @@
   	<div class="col-md-5">
   	  <div class="panel panel-primary">
   	  	<div class="panel-heading">Colaboradores Asignados</div>
-  	  	<select id="quitar" name="agregar" multiple class="form-control" style="min-height:300px;max-height:700px">
+  	  	<select id="quitar" name="agregar" multiple class="form-control" style="overflow-y:auto;overflow-x:auto;min-height:300px;max-height:700px">
   	  	</select>
   	  </div>
   	</div>
@@ -68,7 +78,7 @@
   	<div class="col-md-5">
   	  <div class="panel panel-primary">
   	  	<div class="panel-heading">Colaboradores Sin Asignar</div>
-  	  	<select id="agregar" name="agregar" multiple class="form-control" style="min-height:300px;max-height:700px">
+  	  	<select id="agregar" name="agregar" multiple class="form-control" style="overflow-y:auto;overflow-x:auto;min-height:300px;max-height:700px">
   	  	</select>
   	  </div>
   	</div>
@@ -98,9 +108,10 @@
 						selected[i] = $(select).val();
 					});
 					var evaluador = $('#evaluador').val();
+					var tipo = $('#tipo').val();
 					$.ajax({
-						url:'<?= base_url("evaluacion/add_colaboradores/");?>/'+evaluador,
-						data:{'selected':selected},
+						url:'<?= base_url("evaluacion/add_colaboradores/");?>',
+						data:{'selected':selected,'evaluador':evaluador,'tipo':tipo},
 						type:'POST',
 						success:function(data) {
 							$('body').html(data);
@@ -118,8 +129,8 @@
 					});
 					var evaluador = $('#evaluador').val();
 					$.ajax({
-						url:'<?= base_url("evaluacion/del_colaboradores");?>/'+evaluador,
-						data:{'selected':selected},
+						url:'<?= base_url("evaluacion/del_colaboradores");?>',
+						data:{'selected':selected,'evaluador':evaluador,'tipo':1},
 						type:'POST',
 						success:function(data) {
 							$('body').html(data);

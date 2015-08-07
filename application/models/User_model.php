@@ -133,7 +133,12 @@ class User_model extends CI_Model{
 	}
 	function getAll($tipo=null) {
 		if($tipo == 1)
-			$this->db->where_in('posicion',array('Gerente / Master','Gerente Sr / Experto','Director'));
-		return $this->db->order_by('nombre','asc')->get('Users')->result();
+			$this->db->where('P.nivel <=',5);
+		$this->db->select('U.id,U.nombre,U.email,U.foto,U.empresa,U.categoria,U.nomina,
+			U.area,U.plaza,P.nombre posicion,T.nombre track');
+		$this->db->join('Posicion_Track PT','PT.id = U.posicion_track');
+		$this->db->join('Posiciones P','P.id = PT.posicion');
+		$this->db->join('Tracks T','T.id = PT.track');
+		return $this->db->where('U.estatus',1)->order_by('nombre','asc')->get('Users U')->result();
 	}
 }

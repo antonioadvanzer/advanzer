@@ -141,7 +141,6 @@ class Evaluacion extends CI_Controller {
             }
     		$valor = $this->input->post('valor');
     		$resultados = $this->evaluacion_model->getByText($valor,$tipo);
-    		$resultados = $this->evaluacion_model->getByText($valor);
     		foreach ($resultados as $ev) : ?>
     			<tr>
 		          <td><img height="25px" src="<?= base_url('assets/images/fotos')."/".$ev->foto;?>"></td>
@@ -179,8 +178,8 @@ class Evaluacion extends CI_Controller {
     }
 
     public function add_colaboradores() {
-        $evaluador = $this->uri->segment(3,null);
-        $tipo = $this->uri->segment(4,0);
+        $evaluador = $this->input->post('evaluador');
+        $tipo = $this->input->post('tipo');
         if ($evaluador) {
             $opciones=$this->input->post('selected');
             foreach ($opciones as $colaborador) {
@@ -191,8 +190,8 @@ class Evaluacion extends CI_Controller {
     }
 
     public function del_colaboradores() {
-        $evaluador = $this->uri->segment(3,null);
-        $tipo = $this->uri->segment(4,0);
+        $evaluador = $this->input->post('evaluador');
+        $tipo = $this->input->post('tipo');
         if ($evaluador) {
             $opciones=$this->input->post('selected');
             foreach ($opciones as $colaborador) {
@@ -202,13 +201,20 @@ class Evaluacion extends CI_Controller {
         }
     }
 
-    public function load_asignados($tipo=0) {
+    public function load_asignados($tipo=null) {
         if($this->input->post('evaluador')) {
             $evaluador = $this->input->post('evaluador');
             $asignados = $this->evaluacion_model->getByEvaluador($evaluador,$tipo);
-            foreach($asignados as $colaborador) : ?>
-            <option value="<?= $colaborador->id;?>"><?= $colaborador->nombre ." - ". $colaborador->posicion;?></option>
-          <?php endforeach;
+            foreach($asignados as $colaborador) : 
+                if($colaborador->tipo == 1)
+                    $extra="Competencias";
+                else
+                    $extra="Responsabilidades";
+                ?>
+                <option value="<?= $colaborador->id;?>">
+                    <?= "De $extra  -  $colaborador->nombre - $colaborador->posicion ($colaborador->track)";?>
+                </option>
+            <?php endforeach;
         }else
             echo "";
     }
@@ -219,7 +225,7 @@ class Evaluacion extends CI_Controller {
             $asignados = $this->evaluacion_model->getByEvaluador($evaluador,$tipo);
             $colaboradores = $this->evaluacion_model->getNotByEvaluador($evaluador,$asignados,$tipo);
             foreach($colaboradores as $colaborador) : ?>
-                <option value="<?= $colaborador->id;?>"><?= $colaborador->nombre ." - ". $colaborador->posicion;?></option>
+                <option value="<?= $colaborador->id;?>"><?= "$colaborador->nombre - $colaborador->posicion ($colaborador->track)";?></option>
           <?php endforeach;
         }else
             echo "";

@@ -84,7 +84,10 @@ class Evaluacion_model extends CI_Model{
 		$this->db->select('Us.foto,Ev.id id,Us.nombre nombre,count(Ev.evaluado) as cantidad');
 		$this->db->join('Users as Us','Us.id = Ev.evaluador');
 		$this->db->where('Ev.estatus',0);
-		$this->db->where('Ev.tipo',$tipo);
+		if($tipo==1)//1=evaluacion 360
+			$this->db->where('Ev.tipo',3);
+		else
+			$this->db->where('Ev.tipo !=',3);
 		$this->db->group_by('Ev.evaluador');
 		$this->db->order_by('Us.nombre','asc');
 		return $this->db->get('Evaluadores as Ev');
@@ -94,7 +97,10 @@ class Evaluacion_model extends CI_Model{
 		$this->db->select('Us.foto,Ev.id id,Us.nombre nombre,count(Ev.evaluado) as cantidad');
 		$this->db->join('Users as Us','Us.id = Ev.evaluador');
 		$this->db->where('Ev.estatus',0);
-		$this->db->where('Ev.tipo',$tipo);
+		if($tipo==1)//1=evaluacion 360
+			$this->db->where('Ev.tipo',3);
+		else
+			$this->db->where('Ev.tipo !=',3);
 
 		$this->db->select('Us.foto,Ev.id id,Us.nombre nombre,count(Ev.evaluado) as cantidad');
 		$this->db->join('Users as Us','Us.id = Ev.evaluador');
@@ -111,18 +117,27 @@ class Evaluacion_model extends CI_Model{
 		$this->db->select('Us.foto,Ev.evaluador id,Us.nombre nombre,count(Ev.evaluado) as cantidad');
 		$this->db->join('Users as Us','Us.id = Ev.evaluador');
 		$this->db->where('Ev.estatus',0);
-		$this->db->where('Ev.tipo',$tipo);
+		if($tipo==1)//1=evaluacion 360
+			$this->db->where('Ev.tipo',3);
+		else
+			$this->db->where('Ev.tipo !=',3);
 		$this->db->group_by('Ev.evaluador');
 		$this->db->order_by('Us.nombre','asc');
 		return $this->db->get('Evaluadores as Ev')->result();
 	}
 
 	function getByEvaluador($evaluador,$tipo=0) {
-		$this->db->select('Us.id,Us.nombre,Us.posicion');
+		$this->db->select('Us.id,Us.nombre,P.nombre posicion,T.nombre track,Ev.tipo tipo');
 		$this->db->where('evaluador',$evaluador);
-		$this->db->where('Ev.tipo',$tipo);
+		if($tipo==1)//1=evaluacion 360
+			$this->db->where('Ev.tipo',3);
+		else
+			$this->db->where('Ev.tipo !=',3);
 		$this->db->from('Evaluadores Ev');
 		$this->db->join('Users Us','Ev.evaluado = Us.id');
+		$this->db->join('Posicion_Track PT','PT.id = Us.posicion_track');
+		$this->db->join('Posiciones P','P.id = PT.posicion');
+		$this->db->join('Tracks T','T.id = PT.track');
 		return $this->db->get()->result();
 	}
 
@@ -134,12 +149,15 @@ class Evaluacion_model extends CI_Model{
 			$this->db->where_not_in('Us.id',$array_temp);
 		}
 		if($tipo == 1)
-			$this->db->where_in('Us.posicion',array('Gerente / Master','Gerente Sr / Experto','Director'));
+			$this->db->where('P.nivel <=',5);
 
+		$this->db->select('Us.id,Us.nombre,P.nombre posicion,T.nombre track');
 		$this->db->where('Us.id !=',$evaluador);
-		$this->db->select('Us.id,Us.nombre,Us.posicion');
 		$this->db->from('Users Us');
-		return $this->db->get()->result();
+		$this->db->join('Posicion_Track PT','PT.id = Us.posicion_track');
+		$this->db->join('Posiciones P','P.id = PT.posicion');
+		$this->db->join('Tracks T','T.id = PT.track');
+		return $this->db->order_by('Us.nombre')->get()->result();
 	}
 
 	function addColaboradorToEvaluador($evaluador,$colaborador,$tipo) {
@@ -151,7 +169,11 @@ class Evaluacion_model extends CI_Model{
 	}
 
 	function delColaboradorFromEvaluador($evaluador,$colaborador,$tipo) {
-		$this->db->where(array('evaluador'=>$evaluador,'evaluado'=>$colaborador,'tipo'=>$tipo));
+		if($tipo!=3)
+			$this->db->where('tipo !=',3);
+		else
+			$this->db->where('tipo',3);
+		$this->db->where(array('evaluador'=>$evaluador,'evaluado'=>$colaborador));
 		$this->db->delete('Evaluadores');
 		if($this->db->affected_rows() == 1)
 			return true;

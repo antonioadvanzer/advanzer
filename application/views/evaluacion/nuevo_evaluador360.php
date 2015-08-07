@@ -35,7 +35,7 @@
 	    <select id="evaluador" name="evaluador" class="form-control" style="max-width:300px;text-align:center">
 		  <option disabled selected>-- Selecciona un evaluador --</option>
 		  <?php foreach($evaluadores as $ev) : ?>
-		  	<option value="<?= $ev->id;?>"><?= $ev->nombre ." - ". $ev->posicion;?></option>
+		  	<option value="<?= $ev->id;?>"><?= "$ev->nombre - $ev->posicion ($ev->track)";?></option>
 		  <?php endforeach; ?>
 	    </select>
 	  </div>
@@ -51,7 +51,7 @@
   	<div class="col-md-5">
   	  <div class="panel panel-primary">
   	  	<div class="panel-heading">Colaboradores Asignados</div>
-  	  	<select id="quitar" name="agregar" multiple class="form-control" style="min-height:300px;max-height:700px">
+  	  	<select id="quitar" name="agregar" multiple class="form-control" style="overflow-y:auto;overflow-x:auto;min-height:300px;max-height:700px">
   	  	</select>
   	  </div>
   	</div>
@@ -68,7 +68,7 @@
   	<div class="col-md-5">
   	  <div class="panel panel-primary">
   	  	<div class="panel-heading">Colaboradores Sin Asignar</div>
-  	  	<select id="agregar" name="agregar" multiple class="form-control" style="min-height:300px;max-height:700px">
+  	  	<select id="agregar" name="agregar" multiple class="form-control" style="overflow-y:auto;overflow-x:auto;min-height:300px;max-height:700px">
   	  	</select>
   	  </div>
   	</div>
@@ -99,8 +99,8 @@
 					});
 					var evaluador = $('#evaluador').val();
 					$.ajax({
-						url:'<?= base_url("evaluacion/add_colaboradores/");?>/'+evaluador+'/1',
-						data:{'selected':selected},
+						url:'<?= base_url("evaluacion/add_colaboradores");?>',
+						data:{'selected':selected,'evaluador':evaluador,'tipo':3},
 						type:'POST',
 						success:function(data) {
 							$('body').html(data);
@@ -118,8 +118,8 @@
 					});
 					var evaluador = $('#evaluador').val();
 					$.ajax({
-						url:'<?= base_url("evaluacion/del_colaboradores");?>/'+evaluador+'/1',
-						data:{'selected':selected},
+						url:'<?= base_url("evaluacion/del_colaboradores");?>',
+						data:{'selected':selected,'evaluador':evaluador,'tipo':3},
 						type:'POST',
 						success:function(data) {
 							$('body').html(data);

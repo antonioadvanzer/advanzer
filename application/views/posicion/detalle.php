@@ -34,7 +34,7 @@
 	  <div class="col-md-5">
 	  	<div class="panel panel-primary">
 	  	  <div class="panel-heading">Track(s) Asignados</div>
-		  <select id="quitar" multiple name="track[]" style="min-height:100px;max-height:200px" 
+		  <select id="quitar" multiple name="track[]" style="overflow-y:auto;overflow-x:auto;min-height:100px;max-height:200px" 
 		  	class="form-control">
 		  	<?php foreach ($posicion->tracks as $track) : ?>
 		  		<option value="<?= $track->id;?>"><?= $track->nombre;?></option>
@@ -54,7 +54,7 @@
 	  <div class="col-md-5">
 		<div class="panel panel-primary">
 	  	  <div class="panel-heading">Track(s) No asignados</div>
-		  <select id="agregar" multiple name="track[]" style="min-height:100px;max-height:200px" 
+		  <select id="agregar" multiple name="track[]" style="overflow-y:auto;overflow-x:auto;min-height:100px;max-height:200px" 
 		  	class="form-control">
 		  	<?php foreach ($tracks_no_agregados as $track) : ?>
 		  		<option value="<?= $track->id;?>"><?= $track->nombre;?></option>

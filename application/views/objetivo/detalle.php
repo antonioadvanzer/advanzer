@@ -126,7 +126,7 @@
   	<div class="col-md-5">
   	  <div class="panel panel-primary">
 		<div class="panel-heading">Áreas Asignadas</div>
-		<select id="quitar" name="quitar" multiple class="form-control" style="min-height:300px;max-height:700px">
+		<select id="quitar" name="quitar" multiple class="form-control" style="overflow-y:auto;overflow-x:auto;min-height:300px;max-height:700px">
 		  <?php foreach($areas_asignadas as $area) : ?>
 			<option value="<?= $area->id;?>"><?= $area->nombre;?></option>
 		  <?php endforeach; ?>
@@ -146,7 +146,7 @@
   	<div class="col-md-5">
   	  <div class="panel panel-primary">
 		<div class="panel-heading">Áreas Sin Asignar</div>
-		<select id="agregar" name="agregar" multiple class="form-control" style="min-height:300px;max-height:700px">
+		<select id="agregar" name="agregar" multiple class="form-control" style="overflow-y:auto;overflow-x:auto;min-height:300px;max-height:700px">
 		  <?php foreach($areas_no_asignadas as $area) : ?>
 			<option value="<?= $area->id;?>"><?= $area->nombre;?></option>
 		  <?php endforeach; ?>

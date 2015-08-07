@@ -30,6 +30,17 @@
   </div>
   <div class="row" align="center">
   	<div class="col-md-12">
+	  <div class="form-group">
+	    <label for="tipo">Tipo de Evaluación:</label>
+	    <select id="tipo" name="tipo" class="form-control" style="max-width:300px;text-align:center">
+		  <option value="0">De Responsabilidades</option>
+		  <option value="1">De Competencias</option>
+	    </select>
+	  </div>
+	</div>
+  </div>
+  <div class="row" align="center">
+  	<div class="col-md-12">
 	  <a href="<?= base_url('evaluadores');?>">&laquo;Regresar</a>
   	</div>
   </div>
@@ -38,9 +49,16 @@
   	<div class="col-md-5">
   	  <div class="panel panel-primary">
   	  <div class="panel-heading">Colaboradores Asignados</div>
-		<select id="quitar" name="quitar" multiple class="form-control" style="min-height:300px;max-height:700px">
-		  <?php foreach($asignados as $colaborador) : ?>
-			<option value="<?= $colaborador->id;?>"><?= $colaborador->nombre ." - ". $colaborador->posicion;?></option>
+		<select id="quitar" name="quitar" multiple class="form-control" style="overflow-y:auto;overflow-x:auto;min-height:300px;max-height:700px">
+		  <?php foreach($asignados as $colaborador) : 
+		  	if($colaborador->tipo == 1)
+                $extra="Competencias";
+            else
+                $extra="Responsabilidades";
+            ?>
+            <option value="<?= $colaborador->id;?>">
+                <?= "De $extra  -  $colaborador->nombre - $colaborador->posicion ($colaborador->track)";?>
+            </option>?>
 		  <?php endforeach; ?>
 		</select>
   	  </div>
@@ -58,9 +76,9 @@
   	<div class="col-md-5">
   	  <div class="panel panel-primary">
   	  <div class="panel-heading">Colaboradores Sin Asignar</div>
-		<select id="agregar" name="agregar" multiple class="form-control" style="min-height:300px;max-height:700px">
+		<select id="agregar" name="agregar" multiple class="form-control" style="overflow-y:auto;overflow-x:auto;min-height:300px;max-height:700px">
   	  	  <?php foreach($no_asignados as $colaborador) : ?>
-            <option value="<?= $colaborador->id;?>"><?= $colaborador->nombre ." - ". $colaborador->posicion;?></option>
+            <option value="<?= $colaborador->id;?>"><?= "$colaborador->nombre - $colaborador->posicion ($colaborador->track)";?></option>
           <?php endforeach; ?>
         </select>
   	  </div>
@@ -75,9 +93,11 @@
 					$('#agregar :selected').each(function(i,select) {
 						selected[i] = $(select).val();
 					});
+					var tipo = $('#tipo').val();
+					var evaluador = <?= $evaluador->id;?>;
 					$.ajax({
-						url:'<?= base_url("evaluacion/add_colaboradores/$evaluador->id");?>',
-						data:{'selected':selected},
+						url:'<?= base_url("evaluacion/add_colaboradores");?>',
+						data:{'selected':selected,'evaluador':evaluador,'tipo':tipo},
 						type:'POST',
 						success:function(data) {
 							$('body').html(data);
@@ -93,9 +113,10 @@
 					$('#quitar :selected').each(function(i,select) {
 						selected[i] = $(select).val();
 					});
+					var evaluador = <?= $evaluador->id;?>;
 					$.ajax({
-						url:'<?= base_url("evaluacion/del_colaboradores/$evaluador->id");?>',
-						data:{'selected':selected},
+						url:'<?= base_url("evaluacion/del_colaboradores");?>',
+						data:{'selected':selected,'evaluador':evaluador,'tipo':1},
 						type:'POST',
 						success:function(data) {
 							$('body').html(data);
