@@ -77,8 +77,8 @@
 					});
 					var evaluador = <?= $evaluador->id;?>;
 					$.ajax({
-						url:'<?= base_url("evaluacion/add_colaboradores360");?>',
-						data:{'selected':selected,'evaluador':evaluador},
+						url:'<?= base_url("evaluacion/add_colaboradores");?>',
+						data:{'selected':selected,'evaluador':evaluador,'tipo':3},
 						type:'POST',
 						success:function(data) {
 							$('body').html(data);
@@ -97,7 +97,7 @@
 					var evaluador = <?= $evaluador->id;?>;
 					$.ajax({
 						url:'<?= base_url("evaluacion/del_colaboradores360");?>',
-						data:{'selected':selected,'evaluador':evaluador},
+						data:{'selected':selected,'evaluador':evaluador,'tipo':3},
 						type:'POST',
 						success:function(data) {
 							$('body').html(data);
