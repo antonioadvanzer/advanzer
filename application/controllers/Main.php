@@ -82,6 +82,28 @@ class Main extends CI_Controller {
 	}
 
     public function login() {
+    	$email = $this->input->post('email');
+		if (!empty($email)) {
+    		$password = $this->input->post('password');
+    		$result = $this->user_model->do_login($email,$password);
+
+    		if ($result) {
+    			//$_SESSION['access_token'] = 1;
+    			$sess_array = array(
+    				'id'=>$result->id,
+    				'nombre'=>$result->nombre,
+    				'email'=>$result->email,
+    				'foto' =>$result->foto,
+    				'empresa'=>$result->empresa,
+    				'posicion' =>$result->posicion,
+    				'area' =>$result->area
+    			);
+    			$data['email'] = $result->email;
+    			$this->session->set_userdata($sess_array);
+    			$re="main/index";
+    		}else
+    			$data['err_msg'] = "No es posible iniciar sesión, verifica las credenciales";
+    	}
     	$this->verify_session();
 		// Include two files from google-php-client library in controller
 		include_once APPPATH . "libraries/google-api-php-client-master/src/Google/autoload.php";
@@ -150,28 +172,6 @@ class Main extends CI_Controller {
 			$this->layout->title('Advanzer - Login');
 			$re="main/login";
 		}
-		$email = $this->input->post('email');
-		if (!empty($email)) {
-    		$password = $this->input->post('password');
-    		$result = $this->user_model->do_login($email,$password);
-
-    		if ($result) {
-    			//$_SESSION['access_token'] = 1;
-    			$sess_array = array(
-    				'id'=>$result->id,
-    				'nombre'=>$result->nombre,
-    				'email'=>$result->email,
-    				'foto' =>$result->foto,
-    				'empresa'=>$result->empresa,
-    				'posicion' =>$result->posicion,
-    				'area' =>$result->area
-    			);
-    			$data['email'] = $result->email;
-    			$this->session->set_userdata($sess_array);
-    			$re="main/index";
-    		}else
-    			$data['err_msg'] = "No es posible iniciar sesión, verifica las credenciales";
-    	}
 		// Load view and send values stored in $data
 		//$this->load->view('google_authentication', $data);
     	$this->layout->view($re, $data);

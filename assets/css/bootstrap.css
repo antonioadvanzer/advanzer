@@ -4023,7 +4023,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   position: static;
   display: block;
   padding: 10px 10px;
-  max-width: 200px;
+  max-width: 300px;
 }
 .nav > li > a:hover,
 .nav > li > a:focus {

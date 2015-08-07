@@ -148,7 +148,7 @@
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<?php $idU=$this->session->userdata('id'); if(!empty($idU)): ?>
-						<li><a href="<?= base_url('logout'); ?>">(<?= $this->session->userdata('nombre');?>) LogOut</a></li>
+						<li align="center"><a href="<?= base_url('logout'); ?>"><span style="cursor:default">(<?= $this->session->userdata('nombre');?>)</span> LogOut</a></li>
 					<?php else: ?>
 						<li><a href="<?= base_url("login") ?>">LogIn</a></li>
 					<?php endif; ?>

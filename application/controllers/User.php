@@ -51,7 +51,7 @@ class User extends CI_Controller {
 
         $data['pagination'] = $this->pagination->create_links();
 
-        if($msg!=null)
+        if($msg!=null && $msg!='(:num)')
         	$data['msg']=$msg;
         $this->layout->title('Advanzer - Perfiles');
         $this->layout->view('user/index',$data);

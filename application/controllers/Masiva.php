@@ -54,22 +54,17 @@ class Masiva extends CI_Controller {
 			//vaciar tablas
 			if(!$this->masiva_model->dropTables($tipo))
 				exit();
+
+			foreach ($header as $h => $valores) :
+				$head=$valores;
+			endforeach;
 			//llenar tablas en base al tipo(1=responsabilidades, 2=competencias)
 			switch ($tipo) {
-				case 1:
-					foreach ($header as $h => $valores) :
-						if(!$this->masiva_model->registraAreas($valores))
-							exit();
-						$head=$valores;
-					endforeach;
-					
+				case 1:					
 					if(!$this->masiva_model->registraObjetivos($arr_data,$head))
 						exit();
 					break;
 				case 2:
-					foreach ($header as $h => $valores) {
-						$head=$valores;
-					}
 					if(!$this->masiva_model->registraCompetencias($arr_data,$head))
 						exit();
 					break;

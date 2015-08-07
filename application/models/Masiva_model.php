@@ -15,9 +15,8 @@ class Masiva_model extends CI_Model{
 					if($this->db->truncate('Metricas'))
 						if($this->db->truncate('Objetivos_Areas'))
 							if($this->db->truncate('Objetivos'))
-								if($this->db->truncate('Areas'))
-									if($this->db->truncate('Dominios'))
-										return true;
+								if($this->db->truncate('Dominios'))
+									return true;
 				break;
 			case 2:
 				if($this->db->truncate('Comportamiento_Posicion'))
@@ -154,45 +153,14 @@ class Masiva_model extends CI_Model{
 						case 'AD':
 							break;
 						default:
-							$result=$this->db->select('id')->where('nombre',$head[$row])->get('Areas');
-							if($result->num_rows() == 1){
-								$area=$result->first_row()->id;
-								if($value=='SÍ'){
-									$this->db->insert('Objetivos_Areas',array('objetivo'=>$objetivo,'area'=>$area));
-									if($this->db->affected_rows() != 1)
-										return false;
-								}
+							if($value=='SÍ'){
+								$this->db->insert('Objetivos_Areas',array('objetivo'=>$objetivo,'area'=>$head[$row]));
+								if($this->db->affected_rows() != 1)
+									return false;
 							}
 							break;
 					}
 				endforeach;
-		}
-		return true;
-	}
-
-	function registraAreas($areas) {
-		$this->db->where('estatus',1)->or_where('estatus',0)->delete('Areas');
-		foreach ($areas as $key => $value) {
-			switch ($key) {
-				case 'A':
-				case 'B':
-				case 'C':
-				case 'D':
-				case 'X':
-				case 'Y':
-				case 'Z':
-				case 'AA':
-				case 'AB':
-				case 'AC':
-				case 'AD':
-					break;
-				default:
-					if($this->db->select('id')->where('nombre',$value)->get('Areas')->num_rows() < 1)
-						$this->db->insert('Areas',array('nombre'=>$value));
-					else
-						return false;
-					break;
-			}
 		}
 		return true;
 	}
