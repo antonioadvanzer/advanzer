@@ -118,7 +118,7 @@ class Evaluacion_model extends CI_Model{
 		$this->db->limit($limit,$start);
 		$this->db->select('Us.foto,Ev.evaluador id,Us.nombre nombre,count(Ev.evaluado) as cantidad');
 		$this->db->join('Users as Us','Us.id = Ev.evaluador');
-		$this->db->where('Ev.estatus',0);
+		$this->db->where(array('Ev.estatus'=>0,'Us.estatus'=>1));
 		if($tipo==1)//1=evaluacion 360
 			$this->db->where('Ev.tipo',3);
 		else
@@ -137,9 +137,9 @@ class Evaluacion_model extends CI_Model{
 			$this->db->where('Ev.tipo !=',3);
 		$this->db->from('Evaluadores Ev');
 		$this->db->join('Users Us','Ev.evaluado = Us.id');
-		$this->db->join('Posicion_Track PT','PT.id = Us.posicion_track');
-		$this->db->join('Posiciones P','P.id = PT.posicion');
-		$this->db->join('Tracks T','T.id = PT.track');
+		$this->db->join('Posicion_Track PT','PT.id = Us.posicion_track','LEFT OUTER');
+		$this->db->join('Posiciones P','P.id = PT.posicion','LEFT OUTER');
+		$this->db->join('Tracks T','T.id = PT.track','LEFT OUTER');
 		return $this->db->get()->result();
 	}
 
@@ -154,11 +154,11 @@ class Evaluacion_model extends CI_Model{
 			$this->db->where('P.nivel <=',5);
 
 		$this->db->select('Us.id,Us.nombre,P.nombre posicion,T.nombre track');
-		$this->db->where('Us.id !=',$evaluador);
+		$this->db->where(array('Us.id !='=>$evaluador,'Us.estatus'=>1));
 		$this->db->from('Users Us');
-		$this->db->join('Posicion_Track PT','PT.id = Us.posicion_track');
-		$this->db->join('Posiciones P','P.id = PT.posicion');
-		$this->db->join('Tracks T','T.id = PT.track');
+		$this->db->join('Posicion_Track PT','PT.id = Us.posicion_track','LEFT OUTER');
+		$this->db->join('Posiciones P','P.id = PT.posicion','LEFT OUTER');
+		$this->db->join('Tracks T','T.id = PT.track','LEFT OUTER');
 		return $this->db->order_by('Us.nombre')->get()->result();
 	}
 

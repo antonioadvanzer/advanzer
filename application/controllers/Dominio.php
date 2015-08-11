@@ -51,7 +51,7 @@ class Dominio extends CI_Controller {
                     foreach ($porc->posiciones as $posicion) :
                       $cadena.=" <i>$posicion->nombre</i> |";
                     endforeach;
-                  	echo "Nivel ".$porc->nivel_posicion." - ".$porc->valor."% ($cadena)<br><br>";
+                  	echo "Nivel ".$porc->nivel_posicion." - ".$porc->valor."% ($cadena)<br>";
                   endforeach; ?>
                 </span></td>
               <td align="right"><span style="cursor:pointer;" onclick="

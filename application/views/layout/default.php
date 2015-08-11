@@ -77,8 +77,8 @@
 									<li><a href="<?= base_url('ver_requisiciones');?>">Requisiciones</a></li>
 									<li><a href="<?= base_url('evaluaciones');?>">Evaluaciones</a></li>
 									<li><a href="<?= base_url('ev_confidencial');?>">Evaluaciones Confidencial</a></li>
-									<li><a href="<?= base_url('ev_evaluador');?>">Evaluaciones por Evaluador</a></li>
-									<li><a href="<?= base_url('ev_360_evaluador');?>">Evaluaciones 360 por Evaluador</a></li>
+									<li><a href="<?= base_url('evaluadores');?>">Evaluaciones por Evaluador</a></li>
+									<li><a href="<?= base_url('evaluadores360');?>">Evaluaciones 360 por Evaluador</a></li>
 									<li><a href="<?= base_url('gestion_evaluaciones');?>">Gestión de Evaluaciones</a></li>
 								</ul>
 							</li>
@@ -88,8 +88,6 @@
 									<li><a href="<?= base_url('area');?>">Administración de Areas</a></li>
 									<li><a href="<?= base_url('track');?>">Administración de Tracks y Posiciones</a></li>
 									<li><a href="<?= base_url('administrar_usuarios'); ?>">Administración de Usuarios</a></li>
-									<li><a href="<?= base_url('evaluadores'); ?>">Administración de Evaluadores</a></li>
-									<li><a href="<?= base_url('evaluadores360');?>">Administración de Evaluadores 360</a></li>
 									<li><a href="<?= base_url('administrar_dominios');?>">Administración de Responsabilidades</a></li>
 									<li><a href="<?= base_url('administrar_indicadores');?>">Administración de Competencias</a></li>
 									<li><a href="<?= base_url('administrar_cursos');?>">Administración de Cursos</a></li>

@@ -109,7 +109,7 @@
 		  <div class="form-group">
 		    <label for="categoria">Categoría:</label>
 		    <input name="categoria" type="text" class="form-control" style="max-width:300px; text-align:center;" 
-		    	required value="<?= $user->categoria; ?>">
+		    	value="<?= $user->categoria; ?>">
 		  </div>
 		  <div class="form-group">
 		    <label for="requisicion">Requisiciones:</label>

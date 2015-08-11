@@ -55,13 +55,15 @@
           <?php endforeach; ?>
         </select>
       </div>
+      <div align="center"><div id="cargando" style="display:none; color: green;">
+        <img src="<?= base_url('assets/images/loading.gif');?>"></div></div>
       <table width="90%" align="center" class="table">
         <thead>
           <tr>
-            <th class="col-md-3">Responsabilidad</th>
+            <th class="col-md-2">Responsabilidad</th>
             <th class="col-md-2">Descripción</th>
             <th class="col-md-4">Métrica</th>
-            <th class="col-md-2">Porcentaje</th>
+            <th class="col-md-3">Porcentaje</th>
             <th class="col-md-1"></th>
           </tr>
         </thead>
@@ -78,11 +80,21 @@
             area = $('#area').val();
           });
           dominio = $('#dominio').val();
-          $.post("<?= base_url('dominio/load_objetivos');?>", {
-            dominio : dominio,
-            area : area
-          }, function(data) {
-            $("#result").html(data);
+          $.ajax({
+            type: 'post',
+            url: "<?= base_url('dominio/load_objetivos');?>",
+            data: {
+              area : area,
+              dominio : dominio
+            },
+            beforeSend: function (xhr) {
+              $('#result').hide();
+              $('#cargando').show();
+            },
+            success: function(data) {
+              $('#cargando').hide();
+              $("#result").show().html(data);
+            }
           });
         });
       });
@@ -92,11 +104,21 @@
             dominio = $('#dominio').val();
           });
           area = $('#area').val();
-          $.post("<?= base_url('dominio/load_objetivos');?>", {
-            dominio : dominio,
-            area : area
-          }, function(data) {
-            $("#result").html(data);
+          $.ajax({
+            type: 'post',
+            url: "<?= base_url('dominio/load_objetivos');?>",
+            data: {
+              area : area,
+              dominio : dominio
+            },
+            beforeSend: function (xhr) {
+              $('#result').hide();
+              $('#cargando').show();
+            },
+            success: function(data) {
+              $('#cargando').hide();
+              $("#result").show().html(data);
+            }
           });
         });
       });

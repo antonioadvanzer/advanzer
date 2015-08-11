@@ -58,6 +58,8 @@
           <option value="3">Nivel 3 o Inferior (Director)</option>
         </select>
       </div>
+      <div align="center"><div id="cargando" style="display:none; color: green;">
+        <img src="<?= base_url('assets/images/loading.gif');?>"></div></div>
       <table width="90%" align="center" class="table">
         <thead>
           <tr>
@@ -79,11 +81,21 @@
             posicion = $('#posicion').val();
           });
           indicador = $('#indicador').val();
-          $.post("<?= base_url('indicador/load_competencias');?>", {
-            indicador : indicador,
-            posicion : posicion
-          }, function(data) {
-            $("#result").html(data);
+          $.ajax({
+            type: 'post',
+            url: "<?= base_url('indicador/load_competencias');?>",
+            data: {
+              indicador : indicador,
+              posicion : posicion
+            },
+            beforeSend: function (xhr) {
+              $('#result').hide();
+              $('#cargando').show();
+            },
+            success: function(data) {
+              $('#cargando').hide();
+              $("#result").show().html(data);
+            }
           });
         });
       });
@@ -93,11 +105,21 @@
             indicador = $('#indicador').val();
           });
           posicion = $('#posicion').val();
-          $.post("<?= base_url('indicador/load_competencias');?>", {
-            indicador : indicador,
-            posicion : posicion
-          }, function(data) {
-            $("#result").html(data);
+          $.ajax({
+            type: 'post',
+            url: "<?= base_url('indicador/load_competencias');?>",
+            data: {
+              indicador : indicador,
+              posicion : posicion
+            },
+            beforeSend: function (xhr) {
+              $('#result').hide();
+              $('#cargando').show();
+            },
+            success: function(data) {
+              $('#cargando').hide();
+              $("#result").show().html(data);
+            }
           });
         });
       });

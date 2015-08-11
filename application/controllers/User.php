@@ -155,8 +155,6 @@ class User extends CI_Controller {
                     <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
                       <?= $user->id;?>"><?= $user->area;?></span></td>
                     <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
-                      <?= $user->id;?>"><?= $user->categoria;?></span></td>
-                    <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
                       <?= $user->id;?>"><?= $user->plaza;?></span></td>
                     <td align="right"><span style="cursor:pointer;" onclick="
                       if(confirm('Seguro que desea cambiar el estatus del usuario: \n <?= $user->nombre;?>'))location.href=

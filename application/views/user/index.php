@@ -29,7 +29,7 @@
       <h3><b>Usuarios:</b></h3>
       <div class="input-group">
         <input name="nombre" type="text" class="form-control" id="nombre" 
-          placeholder="Buscar por nombre, email, track o posición">
+          placeholder="Buscar por nómina,nombre, email, track o posición">
         <span class="input-group-addon">Filtrar Resultados</span>
         <input id="filter" type="text" class="form-control" placeholder="Filtrar...">
       </div>
@@ -44,7 +44,6 @@
             <th data-halign="center" data-field="track">Track</th>
             <th data-halign="center" data-field="posición">Posición</th>
             <th data-halign="center" data-field="area">Área</th>
-            <th data-halign="center" data-field="categoria">Categoría</th>
             <th data-halign="center" data-field="plaza">Plaza</th>
             <th data-halign="center" data-align="center"></th>
           </tr>
@@ -70,8 +69,6 @@
               <?= $user->id;?>"><?= $user->posicion;?></span></td>
             <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
               <?= $user->id;?>"><?= $user->area;?></span></td>
-            <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
-              <?= $user->id;?>"><?= $user->categoria;?></span></td>
             <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
               <?= $user->id;?>"><?= $user->plaza;?></span></td>
             <td align="right"><span style="cursor:pointer;" onclick="

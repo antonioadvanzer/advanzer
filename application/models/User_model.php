@@ -111,9 +111,10 @@ class User_model extends CI_Model{
 		$this->db->join('Tracks T','PT.track = T.id','LEFT OUTER');
 		$this->db->join('Posiciones P','P.id = PT.posicion','LEFT OUTER');
 		$this->db->like('U.nombre',$valor,'both');
-		$this->db->or_like('U.email',$valor);
-		$this->db->or_like('P.nombre',$valor);
-		$this->db->or_like('T.nombre',$valor);
+		$this->db->or_like('U.email',$valor,'both');
+		$this->db->or_like('P.nombre',$valor,'both');
+		$this->db->or_like('T.nombre',$valor,'both');
+		$this->db->or_like('U.nomina',$valor,'both');
 		$this->db->order_by('nombre','asc');
 		//$this->db->where('estatus',1);
 		return $this->db->get('Users U')->result();

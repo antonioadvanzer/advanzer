@@ -47,7 +47,7 @@ class Evaluacion extends CI_Controller {
             <div>
             <?php foreach ($this->evaluacion_model->getObjetivosByDominio($dominio->id,$area,$posicion) as $responsabilidad) : ?>
                 <h2><?= $responsabilidad->nombre;?><span style="float:right;"><?= $responsabilidad->valor;?>%</span></h2>
-                <div>
+                <div align="left">
                     <label><?= $responsabilidad->descripcion;?></label>
                     <p><ol reversed>
                         <?php foreach ($this->evaluacion_model->getMetricaByObjetivo($responsabilidad->id) as $metrica) : ?>
@@ -139,7 +139,6 @@ class Evaluacion extends CI_Controller {
                 case 0:
                     $url = 'evaluacion/asignar_evaluadores360';
                     break;
-                
                 case 1:
                     $url = 'evaluacion/asignar_evaluadores';
                     break;
