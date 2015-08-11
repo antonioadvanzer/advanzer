@@ -8,10 +8,12 @@ class Evaluacion_model extends CI_Model{
 		parent::__construct();
 	}
 
-	function getComportamientoByCompetencia($competencia) {
-		$this->db->where('competencia',$competencia);
-		$this->db->order_by('descripcion');
-		return $this->db->get('Comportamientos')->result();
+	function getComportamientoByCompetencia($competencia,$posicion) {
+		$this->db->select('C.id,C.descripcion,C.competencia,CP.evalua');
+		$this->db->where(array('C.competencia'=>$competencia,'CP.nivel_posicion'=>$posicion));
+		$this->db->order_by('C.descripcion');
+		$this->db->join('Comportamiento_Posicion CP','CP.comportamiento = C.id');
+		return $this->db->get('Comportamientos C')->result();
 	}
 
 	function getCompetenciasByIndicador($indicador,$posicion) {
@@ -31,7 +33,7 @@ class Evaluacion_model extends CI_Model{
 		$this->db->join('Competencias C','C.indicador = I.id');
 		$this->db->join('Comportamientos Co','Co.competencia = C.id');
 		$this->db->join('Comportamiento_Posicion CP','Co.id = CP.comportamiento');
-		$this->db->order_by('I.nombre');
+		//$this->db->order_by('I.nombre');
 		$this->db->where(array('I.estatus'=>1,'C.estatus'=>1,'CP.nivel_posicion'=>$posicion));
 		return $this->db->get()->result();
 	}

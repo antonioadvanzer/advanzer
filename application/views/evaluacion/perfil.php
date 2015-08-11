@@ -26,7 +26,7 @@
 	.accordion h1:not(:last-of-type) {
 	  border-bottom: 1px dotted #FFF;
 	}
-	.accordion div, .accordion p {
+	.accordion div, .accordion p, .accordion span {
 	  display: none;
 	}
 	.accordion h2 {
@@ -131,7 +131,7 @@
 		<div>
 			<?php foreach ($dominio->responsabilidades as $resp) : ?>
 			<h2><?= $resp->nombre;?><span style="float:right;"><?= $resp->valor;?>%</span></h2>
-			<div>
+			<div align="left">
 				<label><?= $resp->descripcion;?></label>
 				<p><ol reversed>
 					<?php foreach ($resp->metricas as $metrica) : ?>
@@ -151,12 +151,17 @@
 		<h1><?= $indicador->nombre;?></h1>
 		<div>
 			<?php foreach ($indicador->competencias as $comp) : ?>
-			<h2><?= $comp->nombre;?><span style="float:right;"><?= $comp->puntuacion;?></span></h2>
-			<div>
+			<h2><?= $comp->nombre;?></h2>
+			<div align="left">
 				<label><?= $comp->descripcion;?></label>
 				<p><ul type="square">
-					<?php foreach ($comp->comportamientos as $comportamiento) : ?>
-						<li><span style="glyphicon glyphicon-ok-circle"></span><?= $comportamiento->descripcion;?></li>
+					<?php foreach ($comp->comportamientos as $comportamiento) : 
+						if($comportamiento->evalua == 1)
+							$class="glyphicon-ok-circle";
+						else
+							$class="glyphicon-remove-circle";
+					?>
+						<span class="glyphicon <?= $class;?>"><?= $comportamiento->descripcion;?></span>
 					<?php endforeach; ?>
 				</ul></p>
 			</div>

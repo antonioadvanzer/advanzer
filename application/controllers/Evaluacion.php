@@ -20,12 +20,16 @@ class Evaluacion extends CI_Controller {
             <h1><?= $indicador->nombre;?></h1>
             <div> <?php 
                 foreach ($this->evaluacion_model->getCompetenciasByIndicador($indicador->id,$posicion) as $comp) : ?>
-                    <h2><?= $comp->nombre;?><span style="float:right;"><?= $comp->puntuacion;?></span></h2>
+                    <h2><?= $comp->nombre;?></h2>
                     <div>
                         <label><?= $comp->descripcion;?></label>
-                        <p><ul> <?php
-                            foreach ($this->evaluacion_model->getComportamientoByCompetencia($comp->id) as $comportamiento) : ?>
-                                <li><?= $comportamiento->descripcion;?></li>
+                        <p><ul type="square"> <?php
+                            foreach ($this->evaluacion_model->getComportamientoByCompetencia($comp->id,$posicion) as $comportamiento) : 
+                                if($comportamiento->evalua == 1)
+                                    $class="glyphicon-ok-circle";
+                                else
+                                    $class="glyphicon-remove-circle";?>
+                                <span class="glyphicon <?= $class;?>"><?= $comportamiento->descripcion;?></span>
                                 <?php
                             endforeach; ?>
                         </ul></p>
@@ -74,7 +78,7 @@ class Evaluacion extends CI_Controller {
             foreach ($data['indicadores'] as $indicador) :
                 $indicador->competencias = $this->evaluacion_model->getCompetenciasByIndicador($indicador->id,$posicion);
                 foreach ($indicador->competencias as $competencia) : 
-                    $competencia->comportamientos = $this->evaluacion_model->getComportamientoByCompetencia($competencia->id);
+                    $competencia->comportamientos = $this->evaluacion_model->getComportamientoByCompetencia($competencia->id,$posicion);
                 endforeach;
             endforeach;
         }
