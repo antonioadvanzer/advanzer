@@ -38,20 +38,20 @@ class Evaluacion extends CI_Controller {
     public function load_perfil() {
         $area = $this->input->post('area');
         $posicion = $this->input->post('posicion');
-        foreach ($this->evaluacion_model->getResponsabilidadByArea($area) as $dominio) : ?>
+        foreach ($this->evaluacion_model->getResponsabilidadByArea($area) as $dominio) :?>
             <h1><?= $dominio->nombre;?></h1>
             <div>
-            <?php foreach ($this->evaluacion_model->getObjetivosByDominio($dominio->id,$area,$posicion) as $responsabilidad) { ?>
+            <?php foreach ($this->evaluacion_model->getObjetivosByDominio($dominio->id,$area,$posicion) as $responsabilidad) : ?>
                 <h2><?= $responsabilidad->nombre;?><span style="float:right;"><?= $responsabilidad->valor;?>%</span></h2>
-                    <div>
-                        <label><?= $responsabilidad->descripcion;?></label>
-                        <p><ol reversed>
-                            <?php foreach ($this->evaluacion_model->getMetricaByObjetivo($responsabilidad->id) as $metrica) { ?>
-                                <li><?= $metrica->descripcion;?></li>
-                            <?php } ?>
-                        </ol></p>
-                    </div>
-            <?php } ?>
+                <div>
+                    <label><?= $responsabilidad->descripcion;?></label>
+                    <p><ol reversed>
+                        <?php foreach ($this->evaluacion_model->getMetricaByObjetivo($responsabilidad->id) as $metrica) : ?>
+                            <li><?= $metrica->descripcion;?></li>
+                        <?php endforeach; ?>
+                    </ol></p>
+                </div>
+            <?php endforeach; ?>
             </div>
         <?php endforeach;
     }
@@ -79,6 +79,7 @@ class Evaluacion extends CI_Controller {
             endforeach;
         }
         $data['areas']=$this->area_model->getAll(1);
+        $data['area_usuario'] = $area;
         $this->layout->title('Advanzer - Perfil de Evaluación');
         $this->layout->view('evaluacion/perfil',$data);
     }

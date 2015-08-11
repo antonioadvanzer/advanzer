@@ -8,7 +8,7 @@
 	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/bootstrap.css');?>">
 	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/bootstrap-table.css');?>">
 	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/theme.css');?>">
-	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/bootstrap-theme.min.css');?>">
+	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/bootstrap-theme.css');?>">
 	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/style.css');?>">
 	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/datepicker/css/bootstrap-datepicker.min.css');?>">
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">

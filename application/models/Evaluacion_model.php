@@ -10,7 +10,7 @@ class Evaluacion_model extends CI_Model{
 
 	function getComportamientoByCompetencia($competencia) {
 		$this->db->where('competencia',$competencia);
-		$this->db->order_by('valor');
+		$this->db->order_by('descripcion');
 		return $this->db->get('Comportamientos')->result();
 	}
 
@@ -20,7 +20,7 @@ class Evaluacion_model extends CI_Model{
 		$this->db->from('Competencias C');
 		$this->db->join('Comportamientos Co','Co.competencia = C.id');
 		$this->db->join('Comportamiento_Posicion CP','CP.comportamiento = Co.id');
-		$this->db->where(array('C.estatus'=>1,'C.indicador'=>$indicador,'CP.posicion'=>$posicion));
+		$this->db->where(array('C.estatus'=>1,'C.indicador'=>$indicador,'CP.nivel_posicion'=>$posicion));
 		return $this->db->get()->result();
 	}
 
@@ -32,7 +32,7 @@ class Evaluacion_model extends CI_Model{
 		$this->db->join('Comportamientos Co','Co.competencia = C.id');
 		$this->db->join('Comportamiento_Posicion CP','Co.id = CP.comportamiento');
 		$this->db->order_by('I.nombre');
-		$this->db->where(array('I.estatus'=>1,'C.estatus'=>1,'CP.posicion'=>$posicion));
+		$this->db->where(array('I.estatus'=>1,'C.estatus'=>1,'CP.nivel_posicion'=>$posicion));
 		return $this->db->get()->result();
 	}
 
@@ -41,7 +41,7 @@ class Evaluacion_model extends CI_Model{
 		$this->db->from('Objetivos O');
 		$this->db->join('Objetivos_Areas OA','OA.objetivo = O.id');
 		$this->db->join('Porcentajes_Objetivos PO','PO.objetivo = O.id');
-		$this->db->where(array('O.dominio'=>$dominio,'OA.area'=>$area,'PO.posicion'=>$posicion,'O.estatus'=>1));
+		$this->db->where(array('O.dominio'=>$dominio,'OA.area'=>$area,'PO.nivel_posicion'=>$posicion,'O.estatus'=>1));
 		return $this->db->get()->result();
 	}
 

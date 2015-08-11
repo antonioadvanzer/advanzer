@@ -9,7 +9,7 @@ class User_model extends CI_Model{
 	}
 
 	function do_login($email,$password){
-		$this->db->select('U.id,U.email,U.nombre,U.foto,U.empresa,P.nombre posicion,A.nombre area,T.nombre track');
+		$this->db->select('U.id,U.email,U.nombre,U.foto,U.empresa,P.nivel nivel_posicion,A.id area,T.nombre track');
 		$this->db->from('Users U');
 		$this->db->join('Areas A','A.id = U.area','LEFT OUTER');
 		$this->db->join('Posicion_Track PT','PT.id = U.posicion_track','LEFT OUTER');
@@ -47,26 +47,13 @@ class User_model extends CI_Model{
 	}
 
 	function searchById($id) {
-		$this->db->where('id',$id);
-		$result = $this->db->get('Users')->first_row();
-		
-		$this->db->select('T.id');
-		$this->db->join('Posicion_Track PT','PT.track = T.id');
-		$this->db->join('Users U','U.posicion_track = PT.id');
-		$track="";
-		if($res=$this->db->get('Tracks T')->first_row())
-			$track = $res->id;
-		$result->track = $track;
-
-		$this->db->select('P.id');
-		$this->db->join('Posicion_Track PT','PT.posicion = P.id');
-		$this->db->join('Users U','U.posicion_track = PT.id');
-		$posicion="";
-		if($res=$this->db->get('Posiciones P')->first_row())
-			$posicon = $res->id;
-		$result->posicion = $posicion;
-
-		return $result;
+		$this->db->select('U.id,U.email,U.nombre,U.foto,U.empresa,U.estatus,U.categoria,U.nomina,U.area,U.plaza,
+			U.requisicion,U.admin,P.id posicion, T.id track');
+		$this->db->join('Posicion_Track PT','PT.id = U.posicion_track');
+		$this->db->join('Posiciones P','P.id = PT.posicion');
+		$this->db->join('Tracks T','T.id = PT.track');
+		$this->db->where('U.id',$id);
+		return $this->db->get('Users U')->first_row();
 	}
 
 	function getTrackByUser($user) {
