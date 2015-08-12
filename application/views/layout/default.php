@@ -77,8 +77,8 @@
 									<li><a href="<?= base_url('ver_requisiciones');?>">Requisiciones</a></li>
 									<li><a href="<?= base_url('evaluaciones');?>">Evaluaciones</a></li>
 									<li><a href="<?= base_url('ev_confidencial');?>">Evaluaciones Confidencial</a></li>
-									<li><a href="<?= base_url('evaluadores');?>">Evaluaciones por Evaluador</a></li>
-									<li><a href="<?= base_url('evaluadores360');?>">Evaluaciones 360 por Evaluador</a></li>
+									<li><a href="<?= base_url('ev_evaluador');?>">Evaluaciones por Evaluador</a></li>
+									<li><a href="<?= base_url('ev_evaluador360');?>">Evaluaciones 360 por Evaluador</a></li>
 									<li><a href="<?= base_url('gestion_evaluaciones');?>">Gestión de Evaluaciones</a></li>
 								</ul>
 							</li>
@@ -90,6 +90,8 @@
 									<li><a href="<?= base_url('administrar_usuarios'); ?>">Administración de Usuarios</a></li>
 									<li><a href="<?= base_url('administrar_dominios');?>">Administración de Responsabilidades</a></li>
 									<li><a href="<?= base_url('administrar_indicadores');?>">Administración de Competencias</a></li>
+									<li><a href="<?= base_url('evaluadores');?>">Administración de Evaluaciones</a></li>
+									<li><a href="<?= base_url('evaluadores360');?>">Administración de Evaluaciones 360</a></li>
 									<li><a href="<?= base_url('administrar_cursos');?>">Administración de Cursos</a></li>
 								</ul>
 							</li>
@@ -106,13 +108,6 @@
 							Servicios<span class="caret"></span></a>
 						<ul class="dropdown-menu">
 							<li><a href="<?= base_url('requisiciones');?>">Requisiciones</a></li>
-						</ul>
-					</li>
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
-							Evaluación<span class="caret"></span></a>
-						<ul class="dropdown-menu">
-							<li><a href="<?= base_url('evaluacion/perfil');?>">Perfil de Evaluación</a></li>
 						</ul>
 					</li>
 					<!--
@@ -146,7 +141,8 @@
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<?php $idU=$this->session->userdata('id'); if(!empty($idU)): ?>
-						<li align="center"><a href="<?= base_url('logout'); ?>"><span style="cursor:default">(<?= $this->session->userdata('nombre');?>)</span> LogOut</a></li>
+						<li align="center"><a href="<?= base_url('evaluacion/perfil');?>"><?= $this->session->userdata('nombre');?></a></li>
+						<li align="center"><a href="<?= base_url('logout'); ?>">LogOut</a></li>
 					<?php else: ?>
 						<li><a href="<?= base_url("login") ?>">LogIn</a></li>
 					<?php endif; ?>

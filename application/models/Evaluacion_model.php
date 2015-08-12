@@ -184,14 +184,14 @@ class Evaluacion_model extends CI_Model{
 	}
 
 	function getEvaluacionesSinAplicar() {
-		$this->db->where('estatus',0);
+		$this->db->where('estatus <',3);
 		$this->db->order_by('nombre','desc');
 		return $this->db->get('Evaluaciones')->result();
 	}
 
-	function gestionar($evaluacion,$inicio,$fin,$tipo) {
-		$this->db->where('id',$evaluacion);
-		$this->db->update('Evaluaciones',array('inicio'=>$inicio,'fin'=>$fin,'tipo'=>$tipo));
+	function gestionar($id,$datos) {
+		$this->db->where('id',$id);
+		$this->db->update('Evaluaciones',$datos);
 		if($this->db->affected_rows() == 1)
 			return true;
 		else
@@ -203,12 +203,7 @@ class Evaluacion_model extends CI_Model{
 		return $this->db->get('Evaluaciones')->first_row();
 	}
 
-	function create($nombre,$descripcion,$inicio,$fin) {
-		$datos=array('nombre'=>$nombre,'descripcion'=>$descripcion);
-		if($inicio!="")
-			$datos['inicio']=$inicio;
-		if($fin!="")
-			$datos['fin']=$fin;
+	function create($datos) {
 		$this->db->insert('Evaluaciones',$datos);
 		if($this->db->affected_rows() == 1)
 			return true;

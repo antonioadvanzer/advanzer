@@ -17,7 +17,10 @@ class Main extends CI_Controller {
 		$this->layout->view('main/index', $data);
 	}
 
-    public function login() {
+    public function login($err=null) {
+    	$data=array();
+    	if($err!=null)
+    		$data['err_msg']=$err;
     	$email = $this->input->post('email');
 		if (!empty($email)) {
     		$password = $this->input->post('password');
@@ -40,21 +43,20 @@ class Main extends CI_Controller {
     		}else
     			$data['err_msg'] = "No es posible iniciar sesión, verifica las credenciales";
     	}
-    	$this->verify_session();
 		// Include two files from google-php-client library in controller
 		include_once APPPATH . "libraries/google-api-php-client-master/src/Google/autoload.php";
 		include_once APPPATH . "libraries/google-api-php-client-master/src/Google/Client.php";
 		include_once APPPATH . "libraries/google-api-php-client-master/src/Google/Service/Oauth2.php";
 
 		// Store values in variables from project created in Google Developer Console
-		$client_id = '577890901025-gathucvdkhl9tbg8878skn7ae5i3rguk.apps.googleusercontent.com';
-		$client_secret = 'ZkPs2AbhoY3llDEQRb4nW23R';
+		$client_id = '904111204763-9c015hanptq9jehs8nj57at4joqfroe1.apps.googleusercontent.com';
+		$client_secret = '49DbvsMqY6-8dTCnlXJrIp-C';
 		$redirect_uri = base_url('auth');
-		$simple_api_key = 'AIzaSyDR_DGouvoZkW4v4lt54yMIReQeYKXy6A4';
+		$simple_api_key = 'AIzaSyBhG2aM8BVUvRNXRypylxu4XJBIYLWtdyQ';
 
 		// Create Client Request to access Google API
 		$client = new Google_Client();
-		$client->setApplicationName("PHP Google OAuth Login Example");
+		$client->setApplicationName("Auth");
 		$client->setClientId($client_id);
 		$client->setClientSecret($client_secret);
 		$client->setRedirectUri($redirect_uri);
@@ -85,20 +87,23 @@ class Main extends CI_Controller {
 			$client->refreshToken($NewAccessToken->access_token);*/
 			$userData = $objOAuthService->userinfo->get();
 			$email = $userData->email;
-			$result=$this->user_model->do_login($email,'google');
+			$result=$this->user_model->do_login($email);
 			if ($result) {
 				$_SESSION['access_token'] = $client->getAccessToken();
 				$sess_array = array(
-					'id'=>$result->id,
-					'nombre'=>$result->nombre,
+    				'id'=>$result->id,
+    				'nombre'=>$result->nombre,
     				'email'=>$result->email,
     				'foto' =>$result->foto,
-    				'empresa' =>$result->empresa,
-    				'posicion' =>$result->posicion,
+    				'empresa'=>$result->empresa,
+    				'posicion' =>$result->nivel_posicion,
     				'area' =>$result->area
-				);
+    			);
     			$data['email'] = $result->email;
     			$this->session->set_userdata($sess_array);
+			}else{
+				echo"<script>alert('Credenciales Inválidas');</script>";
+				unset($_SESSION['access_token']);
 			}
 			$this->layout->title('Advanzer - Bienvenido');
 			$re="main/index";
@@ -108,6 +113,7 @@ class Main extends CI_Controller {
 			$this->layout->title('Advanzer - Login');
 			$re="main/login";
 		}
+		$this->verify_session();
 		// Load view and send values stored in $data
 		//$this->load->view('google_authentication', $data);
     	$this->layout->view($re, $data);
@@ -122,9 +128,10 @@ class Main extends CI_Controller {
     }
 
     // Unset session and logout
-	public function logout() {
+	public function logout($err=null) {
 		unset($_SESSION['access_token']);
 		$this->session->userdata=array();
-		redirect(base_url('login'));
+		$this->login($err);
+		//redirect("https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=".base_url('login'),"refresh");
 	}
 }

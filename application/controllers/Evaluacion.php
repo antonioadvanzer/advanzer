@@ -330,21 +330,68 @@ class Evaluacion extends CI_Controller {
 
     public function gestionar() {
         $evaluacion=$this->input->post('evaluacion');
-        $inicio=$this->input->post('inicio');
-        $fin=$this->input->post('fin');
-        $tipo=$this->input->post('tipo');
-        if($this->evaluacion_model->gestionar($evaluacion,$inicio,$fin,$tipo))
-            $this->gestion("Exito al gestionar la evaluación");
+        $datos=array(
+            'inicio'=>$this->input->post('inicio'),
+            'fin'=>$this->input->post('fin'),
+            'tipo'=>$this->input->post('tipo'),
+            'estatus'=>$this->input->post('estatus')
+        );
+        if($this->evaluacion_model->gestionar($evaluacion,$datos))
+            $this->gestion("Exito al actualizar los datos de la evaluación");
         else{ 
-            $this->gestion(null,"Error al gestionar la evaluación. Intente nuevamente");
+            $this->gestion(null,"Error al actualizar datos de la evaluación. Intente nuevamente");
         }
     }
 
     public function load_info_evaluacion() {
         $evaluacion=$this->input->post('evaluacion');
         $info=$this->evaluacion_model->getEvaluacionById($evaluacion);
-        ?>
-        <div class="col-md-4">
+        if($info->estatus > 2): ?>
+          <script>
+            $('#submit').prop('disabled',true);
+            $('#tipo').prop('disabled',true);
+            $('#inicio').prop('disabled',true);
+            $('#fin').prop('disabled',true);
+            $('#estatus').prop('disabled',true);
+          </script>
+        <?php elseif($info->estatus == 2) : ?>
+          <script>
+            $('#tipo').prop('disabled',true);
+            $('#inicio').prop('disabled',true);
+            $('#estatus').prop('disabled',true);
+          </script>
+        <?php endif; ?>
+        <script>
+            $(document).ready(function() {
+                var today = new Date();
+                var dd = today.getDate();
+                var mm = today.getMonth()+1; //January is 0!
+                var yyyy = today.getFullYear();
+                if(dd<10)
+                    dd='0'+dd
+                if(mm<10)
+                    mm='0'+mm
+                today = yyyy+'-'+mm+'-'+dd;
+                $('#inicio').datepicker({
+                    dateFormat: 'yy-mm-dd',
+                    minDate: today,
+                    maxDate: '+30d'
+                });
+                $('#fin').datepicker({dateFormat: 'yy-mm-dd',minDate: $('#inicio').val()});
+                $("#evaluacion").change(function() {
+                    $("#evaluacion option:selected").each(function() {
+                        evaluacion = $('#evaluacion').val();
+                        $.post("<?= base_url('evaluacion/load_info_evaluacion');?>", {
+                            evaluacion : evaluacion
+                        }, function(data) {
+                            $("#datos").html(data);
+                            $("#submit").show();
+                        });
+                    });
+                });
+            });
+        </script>
+        <div class="col-md-3">
           <div class="form-group">
             <label for="tipo">Tipo</label>
             <select class="form-control" style="max-width:300px;text-align:center;" id="tipo" name="tipo">
@@ -353,21 +400,29 @@ class Evaluacion extends CI_Controller {
             </select>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
           <div class="form-group">
             <label for="inicio">Inicia:</label>
-        <input data-provide="datepicker" data-date-format="yyyy-mm-dd" name="inicio" id="inicio" 
-            onchange="setFin(this);" value="<?php if($info->inicio!=null) echo $info->inicio; else 
-                echo date('Y-m-d');?>" class="form-control" style="max-width:300px;text-align:center;">
+            <input data-provide="datepicker" data-date-format="yyyy-mm-dd" name="inicio" id="inicio" 
+            onchange="setFin(this);" value="<?= $info->inicio; ?>" class="form-control" style="max-width:300px;text-align:center;">
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
           <div class="form-group">
-            <label for="inicio">Termina:</label>
+            <label for="fin">Termina:</label>
               <input data-provide="datepicker" data-date-format="yyyy-mm-dd" name="fin" id="fin" 
-                value="<?php if($info->fin!=null) echo $info->fin; else{$fecha=date('Y-m-d'); $fecha=date_create($fecha); 
-                    echo date_add($fecha,date_interval_create_from_date_string('1 month'));}?>" 
+                value="<?= $info->fin;?>" 
                 class="form-control" style="max-width:300px;text-align:center;">
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label for="estatus">Estatus:</label>
+            <select id="estatus" name="estatus" class="form-control" style="max-width:300px;text-align:center">
+              <option selected disabled>-- Estatus --</option>
+              <option value="0" <?php if($info->estatus == 0) echo "selected"; ?>>Deshabilitado</option>
+              <option value="1" <?php if($info->estatus == 1) echo "selected"; ?>>Habilitado</option>
+            </select>
           </div>
         </div>
         <?php
@@ -382,12 +437,15 @@ class Evaluacion extends CI_Controller {
     }
 
     public function registrar() {
-        $nombre=$this->input->post('nombre');
-        $descripcion=$this->input->post('descripcion');
-        $inicio=$this->input->post('inicio');
-        $fin=$this->input->post('fin');
+        $datos=array(
+            'anio'=>$this->input->post('anio'),
+            'nombre'=>$this->input->post('nombre'),
+            'descripcion'=>$this->input->post('descripcion'),
+            'inicio'=>$this->input->post('inicio'),
+            'fin'=>$this->input->post('fin')
+        );
 
-        if($this->evaluacion_model->create($nombre,$descripcion,$inicio,$fin))
+        if($this->evaluacion_model->create($datos))
             $this->gestion("Evaluación creada.");
         else
             $this->nueva("Error al crear evaluación. Intenta de nuevo");

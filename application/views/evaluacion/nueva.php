@@ -16,14 +16,18 @@
 			mm='0'+mm
 		today = yyyy+'-'+mm+'-'+dd;
 		$('#inicio').datepicker({
-			format: 'yyyy-mm-dd',
-			startDate: ''+today+'',
-			endDate: '+30d'
+			dateFormat: 'yy-mm-dd',
+			minDate: today,
+			maxDate: '+30d'
 		});
-		$('#fin').datepicker({
-			format: 'yyyy-mm-dd',
-			startDate: ''+today+'',
-			endDate: '+60d'
+		$('#fin').prop('disabled',true);
+		$('#inicio').change(function(){
+			$('#fin').prop('disabled',false);
+			$('#fin').datepicker({
+				dateFormat: 'yy-mm-dd',
+				minDate: $('#inicio').val(),
+				maxDate: '+90d'
+			});
 		});
 	});
 
@@ -88,16 +92,19 @@
 	<?php endif; ?>
 	<form onsubmit="return valida_fechas(this);" role="form" method="post" action="<?= base_url('evaluacion/registrar');?>" class="form-signin">
 	  <div align="center" class="row">
-		<div class="col-md-4">
+		<div class="col-md-3"></div>
+		<div class="col-md-3">
 		  <div class="form-group" align="center">
-			<label for="nombre">Año de Evaluación: <?= date('Y')-1;?></label>
+			<label for="nombre">Año de Evaluación:</label>
+			<input class="form-control" style="max-width:300px;text-align:center;" type="text" name="anio" 
+				value="<?= date('Y')-1;?>" required>
 		  </div>
 		</div>
-		<div class="col-md-4">
+		<div class="col-md-3">
 		  <div class="form-group" align="center">
 			<label for="tipo">Tipo</label>
 			<select class="form-control" style="max-width:300px;text-align:center" name="tipo">
-			  <option value="0">Por Responsabilidades</option>
+			  <option value="0">De Responsabilidades</option>
 			  <option value="1">360</option>
 			</select>
 		  </div>
@@ -115,14 +122,14 @@
 		  <div class="form-group">
 			<label for="descripcion">Descripción</label>
 			<input type="text" name="descripcion" class="form-control" style="max-width:300px;text-align:center;" value="" 
-				placeholder="Breve descripción de la evaluación" required>
+				placeholder="Breve descripción de la evaluación">
 		  </div>
 		</div>
 		<div class="col-md-3">
 		  <div class="form-group">
 		    <label for="inicio">Inicia:</label>
 		    <input data-provide="datepicker" data-date-format="yyyy-mm-dd" name="inicio" id="inicio" onchange="setFin(this);" 
-		    	value="<?= date('Y-m-d');?>" class="form-control" style="max-width:300px;text-align:center;">
+		    	value="<?= date('Y-m-d');?>" class="form-control" style="max-width:300px;text-align:center;" required>
 		  </div>
 		</div>
 	  	<div class="col-md-3">
@@ -131,7 +138,7 @@
 		    <input data-provide="datepicker" data-date-format="yyyy-mm-dd" name="fin" id="fin" 
 		    	value="<?= $fecha=date('Y-m-d'); $fecha=date_create($fecha); 
 		    		date_add($fecha,date_interval_create_from_date_string('1 month'));?>" 
-		    	class="form-control" style="max-width:300px;text-align:center;">
+		    	class="form-control" style="max-width:300px;text-align:center;" required>
 		  </div>
 		</div>
 	  </div>

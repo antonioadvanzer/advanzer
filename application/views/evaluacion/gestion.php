@@ -6,25 +6,6 @@
 </div>
 <script type="text/javascript">
 	$(document).ready(function() {
-		var today = new Date();
-		var dd = today.getDate();
-		var mm = today.getMonth()+1; //January is 0!
-		var yyyy = today.getFullYear();
-		if(dd<10)
-			dd='0'+dd
-		if(mm<10)
-			mm='0'+mm
-		today = yyyy+'-'+mm+'-'+dd;
-		$('#inicio').datepicker({
-			format: 'yyyy-mm-dd',
-			startDate: ''+today+'',
-			endDate: '+30d'
-		});
-		$('#fin').datepicker({
-			format: 'yyyy-mm-dd',
-			startDate: ''+today+'',
-			endDate: '+60d'
-		});
 		$("#evaluacion").change(function() {
 			$("#evaluacion option:selected").each(function() {
 				evaluacion = $('#evaluacion').val();
@@ -32,6 +13,7 @@
 					evaluacion : evaluacion
 				}, function(data) {
 					$("#datos").html(data);
+					$("#submit").show();
 				});
 			});
 		});
@@ -108,54 +90,24 @@
         onclick="location.href='<?= base_url('evaluacion/nueva');?>'">Nueva Evaluación</span>
   </div>
   <div>&nbsp;</div>
-	<form onsubmit="return valida_fechas(this);" role="form" method="post" action="<?= base_url('evaluacion/gestionar');?>" class="form-signin">
+	<form id="form" onsubmit="return valida_fechas(this);" role="form" method="post" action="<?= base_url('evaluacion/gestionar');?>" class="form-signin">
 	  <div class="row" align="center">
 	  	<div class="col-md-12">
-		  <div align="center" class="form-group">
-		    <label for="nombre">Año de Evaluación: <?= date('Y')-1;?></label>
-		  </div>
 		  <div class="form-group">
 			<label for="evaluacion">Evaluación</label>
 			<select class="form-control" style="max-width:300px;text-align:center;" id="evaluacion" name="evaluacion">
 			  <option value="" disabled selected>-- Selecciona una encuesta --</option>
 			  <?php foreach ($evaluaciones as $evaluacion) : ?>
-				<option value="<?= $evaluacion->id;?>"><?= $evaluacion->nombre;?></option>
+				<option value="<?= $evaluacion->id;?>"><?= "$evaluacion->nombre - $evaluacion->anio";?></option>
 			  <?php endforeach; ?>
 			</select>
 		  </div>
 		</div>
 	  </div>
-	  <div class="row" align="center" id="datos">
-		<!--<div class="col-md-4">
-		  <div class="form-group">
-			<label for="tipo">Tipo</label>
-			<select class="form-control" style="max-width:300px;text-align:center;" id="tipo" name="tipo">
-			  <option value="0">Por Responsabilidades</option>
-			  <option value="1">360</option>
-			</select>
-		  </div>
-		</div>
-		<div class="col-md-4">
-		  <div class="form-group">
-		    <label for="inicio">Inicia:</label>
-		    <input data-provide="datepicker" data-date-format="yyyy-mm-dd" name="inicio" id="inicio" onchange="setFin(this);" 
-		    	value="<?= date('Y-m-d');?>" class="form-control" style="max-width:300px;text-align:center;">
-		  </div>
-		</div>
-		<div class="col-md-4">
-		  <div class="form-group">
-		    <label for="fin">Termina:</label>
-		    <input data-provide="datepicker" data-date-format="yyyy-mm-dd" name="fin" id="fin" 
-		    	value="<?= $fecha=date('Y-m-d'); $fecha=date_create($fecha); 
-		    		date_add($fecha,date_interval_create_from_date_string('1 month'));?>" 
-		    	class="form-control" style="max-width:300px;text-align:center;">
-		  </div>
-		</div>-->
-	  </div>
+	  <div class="row" align="center" id="datos"></div>
 	  <div class="row" align="center">
 		<div class="col-md-12">
-		  <button type="submit" class="btn btn-lg btn-primary btn-block" style="max-width:200px; text-align:center;">Asignar</button>
-		  <a href="<?= base_url('gestion_evaluaciones');?>">&laquo;Regresar</a>
+		  <button id="submit" type="submit" class="btn btn-lg btn-primary btn-block" style="display:none;max-width:200px; text-align:center;">Asignar</button>
 		</div>
 	  </div>
 	</form>
