@@ -29,16 +29,32 @@
     <div class="col-md-12">
       <h3><b>Áreas:</b></h3>
       <div class="input-group">
-        <input name="nombre" type="text" class="form-control" id="nombre" 
+        <input name="nombre" type="text" class="form-control" id="nombre" style="max-width:50%" 
           placeholder="Buscar por nombre">
+        <select name="estatus" id="estatus" class="form-control" style="max-width:25%;">
+          <option value="1">Activas</option>
+          <option value="0">Inactivas</option>
+          <option value="2">Todas</option>
+        </select>
+        <select name="orden" id="orden" class="form-control" style="max-width:25%;">
+          <option value="ASC">Ascendente</option>
+          <option value="DESC">Descendente</option>
+        </select>
         <span class="input-group-addon">Filtrar Resultados</span>
         <input id="filter" type="text" class="form-control" placeholder="Filtrar...">
       </div>
-      <table width="90%" align="center" class="table table-striped" data-toggle="table" 
-        data-sort-name="area">
+    </div>
+  </div>
+  <div class="row" align="center">
+    <div class="col-md-12"><div id="cargando" style="display:none; color: green;">
+      <img src="<?= base_url('assets/images/loading.gif');?>"></div></div>
+  </div>
+  <div class="row" align="center">
+    <div class="col-md-12">
+      <table id="resultados" width="90%" align="center" class="table table-striped" data-toggle="table">
         <thead>
           <tr>
-            <th data-halign="center" data-field="area" data-sortable="true">Área</th>
+            <th data-halign="center" data-field="area">Área</th>
             <th></th>
           </tr>
         </thead>
@@ -73,26 +89,74 @@
       }(jQuery));
     });
 
-    $(document).ready(function () {
-      (function ($) {
-          $('#filter2').keyup(function () {
-              var rex = new RegExp($(this).val(), 'i');
-              $('.searchable2 tr').hide();
-              $('.searchable2 tr').filter(function () {
-                  return rex.test($(this).text());
-              }).show();
-          })
-      }(jQuery));
-    });
-
     $(document).ready(function() {
       $("#nombre").change(function() {
         valor = $('#nombre').val();
-        $.post("<?= base_url('area/searchByText');?>", {
-          valor : valor
-        }, function(data) {
-          $("#result").html(data);
+        $("#estatus option:selected").each(function() {
+          estatus = $('#estatus').val();
         });
-      })
+        $("#orden option:selected").each(function() {
+          orden = $('#orden').val();
+        });
+        $('#resultados').hide();
+        $('#cargando').show();
+        $.ajax({
+          url: "<?= base_url('area/searchByText');?>",
+          type: "post",
+          data: {'valor':valor,'estatus':estatus,'orden':orden},
+          success: function(data){
+            $('#cargando').hide();
+            $('#result').show().html(data);
+            $('#resultados').show();
+          },
+          error: function(data) {
+            $('body').html(data);
+          }
+        });
+      });
+
+      $("#estatus").change(function() {
+        $("#estatus option:selected").each(function() {
+          estatus = $('#estatus').val();
+        });
+        $("#orden option:selected").each(function() {
+          orden = $('#orden').val();
+        });
+        valor = $('#nombre').val();
+        $('#resultados').hide();
+        $('#cargando').show();
+        $.ajax({
+          url: "<?= base_url('area/searchByText');?>",
+          type: 'POST',
+          data: {'valor':valor,'estatus':estatus,'orden':orden},
+          success: function(data) {
+            $('#cargando').hide();
+            $('#result').show().html(data);
+            $('#resultados').show();
+          }
+        });
+      });
+
+      $("#orden").change(function() {
+        $("#estatus option:selected").each(function() {
+          estatus = $('#estatus').val();
+        });
+        $("#orden option:selected").each(function() {
+          orden = $('#orden').val();
+        });
+        valor = $('#nombre').val();
+        $('#resultados').hide();
+        $('#cargando').show();
+        $.ajax({
+          url: "<?= base_url('area/searchByText');?>",
+          type: 'POST',
+          data: {'valor':valor,'estatus':estatus,'orden':orden},
+          success: function(data) {
+            $('#cargando').hide();
+            $('#result').show().html(data);
+            $('#resultados').show();
+          }
+        });
+      });
     });
   </script>

@@ -12,6 +12,7 @@ class Objetivo_model extends CI_Model{
 		$this->db->select('O.id,O.nombre,O.descripcion,O.estatus');
 		$this->db->join('Objetivos_Areas OA','O.id = OA.objetivo');
 		$this->db->where(array('O.dominio'=>$dominio,'OA.area'=>$area));
+		$this->db->order_by('O.nombre','asc');
 		return $this->db->get('Objetivos O')->result();
 	}
 

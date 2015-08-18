@@ -28,11 +28,44 @@ class User_model extends CI_Model{
 			return false;
 	}
 
-	function getCountUsers() {
-		return $this->db->count_all('Users');
+	function getCountUsers($valor=null,$estatus=null) {
+		if($estatus!=null) {
+			if($estatus < 2){
+				$ids=array('');
+				$this->db->where('estatus',$estatus);
+				$result=$this->db->select('id')->get('Users')->result();
+				foreach ($result as $row) {
+					array_push($ids, $row->id);
+				}
+				if(count($ids)>0)
+					$this->db->where_in('U.id',$ids);
+			}
+		}
+			$this->db->select('U.id,U.nomina,U.categoria,U.plaza,U.nombre,U.email,U.foto,U.empresa,U.estatus, 
+				A.nombre area,T.nombre track,P.nombre posicion');
+			$this->db->join('Areas A','U.area = A.id','LEFT OUTER');
+			$this->db->join('Posicion_Track PT','PT.id = U.posicion_track','LEFT OUTER');
+			$this->db->join('Tracks T','PT.track = T.id','LEFT OUTER');
+			$this->db->join('Posiciones P','P.id = PT.posicion','LEFT OUTER');
+		if($valor!=null)
+			$this->db->where("(U.nombre like '%$valor%' || U.email like '%$valor%' || P.nombre like '%$valor%' ||
+				T.nombre like '%$valor%' || U.nomina like '%$valor%' || U.nombre like '%$valor%')");
+		return $this->db->count_all_results('Users U');
 	}
 
-	function getPagination($limit,$start) {
+	function getPagination($limit,$start,$valor=null,$estatus=null) {
+		if($valor!=null && $estatus!=null) {
+			if($estatus < 2){
+				$ids=array('');
+				$this->db->where('estatus',$estatus);
+				$result=$this->db->select('id')->get('Users')->result();
+				foreach ($result as $row) {
+					array_push($ids, $row->id);
+				}
+				if(count($ids)>0)
+					$this->db->where_in('U.id',$ids);
+			}
+		}
 		$this->db->select('U.id,U.nomina,U.categoria,U.plaza,U.nombre,U.email,U.foto,U.empresa,U.estatus,A.nombre area,
 			T.nombre track,P.nombre posicion');
 		$this->db->join('Areas A','U.area = A.id','LEFT OUTER');
@@ -41,7 +74,7 @@ class User_model extends CI_Model{
 		$this->db->join('Posiciones P','P.id = PT.posicion','LEFT OUTER');
 		$this->db->limit($limit,$start);
 		$this->db->order_by('nombre','asc');
-		//$this->db->where('estatus',1);
+		$this->db->where('U.estatus',1);
 		return $this->db->get('Users U')->result();
 	}
 
@@ -102,20 +135,33 @@ class User_model extends CI_Model{
 			return false;
 	}
 
-	function getByText($valor) {
+	function getByText($valor="",$estatus=1,$orden='DESC') {
+		if($estatus < 2){$ids=array('');
+			$this->db->where('estatus',$estatus);
+			$result=$this->db->select('id')->get('Users')->result();
+			foreach ($result as $row) {
+				array_push($ids, $row->id);
+			}
+			if(count($ids)>0)
+				$this->db->where_in('U.id',$ids);
+		}
 		$this->db->select('U.id,U.nomina,U.categoria,U.plaza,U.nombre,U.email,U.foto,U.empresa,U.estatus,
 			A.nombre area,T.nombre track,P.nombre posicion');
 		$this->db->join('Areas A','U.area = A.id','LEFT OUTER');
 		$this->db->join('Posicion_Track PT','PT.id = U.posicion_track','LEFT OUTER');
 		$this->db->join('Tracks T','PT.track = T.id','LEFT OUTER');
 		$this->db->join('Posiciones P','P.id = PT.posicion','LEFT OUTER');
-		$this->db->like('U.nombre',$valor,'both');
+		if(!empty($valor))
+			$this->db->where("(U.nombre like '%$valor%' || U.email like '%$valor%' || P.nombre like '%$valor%' ||
+				T.nombre like '%$valor%' || U.nomina like '%$valor%' || U.nombre like '%$valor%')");
+		/*$this->db->like('U.nombre',$valor,'both');
 		$this->db->or_like('U.email',$valor,'both');
 		$this->db->or_like('P.nombre',$valor,'both');
 		$this->db->or_like('T.nombre',$valor,'both');
-		$this->db->or_like('U.nomina',$valor,'both');
-		$this->db->order_by('nombre','asc');
-		//$this->db->where('estatus',1);
+		$this->db->or_like('U.nomina',$valor,'both');*/
+		$this->db->order_by('U.nombre',$orden);
+		if($estatus < 2)
+			$this->db->where('U.estatus',$estatus);
 		return $this->db->get('Users U')->result();
 	}
 	function getAll($tipo=null) {

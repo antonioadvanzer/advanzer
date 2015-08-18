@@ -12,6 +12,7 @@ class Dominio_model extends CI_Model{
 	function getAll($estatus=1){
 		if($estatus!=null)
 			$this->db->where('estatus',$estatus);
+		$this->db->order_by('nombre','asc');
 		return $this->db->get('Dominios')->result();
 	}
 

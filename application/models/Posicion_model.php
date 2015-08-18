@@ -13,6 +13,7 @@ class Posicion_model extends CI_Model{
 		$this->db->join('Posicion_Track PT','PT.posicion = P.id');
 		$this->db->join('Tracks T','T.id = PT.track');
 		$this->db->where('T.id',$track);
+		$this->db->order_by('P.nombre','asc');
 		return $this->db->get('Posiciones P')->result();
 	}
 

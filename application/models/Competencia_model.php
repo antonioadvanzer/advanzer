@@ -39,6 +39,35 @@ class Competencia_model extends CI_Model{
 			$this->db->where('id',$comportamiento)->delete('Comportamientos');
 	}
 
+	function delNivelFromComportamiento($nivel,$comportamiento) {
+		$this->db->where(array('comportamiento'=>$comportamiento,'nivel_posicion'=>$nivel))
+			->delete('Comportamiento_Posicion');
+	}
+
+	function addNivelToComportamiento($nivel,$comportamiento) {
+		$this->db->insert('Comportamiento_Posicion',array('comportamiento'=>$comportamiento,'nivel_posicion'=>$nivel));
+	}
+
+	function getPosicionesByComportamiento($comportamiento,$excluir=array()) {
+		if(empty($excluir))
+			$this->db->where('CP.comportamiento',$comportamiento);
+		else{
+			$this->db->where(array('P.nivel >='=>3,'P.nivel <='=>8));
+			$temp=array();
+			foreach ($excluir as $nivel) {
+				array_push($temp, $nivel['nivel']);
+			}
+			$this->db->where_not_in('P.nivel',$temp);
+		}
+		$this->db->distinct();
+		$this->db->select('P.nivel');
+		$this->db->from('Posiciones P');
+		$this->db->join('Comportamiento_Posicion CP','CP.nivel_posicion = P.nivel');
+		$this->db->order_by('P.nivel','desc');
+		return $this->db->get();
+
+	}
+
 	function update($id,$nombre,$descripcion,$indicador) {
 		$this->db->where('id',$id)->update('Competencias',array('nombre'=>$nombre,'descripcion'=>$descripcion,'indicador'=>$indicador));
 		if($this->db->affected_rows() == 1)

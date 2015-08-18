@@ -67,17 +67,23 @@
   	<div class="col-md-5">
   	  <div class="panel panel-primary">
 		<div class="panel-heading">Comportamientos Asignados</div>
-		<select id="quitar" name="quitar" multiple class="form-control" style="overflow-y:auto;overflow-x:auto;min-height:160px;max-height:300px">
-		  <?php foreach($competencia->comportamientos as $comportamiento) : ?>
-			<option value="<?= $comportamiento->id;?>"><?= $comportamiento->descripcion;?></option>
-		  <?php endforeach; ?>
-		</select>
-  	  </div>
+		<div class="row">
+		  <select id="quitar" name="quitar" class="form-control" style="max-width:450px">
+		  	<option selected disabled>-- Selecciona un comportamiento --</option>
+			<?php foreach($competencia->comportamientos as $comportamiento) : ?>
+			  <option value="<?= $comportamiento->id;?>"><?= $comportamiento->descripcion;?></option>
+			<?php endforeach; ?>
+		  </select>
+		</div>
+		<div align="center"><div id="cargando" style="display:none; color: green;">
+		  <img src="<?= base_url('assets/images/loading.gif');?>"></div></div>
+		<div class="row" id="result"></div>
+	  </div>
   	</div>
   	<div class="col-md-2">
 	  <div class="form-group">&nbsp;</div>
 	  <div class="form-group">
-		<button id="btnQuitar" class="form-control" style="max-width:100px;">Quitar&raquo;</button>
+		<button id="btnQuitar" class="form-control" style="max-width:100px;" disabled>Quitar&raquo;</button>
 	  </div>
 	  <div class="form-group">
 		<button id="btnAgregar" class="form-control" style="max-width:100px;">&laquo;Agregar</button>
@@ -85,12 +91,14 @@
 	  <div class="form-group">&nbsp;</div>
   	</div>
   	<div class="col-md-5">
-  	  <div class="panel panel-primary">
+  	  <div class="panel panel-primary" style="min-height:200px">
 		<div class="panel-heading">Asignar Comportamiento</div>
-		<div class="input-group">
+		<div class="input-group" style="min-height:70px">
 			<span class="input-group-addon">Comportamiento</span>
+		</div>
 			<input id="comportamiento" type="text" class="form-control" value="" placeholder="Descripción">
-			<select id="posicion" name="posicion" multiple class="form-control" style="overflow-y:auto;overflow-x:auto;min-height:130px;max-height:300px">
+			<select id="posicion" name="posicion" multiple class="form-control" 
+				style="overflow-y:auto;overflow-x:auto;min-height:130px;max-height:300px">
 				<option value="8">Nivel 8 o Superior (Analista)</option>
 				<option value="7">Nivel 7 (Consultor / Especialista)</option>
 				<option value="6">Nivel 6 (Consultor Sr / Especialista Sr)</option>
@@ -98,8 +106,7 @@
 				<option value="4">Nivel 4 (Gerente Sr / Experto)</option>
 				<option value="3">Nivel 3 o Inferior (Director)</option>
 			</select>
-		</div>
-  	  </div>
+	  </div>
   	</div>
   </div>
   <div class="row" align="center">
@@ -124,7 +131,7 @@
 						type:'POST',
 						success:function(data) {
 							$('body').html(data);
-							alert('Se han agregado!');
+							alert('Se ha agregado!');
 							window.location.reload();
 						}
 					});
@@ -134,19 +141,38 @@
 				if($('#quitar :selected').length > 0){
 					var selected = [];
 					$('#quitar :selected').each(function(i,select) {
-						selected[i] = $(select).val();
+						selected = $(select).val();
 					});
 					$.ajax({
-						url:'<?= base_url("competencia/del_comportamientos");?>',
+						url:'<?= base_url("competencia/del_comportamiento");?>',
 						data:{'selected':selected},
 						type:'POST',
 						success:function(data) {
 							$('body').html(data);
-							alert('Se han eliminado!');
+							alert('Se ha eliminado!');
 							window.location.reload();
 						}
 					});
 				}
+			});
+			$("#quitar").change(function() {
+				$('#btnQuitar').prop('disabled',false);
+				$("#quitar option:selected").each(function() {
+					comportamiento = $('#quitar').val();
+				});
+				$.ajax({
+					type: 'post',
+					url: "<?= base_url('competencia/load_posiciones_comportamiento');?>",
+					data: {comportamiento : comportamiento},
+					beforeSend: function (xhr) {
+						$('#result').hide();
+						$('#cargando').show();
+					},
+					success: function(data) {
+						$("#result").show().html(data);
+						$('#cargando').hide();
+					}
+				});
 			});
 		});
 	</script>

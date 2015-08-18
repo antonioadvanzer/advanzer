@@ -11,6 +11,7 @@ class Indicador_model extends CI_Model{
 	function getAll($estatus=null) {
 		if($estatus!=null)
 			$this->db->where('estatus',$estatus);
+		$this->db->order_by('nombre');
 		return $this->db->get('Indicadores')->result();
 	}
 
@@ -21,6 +22,7 @@ class Indicador_model extends CI_Model{
 		$this->db->join('Comportamientos Co','Co.competencia = C.id');
 		$this->db->join('Comportamiento_Posicion CP','CP.comportamiento = Co.id');
 		$this->db->where(array('C.indicador'=>$indicador,'CP.nivel_posicion'=>$posicion));
+		$this->db->order_by('C.nombre','asc');
 		return $this->db->get()->result();
 	}
 
@@ -28,6 +30,7 @@ class Indicador_model extends CI_Model{
 		$this->db->select('C.descripcion,CP.evalua');
 		$this->db->join('Comportamiento_Posicion CP','CP.comportamiento = C.id');
 		$this->db->where(array('C.competencia'=>$competencia,'CP.nivel_posicion'=>$posicion));
+		$this->db->order_by('C.descripcion','asc');
 		return $this->db->get('Comportamientos C')->result();
 	}
 

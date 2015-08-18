@@ -28,6 +28,7 @@ class Dominio extends CI_Controller {
     	if($this->input->post('dominio')) :
     		$dominio = $this->input->post('dominio');
         $area = $this->input->post('area');
+        $posicion = $this->input->post('posicion');
     		$objetivos = $this->objetivo_model->getByDominioArea($dominio,$area);
     		foreach ($objetivos as $obj):
     	?>
@@ -46,12 +47,8 @@ class Dominio extends CI_Controller {
                 </span></td>
               <td><span style="cursor:pointer" onclick="location.href='<?= base_url('objetivo/ver/');?>/'+
                 <?= $obj->id;?>">
-                  <?php foreach ($this->porcentaje_objetivo_model->getByObjetivo($obj->id) as $porc) : 
-                    $cadena="|";
-                    foreach ($porc->posiciones as $posicion) :
-                      $cadena.=" <i>$posicion->nombre</i> |";
-                    endforeach;
-                  	echo "Nivel ".$porc->nivel_posicion." - ".$porc->valor."% ($cadena)<br>";
+                  <?php foreach ($this->porcentaje_objetivo_model->getByObjetivoPosicion($obj->id,$posicion) as $porc) : 
+                  	echo "$porc->valor%";
                   endforeach; ?>
                 </span></td>
               <td align="right"><span style="cursor:pointer;" onclick="

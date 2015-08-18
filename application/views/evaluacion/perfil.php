@@ -155,13 +155,8 @@
 			<div align="left">
 				<label><?= $comp->descripcion;?></label>
 				<p><ul type="square">
-					<?php foreach ($comp->comportamientos as $comportamiento) : 
-						if($comportamiento->evalua == 1)
-							$class="glyphicon-ok-circle";
-						else
-							$class="glyphicon-remove-circle";
-					?>
-						<span class="glyphicon <?= $class;?>"><?= $comportamiento->descripcion;?></span>
+					<?php foreach ($comp->comportamientos as $comportamiento) : ?>
+						<span class="glyphicon glyphicon-ok-circle"><?= $comportamiento->descripcion;?></span>
 					<?php endforeach; ?>
 				</ul></p>
 			</div>

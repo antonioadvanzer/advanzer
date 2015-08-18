@@ -9,6 +9,7 @@ class Track_model extends CI_Model{
 	}
 
 	function getAll() {
+		$this->db->order_by('nombre','asc');
 		return $this->db->get('Tracks')->result();
 	}
 
@@ -21,13 +22,14 @@ class Track_model extends CI_Model{
 
 	function getNotByPosicion($posicion) {
 		$temp=array();
-		foreach ($this->db->select('T.id')->from('Tracks T')->join('Posicion_Track PT','PT.track = T.id')->where('PT.posicion',$posicion)->get()->result_array() as $array) :
+		foreach ($this->db->select('T.id')->from('Tracks T')->join('Posicion_Track PT','PT.track = T.id')->
+				where('PT.posicion',$posicion)->get()->result_array() as $array) :
 			array_push($temp, $array['id']);
 		endforeach;
 		$this->db->from('Tracks');
 		if(!empty($temp))
 			$this->db->where_not_in('id',$temp);
-		return $this->db->get()->result();
+		return $this->db->order_by('nombre','asc')->get()->result();
 	}
 
 	function getById($id) {

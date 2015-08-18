@@ -40,7 +40,7 @@
   <div class="row">
     <div class="col-md-12">
       <h3 style="cursor:default"><b>Responsabilidades:</b></h3>
-      <div class="input-group">
+      <div class="input-group" align="center">
         <span class="input-group-addon">Dominio</span>
         <select name="dominio" id="dominio" class="form-control">
           <option selected disabled>-- Selecciona un dominio --</option>
@@ -54,6 +54,15 @@
             <option value="<?= $area->id;?>"><?= $area->nombre;?></option>
           <?php endforeach; ?>
         </select>
+        <span class="input-group-addon">Posición</span>
+        <select id="posicion" name="posicion" class="form-control">
+          <option value="8">Nivel 8 o Superior (Analista)</option>
+          <option value="7">Nivel 7 (Consultor / Especialista)</option>
+          <option value="6">Nivel 6 (Consultor Sr / Especialista Sr)</option>
+          <option value="5">Nivel 5 (Gerente / Master)</option>
+          <option value="4">Nivel 4 (Gerente Sr / Experto)</option>
+          <option value="3">Nivel 3 o Inferior (Director)</option>
+        </select>
       </div>
       <div align="center"><div id="cargando" style="display:none; color: green;">
         <img src="<?= base_url('assets/images/loading.gif');?>"></div></div>
@@ -61,9 +70,9 @@
         <thead>
           <tr>
             <th class="col-md-2">Responsabilidad</th>
-            <th class="col-md-2">Descripción</th>
-            <th class="col-md-4">Métrica</th>
-            <th class="col-md-3">Porcentaje</th>
+            <th class="col-md-4">Descripción</th>
+            <th class="col-md-5">Métrica</th>
+            <th class="col-md-1">Porcentaje</th>
             <th class="col-md-1"></th>
           </tr>
         </thead>
@@ -76,50 +85,87 @@
     $(document).ready(function() {
       $("#dominio").change(function() {
         $("#dominio option:selected").each(function() {
-          $("#area option:selected").each(function() {
-            area = $('#area').val();
-          });
           dominio = $('#dominio').val();
-          $.ajax({
-            type: 'post',
-            url: "<?= base_url('dominio/load_objetivos');?>",
-            data: {
-              area : area,
-              dominio : dominio
-            },
-            beforeSend: function (xhr) {
-              $('#result').hide();
-              $('#cargando').show();
-            },
-            success: function(data) {
-              $('#cargando').hide();
-              $("#result").show().html(data);
-            }
-          });
+        });
+        $("#area option:selected").each(function() {
+          area = $('#area').val();
+        });
+        $("#posicion option:selected").each(function() {
+          posicion = $('#posicion').val();
+        });
+        
+        $.ajax({
+          type: 'post',
+          url: "<?= base_url('dominio/load_objetivos');?>",
+          data: {
+            area : area,
+            dominio : dominio,
+            posicion : posicion
+          },
+          beforeSend: function (xhr) {
+            $('#result').hide();
+            $('#cargando').show();
+          },
+          success: function(data) {
+            $('#cargando').hide();
+            $("#result").show().html(data);
+          }
         });
       });
       $("#area").change(function() {
         $("#area option:selected").each(function() {
-          $("#dominio option:selected").each(function() {
-            dominio = $('#dominio').val();
-          });
           area = $('#area').val();
-          $.ajax({
-            type: 'post',
-            url: "<?= base_url('dominio/load_objetivos');?>",
-            data: {
-              area : area,
-              dominio : dominio
-            },
-            beforeSend: function (xhr) {
-              $('#result').hide();
-              $('#cargando').show();
-            },
-            success: function(data) {
-              $('#cargando').hide();
-              $("#result").show().html(data);
-            }
-          });
+        });
+        $("#dominio option:selected").each(function() {
+          dominio = $('#dominio').val();
+        });
+        $("#posicion option:selected").each(function() {
+          posicion = $('#posicion').val();
+        });
+        $.ajax({
+          type: 'post',
+          url: "<?= base_url('dominio/load_objetivos');?>",
+          data: {
+            area : area,
+            dominio : dominio,
+            posicion : posicion
+          },
+          beforeSend: function (xhr) {
+            $('#result').hide();
+            $('#cargando').show();
+          },
+          success: function(data) {
+            $('#cargando').hide();
+            $("#result").show().html(data);
+          }
+        });
+      });
+      $("#posicion").change(function() {
+        $("#area option:selected").each(function() {
+          area = $('#area').val();
+        });
+        $("#dominio option:selected").each(function() {
+          dominio = $('#dominio').val();
+        });
+        $("#posicion option:selected").each(function() {
+          posicion = $('#posicion').val();
+        });
+        $.ajax({
+          type: 'post',
+          url: "<?= base_url('dominio/load_objetivos');?>",
+          data: {
+            area : area,
+            dominio : dominio,
+            posicion : posicion
+          },
+          beforeSend: function (xhr) {
+            $('#result').hide();
+            $('#cargando').show();
+          },
+          success: function(data) {
+            $('#cargando').hide();
+            $("#result").show().html(data);
+          }
         });
       });
     });

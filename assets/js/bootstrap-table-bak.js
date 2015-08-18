@@ -288,7 +288,6 @@
         toolbarAlign: 'left',
         checkboxHeader: true,
         sortable: true,
-        silentSort: true,
         maintainSelected: false,
         searchTimeOut: 500,
         searchText: '',
@@ -451,7 +450,6 @@
         sortName: undefined,
         cellStyle: undefined,
         searchable: true,
-        searchFormatter: true,
         cardVisible: true
     };
 
@@ -642,6 +640,7 @@
             sorters: [],
             sortNames: [],
             cellStyles: [],
+            clickToSelects: [],
             searchables: []
         };
 
@@ -688,6 +687,7 @@
                     that.header.sorters[column.fieldIndex] = column.sorter;
                     that.header.sortNames[column.fieldIndex] = column.sortName;
                     that.header.cellStyles[column.fieldIndex] = column.cellStyle;
+                    that.header.clickToSelects[column.fieldIndex] = column.clickToSelect;
                     that.header.searchables[column.fieldIndex] = column.searchable;
 
                     if (!column.visible) {
@@ -879,7 +879,7 @@
         this.getCaret();
 
         if (this.options.sidePagination === 'server') {
-            this.initServer(this.options.silentSort);
+            this.initServer();
             return;
         }
 
@@ -897,7 +897,7 @@
 
         this.$toolbar.html('');
 
-        if (typeof this.options.toolbar === 'string' || typeof this.options.toolbar === 'object') {
+        if (typeof this.options.toolbar === 'string') {
             $(sprintf('<div class="bars pull-%s"></div>', this.options.toolbarAlign))
                 .appendTo(this.$toolbar)
                 .append($(this.options.toolbar));
@@ -1025,7 +1025,10 @@
 
             if (this.options.searchText !== '') {
                 $search.val(this.options.searchText);
-                that.onSearch({currentTarget: $search});
+                clearTimeout(timeoutId); // doesn't matter if it's 0
+                timeoutId = setTimeout(function () {
+                    $search.trigger('keyup');
+                }, that.options.searchTimeOut);
             }
         }
     };
@@ -1074,10 +1077,8 @@
                         j = $.inArray(key, that.header.fields);
 
                     // Fix #142: search use formated data
-                    if (column && column.searchFormatter) {
-                        value = calculateObjectValue(column,
-                            that.header.formatters[j], [value, item, i], value);
-                    }
+                    value = calculateObjectValue(column,
+                        that.header.formatters[j], [value, item, i], value);
 
                     var index = $.inArray(key, that.header.fields);
                     if (index !== -1 && that.header.searchables[index] && (typeof value === 'string' || typeof value === 'number')) {
@@ -1534,23 +1535,20 @@
             var $td = $(this),
                 $tr = $td.parent(),
                 item = that.data[$tr.data('index')],
-                index = $td[0].cellIndex,
-                field = that.header.fields[that.options.detailView && !that.options.cardView ? index - 1 : index],
-                colomn = that.columns[getFieldIndex(that.columns, field)],
+                cellIndex = $td[0].cellIndex,
+                $headerCell = that.$header.find('th:eq(' + cellIndex + ')'),
+                field = $headerCell.data('field'),
                 value = item[field];
-
-            if ($td.find('.detail-icon').length) {
-                return;
-            }
 
             that.trigger(e.type === 'click' ? 'click-cell' : 'dbl-click-cell', field, value, item, $td);
             that.trigger(e.type === 'click' ? 'click-row' : 'dbl-click-row', item, $tr);
-
             // if click to select - then trigger the checkbox/radio click
-            if (e.type === 'click' && that.options.clickToSelect && colomn.clickToSelect) {
-                var $selectItem = $tr.find(sprintf('[name="%s"]', that.options.selectItemName));
-                if ($selectItem.length) {
-                    $selectItem[0].click(); // #144: .trigger('click') bug
+            if (e.type === 'click' && that.options.clickToSelect) {
+                if (that.header.clickToSelects[$tr.children().index($(this))]) {
+                    var $selectItem = $tr.find(sprintf('[name="%s"]', that.options.selectItemName));
+                    if ($selectItem.length) {
+                        $selectItem[0].click(); // #144: .trigger('click') bug
+                    }
                 }
             }
         });
@@ -1731,7 +1729,7 @@
         this.$selectAll.add(this.$selectAll_).prop('checked', checkAll);
 
         this.$selectItem.each(function () {
-            $(this).closest('tr')[$(this).prop('checked') ? 'addClass' : 'removeClass']('selected');
+            $(this).parents('tr')[$(this).prop('checked') ? 'addClass' : 'removeClass']('selected');
         });
     };
 
@@ -1749,9 +1747,7 @@
         $.each(this.data, function (i, row) {
             that.$selectAll.prop('checked', false);
             that.$selectItem.prop('checked', false);
-            if (that.header.stateField) {
-                row[that.header.stateField] = false;
-            }
+            row[that.header.stateField] = false;
         });
     };
 
@@ -1822,10 +1818,6 @@
         // TODO: it's probably better improving the layout than binding to scroll event
         this.$tableBody.off('scroll').on('scroll', function () {
             that.$tableHeader.scrollLeft($(this).scrollLeft());
-
-            if (that.options.showFooter && !that.options.cardView) {
-                that.$tableFooter.scrollLeft($(this).scrollLeft());
-            }
         });
         that.trigger('post-header');
     };
@@ -1840,7 +1832,7 @@
         }
 
         if (!this.options.cardView && this.options.detailView) {
-            html.push('<td><div class="th-inner">&nbsp;</div><div class="fht-cell"></div></td>');
+            html.push('<td></td>');
         }
 
         $.each(this.columns, function (i, column) {
@@ -1860,13 +1852,8 @@
             style = sprintf('vertical-align: %s; ', column.valign);
 
             html.push('<td', class_, sprintf(' style="%s"', falign + style), '>');
-            html.push('<div class="th-inner">');
 
             html.push(calculateObjectValue(column, column.footerFormatter, [data], '&nbsp;') || '&nbsp;');
-
-            html.push('</div>');
-            html.push('<div class="fht-cell"></div>');
-            html.push('</div>');
             html.push('</td>');
         });
 
@@ -1898,10 +1885,8 @@
 
         $footerTd = this.$tableFooter.find('td');
 
-        this.$body.find('tr:first-child:not(.no-records-found) > *').each(function (i) {
-            var $this = $(this);
-
-            $footerTd.eq(i).find('.fht-cell').width($this.innerWidth());
+        this.$tableBody.find('tbody tr:first-child:not(.no-records-found) > td').each(function (i) {
+            $footerTd.eq(i).outerWidth($(this).outerWidth());
         });
     };
 
@@ -1991,7 +1976,7 @@
         if (this.options.showFooter) {
             this.resetFooter();
             if (this.options.height) {
-                padding += this.$tableFooter.outerHeight() + 1;
+                padding += this.$tableFooter.outerHeight();
             }
         }
 
@@ -2080,7 +2065,7 @@
     BootstrapTable.prototype.getRowByUniqueId = function (id) {
         var uniqueId = this.options.uniqueId,
             len = this.options.data.length,
-            dataRow = null,
+            dataRow = undefined,
             i, row;
 
         for (i = len - 1; i >= 0; i--) {
@@ -2421,12 +2406,6 @@
         this.init();
     };
 
-    BootstrapTable.prototype.resetSearch = function (text) {
-        var $search = this.$toolbar.find('.search input');
-        $search.val(text || '');
-        this.onSearch({currentTarget: $search});
-    };
-
     // BOOTSTRAP TABLE PLUGIN DEFINITION
     // =======================
 
@@ -2452,8 +2431,7 @@
         'selectPage', 'prevPage', 'nextPage',
         'togglePagination',
         'toggleView',
-        'refreshOptions',
-        'resetSearch'
+        'refreshOptions'
     ];
 
     $.fn.bootstrapTable = function (option) {

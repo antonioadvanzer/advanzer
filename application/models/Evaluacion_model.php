@@ -23,6 +23,7 @@ class Evaluacion_model extends CI_Model{
 		$this->db->join('Comportamientos Co','Co.competencia = C.id');
 		$this->db->join('Comportamiento_Posicion CP','CP.comportamiento = Co.id');
 		$this->db->where(array('C.estatus'=>1,'C.indicador'=>$indicador,'CP.nivel_posicion'=>$posicion));
+		$this->db->order_by('C.nombre','asc');
 		return $this->db->get()->result();
 	}
 
@@ -35,6 +36,7 @@ class Evaluacion_model extends CI_Model{
 		$this->db->join('Comportamiento_Posicion CP','Co.id = CP.comportamiento');
 		//$this->db->order_by('I.nombre');
 		$this->db->where(array('I.estatus'=>1,'C.estatus'=>1,'CP.nivel_posicion'=>$posicion));
+		$this->db->order_by('I.nombre','asc');
 		return $this->db->get()->result();
 	}
 
@@ -44,6 +46,7 @@ class Evaluacion_model extends CI_Model{
 		$this->db->join('Objetivos_Areas OA','OA.objetivo = O.id');
 		$this->db->join('Porcentajes_Objetivos PO','PO.objetivo = O.id');
 		$this->db->where(array('O.dominio'=>$dominio,'OA.area'=>$area,'PO.nivel_posicion'=>$posicion,'O.estatus'=>1));
+		$this->db->order_by('O.nombre','asc');
 		return $this->db->get()->result();
 	}
 
@@ -78,6 +81,7 @@ class Evaluacion_model extends CI_Model{
 			$this->db->where('PO.posicion',$posicion);
 		if($area != null)
 			$this->db->where('A.id',$area);
+		$this->db->order_by('D.nombre,O.nombre','asc');
 		return $this->db->get()->result();
 
 	}
@@ -114,6 +118,49 @@ class Evaluacion_model extends CI_Model{
 		return $this->db->get('Evaluadores as Ev')->result();
 	}
 
+	function getCountUsers() {
+		return $this->db->where('estatus',1)->count_all_results('Users');
+	}
+
+	function getEvaluacionesByEvaluador($evaluador) {
+		$this->db->select('U.id,U.foto,U.nombre,U.nomina,A.nombre area,P.nombre posicion,T.nombre track,E.tipo,E.estatus');
+		$this->db->from('Users U');
+		$this->db->join('Areas A','A.id = U.area','LEFT OUTER');
+		$this->db->join('Posicion_Track PT','PT.id = U.posicion_track','LEFT OUTER');
+		$this->db->join('Posiciones P','P.id = PT.posicion','LEFT OUTER');
+		$this->db->join('Tracks T','T.id = PT.track','LEFT OUTER');
+		$this->db->join('Evaluadores E','E.evaluado = U.id','LEFT OUTER');
+		$this->db->where(array('E.evaluador'=>$evaluador,'U.estatus'=>1,'E.estatus !='=>2));
+		$this->db->order_by('U.nombre','asc');
+		return $this->db->get()->result();
+	}
+
+	function getEvaluados($limit,$start,$tipo=3) {
+		$this->db->limit($limit,$start);
+		$this->db->select('U.id,U.foto,U.email,U.nombre,U.nomina,P.nombre posicion,T.nombre track,RE.total,
+			RE.rating,F.id,F.estatus feedback');
+		$this->db->from('Users U');
+		$this->db->join('Posicion_Track PT','PT.id = U.posicion_track','LEFT OUTER');
+		$this->db->join('Posiciones P','P.id = PT.posicion','LEFT OUTER');
+		$this->db->join('Tracks T','T.id = PT.track','LEFT OUTER');
+		$this->db->join('Resultados_Evaluacion RE','RE.colaborador = U.id','LEFT OUTER');
+		$this->db->join('Feedbacks F','F.resultado = RE.id','LEFT OUTER');
+		$this->db->where('U.estatus',1);
+		$this->db->order_by('U.nombre','asc');
+		$result = $this->db->get()->result();
+		foreach ($result as $colaborador) {
+			$this->db->select('U.id,U.foto,U.nombre,RC.total competencia,RR.total responsabilidad');
+			$this->db->from('Users U');
+			$this->db->join('Evaluadores E','E.evaluado = U.id','LEFT OUTER');
+			$this->db->join('Resultados_ev_Competencia RC','RC.asignacion = E.id','LEFT OUTER');
+			$this->db->join('Resultados_ev_Responsabilidad RR','RR.asignacion = E.id','LEFT OUTER');
+			$this->db->join('Evaluaciones Ev','Ev.id = E.evaluacion','LEFT OUTER');
+			$this->db->where(array('E.tipo <'=>$tipo,'Ev.estatus !='=>0,'E.estatus !='=>0));
+			$colaborador->evaluadores = $this->db->get()->result();
+		}
+		return $result;
+	}
+
 	function getPagination($limit, $start,$tipo=0) {
 		$this->db->limit($limit,$start);
 		$this->db->select('Us.foto,Ev.evaluador id,Us.nombre nombre,count(Ev.evaluado) as cantidad');
@@ -144,6 +191,7 @@ class Evaluacion_model extends CI_Model{
 	}
 
 	function getNotByEvaluador($evaluador,$ignore,$tipo=0) {
+		$empresa=$this->db->select('empresa')->from('Users')->where('id',$evaluador)->get()->first_row()->empresa;
 		if(count($ignore)>0){
 			$array_temp=array();
 			foreach ($ignore as $temp) 
@@ -154,7 +202,7 @@ class Evaluacion_model extends CI_Model{
 			$this->db->where('P.nivel <=',5);
 
 		$this->db->select('Us.id,Us.nombre,P.nombre posicion,T.nombre track');
-		$this->db->where(array('Us.id !='=>$evaluador,'Us.estatus'=>1));
+		$this->db->where(array('Us.id !='=>$evaluador,'Us.estatus'=>1,'Us.empresa'=>$empresa));
 		$this->db->from('Users Us');
 		$this->db->join('Posicion_Track PT','PT.id = Us.posicion_track','LEFT OUTER');
 		$this->db->join('Posiciones P','P.id = PT.posicion','LEFT OUTER');

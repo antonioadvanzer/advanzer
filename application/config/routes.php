@@ -65,6 +65,8 @@ $route['evaluadores360/(:num)'] = 'evaluacion/evaluadores360/(:num)';
 $route['gestion_evaluaciones'] = 'evaluacion/gestion';
 $route['carga_comp_resp'] = 'masiva/carga_comp_resp';
 $route['administrar_indicadores'] = 'indicador';
+$route['evaluaciones'] = 'evaluacion';
+$route['evaluacion/(:num)'] = 'evaluacion/index/(:num)';
 /*
 $route['estructura_organizacional'] = 'info/estructura';
 $route['cartas_constancias'] = 'info/cartas_constancias';

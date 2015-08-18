@@ -11,6 +11,7 @@ class Area_model extends CI_Model{
 	function getAll($estatus=null) {
 		if($estatus!=null)
 			$this->db->where('estatus',$estatus);
+		$this->db->order_by('nombre','asc');
 		return $this->db->get('Areas')->result();
 	}
 
@@ -56,14 +57,17 @@ class Area_model extends CI_Model{
 			return false;
 	}
 
-	function getByText($valor) {
-		$this->db->order_by('nombre','asc');
+	function getByText($valor,$estatus,$orden) {
+		if($estatus < 2)
+			$this->db->where('estatus',$estatus);
+		$this->db->order_by('nombre',$orden);
 		$this->db->like('nombre',$valor,'both');
 		return $this->db->get('Areas')->result();
 	}
 
 	function getByDominio($dominio) {
 		$this->db->where('dominio',$dominio);
+		$this->db->order_by('nombre','asc');
 		return $this->db->get('Areas')->result();
 	}
 
@@ -73,11 +77,12 @@ class Area_model extends CI_Model{
 	}
 
 	function getByObjetivo($obj) {
-		$this->db->select('Re.id,Re.nombre,Do.nombre dominio');
-		$this->db->join('Areas Re','OR.area = Re.id');
+		$this->db->select('A.id,A.nombre,Do.nombre dominio');
+		$this->db->join('Areas A','OR.area = A.id');
 		$this->db->join('Objetivos O','O.id = OR.objetivo');
 		$this->db->join('Dominios Do','O.dominio = Do.id');
 		$this->db->where('OR.objetivo',$obj);
+		$this->db->order_by('A.nombre','asc');
 		return $this->db->get('Objetivos_Areas OR')->result();
 	}
 
@@ -88,13 +93,14 @@ class Area_model extends CI_Model{
 			foreach ($asignadas as $temp) :
 				array_push($array_temp, $temp->id);
 			endforeach;
-			$this->db->where_not_in('Re.id',$array_temp);
+			$this->db->where_not_in('A.id',$array_temp);
 		endif;
 		$this->db->distinct();
-		$this->db->select('Re.id,Re.nombre');
-		$this->db->join('Objetivos_Areas Ob_R','Ob_R.area = Re.id','LEFT OUTER');
+		$this->db->select('A.id,A.nombre');
+		$this->db->join('Objetivos_Areas Ob_R','Ob_R.area = A.id','LEFT OUTER');
 		$this->db->join('Objetivos O','O.id = Ob_R.objetivo','LEFT OUTER');
-		return $this->db->get('Areas Re')->result();
+		$this->db->order_by('A.nombre','asc');
+		return $this->db->get('Areas A')->result();
 	}
 
 	function searchByObjetivo($obj) {
@@ -102,6 +108,7 @@ class Area_model extends CI_Model{
 		$this->db->from('Areas A');
 		$this->db->join('Objetivos_Areas OA','A.id = OA.area');
 		$this->db->where('OA.objetivo',$obj);
+		$this->db->order_by('A.nombre','asc');
 		return $this->db->get()->result();
 	}
 

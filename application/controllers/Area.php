@@ -78,23 +78,21 @@ class Area extends CI_Controller {
     }
 
     public function searchByText() {
-        if($this->input->post('valor')) :
-            $valor = $this->input->post('valor');
-            $resultados = $this->area_model->getByText($valor);
-            foreach ($resultados as $resp) : ?>
-                <tr>
-                  <td><span class="glyphicon glyphicon-eye-open" style="cursor:pointer" onclick="
-                    location.href='<?= base_url('area/ver/');?>/'+<?= $resp->id;?>"></span> 
-                    <span style="cursor:pointer" onclick="location.href='<?= base_url('area/ver/');?>/'+
-                    <?= $resp->id;?>"><?= $resp->nombre;?></span></td>
-                  <td align="right"><span style="cursor:pointer;" onclick="
-                    if(confirm('Seguro que desea cambiar el estatus de la area: \n <?= $resp->nombre;?>'))location.href=
-                    '<?= base_url('area/del/');?>/'+<?= $resp->id;?>;" class="glyphicon 
-                    <?php if($resp->estatus ==1 ) echo "glyphicon-ok"; else echo "glyphicon-ban-circle"; ?>"></span></td>
-                </tr>
-            <?php endforeach;
-        else:?>
-            <script type="text/javascript">document.location.href="<?= base_url('area');?>";</script>
-        <?php endif;
+        $valor = $this->input->post('valor');
+        $estatus = $this->input->post('estatus');
+        $orden = $this->input->post('orden');
+        $resultados = $this->area_model->getByText($valor,$estatus,$orden);
+        foreach ($resultados as $resp) : ?>
+            <tr>
+              <td><span class="glyphicon glyphicon-eye-open" style="cursor:pointer" onclick="
+                location.href='<?= base_url('area/ver/');?>/'+<?= $resp->id;?>"></span> 
+                <span style="cursor:pointer" onclick="location.href='<?= base_url('area/ver/');?>/'+
+                <?= $resp->id;?>"><?= $resp->nombre;?></span></td>
+              <td align="right"><span style="cursor:pointer;" onclick="
+                if(confirm('Seguro que desea cambiar el estatus de la area: \n <?= $resp->nombre;?>'))location.href=
+                '<?= base_url('area/del/');?>/'+<?= $resp->id;?>;" class="glyphicon 
+                <?php if($resp->estatus ==1 ) echo "glyphicon-ok"; else echo "glyphicon-ban-circle"; ?>"></span></td>
+            </tr>
+        <?php endforeach;
     }
 }

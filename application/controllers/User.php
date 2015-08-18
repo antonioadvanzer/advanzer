@@ -14,10 +14,15 @@ class User extends CI_Controller {
     	$this->load->library('pagination');
     }
 
-    public function index($msg=null){
+    public function index($msg=null,$valor=null,$estatus=null){
+        if(!empty($this->input->post('valor')))
+            $valor=$this->input->post('valor');
+        if(!empty($this->input->post('estatus')))
+            $estatus=$this->input->post('estatus');
+        
     	//pagination settings
         $config['base_url'] = base_url('administrar_usuarios');
-        $config['total_rows'] = $this->user_model->getCountUsers();
+        $config['total_rows'] = $this->user_model->getCountUsers($valor,$estatus);
         $config['per_page'] = "25";
         $config["uri_segment"] = 2;
         $choice = $config["total_rows"] / $config["per_page"];
@@ -47,7 +52,7 @@ class User extends CI_Controller {
         $data['page'] = ($this->uri->segment(2)) ? $this->uri->segment(2) : 0;
 
         //call the model function to get the data
-        $data['users'] = $this->user_model->getPagination($config["per_page"], $data['page']);
+        $data['users'] = $this->user_model->getPagination($config["per_page"], $data['page'],$valor,$estatus);
 
         $data['pagination'] = $this->pagination->create_links();
 
@@ -131,41 +136,38 @@ class User extends CI_Controller {
     }
 
     public function searchByText() {
-    	if($this->input->post('valor')) :
-    		$valor = $this->input->post('valor');
-    		$resultados = $this->user_model->getByText($valor);
-    		foreach ($resultados as $user) : ?>
-    			<tr>
-                    <td><img height="25px" src="<?= base_url('assets/images/fotos')."/".$user->foto;?>"></td>
-                    <td><span class="glyphicon glyphicon-eye-open" style="cursor:pointer" onclick="
-                      location.href='<?= base_url('user/ver/');?>/'+<?= $user->id;?>"></span> 
-                      <span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
-                      <?= $user->id;?>"><?= $user->nomina;?></span></td>
-                    <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
-                      <?= $user->id;?>"><?= $user->nombre;?></span></td>
-                    <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
-                      <?= $user->id;?>"><?= $user->email;?></span></td>
-                    <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
-                      <?= $user->id;?>"><?php if($user->empresa == 1) echo "Advanzer"; 
-                      elseif($user->empresa == 2) echo "Entuizer";?></span></td>
-                    <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver');?>/'+
-                      <?= $user->id;?>"><?= $user->track;?></span></td>
-                    <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
-                      <?= $user->id;?>"><?= $user->posicion;?></span></td>
-                    <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
-                      <?= $user->id;?>"><?= $user->area;?></span></td>
-                    <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
-                      <?= $user->id;?>"><?= $user->plaza;?></span></td>
-                    <td align="right"><span style="cursor:pointer;" onclick="
-                      if(confirm('Seguro que desea cambiar el estatus del usuario: \n <?= $user->nombre;?>'))location.href=
-                      '<?= base_url('user/del/');?>/'+<?= $user->id;?>;" class="glyphicon 
-                      <?php if($user->estatus ==1 ) echo "glyphicon-ok"; else echo "glyphicon-ban-circle"; ?>"></span></td>
-                </tr>
-		        <script type="text/javascript">$("#pagination").hide('slow');</script>
-    		<?php endforeach;
-    	else:?>
-    		<script type="text/javascript">document.location.href="<?= base_url('administrar_usuarios');?>";</script>
-    	<?php endif;
+        $estatus = $this->input->post('estatus');
+		$valor = $this->input->post('valor');
+        $orden = $this->input->post('orden');
+		$resultados = $this->user_model->getByText($valor,$estatus,$orden);
+		foreach ($resultados as $user) : ?>
+			<tr>
+                <td><img height="25px" src="<?= base_url('assets/images/fotos')."/".$user->foto;?>"></td>
+                <td><span class="glyphicon glyphicon-eye-open" style="cursor:pointer" onclick="
+                  location.href='<?= base_url('user/ver/');?>/'+<?= $user->id;?>"></span> 
+                  <span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
+                  <?= $user->id;?>"><?= $user->nomina;?></span></td>
+                <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
+                  <?= $user->id;?>"><?= $user->nombre;?></span></td>
+                <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
+                  <?= $user->id;?>"><?= $user->email;?></span></td>
+                <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
+          <?= $user->id;?>"><img width="60px"src="<?= base_url('assets/images').'/'.$user->empresa.'.png';?>"></span></td>
+                <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver');?>/'+
+                  <?= $user->id;?>"><?= $user->track;?></span></td>
+                <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
+                  <?= $user->id;?>"><?= $user->posicion;?></span></td>
+                <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
+                  <?= $user->id;?>"><?= $user->area;?></span></td>
+                <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
+                  <?= $user->id;?>"><?= $user->plaza;?></span></td>
+                <td align="right"><span style="cursor:pointer;" onclick="
+                  if(confirm('Seguro que desea cambiar el estatus del usuario: \n <?= $user->nombre;?>'))location.href=
+                  '<?= base_url('user/del/');?>/'+<?= $user->id;?>;" class="glyphicon 
+                  <?php if($user->estatus ==1 ) echo "glyphicon-ok"; else echo "glyphicon-ban-circle"; ?>"></span></td>
+            </tr>
+	        <script type="text/javascript">$("#pagination").hide('slow');</script>
+		<?php endforeach;
     }
 
     public function nuevo($msg=null) {
