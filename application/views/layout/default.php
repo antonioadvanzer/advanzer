@@ -108,6 +108,7 @@
 							Servicios<span class="caret"></span></a>
 						<ul class="dropdown-menu">
 							<li><a href="<?= base_url('requisiciones');?>">Requisiciones</a></li>
+							<li><a href="<?= base_url('evaluar');?>">Evaluaciones</a></li>
 						</ul>
 					</li>
 					<!--

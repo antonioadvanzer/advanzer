@@ -8,11 +8,16 @@ class Evaluacion_model extends CI_Model{
 		parent::__construct();
 	}
 
-	function getComportamientoByCompetencia($competencia,$posicion) {
+	function getComportamientoByCompetencia($competencia,$posicion,$asignacion=null) {
 		$this->db->select('C.id,C.descripcion,C.competencia,CP.evalua');
 		$this->db->where(array('C.competencia'=>$competencia,'CP.nivel_posicion'=>$posicion));
 		$this->db->order_by('C.descripcion');
 		$this->db->join('Comportamiento_Posicion CP','CP.comportamiento = C.id');
+		if($asignacion!=null){
+			$this->db->select('DC.respuesta');
+			$this->db->join('Detalle_ev_Competencia DC','DC.comportamiento=C.id','LEFT OUTER');
+			$this->db->where('DC.asignacion',$asignacion);
+		}
 		return $this->db->get('Comportamientos C')->result();
 	}
 
@@ -34,17 +39,22 @@ class Evaluacion_model extends CI_Model{
 		$this->db->join('Competencias C','C.indicador = I.id');
 		$this->db->join('Comportamientos Co','Co.competencia = C.id');
 		$this->db->join('Comportamiento_Posicion CP','Co.id = CP.comportamiento');
-		//$this->db->order_by('I.nombre');
 		$this->db->where(array('I.estatus'=>1,'C.estatus'=>1,'CP.nivel_posicion'=>$posicion));
 		$this->db->order_by('I.nombre','asc');
 		return $this->db->get()->result();
 	}
 
-	function getObjetivosByDominio($dominio,$area,$posicion) {
+	function getObjetivosByDominio($dominio,$area,$posicion,$asignacion=null) {
 		$this->db->select('O.id,O.nombre,PO.valor,O.descripcion');
 		$this->db->from('Objetivos O');
 		$this->db->join('Objetivos_Areas OA','OA.objetivo = O.id');
 		$this->db->join('Porcentajes_Objetivos PO','PO.objetivo = O.id');
+		if($asignacion!=null){
+			$this->db->select('M.valor');
+			$this->db->join('Detalle_Evaluacion DE','DE.objetivo=O.id','LEFT OUTER');
+			$this->db->join('Metricas M','M.id = DE.metrica','LEFT OUTER');
+			$this->db->where('DE.asignacion',$asignacion);
+		}
 		$this->db->where(array('O.dominio'=>$dominio,'OA.area'=>$area,'PO.nivel_posicion'=>$posicion,'O.estatus'=>1));
 		$this->db->order_by('O.nombre','asc');
 		return $this->db->get()->result();
@@ -123,7 +133,7 @@ class Evaluacion_model extends CI_Model{
 	}
 
 	function getEvaluacionesByEvaluador($evaluador) {
-		$this->db->select('U.id,U.foto,U.nombre,U.nomina,A.nombre area,P.nombre posicion,T.nombre track,E.tipo,E.estatus');
+		$this->db->select('U.id,U.foto,U.nombre,U.nomina,A.nombre area,P.nombre posicion,T.nombre track,E.tipo,E.estatus,E.id asignacion');
 		$this->db->from('Users U');
 		$this->db->join('Areas A','A.id = U.area','LEFT OUTER');
 		$this->db->join('Posicion_Track PT','PT.id = U.posicion_track','LEFT OUTER');
@@ -249,6 +259,110 @@ class Evaluacion_model extends CI_Model{
 	function getEvaluacionById($id) {
 		$this->db->where('id',$id);
 		return $this->db->get('Evaluaciones')->first_row();
+	}
+
+	function getEvaluacionByAsignacion($asignacion) {
+		$this->db->select('id,estatus,tipo,evaluador,evaluado');
+		$this->db->from('Evaluadores');
+		$this->db->where('id',$asignacion);
+		$result = $this->db->get()->first_row();
+		$posicion=$this->getPosicionByColaborador($result->evaluado);
+		foreach ($result->indicadores = $this->getIndicadoresByPosicion($posicion) as $indicador) :
+			foreach ($indicador->competencias = $this->getCompetenciasByIndicador($indicador->id,$posicion) as $competencia ) :
+				$competencia->comportamientos = $this->getComportamientoByCompetencia($competencia->id,$posicion,$asignacion);
+			endforeach;
+		endforeach;
+		switch ($result->tipo) {
+			case 0:
+				$area = $this->getAreaByColaborador($result->evaluado);
+				foreach ($result->dominios=$this->getResponsabilidadByArea($area) as $dominio) :
+					foreach ($dominio->responsabilidades=$this->getObjetivosByDominio($dominio->id,$area,$posicion,$asignacion) as $responsabilidad) :
+						$responsabilidad->metricas = $this->getMetricaByObjetivo($responsabilidad->id);
+					endforeach;
+				endforeach;
+				break;
+		}
+		return $result;
+	}
+
+	function guardaMetrica($asignacion,$metrica,$objetivo) {
+		$id_m=$this->db->select('id')->where(array('objetivo'=>$objetivo,'valor'=>$metrica))->get('Metricas')->first_row()->id;
+		$this->db->where(array('asignacion'=>$asignacion,'objetivo'=>$objetivo))
+			->update('Detalle_Evaluacion',array('metrica'=>$id_m));
+		if($this->db->affected_rows() != 1)
+			return false;
+		return true;
+	}
+
+	function guardaComportamiento($asignacion,$respuesta,$comportamiento) {
+		$this->db->where(array('asignacion'=>$asignacion,'comportamiento'=>$comportamiento))
+			->update('Detalle_ev_Competencia',array('respuesta'=>$respuesta));
+		if($this->db->affected_rows() != 1)
+			return false;
+		return true;
+	}
+
+	function getAreaByColaborador($evaluado) {
+		return $this->db->where('id',$evaluado)->select('area')->from('Users')->get()->first_row()->area;
+	}
+
+	function getPosicionByColaborador($evaluado) {
+		$this->db->select('P.nivel')->from('Users U')->join('Posicion_Track PT','PT.id = U.posicion_track');
+		$this->db->join('Posiciones P','P.id = PT.posicion');
+		return $this->db->where('U.id',$evaluado)->get()->first_row()->nivel;
+	}
+
+	function searchAsignacionById($id) {
+		return $this->db->where('id',$id)->get('Evaluadores')->first_row();
+	}
+
+	function isAsignacionEmpty($asignacion) {
+		if ($this->searchAsignacionById($asignacion)->tipo == 0) {
+			if($this->db->where('asignacion',$asignacion)->get('Detalle_Evaluacion')->num_rows() > 0)
+				return false;
+		}else
+			if($this->db->where('asignacion',$asignacion)->get('Detalle_ev_Competencia')->num_rows() > 0)
+				return false;
+		return true;
+	}
+
+	function fillAsignacion($asignacion) {
+		$tipo = $this->searchAsignacionById($asignacion)->tipo;
+		$this->db->trans_begin();
+		if($tipo == 3 || $tipo == 1 || $tipo==0){
+			//fill Competencias
+			$this->db->select('C.id');
+			$this->db->from('Evaluadores E');
+			$this->db->join('Users U','E.evaluado = U.id');
+			$this->db->join('Posicion_Track PT','PT.id = U.posicion_track');
+			$this->db->join('Posiciones P','P.id = PT.posicion');
+			$this->db->join('Comportamiento_Posicion CP','CP.nivel_posicion = P.nivel');
+			$this->db->join('Comportamientos C','C.id = CP.comportamiento');
+			$this->db->where('E.id',$asignacion);
+			$comportamientos = $this->db->get()->result();
+			foreach ($comportamientos as $comportamiento) :
+				$this->db->insert('Detalle_ev_Competencia',array('comportamiento'=>$comportamiento->id,
+					'asignacion'=>$asignacion));
+			endforeach;
+		}
+		if($tipo==0){
+			//fill Responsabilidades
+			$this->db->select('O.id');
+			$this->db->from('Evaluadores E');
+			$this->db->join('Users U','E.evaluado = U.id');
+			$this->db->join('Objetivos_Areas OA','OA.area = U.area');
+			$this->db->join('Objetivos O','O.id = OA.objetivo');
+			$this->db->where('E.id',$asignacion);
+			$objetivos = $this->db->get()->result();
+			foreach ($objetivos as $objetivo) :
+				$this->db->insert('Detalle_Evaluacion',array('asignacion'=>$asignacion,'objetivo'=>$objetivo->id));
+			endforeach;
+		}
+
+		if($this->db->trans_status() === FALSE)
+			$this->db->trans_rollback();
+		else
+			$this->db->trans_commit();
 	}
 
 	function create($datos) {

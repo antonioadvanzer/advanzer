@@ -29,7 +29,7 @@
             <th class="col-md-1" data-halign="center" data-align="center"></th>
             <th class="col-md-3" data-halign="center" data-field="nombre" data-sortable="true">Nombre</th>
             <th class="col-md-2" data-halign="center" data-field="area" data-sortable="true">Area</th>
-            <th class="col-md-1" data-halign="center" data-field="posicion">Posición</th>
+            <th class="col-md-1" data-halign="center" data-field="posicion" data-sortable="true">Posición</th>
             <th class="col-md-2" data-halign="center" data-field="track" data-sortable="true">Track</th>
             <th class="col-md-2" data-halign="center" data-field="tipo" data-sortable="true">Tipo</th>
             <th class="col-md-1" data-halign="center" data-field="estatus" data-sortable="true">Estatus</th>
@@ -38,24 +38,19 @@
         <tbody id="result" class="searchable">
           <?php foreach ($colaboradores as $colab):?>
           <tr>
-            <td><img height="25px" src="<?= base_url('assets/images/fotos')."/".$colab->foto;?>"></td>
-            <td><span style="cursor:pointer" onclick=""><?= "$colab->nomina - $colab->nombre";?></span></td>
-            <td><span style="cursor:pointer" onclick=""><?= $colab->area;?></span></td>
-            <td><span style="cursor:pointer" onclick=""><?= $colab->posicion;?></span></td>
-            <td><span style="cursor:pointer" onclick=""><?= $colab->track;?></span></td>
-            <td><span style="cursor:pointer" onclick=""><?php if($colab->tipo == 0) echo"De Responsabilidades"; 
+            <td><img style="cursor:pointer" onclick="ir(<?= $colab->asignacion;?>)" height="25px" src="<?= base_url('assets/images/fotos')."/".$colab->foto;?>"></td>
+            <td><span style="cursor:pointer" onclick="ir(<?= $colab->asignacion;?>)"><?= "$colab->nomina - $colab->nombre";?></span></td>
+            <td><span style="cursor:pointer" onclick="ir(<?= $colab->asignacion;?>)"><?= $colab->area;?></span></td>
+            <td><span style="cursor:pointer" onclick="ir(<?= $colab->asignacion;?>)"><?= $colab->posicion;?></span></td>
+            <td><span style="cursor:pointer" onclick="ir(<?= $colab->asignacion;?>)"><?= $colab->track;?></span></td>
+            <td><span style="cursor:pointer" onclick="ir(<?= $colab->asignacion;?>)"><?php if($colab->tipo == 0) echo"De Responsabilidades"; 
               elseif($colab->tipo == 1) echo"De Competencias"; else echo"360";?></span></td>
-            <td><span style="cursor:pointer" onclick=""><?php if($colab->estatus == 0) echo"Pendiente"; 
+            <td><span style="cursor:pointer" onclick="ir(<?= $colab->asignacion;?>)"><?php if($colab->estatus == 0) echo"Pendiente"; 
               elseif($colab->estatus == 1) echo"En proceso"; else echo"Terminada";?></span></td>
           </tr>
           <?php endforeach; ?>
         </tbody>
       </table>
-      <!--<div id="pagination" class="row">
-        <div class="col-md-12 text-center">
-            <?php echo $pagination; ?>
-        </div>
-      </div>-->
     </div>
   </div>
 
@@ -71,6 +66,10 @@
           })
       }(jQuery));
     });
+
+    function ir(asignacion) {
+      location.href='<?= base_url("evaluacion/aplicar");?>/'+asignacion;
+    }
 
     $(document).ready(function() {
       $("#nombre").change(function() {

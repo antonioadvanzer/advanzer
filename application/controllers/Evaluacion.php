@@ -21,6 +21,27 @@ class Evaluacion extends CI_Controller {
         $this->layout->view('evaluacion/evaluar',$data);
     }
 
+    public function aplicar($asignacion) {
+        $this->genera_evaluacion($asignacion);
+        $data['evaluacion']=$this->evaluacion_model->getEvaluacionByAsignacion($asignacion);
+        $this->layout->title('Advanzer - Aplicar Evaluación');
+        $this->layout->view('evaluacion/aplicar',$data);
+    }
+
+    public function guardar_avance() {
+        $asignacion = $this->input->post('asignacion');
+        $tipo = $this->input->post('tipo');
+        $valor = $this->input->post('valor');
+        $elemento = $this->input->post('elemento');
+        if($tipo=="responsabilidad"){
+            if($this->evaluacion_model->guardaMetrica($asignacion,$valor,$elemento)) //metrica=valor,obj=elem
+                echo "Métrica Guardada";
+        }else{
+            if($this->evaluacion_model->guardaComportamiento($asignacion,$valor,$elemento)) //resp=valor,comp=elem
+                echo "Comportamiento Guardado";
+        }
+    }
+
     public function index() {
         $data=array();
 
@@ -499,6 +520,11 @@ class Evaluacion extends CI_Controller {
             $this->gestion("Evaluación creada.");
         else
             $this->nueva("Error al crear evaluación. Intenta de nuevo");
+    }
+
+    private function genera_evaluacion($asignacion) {
+        if($this->evaluacion_model->isAsignacionEmpty($asignacion))
+            $this->evaluacion_model->fillAsignacion($asignacion);
     }
 
     private function valida_sesion() {

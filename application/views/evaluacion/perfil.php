@@ -187,8 +187,8 @@
 						$('#cargando').show();
 					},
 					success: function(data) {
-						$('#cargando').hide();
 						$("#perfil").show().html(data);
+						$('#cargando').hide();
 					}
 				});
 			});
@@ -211,8 +211,8 @@
 						$('#cargando').show();
 					},
 					success: function(data) {
-						$('#cargando').hide();
 						$('#perfil').show().html(data);
+						$('#cargando').hide();
 					}
 				});
 				$.ajax({
@@ -226,8 +226,8 @@
 						$('#cargando').show();
 					},
 					success: function(data) {
-						$('#cargando').hide();
 						$('#competencias').show().html(data);
+						$('#cargando').hide();
 					}
 				});
 			});
