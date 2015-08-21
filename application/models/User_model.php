@@ -53,28 +53,14 @@ class User_model extends CI_Model{
 		return $this->db->count_all_results('Users U');
 	}
 
-	function getPagination($limit,$start,$valor=null,$estatus=null) {
-		if($valor!=null && $estatus!=null) {
-			if($estatus < 2){
-				$ids=array('');
-				$this->db->where('estatus',$estatus);
-				$result=$this->db->select('id')->get('Users')->result();
-				foreach ($result as $row) {
-					array_push($ids, $row->id);
-				}
-				if(count($ids)>0)
-					$this->db->where_in('U.id',$ids);
-			}
-		}
+	function getPagination() {
 		$this->db->select('U.id,U.nomina,U.categoria,U.plaza,U.nombre,U.email,U.foto,U.empresa,U.estatus,A.nombre area,
 			T.nombre track,P.nombre posicion');
 		$this->db->join('Areas A','U.area = A.id','LEFT OUTER');
 		$this->db->join('Posicion_Track PT','PT.id = U.posicion_track','LEFT OUTER');
 		$this->db->join('Tracks T','PT.track = T.id','LEFT OUTER');
 		$this->db->join('Posiciones P','P.id = PT.posicion','LEFT OUTER');
-		$this->db->limit($limit,$start);
-		$this->db->order_by('nombre','asc');
-		$this->db->where('U.estatus',1);
+		$this->db->order_by('nombre');
 		return $this->db->get('Users U')->result();
 	}
 

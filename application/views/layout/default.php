@@ -7,17 +7,20 @@
 	<link rel="icon" href="<?= base_url('assets/images/favicon.ico');?>">
 	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/bootstrap.css');?>">
 	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/bootstrap-table.css');?>">
-	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/theme.css');?>">
 	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/bootstrap-theme.css');?>">
 	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/style.css');?>">
 	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/datepicker/css/bootstrap-datepicker.min.css');?>">
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/bootstrap-table-filter.css');?>">
 	<script src="<?= base_url('assets/js/jquery.min.js');?>"></script>
 	<script src="<?= base_url('assets/js/bootstrap.min.js');?>"></script>
 	<script src="<?= base_url('assets/js/bootstrap-table.js');?>"></script>
 	<script src="<?= base_url('assets/js/docs.min.js');?>"></script>
 	<script src="<?= base_url('assets/datepicker/js/bootstrap-datepicker.min.js');?>"></script>
 	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	<script src="<?= base_url('assets/js/bootstrap-table-filter.js');?>"></script>
+	<script src="<?= base_url('assets/js/moment.min.js');?>"></script>
+	<script src="<?= base_url('assets/js/bootstrap-sortable.js');?>"></script>
 	<title><?=$title_for_layout?></title>
 	<style type="text/css">
 		body {

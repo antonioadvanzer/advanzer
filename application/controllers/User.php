@@ -11,50 +11,10 @@ class User extends CI_Controller {
     	$this->load->model('area_model');
         $this->load->model('track_model');
         $this->load->model('posicion_model');
-    	$this->load->library('pagination');
     }
 
-    public function index($msg=null,$valor=null,$estatus=null){
-        if(!empty($this->input->post('valor')))
-            $valor=$this->input->post('valor');
-        if(!empty($this->input->post('estatus')))
-            $estatus=$this->input->post('estatus');
-        
-    	//pagination settings
-        $config['base_url'] = base_url('administrar_usuarios');
-        $config['total_rows'] = $this->user_model->getCountUsers($valor,$estatus);
-        $config['per_page'] = "25";
-        $config["uri_segment"] = 2;
-        $choice = $config["total_rows"] / $config["per_page"];
-        $config["num_links"] = floor($choice);
-
-        //config for bootstrap pagination class integration
-        $config['full_tag_open'] = '<ul class="pagination">';
-        $config['full_tag_close'] = '</ul>';
-        $config['first_link'] = false;
-        $config['last_link'] = false;
-        $config['first_tag_open'] = '<li>';
-        $config['first_tag_close'] = '</li>';
-        $config['prev_link'] = '&laquo';
-        $config['prev_tag_open'] = '<li class="prev">';
-        $config['prev_tag_close'] = '</li>';
-        $config['next_link'] = '&raquo';
-        $config['next_tag_open'] = '<li>';
-        $config['next_tag_close'] = '</li>';
-        $config['last_tag_open'] = '<li>';
-        $config['last_tag_close'] = '</li>';
-        $config['cur_tag_open'] = '<li class="active"><a href="#">';
-        $config['cur_tag_close'] = '</a></li>';
-        $config['num_tag_open'] = '<li>';
-        $config['num_tag_close'] = '</li>';
-
-        $this->pagination->initialize($config);
-        $data['page'] = ($this->uri->segment(2)) ? $this->uri->segment(2) : 0;
-
-        //call the model function to get the data
-        $data['users'] = $this->user_model->getPagination($config["per_page"], $data['page'],$valor,$estatus);
-
-        $data['pagination'] = $this->pagination->create_links();
+    public function index($msg=null){
+        $data['users'] = $this->user_model->getPagination();
 
         if($msg!=null && $msg!='(:num)')
         	$data['msg']=$msg;

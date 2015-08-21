@@ -28,7 +28,7 @@
     <div class="col-md-12">
       <h3><b>Usuarios:</b></h3>
       <div class="input-group">
-        <input name="nombre" type="text" class="form-control" id="nombre" style="max-width:50%;" 
+        <!--<input name="nombre" type="text" class="form-control" id="nombre" style="max-width:50%;" 
           placeholder="Buscar por nómina,nombre, email, track o posición">
         <select name="estatus" id="estatus" class="form-control" style="max-width:25%;">
           <option value="1">Activos</option>
@@ -40,20 +40,23 @@
           <option value="DESC">Descendente</option>
         </select>
         <span class="input-group-addon">Filtrar Resultados</span>
-        <input id="filter" type="text" class="form-control" placeholder="Filtrar...">
+        <input id="filter" type="text" class="form-control" placeholder="Filtrar...">-->
       </div>
     </div>
   </div>
   <div class="row" align="center">
-    <div class="col-md-12"><div id="cargando" style="display:none; color: green;">
-      <img src="<?= base_url('assets/images/loading.gif');?>"></div></div>
+    <div class="col-md-12">
+      <div id="cargando" style="display:none; color: green;">
+        <img src="<?= base_url('assets/images/loading.gif');?>"></div></div>
   </div>
   <div class="row">
-    <div id="resultados" class="col-md-12">
-      <table align="center" data-toggle="table" data-striped="true" data-hover="true">
+    <div class="col-md-12">
+      <div id="filter-bar"> </div>
+      <table class="sortable" align="center" data-toggle="table" data-toolbar="#filter-bar" data-pagination="true" data-search="true" 
+        data-show-toggle="true" data-show-columns="true" data-show-filter="true" data-hover="true" data-striped="true">
         <thead>
           <tr>
-            <th data-halign="center" data-align="center"></th>
+            <th data-halign="center" data-field="foto" data-align="center" data-defaultsort="disabled">Foto</th>
             <th data-halign="center" data-field="nomina">Nómina</th>
             <th class="col-sm-2" data-halign="center" data-field="nombre">Nombre</th>
             <th class="col-sm-2" data-halign="center" data-field="email">E-Mail</th>
@@ -62,22 +65,20 @@
             <th class="col-sm-1" data-halign="center" data-field="posicion">Posición</th>
             <th class="col-sm-1" data-halign="center" data-field="area">Área</th>
             <th class="col-sm-1" data-halign="center" data-field="plaza">Plaza</th>
-            <th data-halign="center" data-align="center"></th>
+            <th data-halign="center" data-align="center" data-field="estatus"></th>
           </tr>
         </thead>
         <tbody id="result" class="searchable">
           <?php foreach ($users as $user): ?>
           <tr>
             <td><img height="25px" src="<?= base_url('assets/images/fotos')."/".$user->foto;?>"></td>
-            <td><span class="glyphicon glyphicon-eye-open" style="cursor:pointer" onclick="
-              location.href='<?= base_url('user/ver/');?>/'+<?= $user->id;?>"></span> 
-              <span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
+            <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
               <?= $user->id;?>"><?= $user->nomina;?></span></td>
             <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
               <?= $user->id;?>"><?= $user->nombre;?></span></td>
             <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
               <?= $user->id;?>"><?= $user->email;?></span></td>
-            <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
+            <td data-value="<?= $user->empresa;?>"><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
               <?= $user->id;?>"><img width="60px"src="<?= base_url('assets/images').'/'.$user->empresa.'.png';?>"></span></td>
             <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver');?>/'+
               <?= $user->id;?>"><?= $user->track;?></span></td>
@@ -87,7 +88,7 @@
               <?= $user->id;?>"><?= $user->area;?></span></td>
             <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
               <?= $user->id;?>"><?= $user->plaza;?></span></td>
-            <td align="right"><span style="cursor:pointer;" onclick="
+            <td data-value="<?= $user->estatus;?>"><span style="cursor:pointer;" onclick="
               if(confirm('Seguro que desea cambiar el estatus del usuario: \n <?= $user->nombre;?>'))location.href=
               '<?= base_url('user/del/');?>/'+<?= $user->id;?>;" class="glyphicon 
               <?php if($user->estatus ==1 ) echo "glyphicon-ok"; else echo "glyphicon-ban-circle"; ?>"></span></td>
@@ -95,27 +96,16 @@
           <?php endforeach; ?>
         </tbody>
       </table>
-      <div id="pagination" class="row">
+      <!--<div id="pagination" class="row">
         <div class="col-md-12 text-center">
             <?php echo $pagination; ?>
         </div>
-      </div>
+      </div>-->
     </div>
   </div>
 
   <script type="text/javascript">
-    $(document).ready(function () {
-      (function ($) {
-          $('#filter').keyup(function () {
-              var rex = new RegExp($(this).val(), 'i');
-              $('.searchable tr').hide();
-              $('.searchable tr').filter(function () {
-                  return rex.test($(this).text());
-              }).show();
-              $('#pagination').hide();
-          })
-      }(jQuery));
-    });
+    $.bootstrapSortable(true);
 
     $(document).ready(function() {
       $("#nombre").change(function() {
@@ -126,16 +116,17 @@
         $("#orden option:selected").each(function() {
           orden = $('#orden').val();
         });
-        $('#resultados').hide();
+        //$('#resultados').hide();
         $('#cargando').show();
         $.ajax({
-          url: '<?= base_url("user/searchByText");?>',
+          url: '<?= base_url("administrar_usuarios");?>',
           type: 'POST',
           data: {'valor':valor,'estatus':estatus,'orden':orden},
           success: function(data) {
             $('#cargando').hide();
-            $('#result').show().html(data);
-            $('#resultados').show();
+            console.log(data);
+            document.write(data);
+            //$('#resultados').show();
           },
           error: function(data){
             $('body').html(data);

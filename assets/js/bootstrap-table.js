@@ -396,16 +396,16 @@
             return 'Loading, please wait...';
         },
         formatRecordsPerPage: function (pageNumber) {
-            return sprintf('%s records per page', pageNumber);
+            return sprintf('%s resultados por pagina', pageNumber);
         },
         formatShowingRows: function (pageFrom, pageTo, totalRows) {
-            return sprintf('Showing %s to %s of %s rows', pageFrom, pageTo, totalRows);
+            return sprintf('Mostrando %s a %s de %s registros', pageFrom, pageTo, totalRows);
         },
         formatSearch: function () {
-            return 'Search';
+            return 'Filtrar Resultados';
         },
         formatNoMatches: function () {
-            return 'No matching records found';
+            return 'Ninguna coincidencia encontrada';
         },
         formatPaginationSwitch: function () {
             return 'Hide/Show pagination';
