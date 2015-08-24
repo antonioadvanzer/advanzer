@@ -299,7 +299,12 @@ class Evaluacion_model extends CI_Model{
 			->update('Detalle_ev_Competencia',array('respuesta'=>$respuesta));
 		if($this->db->affected_rows() != 1)
 			return false;
+		$this->ch_estatus($asignacion);
 		return true;
+	}
+
+	function ch_estatus($asignacion,$estatus=1) {
+		$this->db->where('id',$asignacion)->update('Evaluadores',array('estatus'=>$estatus));
 	}
 
 	function getAreaByColaborador($evaluado) {
@@ -363,6 +368,27 @@ class Evaluacion_model extends CI_Model{
 			$this->db->trans_rollback();
 		else
 			$this->db->trans_commit();
+	}
+
+	function finalizar_evaluacion($asignacion,$tipo) {
+		if($this->is_filled_evaluacion($asignacion,$tipo)){
+			if($this->ch_estatus($asignacion,2))
+				return true;
+		}
+		return false;
+	}
+
+	function is_filled_evaluacion($asignacion,$tipo) {
+		if($tipo=="responsabilidad"){
+			if($this->db->where(array('asignacion'=>$asignacion,'metrica'=>0))
+				->from('Detalle_Evaluacion')->count_all_results() == 0)
+				return true;
+		}else{
+			if($this->db->where(array('asignacion'=>$asignacion,'respuesta'=>0))
+				->from('Detalle_ev_Competencia')->count_all_results() == 0)
+				return true;
+		}
+		return false;
 	}
 
 	function create($datos) {

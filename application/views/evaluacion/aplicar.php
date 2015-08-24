@@ -132,7 +132,8 @@
 	  <div class="item active" align="center" style="min-height:480px;">
 		<img height="100%" style="opacity:0.3;position:absolute" src="<?= base_url('assets/images/evaluacion.jpg');?>">
 		<div class="carousel-caption">
-		  <h3 style="cursor:default;"><?php switch($evaluacion->estatus){ case 0:echo"Comenzar Evaluación";break;}?></h3>
+		  <h3 style="cursor:default;"><?php switch($evaluacion->estatus){ case 0:echo"Comenzar Evaluación";break;
+			case 1:echo"Continuar Evaluación...";break;}?></h3>
 		</div>
 	  </div>
 	  <?php if(isset($evaluacion->dominios)): ?>
@@ -212,8 +213,8 @@
 	  <div class="item" align="center" style="min-height:480px;">
 		<img width="100%" style="opacity:0.3;position:absolute" src="<?= base_url('assets/images/gracias.jpg');?>">
 		<div class="carousel-caption" align="center">
-		  <button id="finalizar" class="btn btn-lg btn-primary" onclick="finalizar(<?= $evaluacion->id;?>);" 
-		  	style="max-width:200px; text-align:center;">Finalizar</button>
+		  <button id="finalizar" class="btn btn-lg btn-primary" onclick="finalizar(<?= $evaluacion->id;?>,<?= $evaluacion->tipo;?>);" 
+		  	style="max-width:200px; text-align:center;" <?php if($evaluacion->estatus == 0) echo"disabled";?>>Enviar</button>
 		  <h3 style="cursor:default;">Gracias por tu tiempo...!</h3>
 		</div>
 	  </div>
@@ -229,8 +230,23 @@
 
   <script type="text/javascript">
 
-  function guardar(valor,elemento,tipo) {
-  	var asignacion = <?= $evaluacion->id;?>;
+	function finalizar(asignacion,tipo) {
+		$.ajax({
+			url: '<?= base_url("evaluacion/finalizar_evaluacion");?>',
+			type: 'post',
+			data: {'asignacion':asignacion,'tipo':tipo},
+			success: function(data){
+				var returnedData = JSON.parse(data);
+				console.log(returnedData);
+				alert(returnedData['msg']);
+				if(returnedData['redirecciona']=="si")
+					location.href="<?= base_url('evaluar');?>";
+			}
+		});
+	}
+
+	function guardar(valor,elemento,tipo) {
+	  var asignacion = <?= $evaluacion->id;?>;
   	
   	console.log(valor.value,tipo,asignacion,elemento);
 	$.ajax({
@@ -238,7 +254,10 @@
 		type: 'post',
 		data: {'asignacion':asignacion,'tipo':tipo,'valor':valor.value,'elemento':elemento},
 		success: function(data){
-			console.log(data);
+			var returnedData = JSON.parse(data);
+			console.log(returnedData);
+			if(returnedData['terminada'] == "si")
+				$("#finalizar").prop('disabled',false);
 		}
 	});
   }

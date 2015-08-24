@@ -35,11 +35,29 @@ class Evaluacion extends CI_Controller {
         $elemento = $this->input->post('elemento');
         if($tipo=="responsabilidad"){
             if($this->evaluacion_model->guardaMetrica($asignacion,$valor,$elemento)) //metrica=valor,obj=elem
-                echo "Métrica Guardada";
+                $data['msg'] = "Métrica Guardada";
         }else{
             if($this->evaluacion_model->guardaComportamiento($asignacion,$valor,$elemento)) //resp=valor,comp=elem
-                echo "Comportamiento Guardado";
+                $data['msg'] = "Comportamiento Guardado";
         }
+        if($this->evaluacion_model->is_filled_evaluacion($asignacion,$tipo))
+            $data['terminada']="si";
+        else
+            $data['terminada']="no";
+        echo json_encode($data);
+    }
+
+    public function finalizar_evaluacion() {
+        $asignacion = $this->input->post('asignacion');
+        $tipo = $this->input->post('tipo');
+        if($this->evaluacion_model->finalizar_evaluacion($asignacion,$tipo)){
+            $data['msg'] = "Evaluación Finalizada.";
+            $data['redirecciona']="si";
+        }else{
+            $data['msg'] = "Error al finalizar la evaluación. Verifica tus respuestas e intenta de nuevo";
+            $data['redirecciona']="no";
+        }
+        echo json_encode($data);
     }
 
     public function index() {
