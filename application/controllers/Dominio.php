@@ -27,38 +27,50 @@ class Dominio extends CI_Controller {
     public function load_objetivos() {
     	if($this->input->post('dominio')) :
     		$dominio = $this->input->post('dominio');
-        $area = $this->input->post('area');
-        $posicion = $this->input->post('posicion');
-    		$objetivos = $this->objetivo_model->getByDominioArea($dominio,$area);
+    		$objetivos = $this->objetivo_model->getByDominio($dominio);
     		foreach ($objetivos as $obj):
     	?>
-            <tr>
-              <td><span class="glyphicon glyphicon-eye-open" style="cursor:pointer" onclick="
-                location.href='<?= base_url('objetivo/ver/');?>/'+<?= $obj->id;?>"></span> 
-                <span style="cursor:pointer" onclick="location.href='<?= base_url('objetivo/ver/');?>/'+
-                <?= $obj->id;?>"><?= $obj->nombre;?></span></td>
-              <td><span style="cursor:pointer" onclick="location.href='<?= base_url('objetivo/ver/');?>/'+
-                <?= $obj->id;?>"><?= $obj->descripcion;?></span></td>
-              <td><span style="cursor:pointer" onclick="location.href='<?= base_url('objetivo/ver/');?>/'+
-                <?= $obj->id;?>">
-                  <?php foreach ($this->metrica_model->getByObjetivo($obj->id) as $metrica) : 
-                  	echo $metrica->valor ." - ". $metrica->descripcion ."<br>";
-                  endforeach; ?>
-                </span></td>
-              <td><span style="cursor:pointer" onclick="location.href='<?= base_url('objetivo/ver/');?>/'+
-                <?= $obj->id;?>">
-                  <?php foreach ($this->porcentaje_objetivo_model->getByObjetivoPosicion($obj->id,$posicion) as $porc) : 
-                  	echo "$porc->valor%";
-                  endforeach; ?>
-                </span></td>
-              <td align="right"><span style="cursor:pointer;" onclick="
-	              if(confirm('Seguro que desea cambiar el estatus de la responsabilidad: \n <?= $obj->nombre;?>'))location.href=
-	              '<?= base_url('objetivo/del/');?>/'+<?= $obj->id;?>;" class="glyphicon 
-	              <?php if($obj->estatus ==1 ) echo "glyphicon-ok"; else echo "glyphicon-ban-circle"; ?>"></span></td>
+            <tr class="click-row">
+              <td><a style="text-decoration:none" href='<?= base_url("objetivo/ver/").'/'.$obj->id;?>'><?= $obj->nombre;?></a></td>
+              <td><?php foreach ($this->metrica_model->getByObjetivo($obj->id) as $metrica) : 
+                  echo $metrica->valor ." - ". $metrica->descripcion ."<br>";
+                endforeach; ?></td>
+              <td><?= $obj->tipo;?></td>
+              <td data-sortable="false" class="rowlink-skip">
+                <table class="table table-bordered table-striped">
+                  <thead>
+                    <th class="col-sm-2"></th>
+                    <th class="col-sm-1">Analista</th>
+                    <th class="col-sm-1">Consultor</th>
+                    <th class="col-sm-1">Consultor Sr</th>
+                    <th class="col-sm-1">Gerente / Master</th>
+                    <th class="col-sm-1">Gerente Sr / Experto</th>
+                    <th class="col-sm-1">Director</th>
+                  </thead>
+                  <tbody>
+                    <?php foreach ($this->area_model->getByObjetivo($obj->id) as $area) : ?>
+                      <tr>
+                        <td><?= $area->nombre;?></td>
+                        <?php $porcentaje = $this->porcentaje_objetivo_model->getByObjetivoArea($obj->id,$area->id); ?>
+                        <td><?php if(!empty($porcentaje->analista)) echo $porcentaje->analista->valor;?></td>
+                        <td><?php if(!empty($porcentaje->consultor)) echo $porcentaje->consultor->valor;?></td>
+                        <td><?php if(!empty($porcentaje->sr)) echo $porcentaje->sr->valor;?></td>
+                        <td><?php if(!empty($porcentaje->gerente)) echo $porcentaje->gerente->valor;?></td>
+                        <td><?php if(!empty($porcentaje->experto)) echo $porcentaje->experto->valor;?></td>
+                        <td><?php if(!empty($porcentaje->director)) echo $porcentaje->director->valor;?></td>
+                      </tr>
+                    <?php endforeach; ?></ul>
+                  </tbody>
+                </table>
+              </td>
+              <td class="rowlink-skip" align="center"><span style="cursor:pointer;" onclick="
+              if(confirm('Seguro que desea cambiar el estatus de la Responsabilidad: \n <?= $obj->nombre;?>'))
+                location.href='<?= base_url('objetivo/ch_estatus/');?>/'+<?= $obj->id;?>;" class="glyphicon 
+              <?php if($obj->estatus ==1 ) echo "glyphicon-ok"; else echo "glyphicon-ban-circle"; ?>"></span></td>
             </tr>
           <?php endforeach;
     	else:?>
-            <script type="text/javascript">document.location.href="<?= base_url('dominio');?>";</script>
+            <script type="text/javascript">document.location.href="<?= base_url('administrar_dominios');?>";</script>
     	<?php endif;
     }
 

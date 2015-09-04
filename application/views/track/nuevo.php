@@ -5,16 +5,15 @@
   </div>
 </div>
 <div class="container">
-  <div align="center">
-	<?php if(isset($err_msg)): ?>
-		<div id="alert" class="alert alert-danger" role="alert" style="max-width:400px;">
-			<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+  <div align="center" id="alert" style="display:none">
+		<div class="alert alert-danger" role="alert" style="max-width:400px;">
+			<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 			<span class="sr-only">Error:</span>
-			<?= $err_msg;?>
+			<label id="msg"></label>
 		</div>
-	<?php endif; ?>
   </div>
-  <form role="form" method="post" action="<?= base_url('track/create');?>" class="form-signin">
+  <div align="center"><a href="<?= base_url('track');?>">&laquo;Regresar</a></div>
+  <form id="create" role="form" method="post" action="javascript:" class="form-signin">
   	<div class="row" align="center">
 	  <div class="col-md-3"></div>
 	  <div class="col-md-6">
@@ -28,8 +27,31 @@
 	<div style="height:60px" class="row" align="center">
 	  <div class="col-md-12">
 		  <button type="submit" class="btn btn-lg btn-primary btn-block" style="max-width:200px; text-align:center;">
-		  	Registrar Datos</button>
+		  	Registrar</button>
 	  </div>
 	</div>
   </form>
-  <div align="center"><a href="<?= base_url('track');?>">&laquo;Regresar</a></div>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('#create').submit(function(event){
+				$('#alert').prop('display',false);
+				nombre = $('#nombre').val();
+				$.ajax({
+					url: '<?= base_url("track/create");?>',
+					type: 'post',
+					data: {'nombre':nombre},
+					success: function(data){
+						var returnedData = JSON.parse(data);
+						console.log(returnedData['msg']);
+						if(returnedData['msg']=="ok")
+							window.document.location='<?= base_url("track");?>';
+						else{
+							$('#alert').prop('display',true).show();
+							$('#msg').html(returnedData['msg']);
+						}
+					}
+				});
+				event.preventDefault();
+			});
+		});
+	</script>

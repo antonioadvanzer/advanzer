@@ -5,15 +5,14 @@
   </div>
 </div>
 <div class="container">
-  <div align="center">
-	<?php if(isset($err_msg)): ?>
-		<div id="alert" class="alert alert-danger" role="alert" style="max-width:400px;">
-			<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+  <div align="center" id="alert" style="display:none">
+		<div class="alert alert-danger" role="alert" style="max-width:400px;">
+			<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 			<span class="sr-only">Error:</span>
-			<?= $err_msg;?>
+			<label id="msg"></label>
 		</div>
-	<?php endif; ?>
   </div>
+  <div align="center"><a href="<?= base_url('track');?>">&laquo;Regresar</a></div>
   <form role="form" method="post" action="<?= base_url('posicion/create');?>" class="form-signin">
   	<div class="row" align="center">
 	  <div class="col-md-6">
@@ -25,12 +24,12 @@
 	  </div>
 	  <div class="col-md-6">
 		<div class="form-group">
-		  <label for="track">Track(s):</label>
-		  <select multiple name="track[]" id="track" style="max-width:300px;min-height:100px;max-height:200px" 
+		  <label for="track">Track(s):<p style="font-size:smaller;">Utiliza la tecla Ctrl(Windows) / Command (Mac) para 1+</p></label>
+		  <select multiple id="track" style="max-width:300px;min-height:140px;max-height:400px" 
 		  	class="form-control">
 		  	<option disabled>--Selecciona al menos un track --</option>
 		  	<?php foreach ($tracks as $track) : ?>
-		  		<option value="<?= $track->id;?>"><?= $track->nombre;?></option>
+		  		<option selected value="<?= $track->id;?>"><?= $track->nombre;?></option>
 		  	<?php endforeach; ?>
 		  </select>
 		</div>
@@ -43,4 +42,35 @@
 	  </div>
 	</div>
   </form>
-  <div align="center"><a href="<?= base_url('track');?>">&laquo;Regresar</a></div>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('#create').submit(function(event){
+				$('#alert').prop('display',false);
+				if($('#track :selected').length > 0){
+					var selected = [];
+					$('#track :selected').each(function(i,select) {
+						selected[i] = $(select).val();
+					});
+					nombre = $('#nombre').val();
+					$.ajax({
+						url: '<?= base_url("posicion/create");?>',
+						type: 'post',
+						data: {'nombre':nombre,'tracks':selected},
+						success: function(data){
+							var returnedData = JSON.parse(data);
+							console.log(returnedData['msg']);
+							if(returnedData['msg']=="ok")
+								window.document.location='<?= base_url("track");?>';
+							else{
+								$('#alert').prop('display',true).show();
+								$('#msg').html(returnedData['msg']);
+							}
+						}
+					});
+					event.preventDefault();
+				}
+				else
+					alert('Selecciona al menos un track');
+			});
+		});
+	</script>

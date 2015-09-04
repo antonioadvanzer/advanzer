@@ -43,9 +43,10 @@ class Track extends CI_Controller {
     public function create() {
         $nombre=$this->input->post('nombre');
         if($this->track_model->create($nombre))
-            $this->index("Track creado.");
+            $response['msg'] = "ok";
         else
-            $this->nuevo("Error al registrar nuevo track. Intenta de nuevo");
+            $response['msg'] = "Error al registrar nuevo track. Intenta de nuevo";
+        echo json_encode($response);
     }
 
     public function ver($id,$err=null) {
@@ -60,8 +61,9 @@ class Track extends CI_Controller {
         $id=$this->input->post('id');
         $nombre=$this->input->post('nombre');
         if($this->track_model->update($id,$nombre))
-            $this->index("Track actualizado.");
+            $response['msg'] = "ok";
         else
-            $this->ver($id,"Error al actualizar track. Intenta de nuevo");
+            $response['msg'] = "Error al actualizar track. Intenta de nuevo";
+        echo json_encode($response);
     }
 }

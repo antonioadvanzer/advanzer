@@ -32,6 +32,7 @@ class User extends CI_Controller {
         $data['tracks'] = $this->track_model->getAll();
     	$data['areas'] = $this->area_model->getAll();
         $data['posiciones'] = $this->posicion_model->getByTrack($this->user_model->getTrackByUser($id));
+        $data['jefes'] = $this->user_model->getJefes($id);
     	$this->layout->title('Capital Humano - Detalle Perfil');
     	$this->layout->view('user/detalle',$data);
     }
@@ -61,30 +62,29 @@ class User extends CI_Controller {
         }
     }
 
-    public function update($id) {
+    public function update() {
         $array=array(
         	'nombre' => $this->input->post('nombre'),
         	'email' => $this->input->post('email'),
         	'empresa' => $this->input->post('empresa'),
-        	'area' => $this->input->post('area'),
-        	'estatus' => $this->input->post('estatus'),
-            'requisicion' => $this->input->post('requisicion'),
-            'admin' => $this->input->post('admin'),
-            'nomina' => $this->input->post('nomina'),
+            'jefe' => $this->input->post('jefe'),
             'plaza' => $this->input->post('plaza'),
-            'categoria' => $this->input->post('categoria')
+        	'area' => $this->input->post('area'),
+        	'fecha_ingreso' => $this->input->post('ingreso'),
+            'nomina' => $this->input->post('nomina'),
+            'categoria' => $this->input->post('categoria'),
+            'tipo' => $this->input->post('tipo')
         );
 
+        $id=$this->input->post('id');
         $track = $this->input->post('track');
         $posicion = $this->input->post('posicion');
         $array['posicion_track']=$this->posicion_model->getPosicionTrack($posicion,$track);
-    	if($this->user_model->update($id,$array)){
-    		$msg = "Perfil actualizado correctamente";
-    		$this->index($msg);
-    	}else{
-    		$msg = "Error al actualizar usuario. Intenta nuevamente";	
-    		$this->ver($id,$msg);
-    	}
+    	if($this->user_model->update($id,$array))
+    		$response['msg'] = "ok";
+    	else
+    		$response['msg'] = "Error al actualizar usuario. Intenta nuevamente";
+        echo json_encode($response);
     }
 
     public function load_posiciones() {
@@ -136,6 +136,7 @@ class User extends CI_Controller {
     		$data['err_msg'] = $msg;
         $data['tracks'] = $this->track_model->getAll();
     	$data['areas'] = $this->area_model->getAll();
+        $data['jefes'] = $this->user_model->getAll();
     	$this->layout->title('Capital Humano - Nuevo Perfil');
     	$this->layout->view('user/nuevo',$data);
     }
@@ -145,44 +146,54 @@ class User extends CI_Controller {
         	'nombre' => $this->input->post('nombre'),
         	'email' => $this->input->post('email'),
         	'empresa' => $this->input->post('empresa'),
-            'nomina' => $this->input->post('nomina'),
+            'jefe' => $this->input->post('jefe'),
         	'plaza' => $this->input->post('plaza'),
         	'area' => $this->input->post('area'),
-        	'estatus' => $this->input->post('estatus'),
-            'requisicion' => $this->input->post('requisicion'),
-            'admin' => $this->input->post('admin'),
-            'categoria' => $this->input->post('categoria')
+            'fecha_ingreso' => $this->input->post('ingreso'),
+            'nomina' => $this->input->post('nomina'),
+            'categoria' => $this->input->post('categoria'),
+            'tipo' => $this->input->post('tipo')
         );
-        $temp=explode('@',$email);
-        $temp=explode('.',$temp);
+        $temp=explode('@',$this->input->post('email'));
+        $temp=explode('.',$temp[0]);
         $array['password'] = $temp[0];
         $posicion=$this->input->post('posicion');
         $track=$this->input->post('track');
         $array['posicion_track'] = $this->posicion_model->getPosicionTrack($posicion,$track);
 
     	if($id = $this->user_model->create($array)){
-    		$msg="Perfil: <b>$nombre</b> agregado correctamente";
-    		$this->ver($id,null,$msg);
-    	}else{
-    		$msg="Error al intentar registrar perfil.Revisa los datos e intenta de nuevo";
-    		$this->nuevo($msg);
-    	}
+    		$response['msg']="ok";
+    		$response['id']=$id;
+    	}else
+    		$response['msg']="Error al intentar registrar perfil.Revisa los datos e intenta de nuevo";
+        echo json_encode($response);
     }
 
-    public function del($id) {
-    	$status = $this->user_model->getStatus($id);
-    	switch ($status) {
-    		case 1:
-    			$status=0;
-    			break;
-    		case 0:
-    			$status=1;
-    			break;
-    	}
-    	if($this->user_model->change_status($id,$status))
-    		$msg="Estatus ha cambiado";
+    public function recision() {
+    	$id = $this->input->post('id');
+        $datos = array(
+            'fecha_baja'=>$this->input->post('fecha_baja'),
+            'tipo_baja'=>$this->input->post('tipo_baja'),
+            'motivo'=>$this->input->post('motivo'),
+            'estatus'=>0
+        );
+    	if($this->user_model->enable_disable($id,$datos))
+    		$response['msg']="ok";
     	else
-    		$msg = "Error al actualizar estatus";
-    	$this->index($msg);
+    		$response['msg'] = "Error al dar de baja al colaborador. Intenta de nuevo";
+    	echo json_encode($response);
+    }
+
+    public function rehab() {
+        $id = $this->input->post('id');
+        $datos = array(
+            'fecha_ingreso'=>$this->input->post('reingreso'),
+            'estatus'=>1
+        );
+        if($this->user_model->enable_disable($id,$datos))
+            $response['msg']="ok";
+        else
+            $response['msg'] = "Error al reactivar colaborador. Intenta de nuevo";
+        echo json_encode($response);
     }
 }

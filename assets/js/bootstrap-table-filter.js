@@ -1,3 +1,71 @@
+/**
+ * @author zhixin wen <wenzhixin2010@gmail.com>
+ * extensions: https://github.com/lukaskral/bootstrap-table-filter
+ */
+
+!function($) {
+
+    'use strict';
+
+    $.extend($.fn.bootstrapTable.defaults, {
+        showFilter: false
+    });
+
+    var BootstrapTable = $.fn.bootstrapTable.Constructor,
+        _init = BootstrapTable.prototype.init,
+        _initSearch = BootstrapTable.prototype.initSearch;
+
+    BootstrapTable.prototype.init = function () {
+        _init.apply(this, Array.prototype.slice.apply(arguments));
+
+        var that = this;
+        this.$el.on('load-success.bs.table', function () {
+            if (that.options.showFilter) {
+                $(that.options.toolbar).bootstrapTableFilter({
+                    connectTo: that.$el
+                });
+            }
+        });
+    };
+
+    BootstrapTable.prototype.initSearch = function () {
+        _initSearch.apply(this, Array.prototype.slice.apply(arguments));
+
+        if (this.options.sidePagination !== 'server') {
+            if (typeof this.searchCallback === 'function') {
+                this.data = $.grep(this.options.data, this.searchCallback);
+            }
+        }
+    };
+
+    BootstrapTable.prototype.getData = function () {
+        return (this.searchText || this.searchCallback) ? this.data : this.options.data;
+    };
+
+    BootstrapTable.prototype.getColumns = function () {
+        return this.columns;
+    };
+
+    BootstrapTable.prototype.registerSearchCallback = function (callback) {
+        this.searchCallback = callback;
+    };
+
+    BootstrapTable.prototype.updateSearch = function () {
+        this.options.pageNumber = 1;
+        this.initSearch();
+        this.updatePagination();
+    };
+
+    BootstrapTable.prototype.getServerUrl = function () {
+        return (this.options.sidePagination === 'server') ? this.options.url : false;
+    };
+
+    $.fn.bootstrapTable.methods.push('getColumns',
+        'registerSearchCallback', 'updateSearch',
+        'getServerUrl');
+
+}(jQuery);
+
 !function($) {
 
     'use strict';
@@ -5,17 +73,10 @@
     // TOOLS DEFINITION
     // ======================
     var rowLabel = function(el) {
-        var ret = el;
-        if (typeof el === 'object') {
-            ret = el.label;
-            if (typeof el.i18n === 'object') {
-                $.each(el.i18n, function(key, val) { ret = ret.replace('{%' + key + '}', val) });
-            }
-        }
-        return ret;
+        return typeof el === 'object' ? el.label : el;
     };
-    var rowId = function(id, el) {
-        return typeof el === 'object' ? el.id : id;
+    var rowId = function(el) {
+        return typeof el === 'object' ? el.id : el;
     };
     var getOptionData = function($option) {
         var val = false;
@@ -53,18 +114,7 @@
 
     BootstrapTableFilter.DEFAULTS = {
         filters: [],
-        connectTo: false,
-
-        filterIcon: '<span class="glyphicon glyphicon-filter"></span>',
-        refreshIcon: '<span class="glyphicon glyphicon-ok"></span>',
-        clearAllIcon: '<span class="glyphicon glyphicon-remove"></span>',
-
-        formatRemoveFiltersMessage: function() {
-            return 'Remove all filters';
-        },
-        formatSearchMessage: function() {
-            return 'Search';
-        },
+        connectTo: '#tbl',
 
         onAll: function(name, args) {
             return false;
@@ -118,9 +168,9 @@
         range: {
             search: false,
             rows: [
-                {id: 'lte', label: '{%msg} <input class="form-control" type="text">', i18n: {msg: 'Less than'}},
-                {id: 'gte', label: '{%msg} <input class="form-control" type="text">', i18n: {msg: 'More than'}},
-                {id: 'eq', label: '{%msg} <input class="form-control" type="text">', i18n: {msg: 'Equals'}}
+                {id: 'lte', label: 'Less than <input class="form-control" type="text">'},
+                {id: 'gte', label: 'More than <input class="form-control" type="text">'},
+                {id: 'eq', label: 'Equals <input class="form-control" type="text">'}
             ],
             check: function(filterData, value) {
                 if (typeof filterData.lte !== 'undefined' && parseInt(value) > parseInt(filterData.lte)) {
@@ -135,51 +185,16 @@
                 return true;
             }
         },
-        search: {
-            search: false,
-            rows: [
-                {id: 'eq', label: '{%msg} <input class="form-control" type="text">', i18n: {msg: 'Equals'}},
-                {id: 'neq', label: '{%msg} <input class="form-control" type="text">', i18n: {msg: 'Not equals'}},
-                {id: 'cnt', label: '{%msg} <input class="form-control" type="text">', i18n: {msg: 'Contains'}},
-                {id: 'ncnt', label: '{%msg} <input class="form-control" type="text">', i18n: {msg: 'Doesn\'t contain'}},
-                {id: 'ept', label: '{%msg}', i18n: {msg: 'Is empty'}},
-                {id: 'nept', label: '{%msg}', i18n: {msg: 'Is not empty'}}
-            ],
-            check: function(filterData, value) {
-                if (typeof filterData.eq !== 'undefined' && value != filterData.eq) {
-                    return false;
-                }
-                if (typeof filterData.neq !== 'undefined' && value == filterData.neq) {
-                    return false;
-                }
-                if (typeof filterData.cnt !== 'undefined' && value.indexOf(filterData.cnt) < 0) {
-                    return false;
-                }
-                if (typeof filterData.ncnt !== 'undefined' && value.indexOf(filterData.ncnt) >= 0) {
-                    return false;
-                }
-                if (typeof filterData._values !== 'undefined' && filterData._values.indexOf('ept') >= 0 && value.trim()) {
-                    return false;
-                }
-                if (typeof filterData._values !== 'undefined' && filterData._values.indexOf('nept') >= 0 && !value.trim()) {
-                    return false;
-                }
-                return true;
-            }
-        },
         ajaxSelect: {
             search: true,
             rows: [],
             rowsCallback: function(filter, searchPhrase) {
                 var that = this;
-                clearTimeout(this.timeoutId_);
-                this.timeoutId_ = setTimeout(function() {
-                    $.ajax(filter.source, {dataType: 'json', data: {q: searchPhrase}})
-                    .done(function(data) {
-                        that.clearFilterOptions(filter.field);
-                        that.fillFilterOptions(filter.field, data);
-                    });
-                }, 300);
+                $.ajax(filter.source, {dataType: 'json', data: {q: searchPhrase}})
+                .done(function(data) {
+                    that.clearFilterOptions(filter.field);
+                    that.fillFilterOptions(filter.field, data);
+                });
             }
         },
         select: {
@@ -216,7 +231,7 @@
             '<div class="btn-toolbar">',
                 '<div class="btn-group btn-group-filter-main">',
                     '<button type="button" class="btn btn-default dropdown-toggle btn-filter" data-toggle="dropdown">',
-                        this.options.filterIcon,
+                        '<span class="glyphicon glyphicon-filter"></span>',
                     '</button>',
                     '<ul class="dropdown-menu" role="menu">',
                     '</ul>',
@@ -225,7 +240,7 @@
                 '</div>',
                 '<div class="btn-group btn-group-filter-refresh">',
                     '<button type="button" class="btn btn-default btn-primary btn-refresh" data-toggle="dropdown">',
-                        this.options.refreshIcon,
+                        '<span class="glyphicon glyphicon-repeat"></span>',
                     '</button>',
                 '</div>',
             '</div>'
@@ -291,20 +306,20 @@
         this.$refreshButton = this.$toolbar.find('.btn-refresh');
         this.$refreshButton.click(function(e) {
             that.trigger('submit', that.getData());
-            that.toggleRefreshButton(false);
         });
-        this.toggleRefreshButton(false);
     };
 
     BootstrapTableFilter.prototype.initFilters = function() {
         var that = this;
-        this.$buttonList.append('<li class="remove-filters"><a href="javascript:void(0)">' + this.options.clearAllIcon + ' ' + this.options.formatRemoveFiltersMessage() + '</a></li>');
+        this.$buttonList.append('<li class="remove-filters"><a href="javascript:void(0)"><span class="glyphicon glyphicon-remove"></span> Remove all filters</a></li>');
         this.$buttonList.append('<li class="divider"></li>');
         $.each(this.options.filters, function(i, filter) {
             that.addFilter(filter);
         });
         this.$toolbar.delegate('.remove-filters *', 'click', function() {
-            that.disableFilters();
+            $.each(that.filters, function(i, filter) {
+                that.disableFilter(filter.field)
+            });
         });
     };
 
@@ -370,16 +385,14 @@
         }
         else {
             if (typeof filterData._values !== 'undefined') {
-                return $.inArray("" + value, filterData._values) >= 0;
+                return $.inArray(value, filterData._values) >= 0;
             }
         }
-        return true;
     };
 
     BootstrapTableFilter.prototype.clearFilterOptions = function(field) {
         var filter = this.getFilter(field);
         filter.$dropdownList.find('li:not(.static)').remove();
-        this.toggleRefreshButton(true);
     };
 
     BootstrapTableFilter.prototype.fillFilterOptions = function(field, data, cls) {
@@ -388,7 +401,7 @@
         cls = cls || '';
         var option, checked;
         $.each(data, function(i, row) {
-            option = rowId(i, row);
+            option = rowId(row);
             checked = that.isSelected(field, option);
             filter.$dropdownList.append($('<li data-val="' + option + '" class="' + cls + '"><a href="javascript:void(0)"><input type="checkbox" class="filter-enabled"' + (checked ? ' checked' : '') + '> ' + rowLabel(row) + '</a></li>'));
         });
@@ -454,7 +467,7 @@
 
         var fType = this.getFilterType(filter);
         if (fType.search) {
-            filter.$dropdownList.append($('<li class="static"><span><input type="text" class="form-control search-values" placeholder="' + this.options.formatSearchMessage() + '"></span></li>'));
+            filter.$dropdownList.append($('<li class="static"><span><input type="text" class="form-control search-values" placeholder="Search"></span></li>'));
             filter.$dropdownList.append($('<li class="static divider"></li>'));
         }
         if (fType.rows) {
@@ -463,15 +476,7 @@
         if (fType.rowsCallback) {
             fType.rowsCallback.call(this, filter, '');
         }
-        this.toggleRefreshButton(true);
         this.trigger('enable-filter', filter);
-    };
-
-    BootstrapTableFilter.prototype.disableFilters = function() {
-        var that = this;
-        $.each(this.filters, function(i, filter) {
-            that.disableFilter(filter.field);
-        });
     };
 
     BootstrapTableFilter.prototype.disableFilter = function(field) {
@@ -483,7 +488,6 @@
             delete filter.$dropdown;
             this.trigger('disable-filter', filter);
         }
-        this.toggleRefreshButton(true);
     };
 
     BootstrapTableFilter.prototype.selectFilterOption = function(field, option, data) {
@@ -500,7 +504,6 @@
             filter.selectedOptions._values.push(option);
         }
         this.trigger('select-filter-option', field, option, data);
-        this.toggleRefreshButton(true);
     };
 
     BootstrapTableFilter.prototype.unselectFilterOption = function(field, option) {
@@ -520,29 +523,6 @@
             }
         }
         this.trigger('unselect-filter-option', field, option);
-        this.toggleRefreshButton(true);
-    };
-
-    BootstrapTableFilter.prototype.setupFilter = function(field, options) {
-        var that = this;
-        this.enableFilter(field);
-        $.each(options, function(key, val) {
-            if (key === '_values') {
-                $.each(val, function(i, v) {
-                    that.selectFilterOption(field, v, false);
-                    $('div[data-filter-field="' + field + '"] [data-val="' + v + '"] input.filter-enabled').prop('checked', true);
-                });
-            }
-            else {
-                that.selectFilterOption(field, key, val);
-                $('div[data-filter-field="' + field + '"] [data-val="' + key + '"] input.filter-enabled').prop('checked', true);
-                $('div[data-filter-field="' + field + '"] [data-val="' + key + '"] input[type="text"]:not([data-name])').val(val);
-            }
-        });
-    };
-
-    BootstrapTableFilter.prototype.toggleRefreshButton = function(show) {
-        this.$refreshButton.toggle(show);
     };
 
     BootstrapTableFilter.prototype.isSelected = function(field, option, value) {
@@ -578,15 +558,13 @@
     // BOOTSTRAP FILTER TABLE PLUGIN DEFINITION
     // =======================
 
-    $.fn.bootstrapTableFilter = function(option, _relatedTarget, _param2) {
+    $.fn.bootstrapTableFilter = function(option, _relatedTarget) {
         BootstrapTableFilter.externals = this.externals;
 
         var allowedMethods = [
             'addFilter', 'removeFilter',
-            'enableFilter', 'disableFilter', 'disableFilters',
+            'enableFilter', 'disableFilter',
             'selectFilterOption', 'unselectFilterOption',
-            'setupFilter',
-            'toggleRefreshButton',
             'getData', 'isSelected',
             'resetView'
         ],
@@ -609,7 +587,7 @@
                     return;
                 }
 
-                value = data[option](_relatedTarget, _param2);
+                value = data[option](_relatedTarget);
 
                 if (option === 'destroy') {
                     $this.removeData('bootstrap.tableFilter');
@@ -628,7 +606,6 @@
     $.fn.bootstrapTableFilter.defaults = BootstrapTableFilter.DEFAULTS;
     $.fn.bootstrapTableFilter.columnDefaults = BootstrapTableFilter.COLUMN_DEFAULTS;
     $.fn.bootstrapTableFilter.externals = BootstrapTableFilter.EXTERNALS;
-    $.fn.bootstrapTableFilter.filterSources = BootstrapTableFilter.FILTER_SOURCES;
 
     // BOOTSTRAP TABLE FILTER INIT
     // =======================

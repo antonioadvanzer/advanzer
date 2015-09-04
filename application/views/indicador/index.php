@@ -2,31 +2,14 @@
 <div class="jumbotron">
   <div class="container">
     <h2>Administrar Competencias</h2>
-    <p>Por medio de éste módulo podrás realizar las siguentes operaciones:<br>
-      <ol type="1">
-        <li>Realizar Cambios a las Competencias Definidas</li>
+      <ul type="square">
+        <li>Realizar Cambios a las Competencias Laborales</li>
         <li>Agregar nuevas cuando sea necesario</li>
-      </ol>
+      </ul>
     </p>
   </div>
 </div>
 <div class="container">
-  <div align="center">
-    <?php if(isset($msg)): ?>
-      <div id="alert" class="alert alert-success" role="alert" style="max-width:400px;">
-        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-        <span class="sr-only">Error:</span>
-        <?= $msg;?>
-      </div>
-      <script>
-      $(document).ready(function() {
-        setTimeout(function() {
-          window.location="<?= base_url('administrar_indicadores');?>"
-        },3000);
-      });
-    </script>
-    <?php endif; ?>
-  </div>
   <div class="row">
     <div class="col-md-6">
       <span style="cursor:pointer" class="glyphicon glyphicon-plus" 
@@ -60,20 +43,21 @@
       </div>
       <div align="center"><div id="cargando" style="display:none; color: green;">
         <img src="<?= base_url('assets/images/loading.gif');?>"></div></div>
-      <table width="90%" align="center" class="table">
+      <table id="resultados" class="table sortable table-hover table-striped" align="center">
         <thead>
           <tr>
-            <th class="col-md-2">Competencia</th>
-            <th class="col-md-3">Descripción</th>
-            <th class="col-md-4">Comportamientos</th>
+            <th data-field="competencia" class="col-md-2">Competencia</th>
+            <th data-field="descripcion" class="col-md-3">Descripción</th>
+            <th data-field="comportamientos" class="col-md-4">Comportamientos</th>
           </tr>
         </thead>
-        <tbody id="result"></tbody>
+        <tbody data-link="row" class="rowlink searchable" id="result"></tbody>
       </table>
     </div>
   </div>
 
   <script type="text/javascript">
+    $.bootstrapSortable(true);
     $(document).ready(function() {
       $("#indicador").change(function() {
         $("#indicador option:selected").each(function() {
@@ -89,12 +73,14 @@
               posicion : posicion
             },
             beforeSend: function (xhr) {
-              $('#result').hide();
+              $('#resultados').hide();
               $('#cargando').show();
             },
             success: function(data) {
               $('#cargando').hide();
+              $('#resultados').show();
               $("#result").show().html(data);
+              $.bootstrapSortable(true);
             }
           });
         });
@@ -113,12 +99,14 @@
               posicion : posicion
             },
             beforeSend: function (xhr) {
-              $('#result').hide();
+              $('#resultados').hide();
               $('#cargando').show();
             },
             success: function(data) {
               $('#cargando').hide();
+              $('#resultados').show();
               $("#result").show().html(data);
+              $.bootstrapSortable(true);
             }
           });
         });

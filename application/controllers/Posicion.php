@@ -21,7 +21,7 @@ class Posicion extends CI_Controller {
 
     public function create() {
     	$nombre=$this->input->post('nombre');
-    	$tracks=$this->input->post('track');
+    	$tracks=$this->input->post('tracks');
     	$this->db->trans_begin();
     	if($posicion=$this->posicion_model->create($nombre)){
     		foreach ($tracks as $track) :
@@ -71,10 +71,12 @@ class Posicion extends CI_Controller {
 
     public function update() {
         $id=$this->input->post('id');
-        $nombre=$this->input->post('nombre');
-        if($this->posicion_model->update($id,$nombre))
-            redirect('track');
-        else
-            $this->ver($id,"Error al actualizar track. Intentar de nuevo");
+        $datos = array('nombre'=>$this->input->post('nombre'));
+        if($this->posicion_model->update($id,$datos)){
+            $response['msg'] = "ok";
+            $response['alert'] = "Actualización realizada";
+        }else
+            $response['msg'] = "Error al actualizar el nombre de la posición";
+        echo json_encode($response);
     }
 }

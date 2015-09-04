@@ -9,7 +9,7 @@ class User_model extends CI_Model{
 	}
 
 	function do_login($email,$password=null){
-		$this->db->select('U.id,U.email,U.nombre,U.foto,U.empresa,P.nivel nivel_posicion,A.id area,T.nombre track');
+		$this->db->select('U.id,U.email,U.nombre,U.foto,U.empresa,P.nivel nivel_posicion,A.id area,T.nombre track,A.direccion');
 		$this->db->from('Users U');
 		$this->db->join('Areas A','A.id = U.area','LEFT OUTER');
 		$this->db->join('Posicion_Track PT','PT.id = U.posicion_track','LEFT OUTER');
@@ -64,9 +64,13 @@ class User_model extends CI_Model{
 		return $this->db->get('Users U')->result();
 	}
 
+	function getJefes($id) {
+		return $this->db->where(array('id !='=>$id,'estatus'=>1))->order_by('nombre')->get('Users')->result();
+	}
+
 	function searchById($id) {
 		$this->db->select('U.id,U.email,U.nombre,U.foto,U.empresa,U.estatus,U.categoria,U.nomina,U.area,U.plaza,
-			U.requisicion,U.admin,P.id posicion, T.id track');
+			U.tipo,U.jefe,U.fecha_ingreso,P.id posicion, T.id track');
 		$this->db->join('Posicion_Track PT','PT.id = U.posicion_track','LEFT OUTER');
 		$this->db->join('Posiciones P','P.id = PT.posicion','LEFT OUTER');
 		$this->db->join('Tracks T','T.id = PT.track','LEFT OUTER');
@@ -102,7 +106,7 @@ class User_model extends CI_Model{
 	function create($datos) {
 		$this->db->insert('Users',$datos);
 		if($this->db->affected_rows() == 1)
-			return true;
+			return $this->db->insert_id();
 		return false;
 	}
 
@@ -112,9 +116,9 @@ class User_model extends CI_Model{
 		return $this->db->get('Users')->first_row()->estatus;
 	}
 
-	function change_status($id,$status) {
+	function enable_disable($id,$datos) {
 		$this->db->where('id',$id);
-		$this->db->update('Users',array('estatus'=>$status));
+		$this->db->update('Users',$datos);
 		if ($this->db->affected_rows() == 1)
 			return true;
 		else

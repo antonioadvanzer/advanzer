@@ -49,8 +49,7 @@ class Evaluacion extends CI_Controller {
 
     public function finalizar_evaluacion() {
         $asignacion = $this->input->post('asignacion');
-        $tipo = $this->input->post('tipo');
-        if($this->evaluacion_model->finalizar_evaluacion($asignacion,$tipo)){
+        if($this->evaluacion_model->finalizar_evaluacion($asignacion)){
             $data['msg'] = "Evaluación Finalizada.";
             $data['redirecciona']="si";
         }else{
@@ -177,244 +176,53 @@ class Evaluacion extends CI_Controller {
         $this->layout->view('evaluacion/perfil',$data);
     }
 
-    public function evaluadores($msg=null) {
-    	if($msg!='(:num)')
-    		$data['msg'] = $msg;
-
-    	//pagination settings
-        $config['base_url'] = base_url('evaluadores');
-        $config['total_rows'] = $this->evaluacion_model->getEvaluadores()->num_rows();
-        $config['per_page'] = "25";
-        $config["uri_segment"] = 2;
-        $choice = $config["total_rows"] / $config["per_page"];
-        $config["num_links"] = floor($choice);
-
-        //config for bootstrap pagination class integration
-        $config['full_tag_open'] = '<ul class="pagination">';
-        $config['full_tag_close'] = '</ul>';
-        $config['first_link'] = false;
-        $config['last_link'] = false;
-        $config['first_tag_open'] = '<li>';
-        $config['first_tag_close'] = '</li>';
-        $config['prev_link'] = '&laquo';
-        $config['prev_tag_open'] = '<li class="prev">';
-        $config['prev_tag_close'] = '</li>';
-        $config['next_link'] = '&raquo';
-        $config['next_tag_open'] = '<li>';
-        $config['next_tag_close'] = '</li>';
-        $config['last_tag_open'] = '<li>';
-        $config['last_tag_close'] = '</li>';
-        $config['cur_tag_open'] = '<li class="active"><a href="#">';
-        $config['cur_tag_close'] = '</a></li>';
-        $config['num_tag_open'] = '<li>';
-        $config['num_tag_close'] = '</li>';
-
-        $this->pagination->initialize($config);
-        $data['page'] = ($this->uri->segment(2)) ? $this->uri->segment(2) : 0;
-
-        //call the model function to get the data
-        $data['evaluadores'] = $this->evaluacion_model->getPagination($config["per_page"], $data['page']);
-        //$data['evaluadores'] = $this->evaluacion_model->getEvaluadores()->result();
-
-        $data['pagination'] = $this->pagination->create_links();
+    public function evaluaciones($msg=null) {
+        $data['colaboradores'] = $this->evaluacion_model->getPagination();
     	
-        $this->layout->title('Advanzer - Evaluadores');
-    	$this->layout->view('evaluacion/evaluadores',$data);
+        $this->layout->title('Advanzer - Evaluaciones');
+    	$this->layout->view('evaluacion/evaluaciones',$data);
     }
 
-    public function searchByText($tipo=0) {
-    	if($this->input->post('valor')) :
-            switch ($tipo) {
-                case 0:
-                    $url = 'evaluacion/asignar_evaluadores360';
-                    break;
-                case 1:
-                    $url = 'evaluacion/asignar_evaluadores';
-                    break;
-            }
-    		$valor = $this->input->post('valor');
-    		$resultados = $this->evaluacion_model->getByText($valor,$tipo);
-    		foreach ($resultados as $ev) : ?>
-    			<tr>
-		          <td><img height="25px" src="<?= base_url('assets/images/fotos')."/".$ev->foto;?>"></td>
-		          <td><span class="glyphicon glyphicon-eye-open" style="cursor:pointer" onclick="
-		            location.href='<?= base_url($url);?>/'+<?= $ev->id;?>"></span> 
-		            <span style="cursor:pointer" onclick="location.href='<?= base_url($url);?>/'+
-		            <?= $ev->id;?>"><?= $ev->nombre;?></span></td>
-		          <td><span style="cursor:pointer" onclick="location.href='<?= base_url($url);?>/'+
-		            <?= $ev->id;?>"><?= $ev->cantidad;?></span></td>
-		          <!--<td align="right"><span style="cursor:pointer;" onclick="
-		            if(confirm('Seguro que desea eliminar el evaluador: \n <?= $ev->nombre;?>'))location.href=
-		            '<?= base_url('evaluacion/del/');?>/'+<?= $ev->id;?>;" class="glyphicon 
-		            <?php if($ev->estatus ==1 ) echo "glyphicon-ok"; else echo "glyphicon-ban-circle"; ?>"></span></td>-->
-		        </tr>
-		        <script type="text/javascript">$("#pagination").hide('slow');</script>
-    		<?php endforeach;
-    	else:
-            if($tipo==1){ ?>
-                <script type="text/javascript">document.location.href="<?= base_url('evaluadores360');?>";</script>
-            <?php }else { ?>
-                <script type="text/javascript">document.location.href="<?= base_url('evaluadores');?>";</script>
-        	<?php }
-        endif;
+    public function asignar_evaluador($colaborador){
+        $data['colaborador']=$this->user_model->searchById($colaborador);
+        $data['evaluadores']=$this->evaluacion_model->getEvaluadoresByColaborador($colaborador);
+        $data['no_evaluadores']=$this->evaluacion_model->getNotEvaluadoresByColaborador($colaborador,$data['evaluadores']);
+
+        $this->layout->title('Capital Humano - Asignar Evaluadores');
+        $this->layout->view('evaluacion/asignar_evaluador',$data);
     }
 
-    public function nuevo_evaluador($err_msg=null,$msg=null) {
-        $data=array();
-        if($err_msg!=null)
-            $data['err_msg'] = $err_msg;
-        if($msg!=null)
-            $data['msg'] = $msg;
-        $data['evaluadores'] = $this->user_model->getAll();
-        $this->layout->title('Advanzer - Nuevo Evaluador');
-        $this->layout->view('evaluacion/nuevo_evaluador',$data);
-    }
-
-    public function add_colaboradores() {
-        $evaluador = $this->input->post('evaluador');
-        $tipo = $this->input->post('tipo');
-        if ($evaluador) {
-            $opciones=$this->input->post('selected');
-            foreach ($opciones as $colaborador) {
-                if(!$this->evaluacion_model->addColaboradorToEvaluador($evaluador,$colaborador,$tipo))
-                    break;
-            }
+    public function guarda_evaluadores() {
+        $colaborador=$this->input->post('colaborador');
+        $agregar=$this->input->post('agregar');
+        $this->input->post('evaluacion') ? $evaluacion=$this->input->post('evaluacion') : $evaluacion=null;
+        $this->db->trans_begin();
+        if(!empty($agregar))
+            foreach ($agregar as $evaluador) :
+                $this->evaluacion_model->addEvaluadorToColaborador(
+                    array('evaluador'=>$evaluador,'evaluado'=>$colaborador,'evaluacion'=>$evaluacion));
+            endforeach;
+        $quitar=$this->input->post('quitar');
+        if(!empty($quitar))
+            foreach ($quitar as $evaluador) :
+                $this->evaluacion_model->delEvaluadorFromColaborador(
+                    array('evaluador'=>$evaluador,'evaluado'=>$colaborador,'evaluacion'=>$evaluacion));
+            endforeach;
+        if($this->db->trans_status() === FALSE){
+            $this->db->trans_rollback();
+            $response['msg'] = "Ha habido un error. Intenta de nuevo";
         }
-    }
-
-    public function del_colaboradores() {
-        $evaluador = $this->input->post('evaluador');
-        $tipo = $this->input->post('tipo');
-        if ($evaluador) {
-            $opciones=$this->input->post('selected');
-            foreach ($opciones as $colaborador) {
-                if(!$this->evaluacion_model->delColaboradorFromEvaluador($evaluador,$colaborador,$tipo))
-                    break;
-            }
+        else{
+            $this->db->trans_commit();
+            $response['msg']="ok";
         }
+        echo json_encode($response);
     }
 
-    public function load_asignados($tipo=null) {
-        if($this->input->post('evaluador')) {
-            $evaluador = $this->input->post('evaluador');
-            $asignados = $this->evaluacion_model->getByEvaluador($evaluador,$tipo);
-            foreach($asignados as $colaborador) : 
-                if($colaborador->tipo == 1)
-                    $extra="Competencias";
-                else
-                    $extra="Responsabilidades";
-                ?>
-                <option value="<?= $colaborador->id;?>">
-                    <?= "De $extra  -  $colaborador->nombre - $colaborador->posicion ($colaborador->track)";?>
-                </option>
-            <?php endforeach;
-        }else
-            echo "";
-    }
-
-    public function load_no_asignados($tipo=0) {
-        if($this->input->post('evaluador')) {
-            $evaluador = $this->input->post('evaluador');
-            $asignados = $this->evaluacion_model->getByEvaluador($evaluador,$tipo);
-            $colaboradores = $this->evaluacion_model->getNotByEvaluador($evaluador,$asignados,$tipo);
-            foreach($colaboradores as $colaborador) : ?>
-                <option value="<?= $colaborador->id;?>"><?= "$colaborador->nombre - $colaborador->posicion ($colaborador->track)";?></option>
-          <?php endforeach;
-        }else
-            echo "";
-    }
-
-    public function asignar_colaborador($evaluador,$msg=null,$err_msg=null) {
-        $data=array();
-        if($msg!=null)
-            $data['msg']=$msg;
-        if($err_msg!=null)
-            $data['err_msg']=$err_msg;
-        $data['evaluador']=$this->user_model->searchById($evaluador);
-        $data['asignados']=$this->evaluacion_model->getByEvaluador($evaluador);
-        $data['no_asignados'] = $this->evaluacion_model->getNotByEvaluador($evaluador,$data['asignados']);
-        $this->layout->title('Advanzer - Asigna Colaboradores');
-        $this->layout->view('evaluacion/asignar_colaborador',$data);
-    }
-
-    public function asignar_colaborador360($evaluador,$msg=null,$err_msg=null) {
-        $data=array();
-        if($msg!=null)
-            $data['msg']=$msg;
-        if($err_msg!=null)
-            $data['err_msg']=$err_msg;
-        $data['evaluador']=$this->user_model->searchById($evaluador);
-        $data['asignados']=$this->evaluacion_model->getByEvaluador($evaluador,1);
-        $data['no_asignados'] = $this->evaluacion_model->getNotByEvaluador($evaluador,$data['asignados'],1);
-        $this->layout->title('Advanzer - Asigna Colaboradores');
-        $this->layout->view('evaluacion/asignar_colaborador360',$data);
-    }
-
-    public function evaluadores360($msg=null) {
-        if($msg!='(:num)')
-            $data['msg'] = $msg;
-
-        //pagination settings
-        $config['base_url'] = base_url('evaluadores360');
-        $config['total_rows'] = $this->evaluacion_model->getEvaluadores(1)->num_rows();
-        $config['per_page'] = "25";
-        $config["uri_segment"] = 2;
-        $choice = $config["total_rows"] / $config["per_page"];
-        $config["num_links"] = floor($choice);
-
-        //config for bootstrap pagination class integration
-        $config['full_tag_open'] = '<ul class="pagination">';
-        $config['full_tag_close'] = '</ul>';
-        $config['first_link'] = false;
-        $config['last_link'] = false;
-        $config['first_tag_open'] = '<li>';
-        $config['first_tag_close'] = '</li>';
-        $config['prev_link'] = '&laquo';
-        $config['prev_tag_open'] = '<li class="prev">';
-        $config['prev_tag_close'] = '</li>';
-        $config['next_link'] = '&raquo';
-        $config['next_tag_open'] = '<li>';
-        $config['next_tag_close'] = '</li>';
-        $config['last_tag_open'] = '<li>';
-        $config['last_tag_close'] = '</li>';
-        $config['cur_tag_open'] = '<li class="active"><a href="#">';
-        $config['cur_tag_close'] = '</a></li>';
-        $config['num_tag_open'] = '<li>';
-        $config['num_tag_close'] = '</li>';
-
-        $this->pagination->initialize($config);
-        $data['page'] = ($this->uri->segment(2)) ? $this->uri->segment(2) : 0;
-
-        //call the model function to get the data
-        $data['evaluadores'] = $this->evaluacion_model->getPagination($config["per_page"], $data['page'],1);
-        //$data['evaluadores'] = $this->evaluacion_model->getEvaluadores()->result();
-
-        $data['pagination'] = $this->pagination->create_links();
-        
-        $this->layout->title('Advanzer - Evaluadores 360');
-        $this->layout->view('evaluacion/evaluadores360',$data);
-    }
-
-    public function nuevo_evaluador360($err_msg=null,$msg=null) {
-        $data=array();
-        if($err_msg!=null)
-            $data['err_msg'] = $err_msg;
-        if($msg!=null)
-            $data['msg'] = $msg;
-        $data['evaluadores'] = $this->user_model->getAll();
-        $this->layout->title('Advanzer - Nuevo Evaluador 360');
-        $this->layout->view('evaluacion/nuevo_evaluador360',$data);
-    }
-
-    public function gestion($msg=null,$err=null) {
-        $data=array();
-        if($msg!=null)
-            $data['msg']=$msg;
-        if($err!=null)
-            $data['err_msg']=$err;
+    public function proyecto() {
         $data['evaluaciones'] = $this->evaluacion_model->getEvaluacionesSinAplicar();
-        $this->layout->title('Advanzer - Gestión de Evaluaciones');
-        $this->layout->view('evaluacion/gestion',$data);
+        $this->layout->title('Advanzer - Gestión de Proyectos');
+        $this->layout->view('evaluacion/proyecto',$data);
     }
 
     public function gestionar() {
@@ -422,30 +230,61 @@ class Evaluacion extends CI_Controller {
         $datos=array(
             'inicio'=>$this->input->post('inicio'),
             'fin'=>$this->input->post('fin'),
-            'tipo'=>$this->input->post('tipo'),
             'estatus'=>$this->input->post('estatus')
         );
-        if($this->evaluacion_model->gestionar($evaluacion,$datos))
-            $this->gestion("Exito al actualizar los datos de la evaluación");
-        else{ 
-            $this->gestion(null,"Error al actualizar datos de la evaluación. Intente nuevamente");
+        if($this->input->post('tipo') == 0){
+            $datos['lider']=$this->input->post('lider');
+            $agregar = $this->input->post('agregar');
+            $quitar = $this->input->post('quitar');
         }
+        $this->db->trans_begin();
+        $old_lider=$this->evaluacion_model->getEvaluacionById($evaluacion)->lider;
+        $this->evaluacion_model->gestionar($evaluacion,$datos);
+        if(!empty($datos['lider'])){
+            if($old_lider != $datos['lider'])
+                $this->evaluacion_model->eraseByEvaluador($evaluacion,$old_lider);
+            if(!empty($agregar))
+                foreach ($agregar as $colaborador) :
+                    if($colaborador != $datos['lider'])
+                        $this->evaluacion_model->addEvaluadorToColaborador(
+                            array('evaluador'=>$datos['lider'],'evaluado'=>$colaborador,'evaluacion'=>$evaluacion));
+                endforeach;
+            $quitar=$this->input->post('quitar');
+            if(!empty($quitar))
+                foreach ($quitar as $colaborador) :
+                    $this->evaluacion_model->delEvaluadorFromColaborador(
+                        array('evaluador'=>$datos['lider'],'evaluado'=>$colaborador,'evaluacion'=>$evaluacion));
+                endforeach;
+        }
+        if($this->db->trans_status() === FALSE){
+            $this->db->trans_rollback();
+            $response['msg'] = "Ha habido un error. Intenta de nuevo";
+        }
+        else{
+            $this->db->trans_commit();
+            $response['affected']=true;
+            $response['msg']="Evaluación Modificada";
+        }
+        echo json_encode($response);
     }
 
     public function load_info_evaluacion() {
         $evaluacion=$this->input->post('evaluacion');
         $info=$this->evaluacion_model->getEvaluacionById($evaluacion);
+        if($info->tipo == 0){
+            $lider=$this->evaluacion_model->getInfoLider($info->lider);
+            $participantes=$this->evaluacion_model->getParticipantesByEvaluacion($evaluacion);
+            $disponibles=$this->user_model->getAll();
+        }
         if($info->estatus > 2): ?>
           <script>
             $('#submit').prop('disabled',true);
-            $('#tipo').prop('disabled',true);
             $('#inicio').prop('disabled',true);
             $('#fin').prop('disabled',true);
             $('#estatus').prop('disabled',true);
           </script>
         <?php elseif($info->estatus == 2) : ?>
           <script>
-            $('#tipo').prop('disabled',true);
             $('#inicio').prop('disabled',true);
             $('#estatus').prop('disabled',true);
           </script>
@@ -470,33 +309,123 @@ class Evaluacion extends CI_Controller {
                 $("#evaluacion").change(function() {
                     $("#evaluacion option:selected").each(function() {
                         evaluacion = $('#evaluacion').val();
-                        $.post("<?= base_url('evaluacion/load_info_evaluacion');?>", {
-                            evaluacion : evaluacion
-                        }, function(data) {
+                    });
+                    $.ajax({
+                        url: '<?= base_url("evaluacion/load_info_evaluacion");?>',
+                        type: 'post',
+                        data: {'evaluacion': evaluacion},
+                        beforeSend: function(xhr) {
+                            $('#update').hide();
+                            $('#cargando').show();
+                        },
+                        success: function(data) {
+                            $('#cargando').hide();
+                            $('#update').show();
                             $("#datos").html(data);
                             $("#submit").show();
-                        });
+                        }
                     });
+                });
+
+                $('#update').submit(function(event) {
+                    $('#alert').prop('display',false).hide();
+                    $('#alert_success').prop('display',false).hide();
+                    if(valida_fechas(this)){
+                        $('#cargando').show();
+                        $("#evaluacion option:selected").each(function() {
+                            evaluacion = $('#evaluacion').val();
+                        });
+                        inicio = $("#inicio").val();
+                        fin = $("#fin").val();
+                        $("#estatus option:selected").each(function() {
+                            estatus = $('#estatus').val();
+                        });
+                        tipo = $('#tipo').val();
+                        if(tipo == 0){
+                            $("#lider option:selected").each(function() {
+                                lider = $('#lider').val();
+                            });
+                            var agregar = [];
+                            $('#agregar option').each(function(i,select) {
+                                agregar[i] = $(select).val();
+                            });
+                            var quitar = [];
+                            $('#quitar option').each(function(i,select) {
+                                quitar[i] = $(select).val();
+                            });
+                            $.ajax({
+                                url: '<?= base_url("evaluacion/gestionar");?>',
+                                type: 'post',
+                                data: {'evaluacion':evaluacion,'inicio':inicio,'fin':fin,'estatus':estatus,'lider':lider,
+                                    'agregar':agregar,'quitar':quitar,'tipo':tipo},
+                                beforeSend: function(xhr) {
+                                    $('#update').hide();
+                                    $('#cargando').show();
+                                },
+                                success: function(data) {
+                                    console.log(data);
+                                    $('#cargando').hide();
+                                    $('#update').show();
+                                    var returnData = JSON.parse(data);
+                                    console.log(returnData['msg']);
+                                    if(returnData['affected']){
+                                        $('#alert_success').prop('display',true).show();
+                                        $('#msg_success').html(returnData['msg']);
+                                        setTimeout(function() {
+                                            $("#alert_success").fadeOut(1500);
+                                        },3000);
+                                    }else{
+                                        $('#alert').prop('display',true).show();
+                                        $('#msg').html(returnData['msg']);
+                                        setTimeout(function() {
+                                            $("#alert").fadeOut(1500);
+                                        },3000);
+                                    }
+                                }
+                            });
+                        }else
+                            $.ajax({
+                                url: '<?= base_url("evaluacion/gestionar");?>',
+                                type: 'post',
+                                data: {'evaluacion':evaluacion,'inicio':inicio,'fin':fin,'estatus':estatus,'tipo':tipo},
+                                beforeSend: function(xhr) {
+                                    $('#update').hide();
+                                    $('#cargando').show();
+                                },
+                                success: function(data) {
+                                    $('#cargando').hide();
+                                    $('#update').show();
+                                    var returnData = JSON.parse(data);
+                                    console.log(returnData['msg']);
+                                    if(returnData['affected']){
+                                        $('#alert_success').prop('display',true).show();
+                                        $('#msg_success').html(returnData['msg']);
+                                        setTimeout(function() {
+                                            $("#alert_success").fadeOut(1500);
+                                        },3000);
+                                    }else{
+                                        $('#alert').prop('display',true).show();
+                                        $('#msg').html(returnData['msg']);
+                                        setTimeout(function() {
+                                            $("#alert").fadeOut(1500);
+                                        },3000);
+                                    }
+                                }
+                            });
+                    }
+                    event.preventDefault();
                 });
             });
         </script>
-        <div class="col-md-3">
-          <div class="form-group">
-            <label for="tipo">Tipo</label>
-            <select class="form-control" style="max-width:300px;text-align:center;" id="tipo" name="tipo">
-              <option value="0" <?php if($info->tipo == 0) echo "selected";?>>Por Responsabilidades</option>
-              <option value="1"  <?php if($info->tipo == 1) echo "selected";?>>360</option>
-            </select>
-          </div>
-        </div>
-        <div class="col-md-3">
+        <input type="hidden" id="tipo" value="<?= $info->tipo;?>">
+        <div class="col-md-4">
           <div class="form-group">
             <label for="inicio">Inicia:</label>
             <input data-provide="datepicker" data-date-format="yyyy-mm-dd" name="inicio" id="inicio" 
             onchange="setFin(this);" value="<?= $info->inicio; ?>" class="form-control" style="max-width:300px;text-align:center;">
           </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
           <div class="form-group">
             <label for="fin">Termina:</label>
               <input data-provide="datepicker" data-date-format="yyyy-mm-dd" name="fin" id="fin" 
@@ -504,7 +433,7 @@ class Evaluacion extends CI_Controller {
                 class="form-control" style="max-width:300px;text-align:center;">
           </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
           <div class="form-group">
             <label for="estatus">Estatus:</label>
             <select id="estatus" name="estatus" class="form-control" style="max-width:300px;text-align:center">
@@ -514,13 +443,91 @@ class Evaluacion extends CI_Controller {
             </select>
           </div>
         </div>
-        <?php
+        <?php if($info->tipo == 0) : ?>
+            <div class="col-md-12">
+                <div class="form-group" align="center">
+                    <label for="lider">Líder de Proyecto</label>
+                    <select id="lider" name="lider" class="form-control" style="max-width:300px">
+                        <option value="<?= $lider->id;?>" selected>
+                            <?= "$lider->nombre - $lider->posicion ($lider->track)";?></option>
+                        <?php foreach($participantes as $colaborador) : ?>
+                            <option value="<?= $colaborador->id;?>">
+                                <?= "$colaborador->nombre - $colaborador->posicion ($colaborador->track)";?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="form-group" align="center">
+                    <label for="participantes">Participantes</label>
+                    <select id="agregar" name="agregar" multiple class="form-control" style="overflow-y:auto;
+                        overflow-x:auto;min-height:200px;max-height:700px">
+                        <?php foreach($participantes as $colaborador) : ?>
+                            <option value="<?= $colaborador->id;?>">
+                                <?= "$colaborador->nombre - $colaborador->posicion ($colaborador->track)";?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-2"><div class="form-group">&nbsp;</div>
+                <div class="form-group">
+                    <button type="button" id="btnQuitar" style="max-width:100px" class="form-control">Quitar&raquo;</button>
+                </div>
+                <div class="form-group">
+                    <button type="button" id="btnAgregar" style="max-width:100px" class="form-control">&laquo;Agregar</button>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="form-group" align="center">
+                    <label for="participantes">Colaboradores Disponibles</label>
+                    <select id="quitar" name="quitar" multiple class="form-control" style="overflow-y:auto;
+                        overflow-x:auto;min-height:200px;max-height:700px">
+                        <?php foreach($disponibles as $colaborador) : ?>
+                            <option value="<?= $colaborador->id;?>">
+                                <?= "$colaborador->nombre - $colaborador->posicion ($colaborador->track)";?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+            <script>
+                $(document).ready(function() {
+                    $('#agregar').append($('<option>',{value:$('#lider option:selected').val()}).text($('#lider option:selected').text()));
+                    $('#agregar option').each(function(i,select) {
+                        $('#quitar').find("option[value='"+$(select).val()+"']").remove();
+                    });
+                    $('#btnAgregar').click(function() {
+                        if($('#quitar :selected').length > 0){
+                            $('#quitar :selected').each(function(i,select) {
+                                $('#quitar').find($(select)).remove();
+                                $('#agregar').append($('<option>',{value:$(select).val()}).text($(select).text()));
+                                $('#lider').append($('<option>',{value:$(select).val()}).text($(select).text()));
+                            });
+                        }
+                    });
+                    $('#btnQuitar').click(function() {
+                        if($('#agregar :selected').length > 0){
+                            $('#agregar :selected').each(function(i,select) {
+                                $('#agregar').find($(select)).remove();
+                                $('#lider').find("option[value='"+$(select).val()+"']").remove();
+                                $('#quitar').append($('<option>',{value:$(select).val()}).text($(select).text()));
+                            });
+                        }
+                    });
+                });
+            </script>
+        <?php endif; ?>
+        <div class="col-md-12">
+            <button id="submit" type="submit" class="btn btn-lg btn-primary btn-block" 
+                style="max-width:200px; text-align:center;">Guardar</button>
+        </div>
+        <?php 
     }
 
-    public function nueva($err=null) {
-        $data=array();
-        if($err!=null)
-            $data['err_msg']=$err;
+    public function nueva() {
+        $data['colaboradores'] = $this->user_model->getAll();
+        $data['participantes']=array();
         $this->layout->title('Advanzer - Nueva Evaluación');
         $this->layout->view('evaluacion/nueva',$data);
     }
@@ -528,16 +535,27 @@ class Evaluacion extends CI_Controller {
     public function registrar() {
         $datos=array(
             'anio'=>$this->input->post('anio'),
+            'tipo'=>$this->input->post('tipo'),
             'nombre'=>$this->input->post('nombre'),
-            'descripcion'=>$this->input->post('descripcion'),
             'inicio'=>$this->input->post('inicio'),
-            'fin'=>$this->input->post('fin')
+            'fin'=>$this->input->post('fin'),
+            'lider'=>$this->input->post('lider')
         );
-
-        if($this->evaluacion_model->create($datos))
-            $this->gestion("Evaluación creada.");
-        else
-            $this->nueva("Error al crear evaluación. Intenta de nuevo");
+        $this->db->trans_begin();
+        if($evaluacion=$this->evaluacion_model->create($datos)){
+            foreach ($this->input->post('agregar') as $colaborador) :
+                $this->evaluacion_model->addEvaluadorToColaborador(array('evaluador'=>$this->input->post('lider'),
+                    'evaluado'=>$colaborador,'evaluacion'=>$evaluacion));
+            endforeach;
+        }
+        if($this->db->trans_status() === FALSE){
+            $this->db->trans_rollback();
+            $response['msg'] = "Ha habido un error. Intenta de nuevo";
+        }else{
+            $this->db->trans_commit();
+            $response['msg']="ok";
+        }
+        echo json_encode($response);
     }
 
     private function genera_evaluacion($asignacion) {

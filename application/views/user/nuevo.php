@@ -5,8 +5,20 @@
   </div>
 </div>
 <div class="container">
-  <form role="form" method="post" action="<?= base_url('user/create');?>" class="form">
-  	<div class="row" align="center">
+  <div class="row" align="center">
+	<a href="<?= base_url('administrar_usuarios');?>">&laquo;Regresar</a>
+	<div class="col-md-12" align="center">
+	  	<div class="form-group">
+		  <div align="center">
+			<div id="alert" style="display:none" class="alert alert-danger" role="alert" style="max-width:400px;">
+		      <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+		      <span class="sr-only">Error:</span>
+		      <label id="msg"></label>
+		    </div>
+		  </div>
+		</div>
+	</div>
+	<form id="create" role="form" method="post" action="javascript:" class="form-signin">
 	  <div class="col-md-4">
 		  <div class="form-group">
 		    <label for="nombre">Nombre:</label>
@@ -15,26 +27,30 @@
 		  </div>
 		  <div class="form-group">
 		    <label for="nombre">E-Mail:</label>
-		    <input name="email" type="email" class="form-control" style="max-width:300px; text-align:center;" required>
+		    <input id="email" type="email" class="form-control" style="max-width:300px; text-align:center;" required>
 		  </div>
 		  <div class="form-group">
 		    <label for="tipo">Empresa:</label>
-		    <select class="form-control" style="max-width:300px; text-align:center;" name="empresa">
+		    <select class="form-control" style="max-width:300px; text-align:center;" id="empresa">
 		    	<option value="0">--</option>
 		    	<option value="1">Advanzer</option>
 		    	<option value="2">Entuizer</option>
 		    </select>
 		  </div>
 		  <div class="form-group">
-			<label for="nomina"># Nómina:</label>
-			<input class="form-control" style="max-width:300px;text-align:center" name="nomina" value="" required>
-		  </div>  
+			<label for="jefe">Jefe Directo:</label>
+			<select class="form-control" style="max-width:300px; text-align:center;" name="jefe" id="jefe">
+				<?php foreach($jefes as $jefe): ?>
+					<option value="<?= $jefe->id;?>"><?= $jefe->nombre;?></option>
+				<?php endforeach; ?>
+			</select>
+		  </div>
 	  </div>
 	  <div class="col-md-4">
 	  	  <div class="form-group">
 		    <label for="plaza">Plaza:</label>
 		    <input name="plaza" type="text" class="form-control" style="max-width:300px; text-align:center;" 
-		    	required value="">
+		    	required value="" id="plaza">
 		  </div>
 		  <div class="form-group">
 			<label for="track">Track</label>
@@ -65,52 +81,84 @@
 	  </div>
 	  <div class="col-md-4">
 		  <div class="form-group">
+			<label for="ingreso">Fecha de Ingreso:</label>
+			<input data-provide="datepicker" data-date-format="yyyy-mm-dd" class="form-control" type="text" 
+				style="max-width:300px; text-align:center;background-color:white" name="ingreso" id="ingreso" 
+				value="<?= date('Y-m-d');?>" readonly required>
+		  </div>
+		  <div class="form-group">
+			<label for="nomina"># Nómina:</label>
+			<input class="form-control" style="max-width:300px;text-align:center" name="nomina" value="" id="nomina" required>
+		  </div>
+		  <div class="form-group">
 		    <label for="categoria">Categoría:</label>
 		    <input name="categoria" type="text" class="form-control" style="max-width:300px; text-align:center;" 
-		    	value="">
+		    	value="" required id="categoria">
 		  </div>
 		  <div class="form-group">
-		    <label for="requisicion">Requisiciones:</label>
-		    <select class="form-control" style="max-width:300px; text-align:center;" name="requisicion">
-		    	<option value="0">No</option>
-		    	<option value="1">Si</option>
-		    </select>
-		  </div>
-		  <div class="form-group">
-		    <label for="admin">Administrador:</label>
-		    <select class="form-control" style="max-width:300px; text-align:center;" name="admin">
-		    	<option value="0">No</option>
-		    	<option value="1">Si</option>
-		    </select>
-		  </div>
-		  <div class="form-group">
-		    <label for="estatus">Estatus:</label>
-		    <select class="form-control" style="max-width:300px; text-align:center;" name="estatus">
-		    	<option value="1">Habilitado</option>
-		    	<option value="0">Deshabilitado</option>
-		    </select>
+			<label for="tipo">Tipo de Acceso:</label>
+			<select class="form-control" style="max-width:300px; text-align:center;" id="tipo">
+				<option value="0">Colaborador</option>
+				<option value="1">Requisiciones</option>
+				<option value="2">Administrador</option>
+				<option value="3">Requisiciones y Administrador</option>
+			</select>
 		  </div>
 	  </div>
-	</div>
-	<div class="row" align="center">
 	  <div class="col-md-12">
 		  <button type="submit" class="btn btn-lg btn-primary btn-block" style="max-width:200px; text-align:center;">Registrar</button>
-		  <a href="<?= base_url('administrar_usuarios');?>">&laquo;Regresar</a>
 	  </div>
-	</div>
-  </form>
-  <div align="center">
-	<?php if(isset($err_msg)): ?>
-		<div id="alert" class="alert alert-danger" role="alert" style="max-width:400px;">
-			<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-			<span class="sr-only">Error:</span>
-			<?= $err_msg;?>
-		</div>
-	<?php endif; ?>
+	</form>
   </div>
 
   <script type="text/javascript">
 	$(document).ready(function() {
+		$('#create').submit(function(event){
+			nombre = $('#nombre').val();
+			email = $('#email').val();
+			$("#empresa option:selected").each(function() {
+				empresa = $('#empresa').val();
+			});
+			$("#jefe option:selected").each(function() {
+				jefe = $('#jefe').val();
+			});
+			plaza = $('#plaza').val();
+			$("#track option:selected").each(function() {
+				track = $('#track').val();
+			});
+			$("#posicion option:selected").each(function() {
+				posicion = $('#posicion').val();
+			});
+			$("#area option:selected").each(function() {
+				area = $('#area').val();
+			});
+			ingreso = $('#ingreso').val();
+			nomina = $('#nomina').val();
+			categoria = $('#categoria').val();
+	  		$("#tipo option:selected").each(function() {
+				tipo = $('#tipo').val();
+			});
+			$.ajax({
+				url: '<?= base_url("user/create");?>',
+				type: 'post',
+				data: {'nombre':nombre,'email':email,'empresa':empresa,'jefe':jefe,'plaza':plaza,
+					'track':track,'posicion':posicion,'area':area,'ingreso':ingreso,'nomina':nomina,
+					'categoria':categoria,'tipo':tipo},
+				success: function(data){
+					var returnedData = JSON.parse(data);
+					console.log(returnedData['msg']);
+					if(returnedData['msg']=="ok")
+						window.document.location='<?= base_url("user/ver");?>/'+returnedData['id'];
+					else{
+						$('#alert').prop('display',true).show();
+						$('#msg').html(returnedData['msg']);
+					}
+				}
+			});
+
+			event.preventDefault();
+		});
+
 		$("#track").change(function() {
 			$("#track option:selected").each(function() {
 				track = $('#track').val();
@@ -120,6 +168,19 @@
 					$("#posicion").html(data);
 				});
 			});
-		})
+		});
+		var today = new Date();
+		var dd = today.getDate();
+		var mm = today.getMonth()+1; //January is 0!
+		var yyyy = today.getFullYear();
+		if(dd<10)
+			dd='0'+dd
+		if(mm<10)
+			mm='0'+mm
+		today = yyyy+'-'+mm+'-'+dd;
+		$('#ingreso').datepicker({
+			dateFormat: 'yy-mm-dd',
+			maxDate: today
+		});
 	});
   </script>

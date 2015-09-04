@@ -16,36 +16,33 @@
   </div>
   <div class="row">
     <div class="col-md-12">
-      <h3><b>Colaboradores Asignados:</b></h3>
-      <div class="input-group">
-        <!--<input name="nombre" type="text" class="form-control" id="nombre" 
-          placeholder="Buscar por nombre">-->
-        <span class="input-group-addon">Filtrar Resultados</span>
-        <input id="filter" type="text" class="form-control" placeholder="Filtrar...">
-      </div>
-      <table width="90%" align="center" class="table table-striped " data-toggle="table">
+      <div id="filter-bar"> </div>
+      <table class="sortable" align="center" data-toggle="table" data-toolbar="#filter-bar" data-pagination="true" 
+        data-search="true" data-show-toggle="true" data-show-columns="true" data-show-filter="true" 
+        data-hover="true" data-striped="true">
         <thead>
           <tr>
-            <th class="col-md-1" data-halign="center" data-align="center"></th>
-            <th class="col-md-3" data-halign="center" data-field="nombre" data-sortable="true">Nombre</th>
-            <th class="col-md-2" data-halign="center" data-field="area" data-sortable="true">Area</th>
-            <th class="col-md-1" data-halign="center" data-field="posicion" data-sortable="true">Posición</th>
-            <th class="col-md-2" data-halign="center" data-field="track" data-sortable="true">Track</th>
-            <th class="col-md-2" data-halign="center" data-field="tipo" data-sortable="true">Tipo</th>
-            <th class="col-md-1" data-halign="center" data-field="estatus" data-sortable="true">Estatus</th>
+            <th class="col-md-1" data-halign="center" data-align="center" data-defaultsort="disabled"></th>
+            <th class="col-md-4" data-halign="center" data-field="nombre">Nombre</th>
+            <th class="col-md-2" data-halign="center" data-field="area">Area</th>
+            <th class="col-md-1" data-halign="center" data-field="posicion">Posición</th>
+            <th class="col-md-2" data-halign="center" data-field="track">Track</th>
+            <th class="col-md-1" data-halign="center" data-field="tipo">Tipo</th>
+            <th class="col-md-1" data-halign="center" data-field="estatus">Estatus</th>
           </tr>
         </thead>
         <tbody id="result" class="searchable">
           <?php foreach ($colaboradores as $colab):?>
           <tr>
             <td><img style="cursor:pointer" onclick="ir(<?= $colab->asignacion;?>)" height="25px" src="<?= base_url('assets/images/fotos')."/".$colab->foto;?>"></td>
-            <td><span style="cursor:pointer" onclick="ir(<?= $colab->asignacion;?>)"><?= "$colab->nomina - $colab->nombre";?></span></td>
+            <td><span style="cursor:pointer" onclick="ir(<?= $colab->asignacion;?>)"><?= "$colab->nombre ($colab->nomina)";?></span></td>
             <td><span style="cursor:pointer" onclick="ir(<?= $colab->asignacion;?>)"><?= $colab->area;?></span></td>
             <td><span style="cursor:pointer" onclick="ir(<?= $colab->asignacion;?>)"><?= $colab->posicion;?></span></td>
             <td><span style="cursor:pointer" onclick="ir(<?= $colab->asignacion;?>)"><?= $colab->track;?></span></td>
-            <td><span style="cursor:pointer" onclick="ir(<?= $colab->asignacion;?>)"><?php if($colab->tipo == 0) echo"De Responsabilidades"; 
-              elseif($colab->tipo == 1) echo"De Competencias"; else echo"360";?></span></td>
-            <td><span style="cursor:pointer" onclick="ir(<?= $colab->asignacion;?>)"><?php if($colab->estatus == 0) echo"Pendiente"; 
+            <td><span style="cursor:pointer" onclick="ir(<?= $colab->asignacion;?>)"><?php if($colab->tipo == 0) echo"Anual"; 
+              elseif($colab->tipo == 1) echo"Por Proyecto"; else echo"360";?></span></td>
+            <td data-value="<?= $colab->estatus;?>"><span style="cursor:pointer" 
+              onclick="ir(<?= $colab->asignacion;?>)"><?php if($colab->estatus == 0) echo"Pendiente"; 
               elseif($colab->estatus == 1) echo"En proceso"; else echo"Terminada";?></span></td>
           </tr>
           <?php endforeach; ?>

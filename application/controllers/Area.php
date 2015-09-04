@@ -24,20 +24,23 @@ class Area extends CI_Controller {
     	if (!empty($msg))
     		$data['err_msg'] = $msg;
     	$data['area'] = $this->area_model->searchById($id);
+        $data['direcciones'] = $this->area_model->getDirecciones();
     	$this->layout->title('Advanzer - Info Área');
     	$this->layout->view('area/detalle',$data);
     }
 
-    public function update($id) {
-    	$nombre = $this->input->post('nombre');
-    	$estatus = $this->input->post('estatus');
-    	if($this->area_model->update($id,$nombre,$estatus)){
-    		$msg = "Área actualizada correctamente";
-    		$this->index($msg);
-    	}else{
-    		$msg = "Error al actualizar area. Intenta nuevamente";	
-    		$this->ver($id,$msg);
-    	}
+    public function update() {
+    	$id = $this->input->post('id');
+        $datos = array(
+            'nombre'=>$this->input->post('nombre'),
+            'estatus'=>$this->input->post('estatus'),
+            'direccion'=>$this->input->post('direccion')
+        );
+    	if($this->area_model->update($id,$datos))
+    		$response['msg'] = "ok";
+    	else
+    		$response['msg'] = "Error al actualizar area. Intenta nuevamente";
+        echo json_encode($response);
     }
 
     public function del($id) {
@@ -66,15 +69,15 @@ class Area extends CI_Controller {
     }
 
     public function create(){
-    	$nombre = $this->input->post('nombre');
-    	$estatus = $this->input->post('estatus');
-    	if($this->area_model->create($nombre,$estatus)){
-    		$msg="Área: <b>$nombre</b> agregada correctamente";
-    		$this->index($msg);
-    	}else{
-    		$msg="Error al intentar registrar.Revisa los datos e intenta de nuevo";
-    		$this->nueva($msg);
-    	}
+        $datos=array(
+            'nombre' => $this->input->post('nombre'),
+        	'estatus' => $this->input->post('estatus')
+        );
+    	if($this->area_model->create($datos))
+    		$response['msg']="ok";
+    	else
+    		$response['msg']="Error al intentar registrar.Revisa los datos e intenta de nuevo";
+    	echo json_encode($response);
     }
 
     public function searchByText() {

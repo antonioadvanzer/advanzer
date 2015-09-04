@@ -57,8 +57,8 @@ class Posicion_model extends CI_Model{
 		return $this->db->where(array('posicion'=>$posicion,'track'=>$track))->get('Posicion_Track')->first_row()->id;
 	}
 
-	function update($id,$nombre) {
-		$this->db->where('id',$id)->update('Posiciones',array('nombre'=>$nombre));
+	function update($id,$datos) {
+		$this->db->where('id',$id)->update('Posiciones',$datos);
 		if($this->db->affected_rows() == 1)
 			return true;
 		return false;

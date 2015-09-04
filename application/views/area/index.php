@@ -1,13 +1,11 @@
 <!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron">
   <div class="container">
-    <h2>Administrar Áreas</h2>
-    <p>Por medio de éste módulo podrás realizar las siguentes operaciones:<br>
-      <ol type="1">
-        <li>Visualizar Las Áreas de la empresa</li>
+    <h2>Administrar Áreas de Especialidad</h2>
+      <ul type="square">
         <li>Realizar Cambios</li>
         <li>Agregar nuevos cuando sea necesario</li>
-      </ol>
+      </ul>
     </p>
   </div>
 </div>
@@ -27,22 +25,7 @@
   </div>
   <div class="row">
     <div class="col-md-12">
-      <h3><b>Áreas:</b></h3>
-      <div class="input-group">
-        <input name="nombre" type="text" class="form-control" id="nombre" style="max-width:50%" 
-          placeholder="Buscar por nombre">
-        <select name="estatus" id="estatus" class="form-control" style="max-width:25%;">
-          <option value="1">Activas</option>
-          <option value="0">Inactivas</option>
-          <option value="2">Todas</option>
-        </select>
-        <select name="orden" id="orden" class="form-control" style="max-width:25%;">
-          <option value="ASC">Ascendente</option>
-          <option value="DESC">Descendente</option>
-        </select>
-        <span class="input-group-addon">Filtrar Resultados</span>
-        <input id="filter" type="text" class="form-control" placeholder="Filtrar...">
-      </div>
+      <h3><b>Áreas de Especialidad:</b></h3>
     </div>
   </div>
   <div class="row" align="center">
@@ -51,24 +34,25 @@
   </div>
   <div class="row" align="center">
     <div class="col-md-12">
-      <table id="resultados" width="90%" align="center" class="table table-striped" data-toggle="table">
+      <div id="filterbar"> </div>
+      <table id="tbl" class="sortable table-hover" align="center" data-toggle="table" 
+        data-toolbar="#filterbar" data-pagination="true" data-show-columns="true" data-show-filter="true" 
+        data-hover="true" data-striped="true" data-show-toggle="true" data-show-export="true">
         <thead>
           <tr>
-            <th data-halign="center" data-field="area">Área</th>
-            <th></th>
+            <th class="col-md-2" data-halign="center" data-field="area">Área</th>
+            <th class="col-md-2" data-halign="center" data-field="direccion">Dirección</th>
+            <th class="col-md-1" data-halign="center" data-field="estatus">Estatus</th>
           </tr>
         </thead>
-        <tbody id="result" class="searchable">
-          <?php foreach ($areas as $resp): ?>
+        <tbody data-link="row" class="rowlink">
+          <?php foreach ($areas as $area): ?>
           <tr>
-            <td><span class="glyphicon glyphicon-eye-open" style="cursor:pointer" onclick="
-              location.href='<?= base_url('area/ver/');?>/'+<?= $resp->id;?>"></span> 
-              <span style="cursor:pointer" onclick="location.href='<?= base_url('area/ver/');?>/'+
-              <?= $resp->id;?>"><?= $resp->nombre;?></span></td>
-            <td align="right"><span style="cursor:pointer;" onclick="
-              if(confirm('Seguro que desea cambiar el estatus del área: \n <?= $resp->nombre;?>'))location.href=
-              '<?= base_url('area/del/');?>/'+<?= $resp->id;?>;" class="glyphicon 
-              <?php if($resp->estatus ==1 ) echo "glyphicon-ok"; else echo "glyphicon-ban-circle"; ?>"></span></td>
+            <td><a style="text-decoration:none" href='<?= base_url("area/ver/$area->id");?>'>
+              <?= $area->nombre;?></a></td>
+            <td><?= $area->direccion;?></td>
+            <td data-value="<?= $area->estatus;?>">
+              <?php if($area->estatus ==1 ) echo "Habilitada"; else echo "Deshabilitada"; ?></td>
           </tr>
           <?php endforeach; ?>
         </tbody>
@@ -77,86 +61,12 @@
   </div>
 
   <script type="text/javascript">
-    $(document).ready(function () {
-      (function ($) {
-          $('#filter').keyup(function () {
-              var rex = new RegExp($(this).val(), 'i');
-              $('.searchable tr').hide();
-              $('.searchable tr').filter(function () {
-                  return rex.test($(this).text());
-              }).show();
-          })
-      }(jQuery));
-    });
+    $.bootstrapSortable(true);
 
-    $(document).ready(function() {
-      $("#nombre").change(function() {
-        valor = $('#nombre').val();
-        $("#estatus option:selected").each(function() {
-          estatus = $('#estatus').val();
-        });
-        $("#orden option:selected").each(function() {
-          orden = $('#orden').val();
-        });
-        $('#resultados').hide();
-        $('#cargando').show();
-        $.ajax({
-          url: "<?= base_url('area/searchByText');?>",
-          type: "post",
-          data: {'valor':valor,'estatus':estatus,'orden':orden},
-          success: function(data){
-            $('#cargando').hide();
-            $('#result').show().html(data);
-            $('#resultados').show();
-          },
-          error: function(data) {
-            $('body').html(data);
-          }
-        });
-      });
+    $(function() {
+      $('#tbl').bootstrapTable();
 
-      $("#estatus").change(function() {
-        $("#estatus option:selected").each(function() {
-          estatus = $('#estatus').val();
-        });
-        $("#orden option:selected").each(function() {
-          orden = $('#orden').val();
-        });
-        valor = $('#nombre').val();
-        $('#resultados').hide();
-        $('#cargando').show();
-        $.ajax({
-          url: "<?= base_url('area/searchByText');?>",
-          type: 'POST',
-          data: {'valor':valor,'estatus':estatus,'orden':orden},
-          success: function(data) {
-            $('#cargando').hide();
-            $('#result').show().html(data);
-            $('#resultados').show();
-          }
-        });
-      });
+      $('#filterbar').bootstrapTableFilter();
 
-      $("#orden").change(function() {
-        $("#estatus option:selected").each(function() {
-          estatus = $('#estatus').val();
-        });
-        $("#orden option:selected").each(function() {
-          orden = $('#orden').val();
-        });
-        valor = $('#nombre').val();
-        $('#resultados').hide();
-        $('#cargando').show();
-        $.ajax({
-          url: "<?= base_url('area/searchByText');?>",
-          type: 'POST',
-          data: {'valor':valor,'estatus':estatus,'orden':orden},
-          success: function(data) {
-            $('#cargando').hide();
-            $('#result').show().html(data);
-            $('#resultados').show();
-          }
-        });
-      });
     });
   </script>

@@ -53,14 +53,14 @@
   <div class="row">
     <div class="col-md-12">
       <h3><b>Dominios:</b></h3>
-      <table width="90%" align="center" class="table table-striped " data-toggle="table">
+      <table class="table sortable table-hover table-striped" align="center">
         <thead>
           <tr>
             <th data-halign="center" data-field="nombre" data-sortable="true">Nombre</th>
             <th data-halign="center" data-align="center"></th>
           </tr>
         </thead>
-        <tbody id="result" class="searchable">
+        <tbody data-link="row" class="rowlink" id="result">
           <?php foreach ($dominios as $dominio): ?>
           <tr>
             <td><span class="glyphicon glyphicon-eye-open" style="cursor:pointer" onclick="

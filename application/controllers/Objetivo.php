@@ -19,75 +19,94 @@ class Objetivo extends CI_Controller {
     		$data['err_msg'] = $msg;
     	$data['objetivo'] = $this->objetivo_model->searchById($id);
     	$data['dominios'] = $this->dominio_model->getAll();
-    	$data['areas_asignadas'] = $this->area_model->getByObjetivo($data['objetivo']->id);
+        $data['areas_asignadas'] = $this->area_model->getByObjetivo($data['objetivo']->id);
         $data['areas_no_asignadas'] = $this->area_model->getNotObjetivo($data['areas_asignadas']);
-    	$this->layout->title('Advanzer - Info Objetivo');
+    	$this->layout->title('Capital Humano - Info Objetivo');
     	$this->layout->view('objetivo/detalle',$data);
-    }
-
-    function load_metricas($objetivo) {
-    	$valor = $this->input->post('valor');
-    	$metrica = $this->metrica_model->getValorByObjetivo($valor,$objetivo);
-    	?>
-        <textarea name="descripcion" class="form-control" rows="2" style="max-width:300px;text-align:center;" required 
-            placeholder="Agrega una descripción"><?php if(!empty($metrica)) echo $metrica->descripcion;?></textarea>
-    	<?php 
-    }
-
-    function load_pesos($objetivo) {
-        $posicion = $this->input->post('posicion');
-        $peso = $this->objetivo_model->getPesoByPosicion($objetivo,$posicion);
-        ?>
-        <input class="form-control" name="valor" style="max-width:300px;text-align:center;" required 
-            placeholder="Agrega un porcentaje" value="<?php if(!empty($peso)) echo $peso->valor;?>">
-        <?php
-    }
-
-    function add_areas() {
-    	$objetivo = $this->input->post('objetivo');
-        $opciones=$this->input->post('selected');
-        foreach ($opciones as $area) {
-            if(!$this->objetivo_model->add_area($objetivo,$area))
-                break;
-        }
-    }
-
-    function del_areas() {
-        $objetivo = $this->input->post('objetivo');
-        $opciones=$this->input->post('selected');
-        foreach ($opciones as $area) {
-            if(!$this->objetivo_model->del_area($objetivo,$area))
-                break;
-        }
     }
 
     function update() {
         $id = $this->input->post('id');
-        $nombre = $this->input->post('nombre');
-        $dominio = $this->input->post('dominio');
-        $descripcion = $this->input->post('descripcion');
-        if($this->objetivo_model->update($id,$nombre,$dominio,$descripcion))
-            redirect("objetivo/ver/$id");
-        else
-            $this->ver($id,'Error al actualizar datos del objetivo. Intenta de nuevo');
+        $datos = array(
+            'nombre' => $this->input->post('nombre'),
+            'dominio' => $this->input->post('dominio'),
+            'descripcion' => $this->input->post('descripcion'),
+            'tipo' => $this->input->post('tipo')
+        );
+        $descripciones=$this->input->post('descripciones');
+        $this->db->trans_begin();
+        $this->objetivo_model->update($id,$datos);
+        for ($i=0; $i < 5; $i++) :
+            $this->metrica_model->update(5-$i,$id,$descripciones[$i]);
+        endfor;
+        $agregar = $this->input->post('agregar');
+        if(!empty($agregar))
+            foreach ($agregar as $area) :
+                $this->objetivo_model->add_area($id,$area);
+            endforeach;
+        $quitar = $this->input->post('quitar');
+        if(!empty($quitar))
+            foreach ($quitar as $area) :
+                $this->objetivo_model->del_area($id,$area);
+            endforeach;
+        if($this->db->trans_status() === FALSE){
+            $this->db->trans_rollback();
+            $response['msg'] = 'Error al actualizar datos del objetivo. Intenta de nuevo';
+        }
+        else{
+            $this->db->trans_commit();
+            $response['msg'] = 'ok';
+        }
+        echo json_encode($response);
+    }
+
+    function ch_estatus($id) {
+        if($this->objetivo_model->ch_estatus($id))
+            redirect('administrar_dominios');
+        else{
+            echo "<script>alert('Error al cambiar estatus de la resposabilidad. Intenta de nuevo');</script>";
+            redirect('objetivo/ver/$id');
+        }
     }
 
     function nuevo($msg=null) {
         if ($msg != null)
             $data['err_msg'] = $msg;
         $data['dominios'] = $this->dominio_model->getAll();
+        $data['areas'] = $this->area_model->getAll();
         $this->layout->title('Advanzer - Nuevo Objetivo');
         $this->layout->view('objetivo/nuevo',$data);
     }
 
     function create() {
-        $nombre=$this->input->post('nombre');
-        $dominio=$this->input->post('dominio');
-        $descripcion=$this->input->post('descripcion');
-        if($id = $this->objetivo_model->create($nombre,$dominio,$descripcion))
-            redirect("objetivo/ver/$id");
+        $datos=array(
+            'nombre'=>$this->input->post('nombre'),
+            'dominio'=>$this->input->post('dominio'),
+            'descripcion'=>$this->input->post('descripcion'),
+            'tipo'=>$this->input->post('tipo')
+        );
+        $this->db->trans_begin();
+        if($id = $this->objetivo_model->create($datos)){
+            $this->metrica_model->update(5,$id,$this->input->post('cinco'));
+            $this->metrica_model->update(4,$id,$this->input->post('cuatro'));
+            $this->metrica_model->update(3,$id,$this->input->post('tres'));
+            $this->metrica_model->update(2,$id,$this->input->post('dos'));
+            $this->metrica_model->update(1,$id,$this->input->post('uno'));
+            $agregar = $this->input->post('agregar');
+            if(!empty($agregar))
+                foreach ($agregar as $area) :
+                    $this->objetivo_model->add_area($id,$area);
+                endforeach;
+        }
         else
-            $this->nuevo("Error al agregar objetivo. Intenta de nuevo");
+            $response['msg'] = "Error al agregar objetivo. Intenta de nuevo";
+        if($this->db->trans_status() === FALSE)
+            $this->db->trans_rollback();
+        else{
+            $this->db->trans_commit();
+            $response['msg'] = "ok";
+        }
+        echo json_encode($response);
     }
 
     function update_metrica() {
@@ -108,5 +127,14 @@ class Objetivo extends CI_Controller {
             redirect("objetivo/ver/$objetivo");
         else
             $this->ver($objetivo,"Error al actualizar Peso Relativo. Intenta de nuevo");
+    }
+
+    function asignar_pesos() {
+        $data=array();
+        $this->load->model('porcentaje_objetivo_model');
+        $direccion = $this->session->userdata('direccion');
+        $data['areas'] = $this->porcentaje_objetivo_model->getPorcentajes($direccion);;
+        $this->layout->title('Capital Humano - Pesos Específicos');
+        $this->layout->view('objetivo/asignar_pesos',$data);
     }
 }

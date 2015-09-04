@@ -21,6 +21,10 @@
 	<script src="<?= base_url('assets/js/bootstrap-table-filter.js');?>"></script>
 	<script src="<?= base_url('assets/js/moment.min.js');?>"></script>
 	<script src="<?= base_url('assets/js/bootstrap-sortable.js');?>"></script>
+	<script src="<?= base_url('assets/js/tableExport.js');?>"></script>
+	<script src="<?= base_url('assets/js/bootstrap-table-export.js');?>"></script>
+	<script src="<?= base_url('assets/js/bs-table.js');?>"></script>
+	<script src="<?= base_url('assets/js/jasny-bootstrap.js');?>"></script>
 	<title><?=$title_for_layout?></title>
 	<style type="text/css">
 		body {
@@ -77,6 +81,7 @@
 						<ul class="dropdown-menu">
 							<li class="dropdown-submenu"><a tabindex="-1" href="#">Servicios</a>
 								<ul class="dropdown-menu">
+									<li><a href="<?= base_url('objetivo/asignar_pesos');?>">Responsabilidades Por Área</a></li>
 									<li><a href="<?= base_url('ver_requisiciones');?>">Requisiciones</a></li>
 									<li><a href="<?= base_url('evaluaciones');?>">Evaluaciones</a></li>
 									<li><a href="<?= base_url('ev_confidencial');?>">Evaluaciones Confidencial</a></li>
@@ -88,22 +93,21 @@
 							<li role="separator" class="divider"></li>
 							<li class="dropdown-submenu"><a tabindex="-1" href="#">ABC</a>
 								<ul class="dropdown-menu">
-									<li><a href="<?= base_url('area');?>">Administración de Areas</a></li>
-									<li><a href="<?= base_url('track');?>">Administración de Tracks y Posiciones</a></li>
-									<li><a href="<?= base_url('administrar_usuarios'); ?>">Administración de Usuarios</a></li>
-									<li><a href="<?= base_url('administrar_dominios');?>">Administración de Responsabilidades</a></li>
-									<li><a href="<?= base_url('administrar_indicadores');?>">Administración de Competencias</a></li>
-									<li><a href="<?= base_url('evaluadores');?>">Administración de Evaluaciones</a></li>
-									<li><a href="<?= base_url('evaluadores360');?>">Administración de Evaluaciones 360</a></li>
-									<li><a href="<?= base_url('administrar_cursos');?>">Administración de Cursos</a></li>
+									<li><a href="<?= base_url('area');?>">Areas de Especialidad</a></li>
+									<li><a href="<?= base_url('track');?>">Tracks y Posiciones</a></li>
+									<li><a href="<?= base_url('administrar_usuarios'); ?>">Colaboradores</a></li>
+									<li><a href="<?= base_url('administrar_dominios');?>">Responsabilidades Funcionales</a></li>
+									<li><a href="<?= base_url('administrar_indicadores');?>">Competencias Laborales</a></li>
+									<li><a href="<?= base_url('evaluaciones');?>">Evaluación de Desempeño</a></li>
+									<li><a href="<?= base_url('evaluacion/proyecto');?>">Evaluación por Proyecto</a></li>
 								</ul>
 							</li>
-							<li role="separator" class="divider"></li>
+							<!--<li role="separator" class="divider"></li>
 							<li class="dropdown-submenu"><a tabindex="-1" href="#">Carga Masiva</a>
 								<ul class="dropdown-menu">
 									<li><a href="<?= base_url('carga_comp_resp');?>">Competencias y Responsabilidades</a></li>
 								</ul>
-							</li>
+							</li>-->
 						</ul>
 					</li>
 					<li class="dropdown">
@@ -145,22 +149,12 @@
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<?php $idU=$this->session->userdata('id'); if(!empty($idU)): ?>
-						<li align="center"><a href="<?= base_url('evaluacion/perfil');?>"><?= $this->session->userdata('nombre');?></a></li>
-						<li align="center"><a href="<?= base_url('logout'); ?>">LogOut</a></li>
+						<li><a href="<?= base_url('evaluacion/perfil');?>"><?= $this->session->userdata('nombre');?></a></li>
+						<li><a href="<?= base_url('logout'); ?>">LogOut</a></li>
 					<?php else: ?>
 						<li><a href="<?= base_url("login") ?>">LogIn</a></li>
 					<?php endif; ?>
 				</ul>
-				<!--<ul class="nav navbar-nav navbar-right">
-					<FORM method=GET action="http://www.google.com/search">
-						<input type=hidden name=ie value=UTF-8>
-						<input type=hidden name=oe value=UTF-8>
-						<INPUT TYPE=text name=q size=31 maxlength=255 value="">
-						<INPUT type=submit name=btnG VALUE="Buscar en sitio">
-						<input type=hidden name=domains value="capitalhumano.advanzer.com">
-						<input type=hidden name=sitesearch value="capitalhumano.advanzer.com">
-					</FORM>
-				</ul>-->
 			</div>
 		</div>
 	</nav>
@@ -174,7 +168,10 @@
 <script type="text/javascript">
 $(document).ready(function() {
     setTimeout(function() {
-        $(".alert").fadeOut(1500);
+        $("#alert").fadeOut(1500);
+    },3000);
+    setTimeout(function() {
+        $("#alert_success").fadeOut(1500);
     },3000);
 });
 </script>

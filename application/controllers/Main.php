@@ -35,7 +35,8 @@ class Main extends CI_Controller {
     				'foto' =>$result->foto,
     				'empresa'=>$result->empresa,
     				'posicion' =>$result->nivel_posicion,
-    				'area' =>$result->area
+    				'area' =>$result->area,
+    				'direccion'=>$result->direccion
     			);
     			$data['email'] = $result->email;
     			$this->session->set_userdata($sess_array);
@@ -97,7 +98,8 @@ class Main extends CI_Controller {
     				'foto' =>$result->foto,
     				'empresa'=>$result->empresa,
     				'posicion' =>$result->nivel_posicion,
-    				'area' =>$result->area
+    				'area' =>$result->area,
+    				'direccion'=>$result->direccion
     			);
     			$data['email'] = $result->email;
     			$this->session->set_userdata($sess_array);

@@ -11,8 +11,10 @@ class Area_model extends CI_Model{
 	function getAll($estatus=null) {
 		if($estatus!=null)
 			$this->db->where('estatus',$estatus);
+		$this->db->select('A.id,A.nombre,D.nombre direccion,A.estatus');
+		$this->db->join('Direcciones D','D.id = A.direccion','LEFT OUTER');
 		$this->db->order_by('nombre','asc');
-		return $this->db->get('Areas')->result();
+		return $this->db->get('Areas A')->result();
 	}
 
 	function searchById($id) {
@@ -20,10 +22,12 @@ class Area_model extends CI_Model{
 		return $this->db->get('Areas')->first_row();
 	}
 
-	function update($id,$nombre,$estatus) {
-		$datos = array('nombre'=>$nombre,'estatus'=>$estatus);
-		$this->db->where('id',$id);
-		$this->db->update('Areas',$datos);
+	function getDirecciones() {
+		return $this->db->get('Direcciones')->result();
+	}
+
+	function update($id,$datos) {
+		$this->db->where('id',$id)->update('Areas',$datos);
 		if ($this->db->affected_rows() == 1)
 			return true;
 		else
@@ -45,13 +49,9 @@ class Area_model extends CI_Model{
 			return false;
 	}
 
-	function create($nombre,$estatus) {
-		$datos=array(
-			'nombre'=>$nombre,
-			'estatus'=>$estatus
-		);
+	function create($datos) {
 		$this->db->insert('Areas',$datos);
-		if($this->db->insert_id())
+		if($this->db->affected_rows() == 1)
 			return true;
 		else
 			return false;
@@ -110,6 +110,17 @@ class Area_model extends CI_Model{
 		$this->db->where('OA.objetivo',$obj);
 		$this->db->order_by('A.nombre','asc');
 		return $this->db->get()->result();
+	}
+
+	function getByDireccion($direccion) {
+		$result = $this->db->where(array('direccion'=>$direccion,'estatus'=>1))->order_by('nombre')
+			->get('Areas')->result();
+		foreach ($result as $area) {
+			$area->objetivos = $this->db->select('O.id,O.nombre')->from('Objetivos O')
+				->join('Objetivos_Areas OA','OA.objetivo = O.id')
+				->where(array('O.estatus'=>1,'OA.area'=>$area->id))->order_by('O.nombre')->get()->result();
+		}
+		return $result;
 	}
 
 }

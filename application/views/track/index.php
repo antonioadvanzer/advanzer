@@ -2,11 +2,10 @@
 <div class="jumbotron">
   <div class="container">
     <h2>Administrar Tracks y Posiciones</h2>
-    <p>Por medio de éste módulo podrás realizar las siguentes operaciones:<br>
-      <ol type="1">
+      <ul type="square">
         <li>Realizar Cambios a Tracks y Posiciones Definidas</li>
         <li>Agregar nuevas cuando sea necesario</li>
-      </ol>
+      </ul>
     </p>
   </div>
 </div>

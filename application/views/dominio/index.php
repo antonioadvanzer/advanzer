@@ -1,32 +1,15 @@
 <!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron">
   <div class="container">
-    <h2>Administrar Responsabilidades</h2>
-    <p>Por medio de éste módulo podrás realizar las siguentes operaciones:<br>
-      <ol type="1">
+    <h2>Administrar Responsabilidades Funcionales</h2>
+      <ul type="square">
         <li>Realizar Cambios a las Responsabilidades Definidas</li>
         <li>Agregar nuevas cuando sea necesario</li>
-      </ol>
+      </ul>
     </p>
   </div>
 </div>
 <div class="container">
-  <div align="center">
-    <?php if(isset($msg)): ?>
-      <div id="alert" class="alert alert-success" role="alert" style="max-width:400px;">
-        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-        <span class="sr-only">Error:</span>
-        <?= $msg;?>
-      </div>
-      <script>
-      $(document).ready(function() {
-        setTimeout(function() {
-          window.location="<?= base_url('dominio');?>"
-        },3000);
-      });
-    </script>
-    <?php endif; ?>
-  </div>
   <div class="row">
     <div class="col-md-6">
       <span style="cursor:pointer" class="glyphicon glyphicon-plus" 
@@ -39,7 +22,7 @@
   </div>
   <div class="row">
     <div class="col-md-12">
-      <h3 style="cursor:default"><b>Responsabilidades:</b></h3>
+      <h3 style="cursor:default"><b>Responsabilidades Funcionales:</b></h3>
       <div class="input-group" align="center">
         <span class="input-group-addon">Dominio</span>
         <select name="dominio" id="dominio" class="form-control">
@@ -48,123 +31,59 @@
             <option value="<?= $dominio->id;?>"><?= $dominio->nombre;?></option>
           <?php endforeach; ?>
         </select>
-        <span class="input-group-addon">Área</span>
-        <select name="area" id="area" class="form-control">
-          <?php foreach ($areas as $area) : ?>
-            <option value="<?= $area->id;?>"><?= $area->nombre;?></option>
-          <?php endforeach; ?>
-        </select>
-        <span class="input-group-addon">Posición</span>
-        <select id="posicion" name="posicion" class="form-control">
-          <option value="8">Nivel 8 o Superior (Analista)</option>
-          <option value="7">Nivel 7 (Consultor / Especialista)</option>
-          <option value="6">Nivel 6 (Consultor Sr / Especialista Sr)</option>
-          <option value="5">Nivel 5 (Gerente / Master)</option>
-          <option value="4">Nivel 4 (Gerente Sr / Experto)</option>
-          <option value="3">Nivel 3 o Inferior (Director)</option>
-        </select>
+        <!--<span class="input-group-addon">Buscar Resultados</span>
+        <input id="filter" type="text" class="form-control" placeholder="Buscar...">-->
       </div>
       <div align="center"><div id="cargando" style="display:none; color: green;">
         <img src="<?= base_url('assets/images/loading.gif');?>"></div></div>
-      <table width="90%" align="center" class="table">
+      <table id="resultados" class="table sortable table-hover table-striped" align="center">
         <thead>
           <tr>
-            <th class="col-md-2">Responsabilidad</th>
-            <th class="col-md-4">Descripción</th>
-            <th class="col-md-5">Métrica</th>
-            <th class="col-md-1">Porcentaje</th>
-            <th class="col-md-1"></th>
+            <th data-field="nombre" class="col-md-1">Nombre</th>
+            <th data-field="metrica" class="col-md-3">Métrica</th>
+            <th data-field="tipo" class="col-md-1">Tipo</th>
+            <th data-field="areas" class="col-md-5" data-sortable="false">Áreas y Posiciones</th>
+            <th data-field="estatus"></th>
           </tr>
         </thead>
-        <tbody id="result"></tbody>
+        <tbody data-link="row" class="rowlink searchable" id="result"></tbody>
       </table>
     </div>
   </div>
 
   <script type="text/javascript">
+    $.bootstrapSortable(true);
+
+    (function ($) {
+          $('#filter').keyup(function () {
+              var rex = new RegExp($(this).val(), 'i');
+              $('.searchable tr').hide();
+              $('.searchable tr').filter(function () {
+                  return rex.test($(this).text());
+              }).show();
+          })
+      }(jQuery));
+
     $(document).ready(function() {
       $("#dominio").change(function() {
         $("#dominio option:selected").each(function() {
           dominio = $('#dominio').val();
         });
-        $("#area option:selected").each(function() {
-          area = $('#area').val();
-        });
-        $("#posicion option:selected").each(function() {
-          posicion = $('#posicion').val();
-        });
-        
         $.ajax({
           type: 'post',
           url: "<?= base_url('dominio/load_objetivos');?>",
           data: {
-            area : area,
-            dominio : dominio,
-            posicion : posicion
+            dominio : dominio
           },
           beforeSend: function (xhr) {
-            $('#result').hide();
+            $('#resultados').hide();
             $('#cargando').show();
           },
           success: function(data) {
             $('#cargando').hide();
+            $('#resultados').show();
             $("#result").show().html(data);
-          }
-        });
-      });
-      $("#area").change(function() {
-        $("#area option:selected").each(function() {
-          area = $('#area').val();
-        });
-        $("#dominio option:selected").each(function() {
-          dominio = $('#dominio').val();
-        });
-        $("#posicion option:selected").each(function() {
-          posicion = $('#posicion').val();
-        });
-        $.ajax({
-          type: 'post',
-          url: "<?= base_url('dominio/load_objetivos');?>",
-          data: {
-            area : area,
-            dominio : dominio,
-            posicion : posicion
-          },
-          beforeSend: function (xhr) {
-            $('#result').hide();
-            $('#cargando').show();
-          },
-          success: function(data) {
-            $('#cargando').hide();
-            $("#result").show().html(data);
-          }
-        });
-      });
-      $("#posicion").change(function() {
-        $("#area option:selected").each(function() {
-          area = $('#area').val();
-        });
-        $("#dominio option:selected").each(function() {
-          dominio = $('#dominio').val();
-        });
-        $("#posicion option:selected").each(function() {
-          posicion = $('#posicion').val();
-        });
-        $.ajax({
-          type: 'post',
-          url: "<?= base_url('dominio/load_objetivos');?>",
-          data: {
-            area : area,
-            dominio : dominio,
-            posicion : posicion
-          },
-          beforeSend: function (xhr) {
-            $('#result').hide();
-            $('#cargando').show();
-          },
-          success: function(data) {
-            $('#cargando').hide();
-            $("#result").show().html(data);
+            $.bootstrapSortable(true);
           }
         });
       });
