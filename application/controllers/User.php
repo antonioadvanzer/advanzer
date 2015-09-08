@@ -37,7 +37,8 @@ class User extends CI_Controller {
     	$this->layout->view('user/detalle',$data);
     }
 
-    public function upload_photo($id) {
+    public function upload_photo() {
+        $id=$this->input->post('id');
     	//set preferences
     	$config['upload_path'] = './assets/images/fotos/';
         $config['allowed_types'] = 'jpg|png|jpeg|gif';
@@ -51,14 +52,14 @@ class User extends CI_Controller {
         if (!$this->upload->do_upload('foto')) {
             // case - failure
             $msg = $this->upload->display_errors();
-            $this->ver($id,$msg);
+            redirect('administrar_usuarios');
         }else {
             // case - success
         	//update info in DB
         	$this->user_model->update_foto($id,$config['file_name']);
             //$upload_data = $this->upload->data();
-            $msg = 'La foto ha sido cargada!';
-            $this->ver($id,null,$msg);
+            $response['msg'] = 'ok';
+            redirect("user/ver/$id");
         }
     }
 

@@ -7,7 +7,8 @@
 <div class="container">
   <div align="center" class="row">
   	<a href="<?= base_url('administrar_usuarios');?>">&laquo;Regresar</a>
-	<form id="update_foto" role="form" method="post" enctype="multipart/form-data" action="<?= base_url('user/upload_photo');?>/<?= $user->id;?>" class="form-signin">
+	<form id="update_foto" role="form" method="post" enctype="multipart/form-data" action="<?= base_url('user/upload_photo');?>" class="form-signin">
+		<input type="hidden" id="id" name="id" value="<?= $user->id;?>">
 	  <div class="col-md-6">
 		  <div class="form-group">
 		  	<img height="200px" src="<?= base_url("assets/images/fotos/$user->foto");?>">
@@ -18,7 +19,7 @@
 		  	<label for="foto" class="control-label">Elige la foto</label>
 		  </div>
 		  <div class="form-group">
-		  	<input class="form-control" type="file" name="foto" size="40" style="max-width:300px; text-align:center;" required/>
+		  	<input class="form-control" id="foto" type="file" name="foto" size="40" style="max-width:300px; text-align:center;" required/>
 		  </div>
 		  <div class="form-group">
 		  	<p style="font-size:smaller;">
@@ -279,7 +280,7 @@
 
 			event.preventDefault();
 		});
-
+		
 		$('#rehab').submit(function(event){
 			id = $('#id').val();
 			reingreso = $('#reingreso').val();
@@ -322,8 +323,7 @@
 			mm='0'+mm
 		today = yyyy+'-'+mm+'-'+dd;
 		$('#ingreso').datepicker({
-			dateFormat: 'yy-mm-dd',
-			maxDate: today
+			dateFormat: 'yy-mm-dd'
 		});
 		$('#baja').datepicker({
 			dateFormat: 'yy-mm-dd',
