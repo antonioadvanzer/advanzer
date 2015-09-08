@@ -125,7 +125,7 @@
   	<div class="col-md-6">
 	  <label>Responsabilidades</label>
       <aside id="perfil" class="accordion">
-  		<?php foreach ($dominios as $dominio) : print_r($dominio);?>
+  		<?php foreach ($dominios as $dominio) :?>
 		<h1><?= $dominio->nombre;?></h1>
 		<div>
 			<?php foreach ($dominio->responsabilidades as $resp) : ?>
