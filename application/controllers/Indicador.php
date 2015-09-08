@@ -20,28 +20,43 @@ class Indicador extends CI_Controller {
 
     public function load_competencias() {
     	$indicador = $this->input->post('indicador');
-    	$posicion = $this->input->post('posicion');
-    	if(!empty($indicador) && !empty($posicion)):
-    		foreach ($this->indicador_model->getCompetenciasByIndicadorPosicion($indicador,$posicion) as $competencia) : ?>
-    			<tr>
-					<td><span class="glyphicon glyphicon-eye-open" style="cursor:pointer" onclick="
-							location.href='<?= base_url('competencia/ver/');?>/'+<?= $competencia->id;?>"></span> 
-						<span style="cursor:pointer" onclick="location.href='<?= base_url('competencia/ver/');?>/'+
-							<?= $competencia->id;?>"><?= $competencia->nombre;?></span></td>
-					<td><span style="cursor:pointer" onclick="location.href='<?= base_url('competencia/ver/');?>/'+
-						<?= $competencia->id;?>"><?= $competencia->descripcion;?></span></td>
-					<td><span style="cursor:pointer" onclick="location.href='<?= base_url('competencia/ver/');?>/'+
-						<?= $competencia->id;?>">
-						<ul>
-						<?php foreach ($this->indicador_model->getComportamientosByCompetenciaPosicion($competencia->id,$posicion) as $comportamiento) : 
-							if($comportamiento->evalua == 1)
-								$span="<span class='glyphicon glyphicon-ok-circle'></span>";
-							else
-								$span="<span class='glyphicon glyphicon-remove-circle'></span>";
-							echo "$span $comportamiento->descripcion<br><br>";
-						endforeach; ?>
-						</ul>
-					</span></td>
+    	if(!empty($indicador)):
+    		foreach ($this->indicador_model->getCompetenciasByIndicador($indicador) as $competencia) : ?>
+    			<tr class="click-row">
+					<td><a href="<?= base_url('competencia/ver/').'/'.$competencia->id;?>"><?= $competencia->nombre;?></a></td>
+					<td data-sortable="false" class="rowlink-skip">
+						<table class="table table-bordered table-striped">
+							<thead>
+								<th class="col-sm-2"></th>
+								<th class="col-sm-1">Analista</th>
+								<th class="col-sm-1">Consultor</th>
+								<th class="col-sm-1">Consultor Sr</th>
+								<th class="col-sm-1">Gerente / Master</th>
+								<th class="col-sm-1">Gerente Sr / Experto</th>
+								<th class="col-sm-1">Director</th>
+							</thead>
+							<tbody>
+								<?php foreach ($this->indicador_model->getComportamientosByCompetencia($competencia->id) as $comportamiento) :?>
+									<tr>
+										<td><?= $comportamiento->descripcion;?></td>
+										<?php //$porcentaje = $this->porcentaje_objetivo_model->getByObjetivoArea($obj->id,$area->id); //expected to be or not?>
+										<td><?php if($comportamiento->analista):?><span class='glyphicon glyphicon-ok-circle'></span>
+											<?php else: ?><span class='glyphicon glyphicon-remove-circle'></span><?php endif;?></td>
+										<td><?php if($comportamiento->consultor):?><span class='glyphicon glyphicon-ok-circle'></span>
+											<?php else: ?><span class='glyphicon glyphicon-remove-circle'></span><?php endif;?></td>
+										<td><?php if($comportamiento->sr):?><span class='glyphicon glyphicon-ok-circle'></span>
+											<?php else: ?><span class='glyphicon glyphicon-remove-circle'></span><?php endif;?></td>
+										<td><?php if($comportamiento->gerente):?><span class='glyphicon glyphicon-ok-circle'></span>
+											<?php else: ?><span class='glyphicon glyphicon-remove-circle'></span><?php endif;?></td>
+										<td><?php if($comportamiento->experto):?><span class='glyphicon glyphicon-ok-circle'></span>
+											<?php else: ?><span class='glyphicon glyphicon-remove-circle'></span><?php endif;?></td>
+										<td><?php if($comportamiento->director):?><span class='glyphicon glyphicon-ok-circle'></span>
+											<?php else: ?><span class='glyphicon glyphicon-remove-circle'></span><?php endif;?></td>
+									</tr>
+								<?php endforeach; ?></ul>
+							</tbody>
+						</table>
+					</td>
 				</tr>
     			<?php
     		endforeach;
@@ -97,5 +112,34 @@ class Indicador extends CI_Controller {
 			$this->nuevo(null,"Se ha realizado el cambio de estatus");
 		else
 			$this->nuevo("Error al intentar hacer el cambio de estatus. Intenta de nuevo");
+	}
+
+	public function asignar_comportamientos() {
+		$data['indicadores'] = $this->indicador_model->getAll();
+		foreach ($data['indicadores'] as $indicador) :
+			foreach ($indicador->competencias = $this->indicador_model->getCompetenciasByIndicador($indicador->id) as $competencia) {
+				$competencia->comportamientos = $this->indicador_model->getComportamientosByCompetencia($competencia->id);
+			}
+		endforeach;
+
+		$this->layout->title('Capital Humano - Comportamientos');
+		$this->layout->view('indicador/asignar_comportamientos',$data);
+	}
+
+	function asigna_comportamiento() {
+		$datos = array(
+			'comportamiento'=>$this->input->post('comportamiento'),
+			'nivel_posicion'=>$this->input->post('posicion')
+		);
+		$valor = $this->input->post('valor');
+		if($valor == 'false')
+			$resp=$this->indicador_model->delPosicionComportamiento($datos);
+		else
+			$resp=$this->indicador_model->addComportamientoPosicion($datos);
+		if($resp)
+			$response['msg']="ok";
+		else
+			$response['msg']="Error, intenta de nuevo";
+		echo json_encode($response);
 	}
 }

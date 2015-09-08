@@ -5,24 +5,22 @@
   </div>
 </div>
 <div class="container">
-  <div align="center">
-	<?php if(isset($err_msg)): ?>
-		<div id="alert" class="alert alert-danger" role="alert" style="max-width:400px;">
-			<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-			<span class="sr-only">Error:</span>
-			<?= $err_msg;?>
+  <div class="row" align="center">
+	  <a href="<?= base_url('administrar_indicadores');?>">&laquo;Regresar</a>
+  	<div class="col-md-12" align="center">
+	  	<div class="form-group">
+		  <div align="center">
+			<div id="alert" style="display:none" class="alert alert-danger" role="alert" style="max-width:400px;">
+		      <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+		      <span class="sr-only">Error:</span>
+		      <label id="msg"></label>
+		    </div>
+		  </div>
 		</div>
-	<?php endif;
-	if(isset($msg)): ?>
-		<div id="alert" class="alert alert-success" role="alert" style="max-width:400px;">
-			<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-			<span class="sr-only">Error:</span>
-			<?= $msg;?>
-		</div>
-	<?php endif; ?>
+	</div>
   </div>
-  <form role="form" method="post" action="<?= base_url('competencia/update');?>" class="form-signin">
-  	<input type="hidden" name="id" value="<?= $competencia->id;?>">
+  <form id="update" role="form" method="post" action="javascript:" class="form-signin">
+  	<input type="hidden" id="id" value="<?= $competencia->id;?>">
   	<div class="row" align="center">
 	  <div class="col-md-4">
 		<div class="form-group">
@@ -34,7 +32,7 @@
 	  <div class="col-md-4">
 		<div class="form-group">
 		  <label for="indicador">Indicador:</label>
-		  <select name="indicador" class="form-control" style="max-width:300px; text-align:center">
+		  <select id="indicador" class="form-control" style="max-width:300px; text-align:center">
 		  	<?php foreach ($indicadores as $indicador) : ?>
 			  <option value="<?= $indicador->id;?>" <?php if($indicador->id == $competencia->indicador) echo"selected";?>>
 				<?= $indicador->nombre;?></option>
@@ -45,7 +43,7 @@
 	  <div class="col-md-4">
 		<div class="form-group">
 		  <label for="descripcion">Descripción:</label>
-		  <textarea name="descripcion" class="form-control" style="max-width:300px;text-align:center" rows="3" 
+		  <textarea id="descripcion" class="form-control" style="max-width:300px;text-align:center" rows="3" 
 		  	required><?= $competencia->descripcion;?></textarea>
 		</div>
 	  </div>
@@ -54,16 +52,17 @@
 	  <div class="col-md-12">
 		  <button type="submit" class="btn btn-lg btn-primary btn-block" style="max-width:200px; text-align:center;">
 		  	Actualizar Datos</button>
+		  	<span style="float:right;">
+				<label onclick="$('#update').hide('slow');$('#comportamientos').show('slow');" style="cursor:pointer;">
+					Ver comportamientos</label>
+			</span>
 	  </div>
 	</div>
   </form>
-  <hr>
-  <div class="row" align="center">
+  <div id="comportamientos" style="display:none" class="row" align="center">
 	<div class="col-md-12">
 	  <label>Comportamientos</label>
 	</div>
-  </div>
-  <div class="row" align="center">
   	<div class="col-md-5">
   	  <div class="panel panel-primary">
 		<div class="panel-heading">Comportamientos Asignados</div>
@@ -83,10 +82,10 @@
   	<div class="col-md-2">
 	  <div class="form-group">&nbsp;</div>
 	  <div class="form-group">
-		<button id="btnQuitar" class="form-control" style="max-width:100px;" disabled>Quitar&raquo;</button>
+		<button type="button" id="btnQuitar" class="form-control" style="max-width:100px;" disabled>Quitar&raquo;</button>
 	  </div>
 	  <div class="form-group">
-		<button id="btnAgregar" class="form-control" style="max-width:100px;">&laquo;Agregar</button>
+		<button type="button" id="btnAgregar" class="form-control" style="max-width:100px;">&laquo;Agregar</button>
 	  </div>
 	  <div class="form-group">&nbsp;</div>
   	</div>
@@ -99,20 +98,21 @@
 			<input id="comportamiento" type="text" class="form-control" value="" placeholder="Descripción">
 			<select id="posicion" name="posicion" multiple class="form-control" 
 				style="overflow-y:auto;overflow-x:auto;min-height:130px;max-height:300px">
-				<option value="8">Nivel 8 o Superior (Analista)</option>
-				<option value="7">Nivel 7 (Consultor / Especialista)</option>
-				<option value="6">Nivel 6 (Consultor Sr / Especialista Sr)</option>
-				<option value="5">Nivel 5 (Gerente / Master)</option>
-				<option value="4">Nivel 4 (Gerente Sr / Experto)</option>
-				<option value="3">Nivel 3 o Inferior (Director)</option>
+				<option value="8">Analista</option>
+				<option value="7">Consultor</option>
+				<option value="6">Consultor Sr</option>
+				<option value="5">Gerente / Master</option>
+				<option value="4">Gerente Sr / Experto</option>
+				<option value="3">Director</option>
 			</select>
 	  </div>
   	</div>
-  </div>
-  <div class="row" align="center">
   	<div class="col-md-12">
-	  <a href="<?= base_url('administrar_indicadores');?>">&laquo;Regresar</a>
-  	</div>
+		<span style="float:right;">
+			<label onclick="$('#comportamientos').hide('slow');$('#update').show('slow');" style="cursor:pointer;">
+				Ver información general</label>
+		</span>
+	</div>
   </div>
 
 	<script type="text/javascript">
@@ -173,6 +173,34 @@
 						$('#cargando').hide();
 					}
 				});
+			});
+
+			$('#update').submit(function(event){
+				id = $('#id').val();
+				nombre = $('#nombre').val();
+				$("#indicador option:selected").each(function() {
+					indicador = $('#indicador').val();
+				});
+				descripcion = $('#descripcion').val();
+				$.ajax({
+					url: '<?= base_url("competencia/update");?>',
+					type: 'post',
+					data: {'id':id,'nombre':nombre,'descripcion':descripcion,'indicador':indicador},
+					success: function(data){
+						var returnedData = JSON.parse(data);
+						console.log(returnedData['msg']);
+						if(returnedData['msg']=="ok")
+							window.document.location='<?= base_url("administrar_indicadores");?>';
+						else{
+							$('#alert').prop('display',true).show();
+							$('#msg').html(returnedData['msg']);
+							setTimeout(function() {
+								$("#alert").fadeOut(1500);
+								},3000);
+						}
+					}
+				});
+				event.preventDefault();
 			});
 		});
 	</script>

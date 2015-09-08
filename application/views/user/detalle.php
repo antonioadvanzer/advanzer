@@ -128,11 +128,12 @@
 		  <span style="float:right;">
 		  	<?php if($user->estatus == 1): ?>
 		  		<label onclick="$('#update_foto').hide('slow');$('#update').hide('slow');$('#recision').
-		  			show('slow');" style="cursor:pointer;">Dar de baja al colaborador</label></span>
+		  			show('slow');" style="cursor:pointer;">Dar de baja al colaborador</label>
 		  	<?php elseif($user->estatus == 0): ?>
 		  		<label onclick="$('#update_foto').hide('slow');$('#update').hide('slow');$('#rehab').
-		  			show('slow');" style="cursor:pointer;">Rehabilitar al colaborador</label></span>
+		  			show('slow');" style="cursor:pointer;">Rehabilitar al colaborador</label>
 		  	<?php endif; ?>
+		  </span>
 	  </div>
 	</div>
   </form>

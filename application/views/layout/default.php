@@ -98,6 +98,7 @@
 									<li><a href="<?= base_url('administrar_usuarios'); ?>">Colaboradores</a></li>
 									<li><a href="<?= base_url('administrar_dominios');?>">Responsabilidades Funcionales</a></li>
 									<li><a href="<?= base_url('administrar_indicadores');?>">Competencias Laborales</a></li>
+									<li><a href="<?= base_url('indicador/asignar_comportamientos');?>">Comportamientos por Posición</a></li>
 									<li><a href="<?= base_url('evaluaciones');?>">Evaluación de Desempeño</a></li>
 									<li><a href="<?= base_url('evaluacion/proyecto');?>">Evaluación por Proyecto</a></li>
 								</ul>

@@ -110,8 +110,16 @@ class Competencia extends CI_Controller {
 			  <select id="quitar_pos" name="quitar_pos" class="form-control" multiple 
 				style="min-height:135px;max-height:250px;overflow-y:auto;overflow-x:auto;">
 				<?php $posiciones=$this->competencia_model->getPosicionesByComportamiento($comportamiento);
-				foreach ($posiciones->result() as $posicion) : ?>
-					<option value="<?= $posicion->nivel; ?>">Nivel <?= $posicion->nivel;?></option>
+				foreach ($posiciones->result() as $posicion) : 
+					switch ($posicion->nivel) {
+						case 3: $nivel="Director"; break;
+						case 4: $nivel="Gerente Sr / Experto"; break;
+						case 5: $nivel="Gerente / Master"; break;
+						case 6: $nivel="Consultor Sr"; break;
+						case 7: $nivel="Consultor"; break;
+						case 8: $nivel="Analista"; break;
+					} ?>
+					<option value="<?= $posicion->nivel; ?>"><?= $nivel;?></option>
 				<?php endforeach; ?>
 			  </select>
 			</div>
@@ -130,8 +138,16 @@ class Competencia extends CI_Controller {
 		  <div class="panel-heading">Posiciones sin asignar</div>
 			<select id="agregar_pos" name="agregar_pos" class="form-control" multiple 
 			  style="min-height:135px;max-height:250px;overflow-y:auto;overflow-x:auto;">
-			  <?php foreach ($this->competencia_model->getPosicionesByComportamiento($comportamiento,$posiciones->result_array())->result() as $posicion) : ?>
-				<option value="<?= $posicion->nivel; ?>">Nivel <?= $posicion->nivel;?></option>
+			  <?php foreach ($this->competencia_model->getPosicionesByComportamiento($comportamiento,$posiciones->result_array())->result() as $posicion) : 
+				switch ($posicion->nivel) {
+					case 3: $nivel="Director"; break;
+					case 4: $nivel="Gerente Sr / Experto"; break;
+					case 5: $nivel="Gerente / Master"; break;
+					case 6: $nivel="Consultor Sr"; break;
+					case 7: $nivel="Consultor"; break;
+					case 8: $nivel="Analista"; break;
+				} ?>
+				<option value="<?= $posicion->nivel; ?>"><?= $nivel;?></option>
 			  <?php endforeach; ?>
 			</select>
 		  </div>
@@ -186,12 +202,15 @@ class Competencia extends CI_Controller {
 
 	function update() {
 		$id=$this->input->post('id');
-		$nombre=$this->input->post('nombre');
-		$descripcion=$this->input->post('descripcion');
-		$indicador=$this->input->post('indicador');
-		if($this->competencia_model->update($id,$nombre,$descripcion,$indicador))
-			$this->ver($id,"Se ha actualizado la competencia");
+		$datos = array(
+			'nombre'=>$this->input->post('nombre'),
+			'descripcion'=>$this->input->post('descripcion'),
+			'indicador'=>$this->input->post('indicador')
+		);
+		if($this->competencia_model->update($id,$datos))
+			$response['msg'] = "ok";
 		else
-			$this->ver($id,null,"Error al actualizar la competencia. Intente de nuevo");
+			$response['msg'] = "Error al actualizar la competencia. Intente de nuevo";
+		echo json_encode($response);
 	}
 }

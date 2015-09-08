@@ -15,23 +15,38 @@ class Indicador_model extends CI_Model{
 		return $this->db->get('Indicadores')->result();
 	}
 
-	function getCompetenciasByIndicadorPosicion($indicador,$posicion) {
+	function getCompetenciasByIndicador($indicador) {
 		$this->db->distinct();
 		$this->db->select('C.id,C.nombre,C.descripcion,C.estatus');
 		$this->db->from('Competencias C');
 		$this->db->join('Comportamientos Co','Co.competencia = C.id');
 		$this->db->join('Comportamiento_Posicion CP','CP.comportamiento = Co.id');
-		$this->db->where(array('C.indicador'=>$indicador,'CP.nivel_posicion'=>$posicion));
-		$this->db->order_by('C.nombre','asc');
+		$this->db->where('C.indicador',$indicador);
+		$this->db->order_by('C.nombre');
 		return $this->db->get()->result();
 	}
 
-	function getComportamientosByCompetenciaPosicion($competencia,$posicion) {
-		$this->db->select('C.descripcion,CP.evalua');
-		$this->db->join('Comportamiento_Posicion CP','CP.comportamiento = C.id');
-		$this->db->where(array('C.competencia'=>$competencia,'CP.nivel_posicion'=>$posicion));
-		$this->db->order_by('C.descripcion','asc');
-		return $this->db->get('Comportamientos C')->result();
+	function getComportamientosByCompetencia($competencia) {
+		$this->db->distinct();
+		$this->db->select('id,descripcion');
+		$this->db->where('competencia',$competencia);
+		$this->db->order_by('descripcion','asc');
+		$result = $this->db->get('Comportamientos')->result();
+		foreach ($result as $comportamiento) :
+			$comportamiento->analista = $this->db->from('Comportamiento_Posicion')
+				->where(array('comportamiento'=>$comportamiento->id,'nivel_posicion'=>8))->get()->first_row();
+			$comportamiento->consultor = $this->db->from('Comportamiento_Posicion')
+				->where(array('comportamiento'=>$comportamiento->id,'nivel_posicion'=>7))->get()->first_row();
+			$comportamiento->sr = $this->db->from('Comportamiento_Posicion')
+				->where(array('comportamiento'=>$comportamiento->id,'nivel_posicion'=>6))->get()->first_row();
+			$comportamiento->gerente = $this->db->from('Comportamiento_Posicion')
+				->where(array('comportamiento'=>$comportamiento->id,'nivel_posicion'=>5))->get()->first_row();
+			$comportamiento->experto = $this->db->from('Comportamiento_Posicion')
+				->where(array('comportamiento'=>$comportamiento->id,'nivel_posicion'=>4))->get()->first_row();
+			$comportamiento->director = $this->db->from('Comportamiento_Posicion')
+				->where(array('comportamiento'=>$comportamiento->id,'nivel_posicion'=>3))->get()->first_row();
+		endforeach;
+		return $result;
 	}
 
 	function searchById($id) {
@@ -56,6 +71,19 @@ class Indicador_model extends CI_Model{
 
 	function ch_estatus($id,$estatus) {
 		$this->db->where('id',$id)->update('Indicadores',array('estatus'=>$estatus));
+		if($this->db->affected_rows() == 1)
+			return true;
+		return false;
+	}
+
+	function addComportamientoPosicion($datos) {
+		$this->db->insert('Comportamiento_Posicion',$datos);
+		if($this->db->affected_rows() == 1)
+			return true;
+		return false;
+	}
+	function delPosicionComportamiento($datos) {
+		$this->db->where($datos)->delete('Comportamiento_Posicion');
 		if($this->db->affected_rows() == 1)
 			return true;
 		return false;

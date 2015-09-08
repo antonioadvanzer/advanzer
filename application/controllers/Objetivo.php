@@ -11,6 +11,7 @@ class Objetivo extends CI_Controller {
     	$this->load->model('metrica_model');
     	$this->load->model('dominio_model');
     	$this->load->model('area_model');
+        $this->load->model('porcentaje_objetivo_model');
     }
 
     function ver($id,$msg=null) {
@@ -131,10 +132,24 @@ class Objetivo extends CI_Controller {
 
     function asignar_pesos() {
         $data=array();
-        $this->load->model('porcentaje_objetivo_model');
         $direccion = $this->session->userdata('direccion');
         $data['areas'] = $this->porcentaje_objetivo_model->getPorcentajes($direccion);;
         $this->layout->title('Capital Humano - Pesos Específicos');
         $this->layout->view('objetivo/asignar_pesos',$data);
+    }
+
+    function asigna_peso() {
+        $objetivo_area = $this->porcentaje_objetivo_model->getObjetivoArea(array('objetivo'=>$this->input->post('responsabilidad'),
+            'area'=>$this->input->post('area')));
+        $datos=array(
+            'nivel_posicion'=>$this->input->post('posicion'),
+            'objetivo_area'=>$objetivo_area
+        );
+        $valor = $this->input->post('valor');
+        if($this->porcentaje_objetivo_model->asigna_peso($datos,$valor))
+            $response['msg']="ok";
+        else
+            $response['msg']="Error, intenta de nuevo";
+        echo json_encode($response);
     }
 }

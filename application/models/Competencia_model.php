@@ -68,11 +68,10 @@ class Competencia_model extends CI_Model{
 
 	}
 
-	function update($id,$nombre,$descripcion,$indicador) {
-		$this->db->where('id',$id)->update('Competencias',array('nombre'=>$nombre,'descripcion'=>$descripcion,'indicador'=>$indicador));
+	function update($id,$datos) {
+		$this->db->where('id',$id)->update('Competencias',$datos);
 		if($this->db->affected_rows() == 1)
 			return true;
-		else
-			return false;
+		return false;
 	}
 }

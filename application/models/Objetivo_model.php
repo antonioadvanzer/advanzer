@@ -34,7 +34,7 @@ class Objetivo_model extends CI_Model{
 	}
 
 	function del_area($obj,$area) {
-		$result = $this->db->where(array('objetivo'=>$obj,'area'=>$area))->get('Objetivos_Areas');;
+		$result = $this->db->where(array('objetivo'=>$obj,'area'=>$area))->get('Objetivos_Areas');
 		if($result->num_rows() == 1){
 			$objetivo_area = $result->first_row()->id;
 			$result = $this->db->where('objetivo_area',$objetivo_area)->get('Porcentajes_Objetivos');
