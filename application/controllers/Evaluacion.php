@@ -109,17 +109,12 @@ class Evaluacion extends CI_Controller {
             <div> <?php 
                 foreach ($this->evaluacion_model->getCompetenciasByIndicador($indicador->id,$posicion) as $comp) : ?>
                     <h2><?= $comp->nombre;?></h2>
-                    <div>
+                    <div align="left">
                         <label><?= $comp->descripcion;?></label>
                         <p><ul type="square"> <?php
-                            foreach ($this->evaluacion_model->getComportamientoByCompetencia($comp->id,$posicion) as $comportamiento) : 
-                                if($comportamiento->evalua == 1)
-                                    $class="glyphicon-ok-circle";
-                                else
-                                    $class="glyphicon-remove-circle";?>
-                                <span class="glyphicon <?= $class;?>"><?= $comportamiento->descripcion;?></span>
-                                <?php
-                            endforeach; ?>
+                            foreach ($this->evaluacion_model->getComportamientoByCompetencia($comp->id,$posicion) as $comportamiento) : ?>
+                                    <span class="glyphicon glyphicon-ok-circle"><?= $comportamiento->descripcion;?></span>
+                            <?php endforeach; ?>
                         </ul></p>
                     </div> <?php
                 endforeach; ?>
@@ -133,12 +128,12 @@ class Evaluacion extends CI_Controller {
         foreach ($this->evaluacion_model->getResponsabilidadByArea($area) as $dominio) :?>
             <h1><?= $dominio->nombre;?></h1>
             <div>
-            <?php foreach ($this->evaluacion_model->getObjetivosByDominio($dominio->id,$area,$posicion) as $responsabilidad) : ?>
+            <?php foreach ($this->evaluacion_model->getObjetivosByDominio($dominio->id,$area,$posicion) as $responsabilidad): ?>
                 <h2><?= $responsabilidad->nombre;?><span style="float:right;"><?= $responsabilidad->valor;?>%</span></h2>
                 <div align="left">
                     <label><?= $responsabilidad->descripcion;?></label>
                     <p><ol reversed>
-                        <?php foreach ($this->evaluacion_model->getMetricaByObjetivo($responsabilidad->id) as $metrica) : ?>
+                        <?php foreach ($this->evaluacion_model->getMetricaByObjetivo($responsabilidad->id) as $metrica) :?>
                             <li><?= $metrica->descripcion;?></li>
                         <?php endforeach; ?>
                     </ol></p>
@@ -195,7 +190,7 @@ class Evaluacion extends CI_Controller {
     public function guarda_evaluadores() {
         $colaborador=$this->input->post('colaborador');
         $agregar=$this->input->post('agregar');
-        $this->input->post('evaluacion') ? $evaluacion=$this->input->post('evaluacion') : $evaluacion=null;
+        $this->input->post('evaluacion') ? $evaluacion=$this->input->post('evaluacion') : $evaluacion=$this->evaluacion_model->getEvaluacionAnual();
         $this->db->trans_begin();
         if(!empty($agregar))
             foreach ($agregar as $evaluador) :
@@ -542,11 +537,14 @@ class Evaluacion extends CI_Controller {
             'lider'=>$this->input->post('lider')
         );
         $this->db->trans_begin();
-        if($evaluacion=$this->evaluacion_model->create($datos)){
+        $evaluacion=$this->evaluacion_model->create($datos);
+        if($this->input->post('tipo') == 0){
             foreach ($this->input->post('agregar') as $colaborador) :
                 $this->evaluacion_model->addEvaluadorToColaborador(array('evaluador'=>$this->input->post('lider'),
                     'evaluado'=>$colaborador,'evaluacion'=>$evaluacion));
             endforeach;
+        }else{
+            $this->evaluacion_model->asignar_evaluacion_anual($evaluacion);
         }
         if($this->db->trans_status() === FALSE){
             $this->db->trans_rollback();

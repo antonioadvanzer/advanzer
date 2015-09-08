@@ -63,7 +63,6 @@
 	.accordion p {
 	  padding: 15px 35px;
 	  background-color: #ddd;
-	  font-family: "Georgia";
 	  font-size: .8rem;
 	  color: #333;
 	  line-height: 1.3rem;
@@ -122,11 +121,11 @@
   	<div class="col-md-12"><div id="cargando" style="display:none; color: green;">
   		<img src="<?= base_url('assets/images/loading.gif');?>"></div></div>
   </div>
-  <div class="row" align="center">
+  <div id="vista" class="row" align="center">
   	<div class="col-md-6">
 	  <label>Responsabilidades</label>
       <aside id="perfil" class="accordion">
-  		<?php foreach ($dominios as $dominio) : ?>
+  		<?php foreach ($dominios as $dominio) : print_r($dominio);?>
 		<h1><?= $dominio->nombre;?></h1>
 		<div>
 			<?php foreach ($dominio->responsabilidades as $resp) : ?>
@@ -134,7 +133,7 @@
 			<div align="left">
 				<label><?= $resp->descripcion;?></label>
 				<p><ol reversed>
-					<?php foreach ($resp->metricas as $metrica) : ?>
+					<?php foreach ($resp->metricas as $metrica): ?>
 					<li><?= $metrica->descripcion;?></li>
 				<?php endforeach; ?>
 				</ol></p>
@@ -183,12 +182,13 @@
 						posicion : posicion
 					},
 					beforeSend: function (xhr) {
-						$('#perfil').hide();
-						$('#cargando').show();
+						$('#vista').hide('slow');
+						$('#cargando').show('slow');
 					},
 					success: function(data) {
-						$("#perfil").show().html(data);
-						$('#cargando').hide();
+						$('#cargando').hide('slow');
+						$("#vista").show('slow');
+						$("#perfil").html(data);
 					}
 				});
 			});
@@ -207,12 +207,11 @@
 						posicion : posicion
 					},
 					beforeSend: function (xhr) {
-						$('#perfil').hide();
-						$('#cargando').show();
+						$('#vista').hide();
+						$('#cargando').show('slow');
 					},
 					success: function(data) {
-						$('#perfil').show().html(data);
-						$('#cargando').hide();
+						$('#perfil').html(data);
 					}
 				});
 				$.ajax({
@@ -221,13 +220,10 @@
 					data: {
 						posicion : posicion
 					},
-					beforeSend: function(xhr) {
-						$('#competencias').hide();
-						$('#cargando').show();
-					},
 					success: function(data) {
-						$('#competencias').show().html(data);
-						$('#cargando').hide();
+						$('#cargando').hide('slow');
+						$('#competencias').html(data);
+						$("#vista").show('slow');
 					}
 				});
 			});

@@ -9,7 +9,7 @@ class Evaluacion_model extends CI_Model{
 	}
 
 	function getComportamientoByCompetencia($competencia,$posicion,$asignacion=null) {
-		$this->db->select('C.id,C.descripcion,C.competencia,CP.evalua');
+		$this->db->select('C.id,C.descripcion,C.competencia');
 		$this->db->where(array('C.competencia'=>$competencia,'CP.nivel_posicion'=>$posicion));
 		$this->db->order_by('C.descripcion');
 		$this->db->join('Comportamiento_Posicion CP','CP.comportamiento = C.id');
@@ -47,8 +47,8 @@ class Evaluacion_model extends CI_Model{
 	function getObjetivosByDominio($dominio,$area,$posicion,$asignacion=null) {
 		$this->db->select('O.id,O.nombre,PO.valor,O.descripcion');
 		$this->db->from('Objetivos O');
-		$this->db->join('Objetivos_Areas OA','OA.objetivo = O.id');
-		$this->db->join('Porcentajes_Objetivos PO','PO.objetivo = O.id');
+		$this->db->join('Objetivos_Areas OA','OA.objetivo = O.id','LEFT OUTER');
+		$this->db->join('Porcentajes_Objetivos PO','PO.objetivo_area = OA.id','LEFT OUTER');
 		if($asignacion!=null){
 			$this->db->select('M.valor');
 			$this->db->join('Detalle_Evaluacion DE','DE.objetivo=O.id','LEFT OUTER');
@@ -406,5 +406,16 @@ class Evaluacion_model extends CI_Model{
 			return $this->db->insert_id();
 		else
 			return false;
+	}
+
+	function asignar_evaluacion_anual($evaluacion) {
+		$this->db->where(array('evaluacion'=>null,'estatus'=>0))->update('Evaluadores',array('evaluacion',$evaluacion));
+	}
+
+	function getEvaluacionAnual() {
+		$result = $this->db->where(array('estatus'=>1,'tipo'=>1))->get('Evaluaciones');
+		if($result->num_rows() == 1)
+			return $result->first_row()->id;
+		return null;
 	}
 }

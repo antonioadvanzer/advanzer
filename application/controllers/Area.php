@@ -64,6 +64,7 @@ class Area extends CI_Controller {
     	$data = array();
     	if (!empty($msg))
     		$data['err_msg'] = $msg;
+        $data['direcciones'] = $this->area_model->getDirecciones();
     	$this->layout->title('Capital Humano - Nueva Área');
     	$this->layout->view('area/nueva',$data);
     }
@@ -71,7 +72,8 @@ class Area extends CI_Controller {
     public function create(){
         $datos=array(
             'nombre' => $this->input->post('nombre'),
-        	'estatus' => $this->input->post('estatus')
+        	'estatus' => $this->input->post('estatus'),
+            'direccion' => $this->input->post('direccion')
         );
     	if($this->area_model->create($datos))
     		$response['msg']="ok";
