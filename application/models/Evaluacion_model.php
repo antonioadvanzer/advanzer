@@ -241,7 +241,7 @@ class Evaluacion_model extends CI_Model{
 			if($res->num_rows() == 1)
 				(double)$competencia += (double)($res->first_row()->total360)*0.1;
 		}
-		//evaluacion del jefe directo
+		//evaluacion del jefe directo y líderes de proyecto
 		$this->db->select('RC.total')->from('Resultados_ev_Competencia RC');
 		$this->db->join('Evaluadores Ev','Ev.id = RC.asignacion');
 		$this->db->where(array('Ev.evaluado'=>$asignacion->evaluado,'Ev.evaluacion'=>$asignacion->evaluacion,'Ev.evaluador'=>$jefe));

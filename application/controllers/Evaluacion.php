@@ -90,10 +90,13 @@ class Evaluacion extends CI_Controller {
     }
 
     public function index() {
-        $data['colaboradores'] = $this->evaluacion_model->getEvaluados();
-
-        $this->layout->title('Advanzer - Evaluaciones');
-        $this->layout->view('evaluacion/index',$data);
+        if(!$this->evaluacion_model->getEvaluacionAnual())
+            redirect('evaluacion/proyecto');
+        else{
+            $data['colaboradores'] = $this->evaluacion_model->getEvaluados();
+            $this->layout->title('Advanzer - Evaluaciones');
+            $this->layout->view('evaluacion/index',$data);
+        }
     }
 
     public function load_competencias() {
