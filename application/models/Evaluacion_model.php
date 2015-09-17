@@ -8,7 +8,7 @@ class Evaluacion_model extends CI_Model{
 		parent::__construct();
 	}
 
-	function getComportamientoByCompetencia($competencia,$posicion,$asignacion) {
+	function getComportamientoByCompetencia($competencia,$posicion,$asignacion=nulll) {
 		$this->db->select('C.id,C.descripcion,C.competencia')->from('Comportamientos C');
 		$this->db->join('Comportamiento_Posicion CP','CP.comportamiento = C.id','LEFT OUTER');
 		$this->db->where(array('C.competencia'=>$competencia,'CP.nivel_posicion'=>$posicion));
