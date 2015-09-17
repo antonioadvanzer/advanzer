@@ -190,7 +190,8 @@ class Evaluacion_model extends CI_Model{
 			$this->db->select('U.id,U.foto,U.nombre,E.id asignacion')->from('Users U');
 			$this->db->join('Evaluadores E','E.evaluador = U.id');
 			$this->db->join('Evaluaciones Ev','Ev.id = E.evaluacion','LEFT OUTER');
-			$this->db->where(array('Ev.estatus !='=>0,'Ev.id'=>$evaluacion,'E.evaluado'=>$colaborador->id,'E.evaluador !='=>$jefe));
+			$this->db->where(array('Ev.estatus !='=>0,'Ev.id'=>$evaluacion,'E.evaluado'=>$colaborador->id,'E.evaluador !='=>$jefe,
+				'E.evaluador !=',$colaborador->id));
 			$colaborador->evaluadores360 = $this->db->get()->result();
 			$ignore=array();
 			foreach ($colaborador->evaluadores360 as $evaluador) :
