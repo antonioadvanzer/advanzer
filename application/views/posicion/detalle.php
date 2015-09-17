@@ -23,7 +23,7 @@
 	<form id="update" role="form" method="post" action="javascript:" class="form-signin">
 		<input type="hidden" id="id" value="<?= $posicion->id;?>">
 		<div class="row" align="center">
-			<div class="col-md-2"></div>
+			<div class="col-md-1"></div>
 			<div class="col-md-4">
 				<div class="form-group">
 					<label for="nombre">Nombre:</label>
@@ -32,9 +32,23 @@
 				</div>
 			</div>
 			<div class="col-md-4">
+				<div class="form-group">
+				  <label for="nivel">Nivel:</label>
+				  <select id="nivel" style="max-width:300px" class="form-control" required>
+				  	<option disabled value="">--Selecciona un nivel de escalabilidad --</option>
+					<option value="8" <?php if($posicion->nivel == 8) echo "selected";?>>Analista</option>
+					<option value="7" <?php if($posicion->nivel == 7) echo "selected";?>>Consultor</option>
+					<option value="6" <?php if($posicion->nivel == 6) echo "selected";?>>Consultor Sr</option>
+					<option value="5" <?php if($posicion->nivel == 5) echo "selected";?>>Gerente / Master</option>
+					<option value="4" <?php if($posicion->nivel == 4) echo "selected";?>>Gerente Sr / Experto</option>
+					<option value="3" <?php if($posicion->nivel == 3) echo "selected";?>>Director</option>
+				  </select>
+				</div>
+			</div>
+			<div class="col-md-2">
 				<label></label>
 				<button type="submit" class="btn btn-lg btn-primary btn-block" 
-					style="max-width:200px; text-align:center;">Actualizar Nombre</button>
+					style="max-width:200px; text-align:center;">Actualizar Datos</button>
 			</div>
 		</div>
 	</form>
@@ -79,10 +93,13 @@
 				$('#alert_success').prop('display',false);
 				id = $('#id').val();
 				nombre = $('#nombre').val();
+				$('#nivel :selected').each(function() {
+					nivel = $('#nivel').val();
+				});
 				$.ajax({
 					url: '<?= base_url("posicion/update");?>',
 					type: 'post',
-					data: {'id':id,'nombre':nombre},
+					data: {'id':id,'nombre':nombre,'nivel':nivel},
 					success: function(data){
 						var returnedData = JSON.parse(data);
 						console.log(returnedData['msg']);

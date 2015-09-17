@@ -41,23 +41,23 @@ class Indicador extends CI_Controller {
 										<td><?= $comportamiento->descripcion;?></td>
 										<?php //$porcentaje = $this->porcentaje_objetivo_model->getByObjetivoArea($obj->id,$area->id); //expected to be or not?>
 										<td style="vertical-align:middle;text-align:center;"><?php if($comportamiento->analista):?>
-											<span class='glyphicon glyphicon-ok-circle'></span>
-											<?php else: ?><span class='glyphicon glyphicon-remove-circle'></span><?php endif;?></td>
+											<span class='glyphicon glyphicon-ok'></span>
+											<?php else: ?><span class='glyphicon glyphicon-remove'></span><?php endif;?></td>
 										<td style="vertical-align:middle;text-align:center;"><?php if($comportamiento->consultor):?>
-											<span class='glyphicon glyphicon-ok-circle'></span>
-											<?php else: ?><span class='glyphicon glyphicon-remove-circle'></span><?php endif;?></td>
+											<span class='glyphicon glyphicon-ok'></span>
+											<?php else: ?><span class='glyphicon glyphicon-remove'></span><?php endif;?></td>
 										<td style="vertical-align:middle;text-align:center;"><?php if($comportamiento->sr):?>
-											<span class='glyphicon glyphicon-ok-circle'></span>
-											<?php else: ?><span class='glyphicon glyphicon-remove-circle'></span><?php endif;?></td>
+											<span class='glyphicon glyphicon-ok'></span>
+											<?php else: ?><span class='glyphicon glyphicon-remove'></span><?php endif;?></td>
 										<td style="vertical-align:middle;text-align:center;"><?php if($comportamiento->gerente):?>
-											<span class='glyphicon glyphicon-ok-circle'></span>
-											<?php else: ?><span class='glyphicon glyphicon-remove-circle'></span><?php endif;?></td>
+											<span class='glyphicon glyphicon-ok'></span>
+											<?php else: ?><span class='glyphicon glyphicon-remove'></span><?php endif;?></td>
 										<td style="vertical-align:middle;text-align:center;"><?php if($comportamiento->experto):?>
-											<span class='glyphicon glyphicon-ok-circle'></span>
-											<?php else: ?><span class='glyphicon glyphicon-remove-circle'></span><?php endif;?></td>
+											<span class='glyphicon glyphicon-ok'></span>
+											<?php else: ?><span class='glyphicon glyphicon-remove'></span><?php endif;?></td>
 										<td style="vertical-align:middle;text-align:center;"><?php if($comportamiento->director):?>
-											<span class='glyphicon glyphicon-ok-circle'></span>
-											<?php else: ?><span class='glyphicon glyphicon-remove-circle'></span><?php endif;?></td>
+											<span class='glyphicon glyphicon-ok'></span>
+											<?php else: ?><span class='glyphicon glyphicon-remove'></span><?php endif;?></td>
 									</tr>
 								<?php endforeach; ?></ul>
 							</tbody>

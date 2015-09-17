@@ -19,7 +19,7 @@
           aria-controls="collapseExample"><h3 class="panel-title"><?= $area->nombre;?></h3></a>
       </div>
       <div class="panel-body collapse" id="<?= $area->id;?>">
-        <table class="table table-striped well table-bordered">
+        <table id="tabla<?= $area->id;?>" class="table table-striped well table-bordered">
           <thead>
             <tr>
               <th class="col-sm-3"></th>
@@ -32,30 +32,42 @@
             </tr>
           </thead>
           <tbody>
-            <?php foreach ($area->objetivos as $resp) : ?>
+            <?php $total1=0;$total2=0;$total3=0;$total4=0;$total5=0;$total6=0;
+            foreach ($area->objetivos as $resp) : ?>
               <tr>
-                <td><?= $resp->nombre;?></td>
+                <td><?= $resp->nombre;?> - <small><small><i><?= $resp->tipo;?></i></small></small></td>
                 <td><input style="max-width:80px;text-align:center" class="form-control" type="text" maxlength="3" required pattern="[0-9]+" 
-                  value="<?php if(!empty($resp->analista)) echo $resp->analista->valor;?>" 
-                  onchange="change(this.value,<?= $resp->id;?>,<?= $area->id;?>,8)" ></td>
+                  value="<?php if(!empty($resp->analista)){ echo $resp->analista->valor; $total1+=$resp->analista->valor;}else echo "0";?>" 
+                  onchange="if(this.value == '') this.value=0;change(this.value,<?= $resp->id;?>,<?= $area->id;?>,8);sumarColumna(<?= $area->id;?>,1);" ></td>
                 <td><input style="max-width:80px;text-align:center" class="form-control" type="text" maxlength="3" required pattern="[0-9]+" 
-                  value="<?php if(!empty($resp->consultor)) echo $resp->consultor->valor;?>" 
-                  onchange="change(this.value,<?= $resp->id;?>,<?= $area->id;?>,7)" ></td>
+                  value="<?php if(!empty($resp->consultor)){ echo $resp->consultor->valor;$total2+=$resp->consultor->valor;}else echo "0";?>" 
+                  onchange="change(this.value,<?= $resp->id;?>,<?= $area->id;?>,7);sumarColumna(<?= $area->id;?>,2);" ></td>
                 <td><input style="max-width:80px;text-align:center" class="form-control" type="text" maxlength="3" required pattern="[0-9]+" 
-                  value="<?php if(!empty($resp->sr)) echo $resp->sr->valor;?>" 
-                  onchange="change(this.value,<?= $resp->id;?>,<?= $area->id;?>,6)" ></td>
+                  value="<?php if(!empty($resp->sr)){echo $resp->sr->valor; $total3+=$resp->sr->valor;}else echo "0";?>" 
+                  onchange="change(this.value,<?= $resp->id;?>,<?= $area->id;?>,6);sumarColumna(<?= $area->id;?>,3);" ></td>
                 <td><input style="max-width:80px;text-align:center" class="form-control" type="text" maxlength="3" required pattern="[0-9]+" 
-                  value="<?php if(!empty($resp->gerente)) echo $resp->gerente->valor;?>" 
-                  onchange="change(this.value,<?= $resp->id;?>,<?= $area->id;?>,5)" ></td>
+                  value="<?php if(!empty($resp->gerente)){ echo $resp->gerente->valor;$total4+=$resp->gerente->valor;}else echo "0";?>" 
+                  onchange="change(this.value,<?= $resp->id;?>,<?= $area->id;?>,5);sumarColumna(<?= $area->id;?>,4);" ></td>
                 <td><input style="max-width:80px;text-align:center" class="form-control" type="text" maxlength="3" required pattern="[0-9]+" 
-                  value="<?php if(!empty($resp->experto)) echo $resp->experto->valor;?>" 
-                  onchange="change(this.value,<?= $resp->id;?>,<?= $area->id;?>,4)" ></td>
+                  value="<?php if(!empty($resp->experto)){echo $resp->experto->valor;$total5+=$resp->experto->valor;}else echo "0";?>" 
+                  onchange="change(this.value,<?= $resp->id;?>,<?= $area->id;?>,4);sumarColumna(<?= $area->id;?>,5);" ></td>
                 <td><input style="max-width:80px;text-align:center" class="form-control" type="text" maxlength="3" required pattern="[0-9]+" 
-                  value="<?php if(!empty($resp->director)) echo $resp->director->valor;?>" 
-                  onchange="change(this.value,<?= $resp->id;?>,<?= $area->id;?>,3)" ></td>
+                  value="<?php if(!empty($resp->director)){ echo $resp->director->valor;$total6+=$resp->director->valor;}else echo "0";?>" 
+                  onchange="change(this.value,<?= $resp->id;?>,<?= $area->id;?>,3);sumarColumna(<?= $area->id;?>,6);" ></td>
               </tr>
             <?php endforeach; ?>
           </tbody>
+          <tfoot>
+            <tr>
+              <td align="right"><b>&sum;</b></td>
+              <td align="center"><?= $total1;?></td>
+              <td align="center"><?= $total2;?></td>
+              <td align="center"><?= $total3;?></td>
+              <td align="center"><?= $total4;?></td>
+              <td align="center"><?= $total5;?></td>
+              <td align="center"><?= $total6;?></td>
+            </tr>
+          </tfoot>
         </table>
       </div>
     </div>
@@ -63,6 +75,9 @@
     <script>
       function change(valor,objetivo,area,posicion) {
         console.log(valor,objetivo,area,posicion);
+        if(valor == ''){
+          $valor=0;
+        }
         $.ajax({
           type: 'post',
           url: '<?= base_url("objetivo/asigna_peso");?>',
@@ -75,5 +90,17 @@
             alert(data['statusText']);
           }
         });
+      }
+      function sumarColumna(tabla,columna) {
+        var resultVal = 0.0; 
+        $("#"+ tabla +" tbody tr").each(
+          function() {
+            var celdaValor = $(this).find('td:eq(' + columna + ') input');
+            console.log(celdaValor.val());
+            if (celdaValor.val() != null)
+              resultVal += parseInt(celdaValor.val());
+          } //function
+        ) //each
+        $("#"+ tabla +" tfoot tr td:eq(" + columna + ")").html(resultVal);   
       }
     </script>

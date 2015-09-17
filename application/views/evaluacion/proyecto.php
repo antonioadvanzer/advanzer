@@ -61,21 +61,23 @@
 					type: 'post',
 					data: {'evaluacion': evaluacion},
 					beforeSend: function(xhr) {
-						$('#update').hide();
-						$('#cargando').show();
+						$('#update').hide('slow');
+						$('#cargando').show('slow');
 					},
 					success: function(data) {
-						$('#cargando').hide();
-						$('#update').show();
+						$('#cargando').hide('slow');
+						$('#update').show('slow');
 						$("#datos").html(data);
-						$("#submit").show();
+						$("#submit").show('slow');
 					}
 				});
 			});
 		});
 
 		function valida_fechas(f) {
-			var evaluacion = f.evaluacion.options[f.evaluacion.selectedIndex].value;
+			$("#evaluacion option:selected").each(function() {
+				evaluacion = $('#evaluacion').val();
+			});
 			if(evaluacion == ""){
 				alert('Selecciona una evaluación');
 				return(false);

@@ -58,10 +58,16 @@ class Competencia extends CI_Controller {
 			endforeach;
 		endif;
 
-		if($this->db->trans_status() === FALSE)
+		if($this->db->trans_status() === FALSE){
 			$this->db->trans_rollback();
-		else
+			$response['msg']="Error al agregar comportamiento";
+		}else{
 			$this->db->trans_commit();
+			$response['msg']="ok";
+			$response['msg_success']="Agregado correctamente";
+			$response['id']=$comportamiento;
+		}
+		echo json_encode($response);
 	}
 
 	function del_comportamiento() {
@@ -69,10 +75,15 @@ class Competencia extends CI_Controller {
 
 		$this->db->trans_begin();
 		$this->competencia_model->delComportamiento($comportamiento);
-		if($this->db->trans_status() === FALSE)
+		if($this->db->trans_status() === FALSE){
 			$this->db->trans_rollback();
-		else
+			$response['msg'] = "Error al eliminar comportamiento";
+		}else{
 			$this->db->trans_commit();
+			$response['msg'] = "ok";
+			$response['msg_success'] = "Se ha eliminado el comportamiento";
+		}
+		echo json_encode($response);
 	}
 
 	function del_posicion_comportamiento() {
@@ -82,10 +93,15 @@ class Competencia extends CI_Controller {
 		foreach ($niveles as $nivel) :
 			$this->competencia_model->delNivelFromComportamiento($nivel,$comportamiento);
 		endforeach;
-		if($this->db->trans_status() === FALSE)
+		if($this->db->trans_status() === FALSE){
 			$this->db->trans_rollback();
-		else
+			$response['msg']="Error al desasociar posiciones";
+		}else{
 			$this->db->trans_commit();
+			$response['msg']="ok";
+			$response['msg_success'] = "Se ha desasociado la posición";
+		}
+		echo json_encode($response);
 	}
 
 	function add_posicion_comportamiento() {
@@ -95,10 +111,15 @@ class Competencia extends CI_Controller {
 		foreach ($niveles as $nivel) :
 			$this->competencia_model->addNivelToComportamiento($nivel,$comportamiento);
 		endforeach;
-		if($this->db->trans_status() === FALSE)
+		if($this->db->trans_status() === FALSE){
 			$this->db->trans_rollback();
-		else
+			$response['msg'] = "Error al asociar posiciones";
+		}else{
 			$this->db->trans_commit();
+			$response['msg'] = "ok";
+			$response['msg_success'] = "Se ha añadido la posición";
+		}
+		echo json_encode($response);
 	}
 
 	function load_posiciones_comportamiento() {
@@ -111,7 +132,7 @@ class Competencia extends CI_Controller {
 				style="min-height:135px;max-height:250px;overflow-y:auto;overflow-x:auto;">
 				<?php $posiciones=$this->competencia_model->getPosicionesByComportamiento($comportamiento);
 				foreach ($posiciones->result() as $posicion) : 
-					switch ($posicion->nivel) {
+					switch ($posicion->nivel_posicion) {
 						case 3: $nivel="Director"; break;
 						case 4: $nivel="Gerente Sr / Experto"; break;
 						case 5: $nivel="Gerente / Master"; break;
@@ -119,7 +140,7 @@ class Competencia extends CI_Controller {
 						case 7: $nivel="Consultor"; break;
 						case 8: $nivel="Analista"; break;
 					} ?>
-					<option value="<?= $posicion->nivel; ?>"><?= $nivel;?></option>
+					<option value="<?= $posicion->nivel_posicion; ?>"><?= $nivel;?></option>
 				<?php endforeach; ?>
 			  </select>
 			</div>
@@ -138,22 +159,20 @@ class Competencia extends CI_Controller {
 		  <div class="panel-heading">Posiciones sin asignar</div>
 			<select id="agregar_pos" name="agregar_pos" class="form-control" multiple 
 			  style="min-height:135px;max-height:250px;overflow-y:auto;overflow-x:auto;">
-			  <?php foreach ($this->competencia_model->getPosicionesByComportamiento($comportamiento,$posiciones->result_array())->result() as $posicion) : 
-				switch ($posicion->nivel) {
-					case 3: $nivel="Director"; break;
-					case 4: $nivel="Gerente Sr / Experto"; break;
-					case 5: $nivel="Gerente / Master"; break;
-					case 6: $nivel="Consultor Sr"; break;
-					case 7: $nivel="Consultor"; break;
-					case 8: $nivel="Analista"; break;
-				} ?>
-				<option value="<?= $posicion->nivel; ?>"><?= $nivel;?></option>
-			  <?php endforeach; ?>
+			  <option value="8">Analista</option>
+			  <option value="7">Consultor</option>
+			  <option value="6">Consultor Sr</option>
+			  <option value="5">Gerente / Master</option>
+			  <option value="4">Gerente Sr / Experto</option>
+			  <option value="3">Director</option>
 			</select>
 		  </div>
 		</div>
 		<script>
 			$(document).ready(function() {
+				$('#quitar_pos option').each(function(i,select) {
+					$('#agregar_pos').find("option[value='"+ $(select).val() +"']").remove();
+				});
 				$('#btnQuitarPos').click(function() {
 					if($('#quitar_pos :selected').length > 0){
 						var selected = [];
@@ -168,9 +187,24 @@ class Competencia extends CI_Controller {
 							data:{'selected':selected,'comportamiento':comportamiento},
 							type:'POST',
 							success:function(data) {
-								$('body').html(data);
-								alert('Se ha(n) eliminado!');
-								window.location.reload();
+								var returnData = JSON.parse(data);
+								if(returnData['msg'] == "ok"){
+									$('#quitar_pos :selected').each(function(i,select) {
+										$('#quitar_pos').find(select).remove();
+										$('#agregar_pos').append($('<option>',{value:$(select).val()}).text($(select).text()));
+									});
+									$('#alert_success').prop('display',true).show();
+									$('#msg_success').html(returnData['msg_success']);
+									setTimeout(function() {
+										$("#alert_success").fadeOut(1500);
+										},3000);
+								}else{
+									$('#alert').prop('display',true).show();
+									$('#msg').html(returnData['msg']);
+									setTimeout(function() {
+										$("#alert").fadeOut(1500);
+										},3000);
+								}
 							}
 						});
 					}
@@ -189,9 +223,25 @@ class Competencia extends CI_Controller {
 							data:{'selected':selected,'comportamiento':comportamiento},
 							type:'POST',
 							success:function(data) {
-								$('body').html(data);
-								alert('Se ha(n) agregado!');
-								window.location.reload();
+								console.log(data);
+								var returnData = JSON.parse(data);
+								if(returnData['msg'] == "ok"){
+									$('#agregar_pos :selected').each(function(i,select) {
+										$('#agregar_pos').find(select).remove();
+										$('#quitar_pos').append($('<option>',{value:$(select).val()}).text($(select).text()));
+									});
+									$('#alert_success').prop('display',true).show();
+									$('#msg_success').html(returnData['msg_success']);
+									setTimeout(function() {
+										$("#alert_success").fadeOut(1500);
+										},3000);
+								}else{
+									$('#alert').prop('display',true).show();
+									$('#msg').html(returnData['msg']);
+									setTimeout(function() {
+										$("#alert").fadeOut(1500);
+										},3000);
+								}
 							}
 						});
 					}

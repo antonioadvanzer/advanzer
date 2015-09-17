@@ -1,7 +1,7 @@
 <!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron">
   <div class="container">
-    <h2>Nuevo Perfil de Usuario</h2>
+    <h2>Nuevo Perfil de Colaborador</h2>
   </div>
 </div>
 <div class="container">
@@ -31,15 +31,17 @@
 		  </div>
 		  <div class="form-group">
 		    <label for="tipo">Empresa:</label>
-		    <select class="form-control" style="max-width:300px; text-align:center;" id="empresa">
-		    	<option value="0">--</option>
+		    <select class="form-control" style="max-width:300px; text-align:center;" id="empresa" required>
+		    	<option value="" disabled selected>--</option>
 		    	<option value="1">Advanzer</option>
 		    	<option value="2">Entuizer</option>
 		    </select>
 		  </div>
 		  <div class="form-group">
 			<label for="jefe">Jefe Directo:</label>
-			<select class="form-control" style="max-width:300px; text-align:center;" name="jefe" id="jefe">
+			<select class="selectpicker" data-header="Selecciona al Jefe Directo" data-width="300px" data-live-search="true" 
+				style="max-width:300px; text-align:center;" name="jefe" id="jefe" required>
+				<option value="" disabled selected>-- Selecciona al Jefe Directo --</option>
 				<?php foreach($jefes as $jefe): ?>
 					<option value="<?= $jefe->id;?>"><?= $jefe->nombre;?></option>
 				<?php endforeach; ?>
@@ -54,7 +56,7 @@
 		  </div>
 		  <div class="form-group">
 			<label for="track">Track</label>
-			<select class="form-control" style="max-width:300px;text-align:center" name="track" id="track">
+			<select class="form-control" style="max-width:300px;text-align:center" name="track" id="track" required>
 			  <option disabled selected>-- Selecciona un track --</option>
 				<?php foreach ($tracks as $track) : ?>
 				  <option value="<?= $track->id;?>"><?= $track->nombre;?></option>
@@ -63,7 +65,7 @@
 		  </div>
 	  	  <div class="form-group">
 			<label for="posicion">Posición:</label>
-			<select id="posicion" class="form-control" style="max-width:300px; text-align:center;" name="posicion">
+			<select id="posicion" class="form-control" style="max-width:300px; text-align:center;" name="posicion" required>
 				<option disabled selected>-- Selecciona una posición --</option>
 				<?php foreach ($posiciones as $posicion) : ?>
 					<option value="<?= $posicion->id;?>"><?= $posicion->nombre;?></option>
@@ -72,7 +74,7 @@
 		  </div>
 		  <div class="form-group">
 		    <label for="area">Área:</label>
-		    <select id="area" class="form-control" style="max-width:300px; text-align:center;" name="area">
+		    <select id="area" class="form-control" style="max-width:300px; text-align:center;" name="area" required>
 		    	<?php foreach ($areas as $area) : ?>
 		    		<option value="<?= $area->id;?>"><?= $area->nombre;?></option>
 		    	<?php endforeach; ?>
@@ -113,6 +115,7 @@
 
   <script type="text/javascript">
 	$(document).ready(function() {
+		$('.selectpicker').selectpicker();
 		$('#create').submit(function(event){
 			nombre = $('#nombre').val();
 			email = $('#email').val();
@@ -138,23 +141,26 @@
 	  		$("#tipo option:selected").each(function() {
 				tipo = $('#tipo').val();
 			});
-			$.ajax({
-				url: '<?= base_url("user/create");?>',
-				type: 'post',
-				data: {'nombre':nombre,'email':email,'empresa':empresa,'jefe':jefe,'plaza':plaza,
-					'track':track,'posicion':posicion,'area':area,'ingreso':ingreso,'nomina':nomina,
-					'categoria':categoria,'tipo':tipo},
-				success: function(data){
-					var returnedData = JSON.parse(data);
-					console.log(returnedData['msg']);
-					if(returnedData['msg']=="ok")
-						window.document.location='<?= base_url("user/ver");?>/'+returnedData['id'];
-					else{
-						$('#alert').prop('display',true).show();
-						$('#msg').html(returnedData['msg']);
+			if(jefe != null || track != null || posicion != null)
+				$.ajax({
+					url: '<?= base_url("user/create");?>',
+					type: 'post',
+					data: {'nombre':nombre,'email':email,'empresa':empresa,'jefe':jefe,'plaza':plaza,
+						'track':track,'posicion':posicion,'area':area,'ingreso':ingreso,'nomina':nomina,
+						'categoria':categoria,'tipo':tipo},
+					success: function(data){
+						var returnedData = JSON.parse(data);
+						console.log(returnedData['msg']);
+						if(returnedData['msg']=="ok")
+							window.document.location='<?= base_url("user/ver");?>/'+returnedData['id'];
+						else{
+							$('#alert').prop('display',true).show();
+							$('#msg').html(returnedData['msg']);
+						}
 					}
-				}
-			});
+				});
+			else
+				alert("elige al jefe");
 
 			event.preventDefault();
 		});
@@ -179,8 +185,7 @@
 			mm='0'+mm
 		today = yyyy+'-'+mm+'-'+dd;
 		$('#ingreso').datepicker({
-			dateFormat: 'yy-mm-dd',
-			maxDate: today
+			dateFormat: 'yy-mm-dd'
 		});
 	});
   </script>

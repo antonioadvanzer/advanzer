@@ -15,6 +15,11 @@
 		      <span class="sr-only">Error:</span>
 		      <label id="msg"></label>
 		    </div>
+		    <div id="alert_success" style="display:none" class="alert alert-success" role="alert" style="max-width:400px;">
+		      <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+		      <span class="sr-only">Error:</span>
+		      <label id="msg_success"></label>
+		    </div>
 		  </div>
 		</div>
 	</div>
@@ -54,7 +59,7 @@
 		  	Actualizar Datos</button>
 		  	<span style="float:right;">
 				<label onclick="$('#update').hide('slow');$('#comportamientos').show('slow');" style="cursor:pointer;">
-					Ver comportamientos</label>
+					Ver/Asignar Comportamientos</label>
 			</span>
 	  </div>
 	</div>
@@ -130,9 +135,25 @@
 						data:{'competencia':competencia,'comportamiento':comportamiento,'selected':selected},
 						type:'POST',
 						success:function(data) {
-							$('body').html(data);
-							alert('Se ha agregado!');
-							window.location.reload();
+							var returnData = JSON.parse(data);
+							if(returnData['msg'] == "ok"){
+								$('#quitar').append($('<option>',{value:returnData['id']}).text(comportamiento));
+								$('#posicion :selected').each(function(i,select) {
+									$(select).removeAttr("selected");
+								});
+								$('#comportamiento').val("");
+								$('#alert_success').prop('display',true).show();
+								$('#msg_success').html(returnData['msg_success']);
+								setTimeout(function() {
+									$("#alert_success").fadeOut(1500);
+									},3000);
+							}else{
+								$('#alert').prop('display',true).show();
+								$('#msg').html(returnData['msg']);
+								setTimeout(function() {
+									$("#alert").fadeOut(1500);
+									},3000);
+							}
 						}
 					});
 				}
@@ -148,9 +169,24 @@
 						data:{'selected':selected},
 						type:'POST',
 						success:function(data) {
-							$('body').html(data);
-							alert('Se ha eliminado!');
-							window.location.reload();
+							console.log(data);
+							var returnData = JSON.parse(data);
+							if(returnData['msg'] == "ok"){
+								$('#quitar :selected').each(function(i,select) {
+									$('#quitar').find(select).remove();
+								});
+								$('#alert_success').prop('display',true).show();
+								$('#msg_success').html(returnData['msg_success']);
+								setTimeout(function() {
+									$("#alert_success").fadeOut(1500);
+									},3000);
+							}else{
+								$('#alert').prop('display',true).show();
+								$('#msg').html(returnData['msg']);
+								setTimeout(function() {
+									$("#alert").fadeOut(1500);
+									},3000);
+							}
 						}
 					});
 				}
@@ -187,13 +223,13 @@
 					type: 'post',
 					data: {'id':id,'nombre':nombre,'descripcion':descripcion,'indicador':indicador},
 					success: function(data){
-						var returnedData = JSON.parse(data);
-						console.log(returnedData['msg']);
-						if(returnedData['msg']=="ok")
+						var returnData = JSON.parse(data);
+						console.log(returnData['msg']);
+						if(returnData['msg']=="ok")
 							window.document.location='<?= base_url("administrar_indicadores");?>';
 						else{
 							$('#alert').prop('display',true).show();
-							$('#msg').html(returnedData['msg']);
+							$('#msg').html(returnData['msg']);
 							setTimeout(function() {
 								$("#alert").fadeOut(1500);
 								},3000);

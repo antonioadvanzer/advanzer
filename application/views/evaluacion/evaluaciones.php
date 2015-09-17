@@ -38,15 +38,17 @@
           <tr>
             <th data-halign="center" data-align="center" data-field="foto" data-defaultsort="disabled"></th>
             <th data-halign="center" data-field="nombre">Nombre</th>
+            <th data-halign="center" data-field="area">Área</th>
             <th data-halign="center" data-field="evaluados">Evaluadores</th>
           </tr>
         </thead>
-        <tbody data-link="row" class="rowlink">
+        <tbody data-link="row">
           <?php foreach ($colaboradores as $colab): ?>
-          <tr class="click-row">
+          <tr>
             <td><a href='<?= base_url("evaluacion/asignar_evaluador/").'/'.$colab->id;?>'><img height="25px" 
               src="<?= base_url('assets/images/fotos')."/".$colab->foto;?>"></td>
             <td><?= $colab->nombre;?></td>
+            <td><?= $colab->area;?></td>
             <td><?= $colab->total_evaluadores;?></td>
           </tr>
           <?php endforeach; ?>

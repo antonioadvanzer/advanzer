@@ -33,7 +33,7 @@
 	  padding: 5px 25px;
 	  background: -webkit-gradient(linear, left bottom, left top, from(#B0B914), to(#FFF));
 	  /*background-color: #B0B914;*/
-	  font-size: 1.2rem;
+	  font-size: 1.4rem;
 	  color: #666666;
 	  text-transform: uppercase;
 	}
@@ -44,7 +44,7 @@
 	  width: 100%;
 	  padding: 5px 30px;
 	  background-color: #dadada;
-	  font-size: 1.4rem;
+	  font-size: 1.2rem;
 	  color: #000; 
 	}
 	.accordion h3:hover {
@@ -63,9 +63,8 @@
 	.accordion p {
 	  padding: 15px 35px;
 	  background-color: #ddd;
-	  font-size: .8rem;
+	  font-size: .4rem;
 	  color: #333;
-	  line-height: 1.3rem;
 	}
 	.accordion span {
 		display: block;
@@ -89,15 +88,6 @@
   </div>
 </div>
 <div class="container">
-  <div align="center">
-    <?php if(isset($msg)): ?>
-      <div id="alert" class="alert alert-success" role="alert" style="max-width:400px;">
-        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-        <span class="sr-only">Error:</span>
-        <?= $msg;?>
-      </div>
-    <?php endif; ?>
-  </div>
   <div class="row" align="center">
   	<div class="input-group">
 	  <span class="input-group-addon">Área</span>
@@ -108,12 +98,12 @@
 	  </select>
 	  <span class="input-group-addon">Posición</span>
 	  <select id="posicion" name="posicion" class="form-control">
-	  	<option <?php if($this->session->userdata('posicion')==8) echo"selected"; ?> value="8">Nivel 8 o Superior (Analista)</option>
-		<option <?php if($this->session->userdata('posicion')==7) echo"selected"; ?> value="7">Nivel 7 (Consultor / Especialista)</option>
-		<option <?php if($this->session->userdata('posicion')==6) echo"selected"; ?> value="6">Nivel 6 (Consultor Sr / Especialista Sr)</option>
-		<option <?php if($this->session->userdata('posicion')==5) echo"selected"; ?> value="5">Nivel 5 (Gerente / Master)</option>
-		<option <?php if($this->session->userdata('posicion')==4) echo"selected"; ?> value="4">Nivel 4 (Gerente Sr / Experto)</option>
-		<option <?php if($this->session->userdata('posicion')==3) echo"selected"; ?> value="3">Nivel 3 o Inferior (Director)</option>
+	  	<option <?php if($this->session->userdata('posicion')==8) echo"selected"; ?> value="8">Analista</option>
+		<option <?php if($this->session->userdata('posicion')==7) echo"selected"; ?> value="7">Consultor</option>
+		<option <?php if($this->session->userdata('posicion')==6) echo"selected"; ?> value="6">Consultor Sr</option>
+		<option <?php if($this->session->userdata('posicion')==5) echo"selected"; ?> value="5">Gerente / Master</option>
+		<option <?php if($this->session->userdata('posicion')==4) echo"selected"; ?> value="4">Gerente Sr / Experto</option>
+		<option <?php if($this->session->userdata('posicion')==3) echo"selected"; ?> value="3">Director</option>
 	  </select>
 	</div>
   </div>

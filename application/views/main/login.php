@@ -11,11 +11,13 @@
 		<form role="form" method="post" action="<?= base_url('main/login');?>" class="form-signin">
 		  <div class="form-group">
 			<label for="email" class="sr-only">E-Mail</label>
-			<input name="email" type="email" id="email" class="form-control" style="max-width:200px; text-align:center;" placeholder="E-Mail" required autofocus>
+			<input name="email" type="email" id="email" class="form-control" style="max-width:200px; text-align:center;" placeholder="E-Mail" 
+				value="" required autofocus>
 		  </div>
 		  <div class="form-group">
 			<label for="password" class="sr-only">Password</label>
-			<input name="password" type="password" id="password" class="form-control" style="max-width:200px; text-align:center;" placeholder="Password" required>
+			<input name="password" type="password" id="password" class="form-control" style="max-width:200px; text-align:center;" 
+				placeholder="Password" value="" required>
 		  </div>
 		  <div class="form-group">
 			<button class="btn btn-lg btn-primary btn-block" style="max-width:200px; text-align:center;" type="submit">Entrar</button>

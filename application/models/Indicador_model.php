@@ -17,12 +17,10 @@ class Indicador_model extends CI_Model{
 
 	function getCompetenciasByIndicador($indicador) {
 		$this->db->distinct();
-		$this->db->select('C.id,C.nombre,C.descripcion,C.estatus');
-		$this->db->from('Competencias C');
-		$this->db->join('Comportamientos Co','Co.competencia = C.id');
-		$this->db->join('Comportamiento_Posicion CP','CP.comportamiento = Co.id');
-		$this->db->where('C.indicador',$indicador);
-		$this->db->order_by('C.nombre');
+		$this->db->select('id,nombre,descripcion,estatus');
+		$this->db->from('Competencias');
+		$this->db->where('indicador',$indicador);
+		$this->db->order_by('nombre');
 		return $this->db->get()->result();
 	}
 

@@ -12,6 +12,7 @@
 	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/datepicker/css/bootstrap-datepicker.min.css');?>">
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/bootstrap-table-filter.css');?>">
+	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/bootstrap-select.css');?>">
 	<script src="<?= base_url('assets/js/jquery.min.js');?>"></script>
 	<script src="<?= base_url('assets/js/bootstrap.min.js');?>"></script>
 	<script src="<?= base_url('assets/js/bootstrap-table.js');?>"></script>
@@ -25,6 +26,7 @@
 	<script src="<?= base_url('assets/js/bootstrap-table-export.js');?>"></script>
 	<script src="<?= base_url('assets/js/bs-table.js');?>"></script>
 	<script src="<?= base_url('assets/js/jasny-bootstrap.js');?>"></script>
+	<script src="<?= base_url('assets/js/bootstrap-select.js');?>"></script>
 	<title><?=$title_for_layout?></title>
 	<style type="text/css">
 		body {
@@ -83,10 +85,9 @@
 								<ul class="dropdown-menu">
 									<li><a href="<?= base_url('objetivo/asignar_pesos');?>">Responsabilidades Por Área</a></li>
 									<li><a href="<?= base_url('ver_requisiciones');?>">Requisiciones</a></li>
-									<li><a href="<?= base_url('evaluaciones');?>">Evaluaciones</a></li>
+									<li><a href="<?= base_url('evaluacion');?>">Evaluaciones</a></li>
 									<li><a href="<?= base_url('ev_confidencial');?>">Evaluaciones Confidencial</a></li>
 									<li><a href="<?= base_url('ev_evaluador');?>">Evaluaciones por Evaluador</a></li>
-									<li><a href="<?= base_url('ev_evaluador360');?>">Evaluaciones 360 por Evaluador</a></li>
 									<li><a href="<?= base_url('gestion_evaluaciones');?>">Gestión de Evaluaciones</a></li>
 								</ul>
 							</li>

@@ -17,8 +17,8 @@ class Posicion_model extends CI_Model{
 		return $this->db->get('Posiciones P')->result();
 	}
 
-	function create($nombre) {
-		$this->db->insert('Posiciones',array('nombre'=>$nombre));
+	function create($datos) {
+		$this->db->insert('Posiciones',$datos);
 		if($this->db->affected_rows() == 1)
 			return $this->db->insert_id();
 		return false;

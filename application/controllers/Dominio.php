@@ -25,21 +25,23 @@ class Dominio extends CI_Controller {
     }
 
     public function load_objetivos() {
-    	if($this->input->post('dominio')) :
+    	if($this->input->post('area')) :
     		$dominio = $this->input->post('dominio');
-    		$objetivos = $this->objetivo_model->getByDominio($dominio);
+        $area = $this->input->post('area');
+        $tipo = $this->input->post('tipo');
+    		$objetivos = $this->objetivo_model->getByDominio($dominio,$area,$tipo);
     		foreach ($objetivos as $obj):
     	?>
             <tr class="click-row">
+              <td class="rowlink-skip"><?= $obj->dominio;?></a></td>
               <td><a style="text-decoration:none" href='<?= base_url("objetivo/ver/").'/'.$obj->id;?>'><?= $obj->nombre;?></a></td>
               <td><?php foreach ($this->metrica_model->getByObjetivo($obj->id) as $metrica) : 
                   echo $metrica->valor ." - ". $metrica->descripcion ."<br>";
                 endforeach; ?></td>
               <td><?= $obj->tipo;?></td>
               <td data-sortable="false" class="rowlink-skip">
-                <table class="table table-bordered table-striped">
+                <table class="table table-bordered table-striped table-condensed">
                   <thead>
-                    <th class="col-sm-2"></th>
                     <th class="col-sm-1">Analista</th>
                     <th class="col-sm-1">Consultor</th>
                     <th class="col-sm-1">Consultor Sr</th>
@@ -48,18 +50,15 @@ class Dominio extends CI_Controller {
                     <th class="col-sm-1">Director</th>
                   </thead>
                   <tbody>
-                    <?php foreach ($this->area_model->getByObjetivo($obj->id) as $area) : ?>
-                      <tr>
-                        <td><?= $area->nombre;?></td>
-                        <?php $porcentaje = $this->porcentaje_objetivo_model->getByObjetivoArea($obj->id,$area->id); ?>
-                        <td><?php if(!empty($porcentaje->analista)) echo $porcentaje->analista->valor;?></td>
-                        <td><?php if(!empty($porcentaje->consultor)) echo $porcentaje->consultor->valor;?></td>
-                        <td><?php if(!empty($porcentaje->sr)) echo $porcentaje->sr->valor;?></td>
-                        <td><?php if(!empty($porcentaje->gerente)) echo $porcentaje->gerente->valor;?></td>
-                        <td><?php if(!empty($porcentaje->experto)) echo $porcentaje->experto->valor;?></td>
-                        <td><?php if(!empty($porcentaje->director)) echo $porcentaje->director->valor;?></td>
-                      </tr>
-                    <?php endforeach; ?></ul>
+                    <tr>
+                      <?php $porcentaje = $this->porcentaje_objetivo_model->getByObjetivoArea($obj->id,$area); ?>
+                      <td><?= !empty($porcentaje->analista) ? $porcentaje->analista->valor : 0;?></td>
+                      <td><?= !empty($porcentaje->consultor) ? $porcentaje->consultor->valor : 0;?></td>
+                      <td><?= !empty($porcentaje->sr) ? $porcentaje->sr->valor : 0;?></td>
+                      <td><?= !empty($porcentaje->gerente) ? $porcentaje->gerente->valor : 0;?></td>
+                      <td><?= !empty($porcentaje->experto) ? $porcentaje->experto->valor : 0;?></td>
+                      <td><?= !empty($porcentaje->director) ? $porcentaje->director->valor : 0;?></td>
+                    </tr>
                   </tbody>
                 </table>
               </td>

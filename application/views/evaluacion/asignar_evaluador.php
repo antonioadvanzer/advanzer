@@ -85,6 +85,7 @@
 				$('#quitar option').each(function(i,select) {
 					agregar[i] = $(select).val();
 				});
+				console.log(agregar,quitar,colaborador);
 				$.ajax({
 					url: '<?= base_url("evaluacion/guarda_evaluadores");?>',
 					type: 'POST',

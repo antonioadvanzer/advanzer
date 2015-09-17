@@ -5,45 +5,39 @@
   </div>
 </div>
 <div class="container">
-  <div align="center">
-    <?php if(isset($msg)): ?>
-      <div id="alert" class="alert alert-success" role="alert" style="max-width:400px;">
-        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-        <span class="sr-only">Error:</span>
-        <?= $msg;?>
-      </div>
-    <?php endif; ?>
+  <div align="center" id="alert" style="display:none">
+    <div class="alert alert-danger" role="alert" style="max-width:400px;">
+      <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+      <span class="sr-only">Error:</span>
+      <label id="msg"></label>
+    </div>
   </div>
   <div class="row">
     <div class="col-md-12">
-      <div id="filter-bar"> </div>
-      <table class="sortable" align="center" data-toggle="table" data-toolbar="#filter-bar" data-pagination="true" 
-        data-search="true" data-show-toggle="true" data-show-columns="true" data-show-filter="true" 
-        data-hover="true" data-striped="true">
+      <div id="filterbar"> </div>
+      <table id="tbl" align="center"class="sortable table-hover table-striped table-condensed" data-toggle="table" data-toolbar="#filterbar" 
+        data-pagination="true" data-show-columns="true" data-show-filter="true" data-hover="true" 
+        data-striped="true" data-show-toggle="true" data-show-export="true">
         <thead>
           <tr>
             <th class="col-md-1" data-halign="center" data-align="center" data-defaultsort="disabled"></th>
             <th class="col-md-4" data-halign="center" data-field="nombre">Nombre</th>
             <th class="col-md-2" data-halign="center" data-field="area">Area</th>
-            <th class="col-md-1" data-halign="center" data-field="posicion">Posición</th>
-            <th class="col-md-2" data-halign="center" data-field="track">Track</th>
+            <th class="col-md-2" data-halign="center" data-field="posicion">Posición</th>
             <th class="col-md-1" data-halign="center" data-field="tipo">Tipo</th>
             <th class="col-md-1" data-halign="center" data-field="estatus">Estatus</th>
           </tr>
         </thead>
-        <tbody id="result" class="searchable">
+        <tbody data-link="row">
           <?php foreach ($colaboradores as $colab):?>
           <tr>
-            <td><img style="cursor:pointer" onclick="ir(<?= $colab->asignacion;?>)" height="25px" src="<?= base_url('assets/images/fotos')."/".$colab->foto;?>"></td>
-            <td><span style="cursor:pointer" onclick="ir(<?= $colab->asignacion;?>)"><?= "$colab->nombre ($colab->nomina)";?></span></td>
-            <td><span style="cursor:pointer" onclick="ir(<?= $colab->asignacion;?>)"><?= $colab->area;?></span></td>
-            <td><span style="cursor:pointer" onclick="ir(<?= $colab->asignacion;?>)"><?= $colab->posicion;?></span></td>
-            <td><span style="cursor:pointer" onclick="ir(<?= $colab->asignacion;?>)"><?= $colab->track;?></span></td>
-            <td><span style="cursor:pointer" onclick="ir(<?= $colab->asignacion;?>)"><?php if($colab->tipo == 0) echo"Anual"; 
-              elseif($colab->tipo == 1) echo"Por Proyecto"; else echo"360";?></span></td>
-            <td data-value="<?= $colab->estatus;?>"><span style="cursor:pointer" 
-              onclick="ir(<?= $colab->asignacion;?>)"><?php if($colab->estatus == 0) echo"Pendiente"; 
-              elseif($colab->estatus == 1) echo"En proceso"; else echo"Terminada";?></span></td>
+            <td><a href='<?= base_url("evaluacion/aplicar/$colab->asignacion");?>'>
+              <img height="25px" src="<?= base_url('assets/images/fotos')."/".$colab->foto;?>"></a></td>
+            <td><?= "$colab->nombre ($colab->nomina)"; if($colab->id == $this->session->userdata('id')) echo" AUTOEVALUACIÓN";?></td>
+            <td><?= $colab->area;?></td>
+            <td><?= $colab->posicion;?></td>
+            <td><?php if($colab->tipo == 1) echo"Anual"; elseif($colab->tipo == 0) echo"Por Proyecto";?></td>
+            <td><?php if($colab->estatus == 0) echo"Pendiente"; elseif($colab->estatus == 1) echo"En proceso";?></td>
           </tr>
           <?php endforeach; ?>
         </tbody>
@@ -51,31 +45,13 @@
     </div>
   </div>
 
-  <script type="text/javascript">
-    $(document).ready(function () {
-      (function ($) {
-          $('#filter').keyup(function () {
-              var rex = new RegExp($(this).val(), 'i');
-              $('.searchable tr').hide();
-              $('.searchable tr').filter(function () {
-                  return rex.test($(this).text());
-              }).show();
-          })
-      }(jQuery));
-    });
+  <script>
+    $.bootstrapSortable(true);
 
-    function ir(asignacion) {
-      location.href='<?= base_url("evaluacion/aplicar");?>/'+asignacion;
-    }
+    $(function() {
+      $('#tbl').bootstrapTable();
 
-    $(document).ready(function() {
-      $("#nombre").change(function() {
-        valor = $('#nombre').val();
-        $.post("<?= base_url('evaluacion/searchByText');?>", {
-          valor : valor
-        }, function(data) {
-          $("#result").html(data);
-        });
-      })
+      $('#filterbar').bootstrapTableFilter();
+
     });
   </script>

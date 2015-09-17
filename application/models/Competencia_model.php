@@ -48,22 +48,12 @@ class Competencia_model extends CI_Model{
 		$this->db->insert('Comportamiento_Posicion',array('comportamiento'=>$comportamiento,'nivel_posicion'=>$nivel));
 	}
 
-	function getPosicionesByComportamiento($comportamiento,$excluir=array()) {
-		if(empty($excluir))
-			$this->db->where('CP.comportamiento',$comportamiento);
-		else{
-			$this->db->where(array('P.nivel >='=>3,'P.nivel <='=>8));
-			$temp=array();
-			foreach ($excluir as $nivel) {
-				array_push($temp, $nivel['nivel']);
-			}
-			$this->db->where_not_in('P.nivel',$temp);
-		}
+	function getPosicionesByComportamiento($comportamiento) {
+		$this->db->where('comportamiento',$comportamiento);
 		$this->db->distinct();
-		$this->db->select('P.nivel');
-		$this->db->from('Posiciones P');
-		$this->db->join('Comportamiento_Posicion CP','CP.nivel_posicion = P.nivel');
-		$this->db->order_by('P.nivel','desc');
+		$this->db->select('nivel_posicion');
+		$this->db->from('Comportamiento_Posicion');
+		$this->db->order_by('nivel_posicion','desc');
 		return $this->db->get();
 
 	}

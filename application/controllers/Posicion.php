@@ -20,22 +20,26 @@ class Posicion extends CI_Controller {
     }
 
     public function create() {
-    	$nombre=$this->input->post('nombre');
+    	$datos=array(
+            'nombre'=>$this->input->post('nombre'),
+            'nivel'=>$this->input->post('nivel')
+        );
     	$tracks=$this->input->post('tracks');
     	$this->db->trans_begin();
-    	if($posicion=$this->posicion_model->create($nombre)){
+    	if($posicion=$this->posicion_model->create($datos)){
     		foreach ($tracks as $track) :
     			$this->posicion_model->addTrackToPosicion($track,$posicion);
     		endforeach;
     	}
     	if($this->db->trans_status() === FALSE){
 			$this->db->trans_rollback();
-			$this->nuevo("Error al agregar posición. Intenta de nuevo");
+			$response['msg'] = "Error al agregar posición. Intenta de nuevo";
 		}
 		else{
 			$this->db->trans_commit();
-			redirect('track');
+			$response['msg'] = "ok";
 		}
+        echo json_encode($response);
     }
 
     public function ver($id,$err=null) {
@@ -71,7 +75,10 @@ class Posicion extends CI_Controller {
 
     public function update() {
         $id=$this->input->post('id');
-        $datos = array('nombre'=>$this->input->post('nombre'));
+        $datos = array(
+            'nombre'=>$this->input->post('nombre'),
+            'nivel'=>$this->input->post('nivel')
+        );
         if($this->posicion_model->update($id,$datos)){
             $response['msg'] = "ok";
             $response['alert'] = "Actualización realizada";

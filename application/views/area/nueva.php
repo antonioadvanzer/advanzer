@@ -24,7 +24,7 @@
 			<div class="col-md-4">
 				<div class="form-group">
 					<label for="direccion">Dirección:</label>
-					<select class="form-control" style="max-width:300px; text-align:center;" id="direccion">
+					<select class="form-control" style="max-width:300px; text-align:center;" id="direccion" required>
 						<?php foreach ($direcciones as $direccion) : ?>
 							<option value="<?= $direccion->id;?>"><?= $direccion->nombre;?></option>
 						<?php endforeach; ?>
@@ -55,22 +55,25 @@
 			$("#estatus option:selected").each(function() {
 				estatus = $('#estatus').val();
 			});
-			$.ajax({
-				url: '<?= base_url("area/create");?>',
-				type: 'post',
-				data: {'nombre':nombre,'estatus':estatus,'direccion':direccion},
-				success: function(data){
-					var returnedData = JSON.parse(data);
-					console.log(returnedData['msg']);
-					if(returnedData['msg']=="ok")
-						window.document.location='<?= base_url("area");?>';
-					else{
-						$('#alert').prop('display',true).show();
-						$('#msg').html(returnedData['msg']);
+			console.log(direccion)
+			if(direccion != null)
+				$.ajax({
+					url: '<?= base_url("area/create");?>',
+					type: 'post',
+					data: {'nombre':nombre,'estatus':estatus,'direccion':direccion},
+					success: function(data){
+						var returnedData = JSON.parse(data);
+						console.log(returnedData['msg']);
+						if(returnedData['msg']=="ok")
+							window.document.location='<?= base_url("area");?>';
+						else{
+							$('#alert').prop('display',true).show();
+							$('#msg').html(returnedData['msg']);
+						}
 					}
-				}
-			});
-
+				});
+			else
+				alert('Elige una dirección');
 			event.preventDefault();
 		});
 	});

@@ -157,7 +157,7 @@ class User extends CI_Controller {
         );
         $temp=explode('@',$this->input->post('email'));
         $temp=explode('.',$temp[0]);
-        $array['password'] = $temp[0];
+        $array['password'] = md5($temp[0]);
         $posicion=$this->input->post('posicion');
         $track=$this->input->post('track');
         $array['posicion_track'] = $this->posicion_model->getPosicionTrack($posicion,$track);

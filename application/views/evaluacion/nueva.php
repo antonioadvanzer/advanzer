@@ -161,7 +161,10 @@
 						console.log(data);
 						var returnData = JSON.parse(data);
 						if(returnData['msg'] == "ok")
-							window.document.location = '<?= base_url("evaluacion/proyecto");?>';
+							if(tipo == 1)
+								window.document.location = '<?= base_url("evaluaciones");?>';
+							else
+								window.document.location = '<?= base_url("evaluacion/proyecto");?>';
 						else{
 							$('#alert').prop('display',true).show();
 							$('#msg').html(returnData['msg']);
@@ -181,14 +184,10 @@
 				mm='0'+mm
 			today = yyyy+'-'+mm+'-'+dd;
 			$('#inicio').datepicker({
-				dateFormat: 'yy-mm-dd',
-				minDate: today,
-				maxDate: '+30d'
+				dateFormat: 'yy-mm-dd'
 			});
 			$('#fin').datepicker({
-				dateFormat: 'yy-mm-dd',
-				minDate: today,
-				maxDate: '+30d'
+				dateFormat: 'yy-mm-dd'
 			});
 			$('#inicio').change(function(){
 				$('#fin').datepicker({

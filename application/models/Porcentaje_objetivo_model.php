@@ -12,9 +12,9 @@ class Porcentaje_objetivo_model extends CI_Model{
 		$result = $this->db->where(array('direccion'=>$direccion,'estatus'=>1))->order_by('nombre')
 			->get('Areas')->result();
 		foreach ($result as $area) :
-			$area->objetivos = $this->db->select('O.id,O.nombre')->from('Objetivos O')
+			$area->objetivos = $this->db->select('O.id,O.nombre,O.tipo')->from('Objetivos O')
 				->join('Objetivos_Areas OA','OA.objetivo = O.id')
-				->where(array('O.estatus'=>1,'OA.area'=>$area->id))->order_by('O.nombre')->get()->result();
+				->where(array('O.estatus'=>1,'OA.area'=>$area->id))->order_by('O.tipo,O.nombre')->get()->result();
 			foreach ($area->objetivos as $objetivo) :
 				$objetivo->analista = $this->db->select('PO.valor')->from('Porcentajes_Objetivos PO')
 					->join('Objetivos_Areas OA','OA.id = PO.objetivo_area')
@@ -43,22 +43,22 @@ class Porcentaje_objetivo_model extends CI_Model{
 		$result = $this->db->where(array('objetivo'=>$objetivo,'area'=>$area))->get('Objetivos_Areas')->first_row();
 		$result->analista = $this->db->select('PO.valor')->from('Porcentajes_Objetivos PO')
 			->join('Objetivos_Areas OA','OA.id = PO.objetivo_area')
-			->where(array('objetivo'=>$objetivo,'area'=>$area,'PO.nivel_posicion'=>3))->get()->first_row();
+			->where(array('objetivo'=>$objetivo,'area'=>$area,'PO.nivel_posicion'=>8))->get()->first_row();
 		$result->consultor = $this->db->select('PO.valor')->from('Porcentajes_Objetivos PO')
 			->join('Objetivos_Areas OA','OA.id = PO.objetivo_area')
-			->where(array('objetivo'=>$objetivo,'area'=>$area,'PO.nivel_posicion'=>4))->get()->first_row();
+			->where(array('objetivo'=>$objetivo,'area'=>$area,'PO.nivel_posicion'=>7))->get()->first_row();
 		$result->sr = $this->db->select('PO.valor')->from('Porcentajes_Objetivos PO')
 			->join('Objetivos_Areas OA','OA.id = PO.objetivo_area')
-			->where(array('objetivo'=>$objetivo,'area'=>$area,'PO.nivel_posicion'=>5))->get()->first_row();
+			->where(array('objetivo'=>$objetivo,'area'=>$area,'PO.nivel_posicion'=>6))->get()->first_row();
 		$result->gerente = $this->db->select('PO.valor')->from('Porcentajes_Objetivos PO')
 			->join('Objetivos_Areas OA','OA.id = PO.objetivo_area')
-			->where(array('objetivo'=>$objetivo,'area'=>$area,'PO.nivel_posicion'=>6))->get()->first_row();
+			->where(array('objetivo'=>$objetivo,'area'=>$area,'PO.nivel_posicion'=>5))->get()->first_row();
 		$result->experto = $this->db->select('PO.valor')->from('Porcentajes_Objetivos PO')
 			->join('Objetivos_Areas OA','OA.id = PO.objetivo_area')
-			->where(array('objetivo'=>$objetivo,'area'=>$area,'PO.nivel_posicion'=>7))->get()->first_row();
+			->where(array('objetivo'=>$objetivo,'area'=>$area,'PO.nivel_posicion'=>4))->get()->first_row();
 		$result->director = $this->db->select('PO.valor')->from('Porcentajes_Objetivos PO')
 			->join('Objetivos_Areas OA','OA.id = PO.objetivo_area')
-			->where(array('objetivo'=>$objetivo,'area'=>$area,'PO.nivel_posicion'=>8))->get()->first_row();
+			->where(array('objetivo'=>$objetivo,'area'=>$area,'PO.nivel_posicion'=>3))->get()->first_row();
 		return $result;
 	}
 

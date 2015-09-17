@@ -14,89 +14,83 @@ class Evaluacion extends CI_Controller {
     	$this->load->library('pagination');
     }
 
+    public function revisar($colaborador) {
+        $data['colaborador'] = $this->evaluacion_model->getResultadosByColaborador($this->user_model->searchById($colaborador));
+        $this->layout->title('Advanzer - Revisión');
+        $this->layout->view('evaluacion/revisar',$data);
+    }
+
+    public function asigna_rating() {
+        $response['msg'] = "Error al asignar rating. Intenta de nuevo";
+        $colaborador = $this->input->post('colaborador');
+        $feedback = $this->input->post('feedback');
+        $rating = $this->input->post('rating');
+        $evaluacion = $this->evaluacion_model->getEvaluacionAnual();
+        $where = array('evaluacion'=>$evaluacion,'colaborador'=>$colaborador);
+        if($this->evaluacion_model->updateRating($where,array('rating'=>$rating))){
+            $this->evaluacion_model->updateFeedbacker($where,array('feedbacker'=>$feedback));
+            $response['msg']="ok";
+        }
+        echo json_encode($response);
+    }
+
+    private function genera_autoevaluacion($colaborador) {
+        $evaluacion = $this->evaluacion_model->getEvaluacionAnual();
+        $this->evaluacion_model->genera_autoevaluacion($evaluacion,$colaborador);
+    }
+
     public function evaluar() {
         $evaluador=$this->session->userdata('id');
+        $this->genera_autoevaluacion($evaluador);
         $data['colaboradores']=$this->evaluacion_model->getEvaluacionesByEvaluador($evaluador);
+        $data['yo'] = $evaluador;
         $this->layout->title('Advanzer - Evaluaciones');
         $this->layout->view('evaluacion/evaluar',$data);
     }
 
     public function aplicar($asignacion) {
-        $this->genera_evaluacion($asignacion);
         $data['evaluacion']=$this->evaluacion_model->getEvaluacionByAsignacion($asignacion);
         $this->layout->title('Advanzer - Aplicar Evaluación');
         $this->layout->view('evaluacion/aplicar',$data);
     }
 
     public function guardar_avance() {
+        $response['msg']="Error al guardar";
         $asignacion = $this->input->post('asignacion');
         $tipo = $this->input->post('tipo');
         $valor = $this->input->post('valor');
         $elemento = $this->input->post('elemento');
         if($tipo=="responsabilidad"){
             if($this->evaluacion_model->guardaMetrica($asignacion,$valor,$elemento)) //metrica=valor,obj=elem
-                $data['msg'] = "Métrica Guardada";
+                $response['msg'] = "Métrica Guardada";
         }else{
             if($this->evaluacion_model->guardaComportamiento($asignacion,$valor,$elemento)) //resp=valor,comp=elem
-                $data['msg'] = "Comportamiento Guardado";
+                $response['msg'] = "Comportamiento Guardado";
         }
-        if($this->evaluacion_model->is_filled_evaluacion($asignacion,$tipo))
-            $data['terminada']="si";
-        else
-            $data['terminada']="no";
-        echo json_encode($data);
+        $this->evaluacion_model->ch_estatus($asignacion);
+        echo json_encode($response);
     }
 
     public function finalizar_evaluacion() {
         $asignacion = $this->input->post('asignacion');
-        if($this->evaluacion_model->finalizar_evaluacion($asignacion)){
-            $data['msg'] = "Evaluación Finalizada.";
-            $data['redirecciona']="si";
-        }else{
+        $tipo = $this->input->post('tipo');
+        $this->db->trans_begin();
+        $this->evaluacion_model->finalizar_evaluacion($asignacion,$tipo);
+        if($this->db->trans_status() === FALSE){
+            $this->db->trans_rollback();
             $data['msg'] = "Error al finalizar la evaluación. Verifica tus respuestas e intenta de nuevo";
             $data['redirecciona']="no";
+        }
+        else{
+            $this->db->trans_commit();
+            $data['msg'] = "Evaluación Finalizada.";
+            $data['redirecciona']="si";
         }
         echo json_encode($data);
     }
 
     public function index() {
-        $data=array();
-
-        //pagination settings
-        $config['base_url'] = base_url('evaluacion');
-        $config['total_rows'] = $this->evaluacion_model->getCountUsers();
-        $config['per_page'] = "8";
-        $config["uri_segment"] = 2;
-        $choice = $config["total_rows"] / $config["per_page"];
-        $config["num_links"] = floor($choice);
-
-        //config for bootstrap pagination class integration
-        $config['full_tag_open'] = '<ul class="pagination">';
-        $config['full_tag_close'] = '</ul>';
-        $config['first_link'] = false;
-        $config['last_link'] = false;
-        $config['first_tag_open'] = '<li>';
-        $config['first_tag_close'] = '</li>';
-        $config['prev_link'] = '&laquo';
-        $config['prev_tag_open'] = '<li class="prev">';
-        $config['prev_tag_close'] = '</li>';
-        $config['next_link'] = '&raquo';
-        $config['next_tag_open'] = '<li>';
-        $config['next_tag_close'] = '</li>';
-        $config['last_tag_open'] = '<li>';
-        $config['last_tag_close'] = '</li>';
-        $config['cur_tag_open'] = '<li class="active"><a href="#">';
-        $config['cur_tag_close'] = '</a></li>';
-        $config['num_tag_open'] = '<li>';
-        $config['num_tag_close'] = '</li>';
-
-        $this->pagination->initialize($config);
-        $data['page'] = ($this->uri->segment(2)) ? $this->uri->segment(2) : 0;
-
-        //call the model function to get the data
-        $data['colaboradores'] = $this->evaluacion_model->getEvaluados($config["per_page"], $data['page']);
-        
-        $data['pagination'] = $this->pagination->create_links();
+        $data['colaboradores'] = $this->evaluacion_model->getEvaluados();
 
         $this->layout->title('Advanzer - Evaluaciones');
         $this->layout->view('evaluacion/index',$data);
@@ -113,7 +107,7 @@ class Evaluacion extends CI_Controller {
                         <label><?= $comp->descripcion;?></label>
                         <p><ul type="square"> <?php
                             foreach ($this->evaluacion_model->getComportamientoByCompetencia($comp->id,$posicion) as $comportamiento) : ?>
-                                    <span class="glyphicon glyphicon-ok-circle"><?= $comportamiento->descripcion;?></span>
+                                    <span style="display:block;float:left" class="glyphicon glyphicon-ok"></span><?= $comportamiento->descripcion;?><br>
                             <?php endforeach; ?>
                         </ul></p>
                     </div> <?php
@@ -172,10 +166,14 @@ class Evaluacion extends CI_Controller {
     }
 
     public function evaluaciones($msg=null) {
+        $data['evaluacion'] = $this->evaluacion_model->getEvaluacionAnual();
         $data['colaboradores'] = $this->evaluacion_model->getPagination();
     	
         $this->layout->title('Advanzer - Evaluaciones');
-    	$this->layout->view('evaluacion/evaluaciones',$data);
+        if(!$data['evaluacion'])
+            redirect('evaluacion/proyecto');
+        else
+    	   $this->layout->view('evaluacion/evaluaciones',$data);
     }
 
     public function asignar_evaluador($colaborador){
@@ -296,11 +294,9 @@ class Evaluacion extends CI_Controller {
                     mm='0'+mm
                 today = yyyy+'-'+mm+'-'+dd;
                 $('#inicio').datepicker({
-                    dateFormat: 'yy-mm-dd',
-                    minDate: today,
-                    maxDate: '+30d'
+                    dateFormat: 'yy-mm-dd'
                 });
-                $('#fin').datepicker({dateFormat: 'yy-mm-dd',minDate: $('#inicio').val()});
+                $('#fin').datepicker({dateFormat: 'yy-mm-dd'});
                 $("#evaluacion").change(function() {
                     $("#evaluacion option:selected").each(function() {
                         evaluacion = $('#evaluacion').val();
@@ -310,14 +306,14 @@ class Evaluacion extends CI_Controller {
                         type: 'post',
                         data: {'evaluacion': evaluacion},
                         beforeSend: function(xhr) {
-                            $('#update').hide();
-                            $('#cargando').show();
+                            $('#update').hide('slow');
+                            $('#cargando').show('slow');
                         },
                         success: function(data) {
-                            $('#cargando').hide();
-                            $('#update').show();
+                            $('#cargando').hide('slow');
+                            $('#update').show('slow');
                             $("#datos").html(data);
-                            $("#submit").show();
+                            $("#submit").show('slow');
                         }
                     });
                 });
@@ -354,23 +350,24 @@ class Evaluacion extends CI_Controller {
                                 data: {'evaluacion':evaluacion,'inicio':inicio,'fin':fin,'estatus':estatus,'lider':lider,
                                     'agregar':agregar,'quitar':quitar,'tipo':tipo},
                                 beforeSend: function(xhr) {
-                                    $('#update').hide();
-                                    $('#cargando').show();
+                                    $('#update').hide('slow');
+                                    $('#cargando').show('slow');
                                 },
                                 success: function(data) {
                                     console.log(data);
-                                    $('#cargando').hide();
-                                    $('#update').show();
+                                    console.log(evaluacion,lider,agregar);
+                                    $('#cargando').hide('slow');
+                                    $('#update').show('slow');
                                     var returnData = JSON.parse(data);
                                     console.log(returnData['msg']);
                                     if(returnData['affected']){
-                                        $('#alert_success').prop('display',true).show();
+                                        $('#alert_success').prop('display',true).show('slow');
                                         $('#msg_success').html(returnData['msg']);
                                         setTimeout(function() {
                                             $("#alert_success").fadeOut(1500);
                                         },3000);
                                     }else{
-                                        $('#alert').prop('display',true).show();
+                                        $('#alert').prop('display',true).show('slow');
                                         $('#msg').html(returnData['msg']);
                                         setTimeout(function() {
                                             $("#alert").fadeOut(1500);
@@ -403,6 +400,7 @@ class Evaluacion extends CI_Controller {
                                         $('#msg').html(returnData['msg']);
                                         setTimeout(function() {
                                             $("#alert").fadeOut(1500);
+                                            window.document.location = '<?= base_url("evaluaciones");?>';
                                         },3000);
                                     }
                                 }
@@ -533,18 +531,19 @@ class Evaluacion extends CI_Controller {
             'tipo'=>$this->input->post('tipo'),
             'nombre'=>$this->input->post('nombre'),
             'inicio'=>$this->input->post('inicio'),
-            'fin'=>$this->input->post('fin'),
-            'lider'=>$this->input->post('lider')
+            'fin'=>$this->input->post('fin')
         );
+        $tipo=$this->input->post('tipo');
+        $lider=$this->input->post('lider');
         $this->db->trans_begin();
+        if($tipo == 0)
+            $datos['lider'] = $lider;
         $evaluacion=$this->evaluacion_model->create($datos);
         if($this->input->post('tipo') == 0){
             foreach ($this->input->post('agregar') as $colaborador) :
-                $this->evaluacion_model->addEvaluadorToColaborador(array('evaluador'=>$this->input->post('lider'),
+                $this->evaluacion_model->addEvaluadorToColaborador(array('evaluador'=>$lider,
                     'evaluado'=>$colaborador,'evaluacion'=>$evaluacion));
             endforeach;
-        }else{
-            $this->evaluacion_model->asignar_evaluacion_anual($evaluacion);
         }
         if($this->db->trans_status() === FALSE){
             $this->db->trans_rollback();
@@ -554,11 +553,6 @@ class Evaluacion extends CI_Controller {
             $response['msg']="ok";
         }
         echo json_encode($response);
-    }
-
-    private function genera_evaluacion($asignacion) {
-        if($this->evaluacion_model->isAsignacionEmpty($asignacion))
-            $this->evaluacion_model->fillAsignacion($asignacion);
     }
 
     private function valida_sesion() {

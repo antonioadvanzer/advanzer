@@ -54,7 +54,7 @@
 		</div>
 		<div class="form-group">
 		  <label for="jefe">Jefe Directo:</label>
-		  <select class="form-control" style="max-width:300px; text-align:center;" name="jefe" id="jefe">
+		  <select class="selectpicker" data-header="Selecciona al Jefe Directo" data-live-search="true" data-width="300px" style="max-width:300px; text-align:center;" name="jefe" id="jefe">
 		  	<?php foreach($jefes as $jefe): ?>
 			  <option value="<?= $jefe->id;?>" <?php if($user->jefe == $jefe->id) echo "selected"; ?>>
 				<?= $jefe->nombre;?></option>
@@ -208,6 +208,7 @@
   <script type="text/javascript">
 
 	$(document).ready(function() {
+		$('.selectpicker').selectpicker();
 		$('#update').submit(function(event){
 			id = $('#id').val();
 			nombre = $('#nombre').val();
@@ -280,7 +281,7 @@
 
 			event.preventDefault();
 		});
-		
+
 		$('#rehab').submit(function(event){
 			id = $('#id').val();
 			reingreso = $('#reingreso').val();
