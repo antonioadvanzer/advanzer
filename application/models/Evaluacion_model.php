@@ -235,9 +235,8 @@ class Evaluacion_model extends CI_Model{
 		if($posicion >= 3 && $posicion <= 5){
 			$this->db->select('AVG(RC.total) total360')->from('Resultados_ev_Competencia RC');
 			$this->db->join('Evaluadores Ev','Ev.id = RC.asignacion');
-			$this->db->where(array('Ev.evaluado'=>$asignacion->evaluado,'Ev.evaluacion'=>$asignacion->evaluacion));
-			$ids=array($jefe,$asignacion->evaluado);
-			$this->db->where_not_in('Ev.evaluador',$ids);
+			$this->db->where(array('Ev.evaluado'=>$asignacion->evaluado,'Ev.evaluacion'=>$asignacion->evaluacion,'Ev.evaluador !='=>$jefe,
+				'Ev.evaluador !='=>$asignacion->evaluado));
 			$res = $this->db->get();
 			if($res->num_rows() == 1)
 				(double)$competencia += (double)($res->first_row()->total360)*0.1;
