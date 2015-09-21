@@ -101,43 +101,49 @@ class Evaluacion extends CI_Controller {
 
     public function load_competencias() {
         $posicion = $this->input->post('posicion');
-        foreach ($this->evaluacion_model->getIndicadoresByPosicion($posicion) as $indicador) : ?>
-            <h1><?= $indicador->nombre;?></h1>
-            <div> <?php 
-                foreach ($this->evaluacion_model->getCompetenciasByIndicador($indicador->id,$posicion) as $comp) : ?>
-                    <h2><?= $comp->nombre;?></h2>
-                    <div align="left">
-                        <label><?= $comp->descripcion;?></label>
-                        <p><ul type="square"> <?php
-                            foreach ($this->evaluacion_model->getComportamientoByCompetencia($comp->id,$posicion) as $comportamiento) : ?>
-                                    <span style="display:block;float:left" class="glyphicon glyphicon-ok"></span><?= $comportamiento->descripcion;?><br>
-                            <?php endforeach; ?>
-                        </ul></p>
-                    </div> <?php
-                endforeach; ?>
-            </div> <?php
+        foreach ($this->evaluacion_model->getIndicadoresByPosicion($posicion) as $indicador) : 
+            $indicador->competencias = $this->evaluacion_model->getCompetenciasByIndicador($indicador->id,$posicion);
+            if(count($indicador->competencias) > 0): ?>
+                <h1><?= $indicador->nombre;?></h1>
+                <div> <?php 
+                    foreach ($indicador->competencias as $comp) : ?>
+                        <h2><?= $comp->nombre;?></h2>
+                        <div align="left">
+                            <label><?= $comp->descripcion;?></label>
+                            <p><ul type="square"> <?php
+                                foreach ($this->evaluacion_model->getComportamientoByCompetencia($comp->id,$posicion) as $comportamiento) : ?>
+                                        <span style="display:block;float:left" class="glyphicon glyphicon-ok"></span><?= $comportamiento->descripcion;?><br>
+                                <?php endforeach; ?>
+                            </ul></p>
+                        </div> <?php
+                    endforeach; ?>
+                </div> <?php
+            endif;
         endforeach;
     }
 
     public function load_perfil() {
         $area = $this->input->post('area');
         $posicion = $this->input->post('posicion');
-        foreach ($this->evaluacion_model->getResponsabilidadByArea($area) as $dominio) :?>
-            <h1><?= $dominio->nombre;?></h1>
-            <div>
-            <?php foreach ($this->evaluacion_model->getObjetivosByDominio($dominio->id,$area,$posicion) as $responsabilidad): ?>
-                <h2><?= $responsabilidad->nombre;?><span style="float:right;"><?= $responsabilidad->valor;?>%</span></h2>
-                <div align="left">
-                    <label><?= $responsabilidad->descripcion;?></label>
-                    <p><ol reversed>
-                        <?php foreach ($this->evaluacion_model->getMetricaByObjetivo($responsabilidad->id) as $metrica) :?>
-                            <li><?= $metrica->descripcion;?></li>
-                        <?php endforeach; ?>
-                    </ol></p>
+        foreach ($this->evaluacion_model->getResponsabilidadByArea($area) as $dominio) :
+            $dominio->responsabilidades = $this->evaluacion_model->getObjetivosByDominio($dominio->id,$area,$posicion);
+            if(count($dominio->responsabilidades) > 0): ?>
+                <h1><?= $dominio->nombre;?></h1>
+                <div>
+                <?php foreach ($dominio->responsabilidades as $responsabilidad): ?>
+                    <h2><?= $responsabilidad->nombre;?><span style="float:right;"><?= $responsabilidad->valor;?>%</span></h2>
+                    <div align="left">
+                        <label><?= $responsabilidad->descripcion;?></label>
+                        <p><ol reversed>
+                            <?php foreach ($this->evaluacion_model->getMetricaByObjetivo($responsabilidad->id) as $metrica) :?>
+                                <li><?= $metrica->descripcion;?></li>
+                            <?php endforeach; ?>
+                        </ol></p>
+                    </div>
+                <?php endforeach; ?>
                 </div>
-            <?php endforeach; ?>
-            </div>
-        <?php endforeach;
+            <?php endif;
+        endforeach;
     }
 
     public function perfil() {

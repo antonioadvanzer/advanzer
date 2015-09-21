@@ -115,7 +115,7 @@
   	<div class="col-md-6">
 	  <label>Responsabilidades</label>
       <aside id="perfil" class="accordion">
-  		<?php foreach ($dominios as $dominio) :?>
+  		<?php foreach ($dominios as $dominio) : if(count($dominio->responsabilidades) > 0): ?>
 		<h1><?= $dominio->nombre;?></h1>
 		<div>
 			<?php foreach ($dominio->responsabilidades as $resp) : ?>
@@ -130,13 +130,13 @@
 			</div>
 			<?php endforeach; ?>
 		</div>
-		<?php endforeach; ?>
+		<?php endif; endforeach; ?>
 	  </aside>
     </div>
     <div class="col-md-6">
 	  <label>Competencias</label>
 	  <aside id="competencias" class="accordion">
-		<?php foreach ($indicadores as $indicador) : ?>
+		<?php foreach ($indicadores as $indicador) : if(count($indicador->competencias)): ?>
 		<h1><?= $indicador->nombre;?></h1>
 		<div>
 			<?php foreach ($indicador->competencias as $comp) : ?>
@@ -151,7 +151,7 @@
 			</div>
 			<?php endforeach; ?>
 		</div>
-		<?php endforeach; ?>
+		<?php endif; endforeach; ?>
 	  </aside>
     </div>
   </div>
