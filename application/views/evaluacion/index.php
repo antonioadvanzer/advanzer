@@ -33,8 +33,8 @@
         <tbody data-link="row">
           <?php foreach ($colaboradores as $colab):?>
           <tr>
-            <td><a href="<?= base_url("evaluacion/revisar/$colab->id");?>">
-              <img height="25px" src="<?= base_url('assets/images/fotos')."/".$colab->foto;?>"></a></td>
+            <td><small><a href="<?= base_url("evaluacion/revisar/$colab->id");?>">
+              <img height="25px" src="<?= base_url('assets/images/fotos')."/".$colab->foto;?>"></a></small></td>
             <td><small><?= "$colab->nombre ($colab->posicion - $colab->track)";?></small></td>
             <td><small><?= $colab->autoevaluacion;?></small></td>
             <td><small><?= $colab->rating;?></small></td>

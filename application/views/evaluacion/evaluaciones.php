@@ -45,11 +45,11 @@
         <tbody data-link="row">
           <?php foreach ($colaboradores as $colab): ?>
           <tr>
-            <td><a href='<?= base_url("evaluacion/asignar_evaluador/").'/'.$colab->id;?>'><img height="25px" 
-              src="<?= base_url('assets/images/fotos')."/".$colab->foto;?>"></td>
-            <td><?= $colab->nombre;?></td>
-            <td><?= $colab->area;?></td>
-            <td><?= $colab->total_evaluadores;?></td>
+            <td><small><a href='<?= base_url("evaluacion/asignar_evaluador/").'/'.$colab->id;?>'><img height="25px" 
+              src="<?= base_url('assets/images/fotos')."/".$colab->foto;?>"></a></small></td>
+            <td><small><?= $colab->nombre;?></small></td>
+            <td><small><?= $colab->area;?></small></td>
+            <td><small><?= $colab->total_evaluadores;?></small></td>
           </tr>
           <?php endforeach; ?>
         </tbody>

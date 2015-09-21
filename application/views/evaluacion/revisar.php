@@ -33,7 +33,7 @@
 					<select id="feedback" class="form-control" style="max-width:300px" required>
 						<option selected disabled value="">-- Asigna al FeedBack --</option>
 						<?php foreach ($colaborador->evaluadores as $evaluador) : ?>
-							<option value="<?= $evaluador->id;?>" <?php if($evaluador->id == $colaborador->feedback->feedbacker) echo "selected";?>>
+							<option value="<?= $evaluador->id;?>" <?php if($colaborador->feedback && $evaluador->id == $colaborador->feedback->feedbacker) echo "selected";?>>
 								<?= $evaluador->nombre;?></option>
 						<?php endforeach; ?>
 					</select>

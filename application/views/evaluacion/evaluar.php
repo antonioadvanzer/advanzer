@@ -31,13 +31,13 @@
         <tbody data-link="row">
           <?php foreach ($colaboradores as $colab):?>
           <tr>
-            <td><a href='<?= base_url("evaluacion/aplicar/$colab->asignacion");?>'>
-              <img height="25px" src="<?= base_url('assets/images/fotos')."/".$colab->foto;?>"></a></td>
-            <td><?= "$colab->nombre ($colab->nomina)"; if($colab->id == $this->session->userdata('id')) echo" AUTOEVALUACIÓN";?></td>
-            <td><?= $colab->area;?></td>
-            <td><?= $colab->posicion;?></td>
-            <td><?php if($colab->tipo == 1) echo"Anual"; elseif($colab->tipo == 0) echo"Por Proyecto";?></td>
-            <td><?php if($colab->estatus == 0) echo"Pendiente"; elseif($colab->estatus == 1) echo"En proceso";?></td>
+            <td><small><a href='<?= base_url("evaluacion/aplicar/$colab->asignacion");?>'>
+              <img height="25px" src="<?= base_url('assets/images/fotos')."/".$colab->foto;?>"></a></small></td>
+            <td><small><?= "$colab->nombre ($colab->nomina)"; if($colab->id == $this->session->userdata('id')) echo" AUTOEVALUACIÓN";?></small></td>
+            <td><small><?= $colab->area;?></small></td>
+            <td><small><?= $colab->posicion;?></small></td>
+            <td><small><?php if($colab->tipo == 1) echo"Anual"; elseif($colab->tipo == 0) echo"Por Proyecto";?></small></td>
+            <td><small><?php if($colab->estatus == 0) echo"Pendiente"; elseif($colab->estatus == 1) echo"En proceso";?></small></td>
           </tr>
           <?php endforeach; ?>
         </tbody>

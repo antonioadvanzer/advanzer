@@ -71,10 +71,10 @@
         <tbody>
           <?php foreach ($tracks as $track) : ?>
             <tr>
-              <td><span class="glyphicon glyphicon-eye-open" style="cursor:pointer" onclick="
+              <td><small><span class="glyphicon glyphicon-eye-open" style="cursor:pointer" onclick="
                   location.href='<?= base_url('track/ver');?>/'+<?= $track->id;?>"></span>
                   <span style="cursor:pointer" onclick="location.href='<?= base_url('track/ver');?>/'+
-                    <?= $track->id;?>"><?= $track->nombre;?></span></td>
+                    <?= $track->id;?>"><?= $track->nombre;?></span></small></td>
             </tr>
           <?php endforeach; ?>
         </tbody>

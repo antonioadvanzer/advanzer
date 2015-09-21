@@ -14,6 +14,7 @@
 		</div>
 	<?php endif; ?>
   </div>
+  <div align="center"><a href="<?= base_url('administrar_indicadores');?>">&laquo;Regresar</a></div>
   <form role="form" method="post" action="<?= base_url('competencia/create');?>" class="form-signin">
   	<div class="row" align="center">
 	  <div class="col-md-4">
@@ -48,4 +49,3 @@
 	  </div>
 	</div>
   </form>
-  <div align="center"><a href="<?= base_url('administrar_indicadores');?>">&laquo;Regresar</a></div>

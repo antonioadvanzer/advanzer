@@ -23,8 +23,8 @@ class Indicador extends CI_Controller {
     	if(!empty($indicador)):
     		foreach ($this->indicador_model->getCompetenciasByIndicador($indicador) as $competencia) : ?>
     			<tr class="click-row">
-					<td><a href="<?= base_url('competencia/ver/').'/'.$competencia->id;?>"><?= $competencia->nombre;?></a></td>
-					<td data-sortable="false" class="rowlink-skip">
+					<td><small><a href="<?= base_url('competencia/ver/').'/'.$competencia->id;?>"><?= $competencia->nombre;?></a></small></td>
+					<td data-sortable="false" class="rowlink-skip"><small>
 						<table class="table table-bordered table-striped">
 							<thead>
 								<th class="col-sm-2"></th>
@@ -62,7 +62,7 @@ class Indicador extends CI_Controller {
 								<?php endforeach; ?></ul>
 							</tbody>
 						</table>
-					</td>
+					</small></td>
 				</tr>
     			<?php
     		endforeach;

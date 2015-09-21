@@ -28,6 +28,11 @@
 		</script>
 	<?php endif; ?>
   </div>
+  <div class="row" align="center">
+    <div class="col-md-12">
+    <a href="<?= base_url('administrar_indicadores');?>">&laquo;Regresar</a>
+    </div>
+  </div>
   <form role="form" method="post" action="<?= base_url('indicador/create');?>" class="form-signin">
   	<div class="row" align="center">
     <div class="col-md-2"></div>
@@ -45,11 +50,6 @@
   	  </div>
     </div>
   </form>
-  <div class="row" align="center">
-  	<div class="col-md-12">
-	  <a href="<?= base_url('administrar_indicadores');?>">&laquo;Regresar</a>
-  	</div>
-  </div>
   <div class="row">
     <div class="col-md-12">
       <h3><b>Indicadores:</b></h3>
@@ -63,14 +63,14 @@
         <tbody id="result" class="searchable">
           <?php foreach ($indicadores as $indicador): ?>
           <tr>
-            <td><span class="glyphicon glyphicon-eye-open" style="cursor:pointer" onclick="
+            <td><small><span class="glyphicon glyphicon-eye-open" style="cursor:pointer" onclick="
               location.href='<?= base_url('indicador/ver/');?>/'+<?= $indicador->id;?>"></span> 
               <span style="cursor:pointer" onclick="location.href='<?= base_url('indicador/ver/');?>/'+
-              <?= $indicador->id;?>"><?= $indicador->nombre;?></span></td>
-            <td align="right"><span style="cursor:pointer;" onclick="
+              <?= $indicador->id;?>"><?= $indicador->nombre;?></span></small></td>
+            <td align="right"><small><span style="cursor:pointer;" onclick="
               if(confirm('Seguro que desea cambiar el estatus del indicador: \n <?= $indicador->nombre;?>'))location.href=
               '<?= base_url('indicador/ch_estatus/');?>/'+<?= $indicador->id;?>;" class="glyphicon 
-              <?php if($indicador->estatus ==1 ) echo "glyphicon-ok"; else echo "glyphicon-ban-circle"; ?>"></span></td>
+              <?php if($indicador->estatus ==1 ) echo "glyphicon-ok"; else echo "glyphicon-ban-circle"; ?>"></span></small></td>
           </tr>
           <?php endforeach; ?>
         </tbody>

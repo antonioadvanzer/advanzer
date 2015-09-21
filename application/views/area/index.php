@@ -48,11 +48,11 @@
         <tbody data-link="row" class="rowlink">
           <?php foreach ($areas as $area): ?>
           <tr>
-            <td><a style="text-decoration:none" href='<?= base_url("area/ver/$area->id");?>'>
-              <?= $area->nombre;?></a></td>
-            <td><?= $area->direccion;?></td>
+            <td><small><a style="text-decoration:none" href='<?= base_url("area/ver/$area->id");?>'>
+              <?= $area->nombre;?></a></small></td>
+            <td><small><?= $area->direccion;?></small></td>
             <td data-value="<?= $area->estatus;?>">
-              <?php if($area->estatus ==1 ) echo "Habilitada"; else echo "Deshabilitada"; ?></td>
+              <small><?php if($area->estatus ==1 ) echo "Habilitada"; else echo "Deshabilitada"; ?></small></td>
           </tr>
           <?php endforeach; ?>
         </tbody>

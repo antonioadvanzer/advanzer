@@ -463,7 +463,8 @@ class Evaluacion_model extends CI_Model{
 	}
 
 	function searchAsignacionById($id) {
-		return $this->db->select('E.id,Ev.tipo,E.evaluador,E.evaluado,E.estatus,Ev.id evaluacion')->from('Evaluadores E')->join('Evaluaciones Ev','Ev.id=E.evaluacion')->where('E.id',$id)->get()->first_row();
+		return $this->db->select('E.id,Ev.tipo,E.evaluador,E.evaluado,E.estatus,Ev.id evaluacion')->from('Evaluadores E')
+			->join('Evaluaciones Ev','Ev.id=E.evaluacion')->where('E.id',$id)->get()->first_row();
 	}
 
 	function isAsignacionEmpty($asignacion) {
@@ -485,16 +486,17 @@ class Evaluacion_model extends CI_Model{
 	function finalizar_evaluacion($asignacion,$tipo) {
 		$info = $this->searchAsignacionById($asignacion);
 		$posicion = $this->getPosicionByColaborador($info->evaluado);
+		$area = $this->getAreaByColaborador($info->evaluado);
 		$jefe=$this->db->select('jefe')->from('Users')->where('id',$info->evaluado)->get()->first_row()->jefe;
 		switch ($tipo) { //tipo 1 = anual
 			case 1:
 				if($jefe == $info->evaluador) { //si el evaluador es el jefe, guarda las responsabilidades
 					// tomamos las responsabilidades de la tabla detalles para hacer los calculos
 					$total = $this->db->select('SUM(PO.valor/100*M.valor) total')->from('Detalle_Evaluacion DE')
-						->join('Objetivos O','O.id = DE.objetivo')->join('Objetivos_Areas OA','OA.objetivo = OA.id')
+						->join('Objetivos O','O.id = DE.objetivo')->join('Objetivos_Areas OA','OA.objetivo = O.id')
 						->join('Porcentajes_Objetivos PO','PO.objetivo_area = OA.id')
 						->join('Metricas M','M.id = DE.metrica')
-						->where(array('DE.asignacion'=>$asignacion,'PO.nivel_posicion'=>$posicion))->get()->first_row()->total;
+						->where(array('DE.asignacion'=>$asignacion,'PO.nivel_posicion'=>$posicion,'OA.area'=>$area))->get()->first_row()->total;
 					$this->db->insert('Resultados_ev_Responsabilidad',array('asignacion'=>$asignacion,'total'=>$total));
 				}
 				$total = $this->db->select('AVG(DC.respuesta) total')->from('Detalle_ev_Competencia DC')

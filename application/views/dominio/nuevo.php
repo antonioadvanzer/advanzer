@@ -28,6 +28,11 @@
 		</script>
 	<?php endif; ?>
   </div>
+  <div class="row" align="center">
+    <div class="col-md-12">
+    <a href="<?= base_url('administrar_dominios');?>">&laquo;Regresar</a>
+    </div>
+  </div>
   <form role="form" method="post" action="<?= base_url('dominio/create');?>" class="form-signin">
   	<div class="row" align="center">
     <div class="col-md-2"></div>
@@ -45,11 +50,6 @@
   	  </div>
     </div>
   </form>
-  <div class="row" align="center">
-  	<div class="col-md-12">
-	  <a href="<?= base_url('administrar_dominios');?>">&laquo;Regresar</a>
-  	</div>
-  </div>
   <div class="row">
     <div class="col-md-12">
       <h3><b>Dominios:</b></h3>
@@ -63,14 +63,14 @@
         <tbody data-link="row" class="rowlink" id="result">
           <?php foreach ($dominios as $dominio): ?>
           <tr>
-            <td><span class="glyphicon glyphicon-eye-open" style="cursor:pointer" onclick="
+            <td><small><span class="glyphicon glyphicon-eye-open" style="cursor:pointer" onclick="
               location.href='<?= base_url('dominio/ver/');?>/'+<?= $dominio->id;?>"></span> 
               <span style="cursor:pointer" onclick="location.href='<?= base_url('dominio/ver/');?>/'+
-              <?= $dominio->id;?>"><?= $dominio->nombre;?></span></td>
-            <td align="right"><span style="cursor:pointer;" onclick="
+              <?= $dominio->id;?>"><?= $dominio->nombre;?></span></small></td>
+            <td align="right"><small><span style="cursor:pointer;" onclick="
               if(confirm('Seguro que desea cambiar el estatus del dominio: \n <?= $dominio->nombre;?>'))location.href=
               '<?= base_url('dominio/ch_estatus/');?>/'+<?= $dominio->id;?>;" class="glyphicon 
-              <?php if($dominio->estatus ==1 ) echo "glyphicon-ok"; else echo "glyphicon-ban-circle"; ?>"></span></td>
+              <?php if($dominio->estatus ==1 ) echo "glyphicon-ok"; else echo "glyphicon-ban-circle"; ?>"></span></small></td>
           </tr>
           <?php endforeach; ?>
         </tbody>

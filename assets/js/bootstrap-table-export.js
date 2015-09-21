@@ -23,7 +23,7 @@
         showExport: false,
         exportDataType: 'basic', // basic, all, selected
         // 'json', 'xml', 'png', 'csv', 'txt', 'sql', 'doc', 'excel', 'powerpoint', 'pdf'
-        exportTypes: ['csv', 'excel'],
+        exportTypes: ['excel'],
         exportOptions: {}
     });
 

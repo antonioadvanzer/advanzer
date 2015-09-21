@@ -24,10 +24,10 @@ class Track extends CI_Controller {
         $track=$this->input->post('track');
             foreach ($this->posicion_model->getByTrack($track) as $posicion) : ?>
                 <tr>
-                    <td><span class="glyphicon glyphicon-eye-open" style="cursor:pointer" onclick="
+                    <td><small><span class="glyphicon glyphicon-eye-open" style="cursor:pointer" onclick="
                         location.href='<?= base_url('posicion/ver');?>/'+<?= $posicion->id;?>"></span>
                         <span style="cursor:pointer" onclick="location.href='<?= base_url('posicion/ver');?>/'+
-                            <?= $posicion->id;?>"><?= $posicion->nombre;?></span></td>
+                            <?= $posicion->id;?>"><?= $posicion->nombre;?></span></small></td>
                 </tr>
             <?php endforeach;
     }

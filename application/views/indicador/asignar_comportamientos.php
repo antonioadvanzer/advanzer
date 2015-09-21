@@ -41,19 +41,19 @@
                 <tbody>
                   <?php foreach ($competencia->comportamientos as $comp) : ?>
                     <tr>
-                      <td><?= $comp->descripcion;?></td>
-                      <td style="vertical-align:middle;text-align:center;"><input type="checkbox" id="evalua" onclick="change(this.checked,
-                        <?= $comp->id;?>,8)" <?php if(!empty($comp->analista)) echo "checked";?>>
-                      <td style="vertical-align:middle;text-align:center;"><input type="checkbox" id="evalua" onclick="change(this.checked,
-                        <?= $comp->id;?>,7)" <?php if(!empty($comp->consultor)) echo "checked";?>>
-                      <td style="vertical-align:middle;text-align:center;"><input type="checkbox" id="evalua" onclick="change(this.checked,
-                        <?= $comp->id;?>,6)" <?php if(!empty($comp->sr)) echo "checked";?>>
-                      <td style="vertical-align:middle;text-align:center;"><input type="checkbox" id="evalua" onclick="change(this.checked,
-                        <?= $comp->id;?>,5)" <?php if(!empty($comp->gerente)) echo "checked";?>>
-                      <td style="vertical-align:middle;text-align:center;"><input type="checkbox" id="evalua" onclick="change(this.checked,
-                        <?= $comp->id;?>,4)" <?php if(!empty($comp->experto)) echo "checked";?>>
-                      <td style="vertical-align:middle;text-align:center;"><input type="checkbox" id="evalua" onclick="change(this.checked,
-                        <?= $comp->id;?>,3)" <?php if(!empty($comp->director)) echo "checked";?>>
+                      <td><small><?= $comp->descripcion;?></td>
+                      <td style="vertical-align:middle;text-align:center;"><small><input type="checkbox" id="evalua" 
+                        onclick="change(this.checked,<?= $comp->id;?>,8)" <?php if(!empty($comp->analista)) echo "checked";?>></small></td>
+                      <td style="vertical-align:middle;text-align:center;"><small><input type="checkbox" id="evalua" 
+                        onclick="change(this.checked,<?= $comp->id;?>,7)" <?php if(!empty($comp->consultor)) echo "checked";?>></small></td>
+                      <td style="vertical-align:middle;text-align:center;"><small><input type="checkbox" id="evalua" 
+                        onclick="change(this.checked,<?= $comp->id;?>,6)" <?php if(!empty($comp->sr)) echo "checked";?>></small></td>
+                      <td style="vertical-align:middle;text-align:center;"><small><input type="checkbox" id="evalua" 
+                        onclick="change(this.checked,<?= $comp->id;?>,5)" <?php if(!empty($comp->gerente)) echo "checked";?>></small></td>
+                      <td style="vertical-align:middle;text-align:center;"><small><input type="checkbox" id="evalua" 
+                        onclick="change(this.checked,<?= $comp->id;?>,4)" <?php if(!empty($comp->experto)) echo "checked";?>></small></td>
+                      <td style="vertical-align:middle;text-align:center;"><small><input type="checkbox" id="evalua" 
+                        onclick="change(this.checked,<?= $comp->id;?>,3)" <?php if(!empty($comp->director)) echo "checked";?>></small></td>
                     </tr>
                   <?php endforeach; ?>
                 </tbody>

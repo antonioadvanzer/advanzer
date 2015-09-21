@@ -1,3 +1,6 @@
+.text-center{
+    text-align: center !important;
+}
 img.user_img{
 	border-radius:50% 50% 50% 50%;
 	border:3px solid white;

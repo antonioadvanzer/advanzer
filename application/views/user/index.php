@@ -47,19 +47,19 @@
         <tbody data-link="row" class="rowlink">
           <?php foreach ($users as $user): ?>
           <tr class="click-row">
-            <td><a href='<?= base_url("user/ver/").'/'.$user->id;?>'><img height="40px" 
-              src="<?= base_url('assets/images/fotos')."/".$user->foto;?>"></a></td>
-            <td><?= $user->nomina;?></td>
-            <td><?= $user->nombre;?></td>
-            <td><?= $user->email;?></td>
-            <td data-value="<?= $user->empresa;?>"><img width="60px"
-              src="<?= base_url('assets/images').'/'.$user->empresa.'.png';?>"></td>
-            <td><?= $user->track;?></td>
-            <td><?= $user->posicion;?></td>
-            <td><?= $user->area;?></td>
-            <td><?= $user->plaza;?></td>
-            <td data-value="<?= $user->estatus;?>">
-              <?php if($user->estatus ==1 ) echo "Activo"; else echo "Inactivo"; ?></td>
+            <td><small><a href='<?= base_url("user/ver/").'/'.$user->id;?>'><img height="40px" 
+              src="<?= base_url('assets/images/fotos')."/".$user->foto;?>"></a></small></td>
+            <td><small><?= $user->nomina;?></small></td>
+            <td><small><?= $user->nombre;?></small></td>
+            <td><small><?= $user->email;?></small></td>
+            <td data-value="<?= $user->empresa;?>"><small><img width="60px"
+              src="<?= base_url('assets/images').'/'.$user->empresa.'.png';?>"></small></td>
+            <td><small><?= $user->track;?></small></td>
+            <td><small><?= $user->posicion;?></small></td>
+            <td><small><?= $user->area;?></small></td>
+            <td><small><?= $user->plaza;?></small></td>
+            <td data-value="<?= $user->estatus;?>"><small>
+              <?php if($user->estatus ==1 ) echo "Activo"; else echo "Inactivo"; ?></small></td>
           </tr>
           <?php endforeach; ?>
         </tbody>

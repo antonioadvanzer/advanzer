@@ -22,20 +22,20 @@
         <table id="tabla<?= $area->id;?>" class="table table-striped well table-bordered">
           <thead>
             <tr>
-              <th class="col-sm-3"></th>
-              <th>Analista</th>
-              <th>Consultor</th>
-              <th>Consultor Sr</th>
-              <th>Gerente / Master</th>
-              <th>Gerente Sr / Experto</th>
-              <th>Director</th>
+              <th class="col-sm-4"></th>
+              <th class="text-center col-sm-1">Analista</th>
+              <th class="text-center col-sm-1">Consultor</th>
+              <th class="text-center col-sm-1">Consultor Sr</th>
+              <th class="text-center col-sm-1">Gerente / Master</th>
+              <th class="text-center col-sm-1">Gerente Sr / Experto</th>
+              <th class="text-center col-sm-1">Director</th>
             </tr>
           </thead>
           <tbody>
             <?php $total1=0;$total2=0;$total3=0;$total4=0;$total5=0;$total6=0;
             foreach ($area->objetivos as $resp) : ?>
               <tr>
-                <td><?= $resp->nombre;?> - <small><small><i><?= $resp->tipo;?></i></small></small></td>
+                <td><small><?= $resp->nombre;?> - <small><i><?= $resp->tipo;?></i></small></small></td>
                 <td><input style="max-width:80px;text-align:center" class="form-control" type="text" maxlength="3" required pattern="[0-9]+" 
                   value="<?php if(!empty($resp->analista)){ echo $resp->analista->valor; $total1+=$resp->analista->valor;}else echo "0";?>" 
                   onchange="if(this.value == '') this.value=0;change(this.value,<?= $resp->id;?>,<?= $area->id;?>,8);sumarColumna(<?= $area->id;?>,1);" ></td>
@@ -59,13 +59,13 @@
           </tbody>
           <tfoot>
             <tr>
-              <td align="right"><b>&sum;</b></td>
-              <td align="center"><?= $total1;?></td>
-              <td align="center"><?= $total2;?></td>
-              <td align="center"><?= $total3;?></td>
-              <td align="center"><?= $total4;?></td>
-              <td align="center"><?= $total5;?></td>
-              <td align="center"><?= $total6;?></td>
+              <td align="right"><small><b>&sum;</b></small></td>
+              <td align="center"><small><?= $total1;?></small></td>
+              <td align="center"><small><?= $total2;?></small></td>
+              <td align="center"><small><?= $total3;?></small></td>
+              <td align="center"><small><?= $total4;?></small></td>
+              <td align="center"><small><?= $total5;?></small></td>
+              <td align="center"><small><?= $total6;?></small></td>
             </tr>
           </tfoot>
         </table>
