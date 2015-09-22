@@ -41,7 +41,7 @@ class User extends CI_Controller {
         $id=$this->input->post('id');
     	//set preferences
     	$config['upload_path'] = './assets/images/fotos/';
-        $config['allowed_types'] = 'jpg|jpeg|gif|png';
+        $config['allowed_types'] = '*';
         $ext = explode(".", $_FILES['foto']['name']);
         $config['file_name'] = $id.'.'.end($ext);
         $config['overwrite'] = TRUE;
