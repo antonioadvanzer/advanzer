@@ -52,13 +52,14 @@ class User extends CI_Controller {
         if (!$this->upload->do_upload('foto')) {
             // case - failure
             $msg = $this->upload->display_errors();
+            echo $msg;exit();
             redirect('administrar_usuarios');
         }else {
             // case - success
         	//update info in DB
         	$this->user_model->update_foto($id,$config['file_name']);
-            //$upload_data = $this->upload->data();
-            $response['msg'] = 'ok';
+            $upload_data = $this->upload->data();
+            print_r($upload_data);exit();
             redirect("user/ver/$id");
         }
     }
