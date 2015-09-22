@@ -86,8 +86,7 @@
 									<li><a href="<?= base_url('objetivo/asignar_pesos');?>">Responsabilidades Por Área</a></li>
 									<li><a href="<?= base_url('ver_requisiciones');?>">Requisiciones</a></li>
 									<li><a href="<?= base_url('evaluacion');?>">Evaluaciones</a></li>
-									<li><a href="<?= base_url('ev_confidencial');?>">Evaluaciones Confidencial</a></li>
-									<li><a href="<?= base_url('ev_evaluador');?>">Evaluaciones por Evaluador</a></li>
+									<li><a href="<?= base_url('evaluacion/por_evaluador');?>">Evaluaciones por Evaluador</a></li>
 									<li><a href="<?= base_url('gestion_evaluaciones');?>">Gestión de Evaluaciones</a></li>
 								</ul>
 							</li>

@@ -14,81 +14,7 @@ class Evaluacion extends CI_Controller {
     	$this->load->library('pagination');
     }
 
-    public function revisar($colaborador) {
-        $data['colaborador'] = $this->evaluacion_model->getResultadosByColaborador($this->user_model->searchById($colaborador));
-        $this->layout->title('Advanzer - Revisión');
-        $this->layout->view('evaluacion/revisar',$data);
-    }
-
-    public function asigna_rating() {
-        $response['msg'] = "Error al asignar rating. Intenta de nuevo";
-        $colaborador = $this->input->post('colaborador');
-        $feedback = $this->input->post('feedback');
-        $rating = $this->input->post('rating');
-        $evaluacion = $this->evaluacion_model->getEvaluacionAnual();
-        $where = array('evaluacion'=>$evaluacion,'colaborador'=>$colaborador);
-        if($this->evaluacion_model->updateRating($where,array('rating'=>$rating))){
-            $this->evaluacion_model->updateFeedbacker($where,array('feedbacker'=>$feedback));
-            $response['msg']="ok";
-        }
-        echo json_encode($response);
-    }
-
-    private function genera_autoevaluacion($colaborador) {
-        $evaluacion = $this->evaluacion_model->getEvaluacionAnual();
-        $this->evaluacion_model->genera_autoevaluacion($evaluacion,$colaborador);
-    }
-
-    public function evaluar() {
-        $evaluador=$this->session->userdata('id');
-        $this->genera_autoevaluacion($evaluador);
-        $data['colaboradores']=$this->evaluacion_model->getEvaluacionesByEvaluador($evaluador);
-        $data['yo'] = $evaluador;
-        $this->layout->title('Advanzer - Evaluaciones');
-        $this->layout->view('evaluacion/evaluar',$data);
-    }
-
-    public function aplicar($asignacion) {
-        $data['evaluacion']=$this->evaluacion_model->getEvaluacionByAsignacion($asignacion);
-        $this->layout->title('Advanzer - Aplicar Evaluación');
-        $this->layout->view('evaluacion/aplicar',$data);
-    }
-
-    public function guardar_avance() {
-        $response['msg']="Error al guardar";
-        $asignacion = $this->input->post('asignacion');
-        $tipo = $this->input->post('tipo');
-        $valor = $this->input->post('valor');
-        $elemento = $this->input->post('elemento');
-        if($tipo=="responsabilidad"){
-            if($this->evaluacion_model->guardaMetrica($asignacion,$valor,$elemento)) //metrica=valor,obj=elem
-                $response['msg'] = "Métrica Guardada";
-        }else{
-            if($this->evaluacion_model->guardaComportamiento($asignacion,$valor,$elemento)) //resp=valor,comp=elem
-                $response['msg'] = "Comportamiento Guardado";
-        }
-        $this->evaluacion_model->ch_estatus($asignacion);
-        echo json_encode($response);
-    }
-
-    public function finalizar_evaluacion() {
-        $asignacion = $this->input->post('asignacion');
-        $tipo = $this->input->post('tipo');
-        $this->db->trans_begin();
-        $this->evaluacion_model->finalizar_evaluacion($asignacion,$tipo);
-        if($this->db->trans_status() === FALSE){
-            $this->db->trans_rollback();
-            $data['msg'] = "Error al finalizar la evaluación. Verifica tus respuestas e intenta de nuevo";
-            $data['redirecciona']="no";
-        }
-        else{
-            $this->db->trans_commit();
-            $data['msg'] = "Evaluación Finalizada.";
-            $data['redirecciona']="si";
-        }
-        echo json_encode($data);
-    }
-
+    //basicas
     public function index() {
         if(!$this->evaluacion_model->getEvaluacionAnual())
             redirect('evaluacion/proyecto');
@@ -97,128 +23,6 @@ class Evaluacion extends CI_Controller {
             $this->layout->title('Advanzer - Evaluaciones');
             $this->layout->view('evaluacion/index',$data);
         }
-    }
-
-    public function load_competencias() {
-        $posicion = $this->input->post('posicion');
-        foreach ($this->evaluacion_model->getIndicadoresByPosicion($posicion) as $indicador) : 
-            $indicador->competencias = $this->evaluacion_model->getCompetenciasByIndicador($indicador->id,$posicion);
-            if(count($indicador->competencias) > 0): ?>
-                <h1><?= $indicador->nombre;?></h1>
-                <div> <?php 
-                    foreach ($indicador->competencias as $comp) : ?>
-                        <h2><?= $comp->nombre;?></h2>
-                        <div align="left">
-                            <label><?= $comp->descripcion;?></label>
-                            <p><ul type="square"> <?php
-                                foreach ($this->evaluacion_model->getComportamientoByCompetencia($comp->id,$posicion) as $comportamiento) : ?>
-                                        <span style="display:block;float:left" class="glyphicon glyphicon-ok"></span><?= $comportamiento->descripcion;?><br>
-                                <?php endforeach; ?>
-                            </ul></p>
-                        </div> <?php
-                    endforeach; ?>
-                </div> <?php
-            endif;
-        endforeach;
-    }
-
-    public function load_perfil() {
-        $area = $this->input->post('area');
-        $posicion = $this->input->post('posicion');
-        foreach ($this->evaluacion_model->getResponsabilidadByArea($area) as $dominio) :
-            $dominio->responsabilidades = $this->evaluacion_model->getObjetivosByDominio($dominio->id,$area,$posicion);
-            if(count($dominio->responsabilidades) > 0): ?>
-                <h1><?= $dominio->nombre;?></h1>
-                <div>
-                <?php foreach ($dominio->responsabilidades as $responsabilidad): ?>
-                    <h2><?= $responsabilidad->nombre;?><span style="float:right;"><?= $responsabilidad->valor;?>%</span></h2>
-                    <div align="left">
-                        <label><?= $responsabilidad->descripcion;?></label>
-                        <p><ol reversed>
-                            <?php foreach ($this->evaluacion_model->getMetricaByObjetivo($responsabilidad->id) as $metrica) :?>
-                                <li><?= $metrica->descripcion;?></li>
-                            <?php endforeach; ?>
-                        </ol></p>
-                    </div>
-                <?php endforeach; ?>
-                </div>
-            <?php endif;
-        endforeach;
-    }
-
-    public function perfil() {
-        $data=array();
-        $area = $this->session->userdata('area');
-        $posicion = $this->session->userdata('posicion');
-        if(!empty($area) && !empty($posicion)){
-            //get perfil de evaluación de responsabilidades
-            $data['dominios'] = $this->evaluacion_model->getResponsabilidadByArea($area);
-            foreach ($data['dominios'] as $dominio) :
-                $dominio->responsabilidades = $this->evaluacion_model->getObjetivosByDominio($dominio->id,$area,$posicion);
-                foreach ($dominio->responsabilidades as $responsabilidad) :
-                    $responsabilidad->metricas = $this->evaluacion_model->getMetricaByObjetivo($responsabilidad->id);
-                endforeach;
-            endforeach;
-            //get perfil de evaluacion de competencias
-            $data['indicadores'] = $this->evaluacion_model->getIndicadoresByPosicion($posicion);
-            foreach ($data['indicadores'] as $indicador) :
-                $indicador->competencias = $this->evaluacion_model->getCompetenciasByIndicador($indicador->id,$posicion);
-                foreach ($indicador->competencias as $competencia) : 
-                    $competencia->comportamientos = $this->evaluacion_model->getComportamientoByCompetencia($competencia->id,$posicion);
-                endforeach;
-            endforeach;
-        }
-        $data['areas']=$this->area_model->getAll(1);
-        $data['area_usuario'] = $area;
-        $this->layout->title('Advanzer - Perfil de Evaluación');
-        $this->layout->view('evaluacion/perfil',$data);
-    }
-
-    public function evaluaciones($msg=null) {
-        $data['evaluacion'] = $this->evaluacion_model->getEvaluacionAnual();
-        $data['colaboradores'] = $this->evaluacion_model->getPagination();
-    	
-        $this->layout->title('Advanzer - Evaluaciones');
-        if(!$data['evaluacion'])
-            redirect('evaluacion/proyecto');
-        else
-    	   $this->layout->view('evaluacion/evaluaciones',$data);
-    }
-
-    public function asignar_evaluador($colaborador){
-        $data['colaborador']=$this->user_model->searchById($colaborador);
-        $data['evaluadores']=$this->evaluacion_model->getEvaluadoresByColaborador($colaborador);
-        $data['no_evaluadores']=$this->evaluacion_model->getNotEvaluadoresByColaborador($colaborador,$data['evaluadores']);
-
-        $this->layout->title('Capital Humano - Asignar Evaluadores');
-        $this->layout->view('evaluacion/asignar_evaluador',$data);
-    }
-
-    public function guarda_evaluadores() {
-        $colaborador=$this->input->post('colaborador');
-        $agregar=$this->input->post('agregar');
-        $this->input->post('evaluacion') ? $evaluacion=$this->input->post('evaluacion') : $evaluacion=$this->evaluacion_model->getEvaluacionAnual();
-        $this->db->trans_begin();
-        if(!empty($agregar))
-            foreach ($agregar as $evaluador) :
-                $this->evaluacion_model->addEvaluadorToColaborador(
-                    array('evaluador'=>$evaluador,'evaluado'=>$colaborador,'evaluacion'=>$evaluacion));
-            endforeach;
-        $quitar=$this->input->post('quitar');
-        if(!empty($quitar))
-            foreach ($quitar as $evaluador) :
-                $this->evaluacion_model->delEvaluadorFromColaborador(
-                    array('evaluador'=>$evaluador,'evaluado'=>$colaborador,'evaluacion'=>$evaluacion));
-            endforeach;
-        if($this->db->trans_status() === FALSE){
-            $this->db->trans_rollback();
-            $response['msg'] = "Ha habido un error. Intenta de nuevo";
-        }
-        else{
-            $this->db->trans_commit();
-            $response['msg']="ok";
-        }
-        echo json_encode($response);
     }
 
     public function proyecto() {
@@ -266,6 +70,69 @@ class Evaluacion extends CI_Controller {
             $this->db->trans_commit();
             $response['affected']=true;
             $response['msg']="Evaluación Modificada";
+        }
+        echo json_encode($response);
+    }
+
+    public function nueva() {
+        $data['colaboradores'] = $this->user_model->getAll();
+        $data['participantes']=array();
+        $this->layout->title('Advanzer - Nueva Evaluación');
+        $this->layout->view('evaluacion/nueva',$data);
+    }
+
+    public function registrar() {
+        $datos=array(
+            'anio'=>$this->input->post('anio'),
+            'tipo'=>$this->input->post('tipo'),
+            'nombre'=>$this->input->post('nombre'),
+            'inicio'=>$this->input->post('inicio'),
+            'fin'=>$this->input->post('fin')
+        );
+        $tipo=$this->input->post('tipo');
+        $lider=$this->input->post('lider');
+        $this->db->trans_begin();
+        if($tipo == 0)
+            $datos['lider'] = $lider;
+        $evaluacion=$this->evaluacion_model->create($datos);
+        if($this->input->post('tipo') == 0){
+            foreach ($this->input->post('agregar') as $colaborador) :
+                $this->evaluacion_model->addEvaluadorToColaborador(array('evaluador'=>$lider,
+                    'evaluado'=>$colaborador,'evaluacion'=>$evaluacion));
+            endforeach;
+        }
+        if($this->db->trans_status() === FALSE){
+            $this->db->trans_rollback();
+            $response['msg'] = "Ha habido un error. Intenta de nuevo";
+        }else{
+            $this->db->trans_commit();
+            $response['msg']="ok";
+        }
+        echo json_encode($response);
+    }
+
+    //validaciones
+    private function genera_autoevaluacion($colaborador) {
+        $evaluacion = $this->evaluacion_model->getEvaluacionAnual();
+        $this->evaluacion_model->genera_autoevaluacion($evaluacion,$colaborador);
+    }
+
+    private function valida_sesion() {
+        if($this->session->userdata('id') == "")
+            redirect('login');
+    }
+
+    //procesos ajax carga/consulta info
+    public function asigna_rating() {
+        $response['msg'] = "Error al asignar rating. Intenta de nuevo";
+        $colaborador = $this->input->post('colaborador');
+        $feedback = $this->input->post('feedback');
+        $rating = $this->input->post('rating');
+        $evaluacion = $this->evaluacion_model->getEvaluacionAnual();
+        $where = array('evaluacion'=>$evaluacion,'colaborador'=>$colaborador);
+        if($this->evaluacion_model->updateRating($where,array('rating'=>$rating))){
+            $this->evaluacion_model->updateFeedbacker($where,array('feedbacker'=>$feedback));
+            $response['msg']="ok";
         }
         echo json_encode($response);
     }
@@ -527,45 +394,189 @@ class Evaluacion extends CI_Controller {
         <?php 
     }
 
-    public function nueva() {
-        $data['colaboradores'] = $this->user_model->getAll();
-        $data['participantes']=array();
-        $this->layout->title('Advanzer - Nueva Evaluación');
-        $this->layout->view('evaluacion/nueva',$data);
+    public function load_competencias() {
+        $posicion = $this->input->post('posicion');
+        foreach ($this->evaluacion_model->getIndicadoresByPosicion($posicion) as $indicador) : 
+            $indicador->competencias = $this->evaluacion_model->getCompetenciasByIndicador($indicador->id,$posicion);
+            if(count($indicador->competencias) > 0): ?>
+                <h1><?= $indicador->nombre;?></h1>
+                <div> <?php 
+                    foreach ($indicador->competencias as $comp) : ?>
+                        <h2><?= $comp->nombre;?></h2>
+                        <div align="left">
+                            <label><?= $comp->descripcion;?></label>
+                            <p><ul type="square"> <?php
+                                foreach ($this->evaluacion_model->getComportamientoByCompetencia($comp->id,$posicion) as $comportamiento) : ?>
+                                        <span style="display:block;float:left" class="glyphicon glyphicon-ok"></span><?= $comportamiento->descripcion;?><br>
+                                <?php endforeach; ?>
+                            </ul></p>
+                        </div> <?php
+                    endforeach; ?>
+                </div> <?php
+            endif;
+        endforeach;
     }
 
-    public function registrar() {
-        $datos=array(
-            'anio'=>$this->input->post('anio'),
-            'tipo'=>$this->input->post('tipo'),
-            'nombre'=>$this->input->post('nombre'),
-            'inicio'=>$this->input->post('inicio'),
-            'fin'=>$this->input->post('fin')
-        );
-        $tipo=$this->input->post('tipo');
-        $lider=$this->input->post('lider');
-        $this->db->trans_begin();
-        if($tipo == 0)
-            $datos['lider'] = $lider;
-        $evaluacion=$this->evaluacion_model->create($datos);
-        if($this->input->post('tipo') == 0){
-            foreach ($this->input->post('agregar') as $colaborador) :
-                $this->evaluacion_model->addEvaluadorToColaborador(array('evaluador'=>$lider,
-                    'evaluado'=>$colaborador,'evaluacion'=>$evaluacion));
+    public function load_perfil() {
+        $area = $this->input->post('area');
+        $posicion = $this->input->post('posicion');
+        foreach ($this->evaluacion_model->getResponsabilidadByArea($area) as $dominio) :
+            $dominio->responsabilidades = $this->evaluacion_model->getObjetivosByDominio($dominio->id,$area,$posicion);
+            if(count($dominio->responsabilidades) > 0): ?>
+                <h1><?= $dominio->nombre;?></h1>
+                <div>
+                <?php foreach ($dominio->responsabilidades as $responsabilidad): ?>
+                    <h2><?= $responsabilidad->nombre;?><span style="float:right;"><?= $responsabilidad->valor;?>%</span></h2>
+                    <div align="left">
+                        <label><?= $responsabilidad->descripcion;?></label>
+                        <p><ol reversed>
+                            <?php foreach ($this->evaluacion_model->getMetricaByObjetivo($responsabilidad->id) as $metrica) :?>
+                                <li><?= $metrica->descripcion;?></li>
+                            <?php endforeach; ?>
+                        </ol></p>
+                    </div>
+                <?php endforeach; ?>
+                </div>
+            <?php endif;
+        endforeach;
+    }
+
+    public function perfil() {
+        $data=array();
+        $area = $this->session->userdata('area');
+        $posicion = $this->session->userdata('posicion');
+        if(!empty($area) && !empty($posicion)){
+            //get perfil de evaluación de responsabilidades
+            $data['dominios'] = $this->evaluacion_model->getResponsabilidadByArea($area);
+            foreach ($data['dominios'] as $dominio) :
+                $dominio->responsabilidades = $this->evaluacion_model->getObjetivosByDominio($dominio->id,$area,$posicion);
+                foreach ($dominio->responsabilidades as $responsabilidad) :
+                    $responsabilidad->metricas = $this->evaluacion_model->getMetricaByObjetivo($responsabilidad->id);
+                endforeach;
+            endforeach;
+            //get perfil de evaluacion de competencias
+            $data['indicadores'] = $this->evaluacion_model->getIndicadoresByPosicion($posicion);
+            foreach ($data['indicadores'] as $indicador) :
+                $indicador->competencias = $this->evaluacion_model->getCompetenciasByIndicador($indicador->id,$posicion);
+                foreach ($indicador->competencias as $competencia) : 
+                    $competencia->comportamientos = $this->evaluacion_model->getComportamientoByCompetencia($competencia->id,$posicion);
+                endforeach;
             endforeach;
         }
+        $data['areas']=$this->area_model->getAll(1);
+        $data['area_usuario'] = $area;
+        $this->layout->title('Advanzer - Perfil de Evaluación');
+        $this->layout->view('evaluacion/perfil',$data);
+    }
+
+    public function guardar_avance() {
+        $response['msg']="Error al guardar";
+        $asignacion = $this->input->post('asignacion');
+        $tipo = $this->input->post('tipo');
+        $valor = $this->input->post('valor');
+        $elemento = $this->input->post('elemento');
+        if($tipo=="responsabilidad"){
+            if($this->evaluacion_model->guardaMetrica($asignacion,$valor,$elemento)) //metrica=valor,obj=elem
+                $response['msg'] = "Métrica Guardada";
+        }else{
+            if($this->evaluacion_model->guardaComportamiento($asignacion,$valor,$elemento)) //resp=valor,comp=elem
+                $response['msg'] = "Comportamiento Guardado";
+        }
+        $this->evaluacion_model->ch_estatus($asignacion);
+        echo json_encode($response);
+    }
+
+    public function finalizar_evaluacion() {
+        $asignacion = $this->input->post('asignacion');
+        $tipo = $this->input->post('tipo');
+        $this->db->trans_begin();
+        $this->evaluacion_model->finalizar_evaluacion($asignacion,$tipo);
+        if($this->db->trans_status() === FALSE){
+            $this->db->trans_rollback();
+            $data['msg'] = "Error al finalizar la evaluación. Verifica tus respuestas e intenta de nuevo";
+            $data['redirecciona']="no";
+        }
+        else{
+            $this->db->trans_commit();
+            $data['msg'] = "Evaluación Finalizada.";
+            $data['redirecciona']="si";
+        }
+        echo json_encode($data);
+    }
+
+    public function asignar_evaluador($colaborador){
+        $data['colaborador']=$this->user_model->searchById($colaborador);
+        $data['evaluadores']=$this->evaluacion_model->getEvaluadoresByColaborador($colaborador);
+        $data['no_evaluadores']=$this->evaluacion_model->getNotEvaluadoresByColaborador($colaborador,$data['evaluadores']);
+
+        $this->layout->title('Capital Humano - Asignar Evaluadores');
+        $this->layout->view('evaluacion/asignar_evaluador',$data);
+    }
+
+    public function guarda_evaluadores() {
+        $colaborador=$this->input->post('colaborador');
+        $agregar=$this->input->post('agregar');
+        $this->input->post('evaluacion') ? $evaluacion=$this->input->post('evaluacion') : $evaluacion=$this->evaluacion_model->getEvaluacionAnual();
+        $this->db->trans_begin();
+        if(!empty($agregar))
+            foreach ($agregar as $evaluador) :
+                $this->evaluacion_model->addEvaluadorToColaborador(
+                    array('evaluador'=>$evaluador,'evaluado'=>$colaborador,'evaluacion'=>$evaluacion));
+            endforeach;
+        $quitar=$this->input->post('quitar');
+        if(!empty($quitar))
+            foreach ($quitar as $evaluador) :
+                $this->evaluacion_model->delEvaluadorFromColaborador(
+                    array('evaluador'=>$evaluador,'evaluado'=>$colaborador,'evaluacion'=>$evaluacion));
+            endforeach;
         if($this->db->trans_status() === FALSE){
             $this->db->trans_rollback();
             $response['msg'] = "Ha habido un error. Intenta de nuevo";
-        }else{
+        }
+        else{
             $this->db->trans_commit();
             $response['msg']="ok";
         }
         echo json_encode($response);
     }
 
-    private function valida_sesion() {
-        if($this->session->userdata('id') == "")
-            redirect('login');
+    //estructuras
+    public function revisar($colaborador) {
+        $data['colaborador'] = $this->evaluacion_model->getResultadosByColaborador($this->user_model->searchById($colaborador));
+        $this->layout->title('Advanzer - Revisión');
+        $this->layout->view('evaluacion/revisar',$data);
+    }
+
+    public function evaluar() {
+        $evaluador=$this->session->userdata('id');
+        $this->genera_autoevaluacion($evaluador);
+        $data['colaboradores']=$this->evaluacion_model->getEvaluacionesByEvaluador($evaluador);
+        $data['yo'] = $evaluador;
+        $this->layout->title('Advanzer - Evaluaciones');
+        $this->layout->view('evaluacion/evaluar',$data);
+    }
+
+    public function aplicar($asignacion) {
+        $data['evaluacion']=$this->evaluacion_model->getEvaluacionByAsignacion($asignacion);
+        $this->layout->title('Advanzer - Aplicar Evaluación');
+        $this->layout->view('evaluacion/aplicar',$data);
+    }    
+
+    public function evaluaciones($msg=null) {
+        $data['evaluacion'] = $this->evaluacion_model->getEvaluacionAnual();
+        $data['colaboradores'] = $this->evaluacion_model->getPagination();
+    	
+        $this->layout->title('Advanzer - Evaluaciones');
+        if(!$data['evaluacion'])
+            redirect('evaluacion/proyecto');
+        else
+    	   $this->layout->view('evaluacion/evaluaciones',$data);
+    }
+
+    public function por_evaluador() {
+        $data=array();
+        $data['evaluadores'] = $this->evaluacion_model->getEvaluadores();
+        $this->layout->title('Advanzer - Evaluadores');
+        $this->layout->view('evaluacion/por_evaluador',$data);
     }
 }

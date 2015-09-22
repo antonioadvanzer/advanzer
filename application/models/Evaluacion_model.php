@@ -91,17 +91,52 @@ class Evaluacion_model extends CI_Model{
 
 	}
 
-	function getEvaluadores($tipo=0) {
-		$this->db->select('Us.foto,Ev.id id,Us.nombre nombre,count(Ev.evaluado) as cantidad');
-		$this->db->join('Users as Us','Us.id = Ev.evaluador');
-		$this->db->where('Ev.estatus',0);
-		if($tipo==1)//1=evaluacion 360
-			$this->db->where('Ev.tipo',3);
-		else
-			$this->db->where('Ev.tipo !=',3);
-		$this->db->group_by('Ev.evaluador');
-		$this->db->order_by('Us.nombre','asc');
-		return $this->db->get('Evaluadores as Ev');
+	function getEvaluadores() {
+		$this->db->distinct();
+		$this->db->select('Us.id,Us.foto,Us.nombre')->from('Users Us');
+		$this->db->join('Evaluadores Ev','Us.id = Ev.evaluador');
+		$this->db->join('Evaluaciones E','E.id = Ev.evaluacion');
+		$this->db->where(array('E.inicio <='=>date('Y-m-d'),'E.fin >='=>date('Y-m-d')));
+		$this->db->where('Ev.evaluado != Ev.evaluador');
+		$this->db->order_by('Us.nombre');
+		$result = $this->db->get()->result();
+		foreach ($result as $evaluador) :
+			$evaluador->asignaciones = null;
+			$evaluador->asignaciones360 = null;
+			//evaluaciones
+			$this->db->select('Ev.id,Ev.evaluado,Us.nombre,Us.foto')->from('Evaluadores Ev');
+			$this->db->join('Evaluaciones E','E.id = Ev.evaluacion');
+			$this->db->join('Users Us','Us.id = Ev.evaluado');
+			$this->db->where(array('E.inicio <='=>date('Y-m-d'),'E.fin >='=>date('Y-m-d'),'Ev.evaluado !='=>$evaluador->id,
+				'Ev.evaluador'=>$evaluador->id));
+			$this->db->where("(Us.jefe=$evaluador->id OR E.lider=$evaluador->id)");
+			$asignaciones = $this->db->get()->result();
+			foreach ($asignaciones as $asignacion) :
+				$res = $this->db->select('total')->where('asignacion',$asignacion->id)->get('Resultados_ev_Competencia');
+				($res->num_rows() == 1) ? $asignacion->competencia = $res->first_row()->total : $asignacion->competencia=null;
+				$res = $this->db->select('total')->where('asignacion',$asignacion->id)->get('Resultados_ev_Responsabilidad');
+				($res->num_rows() == 1) ? $asignacion->responsabilidad = $res->first_row()->total : $asignacion->responsabilidad=null;
+				$asignacion->total = ($asignacion->competencia*0.3)+($asignacion->responsabilidad*0.7);
+			endforeach;
+			$evaluador->asignaciones = $asignaciones;
+
+			//evaluaciones 360
+			$this->db->select('Ev.id,Ev.evaluado,Us.nombre,Us.foto')->from('Evaluadores Ev');
+			$this->db->join('Evaluaciones E','E.id = Ev.evaluacion');
+			$this->db->join('Users Us','Us.id = Ev.evaluado');
+			$this->db->join('Posicion_Track PT','PT.id = Us.posicion_track');
+			$this->db->join('Posiciones P','P.id = PT.posicion');
+			$this->db->where(array('E.inicio <='=>date('Y-m-d'),'E.tipo'=>1,'E.fin >='=>date('Y-m-d'),'Ev.evaluado !='=>$evaluador->id));
+			$this->db->where(array('Us.jefe!='=>$evaluador->id,'P.nivel >='=>3,'P.nivel <='=>5,'Ev.evaluador'=>$evaluador->id));
+			$asignaciones = $this->db->get()->result();
+			foreach ($asignaciones as $asignacion) :
+				$res = $this->db->select('total')->where('asignacion',$asignacion->id)->get('Resultados_ev_Competencia');
+				($res->num_rows() == 1) ? $asignacion->total = $res->first_row()->total : $asignacion->total=null;
+			endforeach;
+
+			$evaluador->asignaciones360 = $asignaciones;
+		endforeach;
+		return $result;
 	}
 
 	function getByText($valor,$tipo) {
