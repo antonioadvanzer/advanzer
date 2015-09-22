@@ -19,7 +19,8 @@
 		  	<label for="foto" class="control-label">Elige la foto</label>
 		  </div>
 		  <div class="form-group">
-		  	<input class="form-control" id="foto" type="file" name="foto" size="40" style="max-width:300px; text-align:center;" required/>
+		  	<input class="form-control" id="foto" type="file" name="foto" size="40" style="max-width:300px; text-align:center;" 
+		  		accept="image/jpg image/jpeg image/png image/gif" required/>
 		  </div>
 		  <div class="form-group">
 		  	<p style="font-size:smaller;">

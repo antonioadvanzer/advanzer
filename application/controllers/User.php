@@ -41,7 +41,7 @@ class User extends CI_Controller {
         $id=$this->input->post('id');
     	//set preferences
     	$config['upload_path'] = './assets/images/fotos/';
-        $config['allowed_types'] = 'jpg|png|jpeg|gif';
+        $config['allowed_types'] = 'jpg|jpeg|gif|png';
         $ext = explode(".", $_FILES['foto']['name']);
         $config['file_name'] = $id.'.'.end($ext);
         $config['overwrite'] = TRUE;
@@ -52,6 +52,7 @@ class User extends CI_Controller {
         if (!$this->upload->do_upload('foto')) {
             // case - failure
             $msg = $this->upload->display_errors();
+            echo "$msg <a href='ver/$id'>Regresar</a>";exit();
             redirect('administrar_usuarios');
         }else {
             // case - success
