@@ -16,18 +16,38 @@
 	<hr>
 	<form id="save" class="form-signin" role="form" method="post" action="javascript:">
 		<div class="row" align="center">
-			<div class="col-md-5" align="right"><img height="180px" src="<?= base_url("assets/images/fotos/$colaborador->foto");?>"></div>
-			<div class="col-md-5">
+			<div class="col-md-4"><h4>&nbsp;</h4><img style="max-height:220px;max-width:100%" src="<?= base_url("assets/images/fotos/$colaborador->foto");?>"></div>
+			<div class="col-md-4">
+				<h4>Compromisos Internos</h4>
+				<div class="form-group" align="center">
+					<label title="El(la) colaborador(a) presenta sus Gastos de Viaje, bajo los procedimientos establecidos, a más tardar 7 días hábiles a partir de su fecha de regreso en al menos el 90% de sus viajes.">
+						Comprobación de Gastos de Viaje?</label>
+					<input id="gastos" type="text" class="form-control" style="max-width:50px;background-color: #fff;" disabled 
+						value="<?= $colaborador->cumple_gastos;?>">
+					<label title="El(la) colaborador(a) captura sus horas asignadas a cada proyecto los días lunes con un máximo de tres semanas de desfase acumulado al año.">
+						Captura de Asignaciones en Harvest?</label>
+					<input id="harvest" type="text" class="form-control" style="max-width:50px;background-color: #fff;" disabled 
+						value="<?= $colaborador->cumple_harvest;?>">
+					<label title="El(la) colaborador(a) actualiza su CV Advanzer correctamente, cada Junio y Diciembre, en la Carpeta de Documentación Personal on line.">
+						Actualización de CV Advanzer?</label>
+					<input id="cv" type="text" class="form-control" style="max-width:50px;background-color: #fff;" disabled 
+						value="<?= $colaborador->cumple_cv;?>">
+				</div>
+			</div>
+			<div class="col-md-4">
+				<h4>Resultados Globales</h4>
 				<div class="form-group" align="center">
 					<label>Resultado:</label>
-					<input type="text" class="form-control" style="max-width:80px;background-color: #fff;" disabled value="<?= $colaborador->total;?>">
+					<input type="text" class="form-control" style="max-width:80px;background-color: #fff;" 
+						disabled value="<?= $colaborador->total;?>">
 					<label for="nombre">Rating:</label>
 					<select id="rating" class="form-control" style="max-width:80px">
-						<option <?php if($colaborador->rating == "A") echo "selected";?>>A</option>
-						<option <?php if($colaborador->rating == "B") echo "selected";?>>B</option>
-						<option <?php if($colaborador->rating == "C") echo "selected";?>>C</option>
-						<option <?php if($colaborador->rating == "D") echo "selected";?>>D</option>
-						<option <?php if($colaborador->rating == "E") echo "selected";?>>E</option>
+						<option value="" selected disabled>-- Selecciona un valor --</option>
+						<option value="A" <?php if($colaborador->rating == "A") echo "selected";?>>A</option>
+						<option value="B" <?php if($colaborador->rating == "B") echo "selected";?>>B</option>
+						<option value="C" <?php if($colaborador->rating == "C") echo "selected";?>>C</option>
+						<option value="D" <?php if($colaborador->rating == "D") echo "selected";?>>D</option>
+						<option value="E" <?php if($colaborador->rating == "E") echo "selected";?>>E</option>
 					</select>
 					<label for="nombre">FeedBack:</label>
 					<select id="feedback" class="form-control" style="max-width:300px" required>
@@ -51,32 +71,78 @@
 	<div class="row">
 		<div class="col-md-12">
 			<h3><b>Evaluadores:</b></h3>
-			<table id="tbl" align="center" class="sortable table-hover table-striped table-condensed" data-toggle="table" data-toolbar="#filterbar" 
-				data-pagination="true" data-show-columns="true" data-show-filter="true" data-hover="true" 
-				data-striped="true" data-show-toggle="true" data-show-export="true">
-				<thead>
-					<tr>
-						<th data-halign="center" data-field="foto"></th>
-						<th class="col-md-4" data-halign="center" data-field="evaluador">Evaluador</th>
-						<th class "col-md-2" data-halign="center" data-field="responsabilidades">Responsabilidades</th>
-						<th class "col-md-2" data-halign="center" data-field="competencias">Competencias</th>
-					</tr>
-				</thead>
-				<tbody>
-					<?php foreach ($colaborador->evaluadores as $evaluador):?>
+			<?php if(count($colaborador->evaluadores) > 0): ?>
+				<table id="tbl" align="center" class="sortable table-hover table-striped table-condensed" data-toggle="table" data-toolbar="#filterbar" 
+					data-pagination="true" data-show-columns="true" data-show-filter="true" data-hover="true" 
+					data-striped="true" data-show-toggle="true" data-show-export="true">
+					<thead>
 						<tr>
-							<td><img height="25px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;;?>"></td>
-							<td><?= $evaluador->nombre;?></td>
-							<td><?php if($evaluador->responsabilidad) echo $evaluador->responsabilidad;?></td>
-							<td><?php if($evaluador->competencia) echo $evaluador->competencia;?></td>
+							<th data-halign="center" data-field="foto"></th>
+							<th class="col-md-4" data-halign="center" data-field="evaluador">Evaluador</th>
+							<th class "col-md-2" data-halign="center" data-field="responsabilidades">Responsabilidades</th>
+							<th class "col-md-2" data-halign="center" data-field="competencias">Competencias</th>
 						</tr>
-					<?php endforeach; ?>
-				</tbody>
-			</table>
+					</thead>
+					<tbody>
+						<?php foreach ($colaborador->evaluadores as $evaluador):?>
+							<tr>
+								<td><img height="25px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;;?>"></td>
+								<td><?= $evaluador->nombre;?></td>
+								<td><?php if($evaluador->responsabilidad) echo number_format($evaluador->responsabilidad,2);?></td>
+								<td><?php if($evaluador->competencia) echo number_format($evaluador->competencia,2);?></td>
+							</tr>
+						<?php endforeach; ?>
+					</tbody>
+				</table>
+			<?php endif;
+			if(isset($colaborador->evaluadores360) && count($colaborador->evaluadores360) > 0): ?>
+				<table id="tbl" align="center" class="sortable table-hover table-striped table-condensed" data-toggle="table" data-toolbar="#filterbar" 
+					data-pagination="true" data-show-columns="true" data-show-filter="true" data-hover="true" 
+					data-striped="true" data-show-toggle="true" data-show-export="true">
+					<thead>
+						<tr>
+							<th data-halign="center" data-field="foto"></th>
+							<th class="col-md-4" data-halign="center" data-field="evaluador">Evaluador 360</th>
+							<th class "col-md-2" data-halign="center" data-field="responsabilidades">Resultado</th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php foreach ($colaborador->evaluadores360 as $evaluador):?>
+							<tr>
+								<td><img height="25px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;;?>"></td>
+								<td><?= $evaluador->nombre;?></td>
+								<td><?php if($evaluador->competencia) echo number_format($evaluador->competencia,2);?></td>
+							</tr>
+						<?php endforeach; ?>
+					</tbody>
+				</table>
+			<?php endif; ?>
 		</div>
 	</div>
 	<script>
+	function verificaRating() {
+		gastos = $('#gastos').val();
+		harvest = $('#harvest').val();
+		cv = $('#cv').val();
+		if(gastos=="NO" || harvest=="NO" || cv=="NO"){
+			$('#rating option[value="A"]').attr("disabled","disabled");
+			$('#rating option[value="B"]').attr("disabled","disabled");
+			$('#rating option[value="C"]').attr("disabled","disabled");
+			$('#rating option[value=""]').attr("selected","selected");
+		}
+	}
 	$(document).ready(function() {
+		verificaRating();
+
+		$('#gastos').change(function() {
+			verificaRating();
+		});
+		$('#harvest').change(function() {
+			verificaRating();
+		});
+		$('#cv').change(function() {
+			verificaRating();
+		});
 		$('#save').submit(function(event) {
 			$('#rating :selected').each(function(i,select) {
 				rating = $(select).val();

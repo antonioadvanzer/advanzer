@@ -12,9 +12,10 @@ class Porcentaje_objetivo_model extends CI_Model{
 		$result = $this->db->where(array('direccion'=>$direccion,'estatus'=>1))->order_by('nombre')
 			->get('Areas')->result();
 		foreach ($result as $area) :
-			$area->objetivos = $this->db->select('O.id,O.nombre,O.tipo')->from('Objetivos O')
+			$area->objetivos = $this->db->select('O.id,O.nombre,O.tipo,D.nombre dominio')->from('Objetivos O')
 				->join('Objetivos_Areas OA','OA.objetivo = O.id')
-				->where(array('O.estatus'=>1,'OA.area'=>$area->id))->order_by('O.tipo,O.nombre')->get()->result();
+				->join('Dominios D','D.id = O.dominio')
+				->where(array('O.estatus'=>1,'OA.area'=>$area->id))->order_by('D.nombre,O.tipo,O.nombre')->get()->result();
 			foreach ($area->objetivos as $objetivo) :
 				$objetivo->analista = $this->db->select('PO.valor')->from('Porcentajes_Objetivos PO')
 					->join('Objetivos_Areas OA','OA.id = PO.objetivo_area')

@@ -35,7 +35,7 @@
             <?php $total1=0;$total2=0;$total3=0;$total4=0;$total5=0;$total6=0;
             foreach ($area->objetivos as $resp) : ?>
               <tr>
-                <td><small><?= $resp->nombre;?> - <small><i><?= $resp->tipo;?></i></small></small></td>
+                <td><b>[<?= $resp->dominio;?>]</b> <small><?= $resp->nombre;?> - <small><i><?= $resp->tipo;?></i></small></small></td>
                 <td><input style="max-width:80px;text-align:center" class="form-control" type="text" maxlength="3" required pattern="[0-9]+" 
                   value="<?php if(!empty($resp->analista)){ echo $resp->analista->valor; $total1+=$resp->analista->valor;}else echo "0";?>" 
                   onchange="if(this.value == '') this.value=0;change(this.value,<?= $resp->id;?>,<?= $area->id;?>,8);sumarColumna(<?= $area->id;?>,1);" ></td>

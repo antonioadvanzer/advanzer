@@ -209,6 +209,9 @@ class Evaluacion_model extends CI_Model{
 		if($res->num_rows() == 1){
 			$colaborador->rating = $res->first_row()->rating;
 			$colaborador->total = $res->first_row()->total;
+			$colaborador->cumple_gastos = $res->first_row()->cumple_gastos;
+			$colaborador->cumple_harvest = $res->first_row()->cumple_harvest;
+			$colaborador->cumple_cv = $res->first_row()->cumple_cv;
 			$res = $this->db->select('F.id,F.estatus,F.feedbacker,F.contenido,U.nombre')->from('Feedbacks F')
 				->join('Users U','U.id = F.feedbacker')
 				->where(array('F.resultado'=>$res->first_row()->id))->get();
