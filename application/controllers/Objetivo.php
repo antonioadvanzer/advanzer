@@ -7,6 +7,7 @@ class Objetivo extends CI_Controller {
 
     function __construct(){
     	parent::__construct();
+        $this->valida_sesion();
     	$this->load->model('objetivo_model');
     	$this->load->model('metrica_model');
     	$this->load->model('dominio_model');
@@ -131,6 +132,9 @@ class Objetivo extends CI_Controller {
     }
 
     function asignar_pesos() {
+        if($this->session->userdata('tipo') < 2)
+            if($this->session->userdata('posicion') > 3)
+                redirect(base_url());
         $data=array();
         $direccion = $this->session->userdata('direccion');
         $data['areas'] = $this->porcentaje_objetivo_model->getPorcentajes($direccion);;
@@ -151,5 +155,10 @@ class Objetivo extends CI_Controller {
         else
             $response['msg']="Error, intenta de nuevo";
         echo json_encode($response);
+    }
+
+    private function valida_sesion() {
+        if($this->session->userdata('id') == "")
+            redirect('login');
     }
 }

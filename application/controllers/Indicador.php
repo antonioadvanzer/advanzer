@@ -6,6 +6,7 @@ class Indicador extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
+		$this->valida_sesion();
 		$this->load->model('indicador_model');
 	}
 
@@ -148,4 +149,9 @@ class Indicador extends CI_Controller {
 			$response['msg']="Error, intenta de nuevo";
 		echo json_encode($response);
 	}
+
+	private function valida_sesion() {
+        if($this->session->userdata('id') == "")
+            redirect('login');
+    }
 }

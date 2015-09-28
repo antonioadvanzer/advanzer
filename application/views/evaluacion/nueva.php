@@ -52,14 +52,14 @@
 		</div>
 		<div class="col-md-4">
 		  <div class="form-group">
-		    <label for="inicio">Inicia:</label>
+		    <label for="inicio">Inicia Evaluación:</label>
 		    <input data-provide="datepicker" data-date-format="yyyy-mm-dd" name="inicio" id="inicio" onchange="setFin(this);" 
 		    	value="<?= date('Y-m-d');?>" class="form-control" style="max-width:300px;text-align:center;" required>
 		  </div>
 		</div>
 	  	<div class="col-md-4">
 		  <div class="form-group">
-		    <label for="fin">Termina:</label>
+		    <label for="fin">Termina Evaluación:</label>
 		    <input data-provide="datepicker" data-date-format="yyyy-mm-dd" name="fin" id="fin" 
 		    	value="<?= $fecha=date('Y-m-d');?>" 
 		    	class="form-control" style="max-width:300px;text-align:center;" required>
@@ -67,13 +67,28 @@
 		</div>
 	  </div>
 	  <div class="row" align="center" id="proyecto">
-		<div class="col-md-12">
+		<div class="col-md-4">
 			<div class="form-group" align="center">
 				<label for="lider">Líder de Proyecto</label>
 				<select id="lider" name="lider" class="form-control" style="max-width:300px">
 					<option value="" disabled="selected">-- Selecciona un líder --</option>
 				</select>
 			</div>
+		</div>
+		<div class="col-md-4">
+		  <div class="form-group">
+		    <label for="inicio">Inicia Proyecto:</label>
+		    <input data-provide="datepicker" data-date-format="yyyy-mm-dd" name="inicio_p" id="inicio_p" 
+		    	value="<?= date('Y-m-d');?>" class="form-control" style="max-width:300px;text-align:center;" required>
+		  </div>
+		</div>
+	  	<div class="col-md-4">
+		  <div class="form-group">
+		    <label for="fin">Termina Proyecto:</label>
+		    <input data-provide="datepicker" data-date-format="yyyy-mm-dd" name="fin_p" id="fin_p" 
+		    	value="<?= $fecha=date('Y-m-d');?>" 
+		    	class="form-control" style="max-width:300px;text-align:center;" required>
+		  </div>
 		</div>
 		<div class="col-md-5">
 			<div class="form-group" align="center">
@@ -145,6 +160,8 @@
 				nombre=$('#nombre').val();
 				fin=$('#fin').val();
 				inicio=$('#inicio').val();
+				fin_p=$('#fin_p').val();
+				inicio_p=$('#inicio_p').val();
 				$('#lider option:selected').each(function(i,select) {
 					lider = $(select).val();
 				});
@@ -156,7 +173,8 @@
 				$.ajax({
 					url: '<?= base_url("evaluacion/registrar");?>',
 					type: 'POST',
-					data: {'anio':anio,'tipo':tipo,'nombre':nombre,'fin':fin,'inicio':inicio,'lider':lider,'agregar':agregar},
+					data: {'anio':anio,'tipo':tipo,'nombre':nombre,'fin':fin,'inicio':inicio,'lider':lider,'agregar':agregar,'fin_p':fin_p,
+						'inicio_p':inicio_p},
 					success: function(data) {
 						console.log(data);
 						var returnData = JSON.parse(data);
@@ -183,12 +201,10 @@
 			if(mm<10)
 				mm='0'+mm
 			today = yyyy+'-'+mm+'-'+dd;
-			$('#inicio').datepicker({
-				dateFormat: 'yy-mm-dd'
-			});
-			$('#fin').datepicker({
-				dateFormat: 'yy-mm-dd'
-			});
+			$('#inicio').datepicker({dateFormat: 'yy-mm-dd'});
+			$('#fin').datepicker({dateFormat: 'yy-mm-dd'});
+			$('#inicio_p').datepicker({dateFormat: 'yy-mm-dd'});
+			$('#fin_p').datepicker({dateFormat: 'yy-mm-dd'});
 			$('#inicio').change(function(){
 				$('#fin').datepicker({
 					dateFormat: 'yy-mm-dd',

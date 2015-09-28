@@ -103,7 +103,7 @@
 		<option <?php if($this->session->userdata('posicion')==6) echo"selected"; ?> value="6">Consultor Sr</option>
 		<option <?php if($this->session->userdata('posicion')==5) echo"selected"; ?> value="5">Gerente / Master</option>
 		<option <?php if($this->session->userdata('posicion')==4) echo"selected"; ?> value="4">Gerente Sr / Experto</option>
-		<option <?php if($this->session->userdata('posicion')==3) echo"selected"; ?> value="3">Director</option>
+		<option <?php if($this->session->userdata('posicion')<=3) echo"selected"; ?> value="3">Director</option>
 	  </select>
 	</div>
   </div>

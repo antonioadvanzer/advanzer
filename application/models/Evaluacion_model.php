@@ -103,12 +103,13 @@ class Evaluacion_model extends CI_Model{
 		foreach ($result as $evaluador) :
 			$evaluador->asignaciones = null;
 			$evaluador->asignaciones360 = null;
+			$evaluador->asignacionesProyecto = null;
 			//evaluaciones
 			$this->db->select('Ev.id,Ev.evaluado,Us.nombre,Us.foto')->from('Evaluadores Ev');
 			$this->db->join('Evaluaciones E','E.id = Ev.evaluacion');
 			$this->db->join('Users Us','Us.id = Ev.evaluado');
 			$this->db->where(array('E.inicio <='=>date('Y-m-d'),'E.fin >='=>date('Y-m-d'),'Ev.evaluado !='=>$evaluador->id,
-				'Ev.evaluador'=>$evaluador->id));
+				'Ev.evaluador'=>$evaluador->id,'E.tipo'=>1));
 			$this->db->where("(Us.jefe=$evaluador->id OR E.lider=$evaluador->id)");
 			$asignaciones = $this->db->get()->result();
 			foreach ($asignaciones as $asignacion) :
@@ -127,14 +128,30 @@ class Evaluacion_model extends CI_Model{
 			$this->db->join('Posicion_Track PT','PT.id = Us.posicion_track');
 			$this->db->join('Posiciones P','P.id = PT.posicion');
 			$this->db->where(array('E.inicio <='=>date('Y-m-d'),'E.tipo'=>1,'E.fin >='=>date('Y-m-d'),'Ev.evaluado !='=>$evaluador->id));
-			$this->db->where(array('Us.jefe!='=>$evaluador->id,'P.nivel >='=>3,'P.nivel <='=>5,'Ev.evaluador'=>$evaluador->id));
+			$this->db->where(array('Us.jefe!='=>$evaluador->id,'P.nivel >='=>3,'P.nivel <='=>5,'Ev.evaluador'=>$evaluador->id,'E.tipo'=>1));
 			$asignaciones = $this->db->get()->result();
 			foreach ($asignaciones as $asignacion) :
 				$res = $this->db->select('total')->where('asignacion',$asignacion->id)->get('Resultados_ev_Competencia');
 				($res->num_rows() == 1) ? $asignacion->total = $res->first_row()->total : $asignacion->total=null;
 			endforeach;
-
 			$evaluador->asignaciones360 = $asignaciones;
+
+			//evaluaciones de proyecto
+			$this->db->select('Ev.id,Ev.evaluado,Us.nombre,Us.foto')->from('Evaluadores Ev');
+			$this->db->join('Evaluaciones E','E.id = Ev.evaluacion');
+			$this->db->join('Users Us','Us.id = Ev.evaluado');
+			$this->db->where(array('E.inicio <='=>date('Y-m-d'),'E.fin >='=>date('Y-m-d'),'Ev.evaluado !='=>$evaluador->id,
+				'Ev.evaluador'=>$evaluador->id,'E.tipo'=>0));
+			$this->db->where("(Us.jefe=$evaluador->id OR E.lider=$evaluador->id)");
+			$asignaciones = $this->db->get()->result();
+			foreach ($asignaciones as $asignacion) :
+				$res = $this->db->select('total')->where('asignacion',$asignacion->id)->get('Resultados_ev_Competencia');
+				($res->num_rows() == 1) ? $asignacion->competencia = $res->first_row()->total : $asignacion->competencia=null;
+				$res = $this->db->select('total')->where('asignacion',$asignacion->id)->get('Resultados_ev_Responsabilidad');
+				($res->num_rows() == 1) ? $asignacion->responsabilidad = $res->first_row()->total : $asignacion->responsabilidad=null;
+				$asignacion->total = ($asignacion->competencia*0.3)+($asignacion->responsabilidad*0.7);
+			endforeach;
+			$evaluador->asignacionesProyecto = $asignaciones;
 		endforeach;
 		return $result;
 	}
@@ -163,7 +180,8 @@ class Evaluacion_model extends CI_Model{
 	}
 
 	function getEvaluacionesByEvaluador($evaluador) {
-		$this->db->select('U.id,U.foto,U.nombre,U.nomina,A.nombre area,P.nombre posicion,Ev.tipo,E.estatus,E.id asignacion');
+		$this->db->select('U.id,U.foto,U.nombre,U.nomina,A.nombre area,P.nombre posicion,Ev.nombre evaluacion,E.estatus,E.id asignacion,
+			Ev.inicio,Ev.fin,Ev.tipo');
 		$this->db->from('Users U');
 		$this->db->join('Areas A','A.id = U.area','LEFT OUTER');
 		$this->db->join('Posicion_Track PT','PT.id = U.posicion_track','LEFT OUTER');
@@ -172,7 +190,7 @@ class Evaluacion_model extends CI_Model{
 		$this->db->join('Evaluadores E','E.evaluado = U.id','LEFT OUTER');
 		$this->db->join('Evaluaciones Ev','Ev.id = E.evaluacion','LEFT OUTER');
 		$this->db->where(array('E.evaluador'=>$evaluador,'U.estatus'=>1,'E.estatus !='=>2));
-		$this->db->order_by('U.nombre','asc');
+		$this->db->order_by('Ev.nombre,U.nombre');
 		return $this->db->get()->result();
 	}
 
@@ -262,6 +280,25 @@ class Evaluacion_model extends CI_Model{
 			($res->num_rows() == 1) ? $colaborador->autoevaluacion = $res->first_row()->total : $colaborador->autoevaluacion = null;
 		}else
 			$colaborador->autoevaluacion = null;
+
+		//evaluaciones por proyecto
+		if($proyectos=$this->getEvaluacionesProyecto()):
+			$ids = array();
+			foreach ($proyectos as $row)
+				array_push($ids, $row->id);
+			$this->db->select('U.id,U.foto,U.nombre,E.id asignacion,Ev.nombre evaluacion');
+			$this->db->from('Users U');
+			$this->db->join('Evaluadores E','E.evaluador = U.id');
+			$this->db->join('Evaluaciones Ev','Ev.id = E.evaluacion','LEFT OUTER');
+			$this->db->where_in('Ev.id',$ids)->where(array('Ev.estatus !='=>0,'E.evaluado'=>$colaborador->id,'E.evaluador !='=>$colaborador->id));
+			$colaborador->evaluadoresProyecto = $this->db->get()->result();
+			foreach ($colaborador->evaluadoresProyecto as $evaluador) :
+				$res=$this->db->from('Resultados_ev_Responsabilidad')->where('asignacion',$evaluador->asignacion)->get();
+				($res->num_rows() == 1) ? $evaluador->responsabilidad = $res->first_row()->total : $evaluador->responsabilidad = null;
+				$asignacion = $evaluador->asignacion;
+			endforeach;
+		endif;
+
 		return $colaborador;
 	}
 
@@ -501,7 +538,7 @@ class Evaluacion_model extends CI_Model{
 	}
 
 	function searchAsignacionById($id) {
-		return $this->db->select('E.id,Ev.tipo,E.evaluador,E.evaluado,E.estatus,Ev.id evaluacion')->from('Evaluadores E')
+		return $this->db->select('E.id,Ev.tipo,E.evaluador,E.evaluado,E.estatus,Ev.id evaluacion,Ev.nombre')->from('Evaluadores E')
 			->join('Evaluaciones Ev','Ev.id=E.evaluacion')->where('E.id',$id)->get()->first_row();
 	}
 
@@ -559,10 +596,70 @@ class Evaluacion_model extends CI_Model{
 	}
 
 	function getEvaluacionAnual() {
-		$result = $this->db->where(array('estatus'=>1,'tipo'=>1))->get('Evaluaciones');
-		if($result->num_rows() != 1)
-			$result = $this->db->where(array('estatus'=>2,'tipo'=>1))->get('Evaluaciones');
-		return $result->first_row()->id;
+		$result = $this->db->where_in('estatus',array(1,2))->where(array('tipo'=>1,'inicio <='=>date('Y-m-d'),'fin >='=>date('Y-m-d')))
+			->get('Evaluaciones');
+		if($result->num_rows() != 0)
+			return $result->first_row()->id;
+		return false;
+	}
 
+	function getEvaluacionesProyecto() {
+		$result = $this->db->where_in('estatus',array(1,2))->where(array('tipo'=>0,'inicio <='=>date('Y-m-d'),'fin >='=>date('Y-m-d')))
+			->get('Evaluaciones');
+		if($result->num_rows() != 0):
+			return $result->result();
+		endif;
+		return false;
+	}
+
+	function getProyectoByAsignacion($asignacion) {
+		$res=$this->db->where('estatus',1)->get('Dominios')->result();
+		foreach ($res as $dom)
+		$result = $this->searchAsignacionById($asignacion);
+		//iniciar dominios
+		$result->costo=array();
+		$result->tiempo=array();
+		$result->calidad=array();
+		$result->entregables=array();
+		$result->generacion=array();
+		$result->habilidades=array();
+		$result->relacion=array();
+		foreach ($result->dominios = $this->db->from('Detalle_ev_Proyecto DP')->join('Evaluadores E','E.id = DP.asignacion')
+			->where(array('DP.asignacion'=>$asignacion,'E.evaluador'=>$result->evaluador,'E.evaluado'=>$result->evaluado))->get()->result() as $resp):
+			switch ($resp->dominio) {
+				case 1:
+					$result->calidad->respuesta=$resp->respuesta;
+					$result->calidad->justificacion=$resp->justificacion;
+					break;
+				case 2:
+					$result->entregables->respuesta=$resp->respuesta;
+					$result->entregables->justificacion=$resp->justificacion;
+					break;
+				case 3:
+					$result->generacion->respuesta=$resp->respuesta;
+					$result->generacion->justificacion=$resp->justificacion;
+					break;
+				case 4:
+					$result->habilidades->respuesta=$resp->respuesta;
+					$result->habilidades->justificacion=$resp->justificacion;
+					break;
+				case 5:
+					$result->costo->respuesta=$resp->respuesta;
+					$result->costo->justificacion=$resp->justificacion;
+					break;
+				case 6:
+					$result->relacion->respuesta=$resp->respuesta;
+					$result->relacion->justificacion=$resp->justificacion;
+					break;
+				case 7:
+					$result->tiempo->respuesta=$resp->respuesta;
+					$result->tiempo->justificacion=$resp->justificacion;
+					break;
+				default:
+					# code...
+					break;
+			}
+		endforeach;
+		return $result;
 	}
 }

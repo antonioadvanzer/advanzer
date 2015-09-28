@@ -81,6 +81,7 @@
 							<th class="col-md-4" data-halign="center" data-field="evaluador">Evaluador</th>
 							<th class "col-md-2" data-halign="center" data-field="responsabilidades">Responsabilidades</th>
 							<th class "col-md-2" data-halign="center" data-field="competencias">Competencias</th>
+							<th class "col-md-2" data-halign="center" data-field="resultado">Resultado</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -90,6 +91,8 @@
 								<td><?= $evaluador->nombre;?></td>
 								<td><?php if($evaluador->responsabilidad) echo number_format($evaluador->responsabilidad,2);?></td>
 								<td><?php if($evaluador->competencia) echo number_format($evaluador->competencia,2);?></td>
+								<td><?php if($evaluador->competencia) echo number_format(($evaluador->competencia*0.3+
+									$evaluador->responsabilidad*0.7),2);?></td>
 							</tr>
 						<?php endforeach; ?>
 					</tbody>

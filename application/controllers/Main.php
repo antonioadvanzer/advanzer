@@ -11,6 +11,7 @@ class Main extends CI_Controller {
     }
  
     public function index() {
+    	$this->valida_sesion();
     	$data=array();
 
 		$this->layout->title('Advanzer - Inicio');
@@ -25,7 +26,6 @@ class Main extends CI_Controller {
 		if (!empty($email)) {
     		$password = $this->input->post('password');
     		$result = $this->user_model->do_login($email,$password);
-
     		if ($result) {
     			//$_SESSION['access_token'] = 1;
     			$sess_array = array(
@@ -36,7 +36,8 @@ class Main extends CI_Controller {
     				'empresa'=>$result->empresa,
     				'posicion' =>$result->nivel_posicion,
     				'area' =>$result->area,
-    				'direccion'=>$result->direccion
+    				'direccion'=>$result->direccion,
+    				'tipo'=>$result->tipo
     			);
     			$data['email'] = $result->email;
     			$this->session->set_userdata($sess_array);
@@ -99,7 +100,8 @@ class Main extends CI_Controller {
     				'empresa'=>$result->empresa,
     				'posicion' =>$result->nivel_posicion,
     				'area' =>$result->area,
-    				'direccion'=>$result->direccion
+    				'direccion'=>$result->direccion,
+    				'tipo'=>$result->tipo
     			);
     			$data['email'] = $result->email;
     			$this->session->set_userdata($sess_array);
@@ -121,14 +123,6 @@ class Main extends CI_Controller {
     	$this->layout->view($re, $data);
     }
 
-    private function verify_session(){
-    	$idU=$this->session->userdata('id');
-    	if (!empty($idU))
-    		redirect(base_url('main'));
-    	/*if (empty($this->session->userdata('id')))
-    		redirect(base_url('main/login'));*/
-    }
-
     // Unset session and logout
 	public function logout($err=null) {
 		unset($_SESSION['access_token']);
@@ -136,4 +130,15 @@ class Main extends CI_Controller {
 		$this->login($err);
 		//redirect("https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=".base_url('login'),"refresh");
 	}
+
+	private function verify_session(){
+		$idU=$this->session->userdata('id');
+		if (!empty($idU))
+			redirect(base_url('main'));
+	}
+
+	private function valida_sesion() {
+        if($this->session->userdata('id') == "")
+            redirect('login');
+    }
 }

@@ -7,6 +7,7 @@ class User extends CI_Controller {
 
     function __construct(){
     	parent::__construct();
+        $this->valida_sesion();
     	$this->load->model('user_model');
     	$this->load->model('area_model');
         $this->load->model('track_model');
@@ -197,5 +198,10 @@ class User extends CI_Controller {
         else
             $response['msg'] = "Error al reactivar colaborador. Intenta de nuevo";
         echo json_encode($response);
+    }
+
+    private function valida_sesion() {
+        if($this->session->userdata('id') == "")
+            redirect('login');
     }
 }

@@ -7,6 +7,7 @@ class Area extends CI_Controller {
 
     function __construct(){
     	parent::__construct();
+        $this->valida_sesion();
     	$this->load->model('area_model');
     }
  
@@ -99,5 +100,10 @@ class Area extends CI_Controller {
                 <?php if($resp->estatus ==1 ) echo "glyphicon-ok"; else echo "glyphicon-ban-circle"; ?>"></span></td>
             </tr>
         <?php endforeach;
+    }
+
+    private function valida_sesion() {
+        if($this->session->userdata('id') == "")
+            redirect('login');
     }
 }

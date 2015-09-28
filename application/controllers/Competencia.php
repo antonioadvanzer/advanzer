@@ -7,6 +7,7 @@ class Competencia extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
+		$this->valida_sesion();
 		$this->load->model('competencia_model');
 		$this->load->model('indicador_model');
 	}
@@ -263,4 +264,9 @@ class Competencia extends CI_Controller {
 			$response['msg'] = "Error al actualizar la competencia. Intente de nuevo";
 		echo json_encode($response);
 	}
+
+	private function valida_sesion() {
+        if($this->session->userdata('id') == "")
+            redirect('login');
+    }
 }

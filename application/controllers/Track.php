@@ -7,6 +7,7 @@ class Track extends CI_Controller {
 
     function __construct(){
     	parent::__construct();
+        $this->valida_sesion();
         $this->load->model('track_model');
         $this->load->model('posicion_model');
     }
@@ -65,5 +66,10 @@ class Track extends CI_Controller {
         else
             $response['msg'] = "Error al actualizar track. Intenta de nuevo";
         echo json_encode($response);
+    }
+
+    private function valida_sesion() {
+        if($this->session->userdata('id') == "")
+            redirect('login');
     }
 }

@@ -9,7 +9,7 @@ class User_model extends CI_Model{
 	}
 
 	function do_login($email,$password=null){
-		$this->db->select('U.id,U.email,U.nombre,U.foto,U.empresa,P.nivel nivel_posicion,A.id area,T.nombre track,A.direccion');
+		$this->db->select('U.id,U.email,U.nombre,U.foto,U.empresa,U.tipo,P.nivel nivel_posicion,A.id area,T.nombre track,A.direccion');
 		$this->db->from('Users U');
 		$this->db->join('Areas A','A.id = U.area','LEFT OUTER');
 		$this->db->join('Posicion_Track PT','PT.id = U.posicion_track','LEFT OUTER');

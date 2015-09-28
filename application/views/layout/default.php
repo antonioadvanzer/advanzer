@@ -13,6 +13,7 @@
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/bootstrap-table-filter.css');?>">
 	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/bootstrap-select.css');?>">
+	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/fancybox/jquery.fancybox.css?v=2.1.5');?>" media="screen">
 	<script src="<?= base_url('assets/js/jquery.min.js');?>"></script>
 	<script src="<?= base_url('assets/js/bootstrap.min.js');?>"></script>
 	<script src="<?= base_url('assets/js/bootstrap-table.js');?>"></script>
@@ -27,6 +28,7 @@
 	<script src="<?= base_url('assets/js/bs-table.js');?>"></script>
 	<script src="<?= base_url('assets/js/jasny-bootstrap.js');?>"></script>
 	<script src="<?= base_url('assets/js/bootstrap-select.js');?>"></script>
+	<script src="<?= base_url('assets/fancybox/jquery.fancybox.pack.js?v=2.1.5');?>"></script>
 	<title><?=$title_for_layout?></title>
 	<style type="text/css">
 		body {
@@ -77,76 +79,79 @@
 			</div>
 			<div id="navbar" class="navbar-collapse collapse" aria-expanded="false" style="height: 1px;">
 				<ul class="nav navbar-nav">
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
-							Administración<span class="caret"></span></a>
-						<ul class="dropdown-menu">
-							<li class="dropdown-submenu"><a tabindex="-1" href="#">Servicios</a>
+					<?php if($this->session->userdata('id') != ""):
+							if($this->session->userdata('tipo') > 1 || $this->session->userdata('posicion') <= 3): ?>
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
+									Administración<span class="caret"></span></a>
 								<ul class="dropdown-menu">
-									<li><a href="<?= base_url('objetivo/asignar_pesos');?>">Responsabilidades Por Área</a></li>
-									<li><a href="<?= base_url('ver_requisiciones');?>">Requisiciones</a></li>
-									<li><a href="<?= base_url('evaluacion');?>">Evaluaciones</a></li>
-									<li><a href="<?= base_url('evaluacion/por_evaluador');?>">Evaluaciones por Evaluador</a></li>
-									<li><a href="<?= base_url('gestion_evaluaciones');?>">Gestión de Evaluaciones</a></li>
+									<li class="dropdown-submenu"><a tabindex="-1" href="#">Servicios</a>
+										<ul class="dropdown-menu">
+											<?php if($this->session->userdata('posicion') <= 3): ?>
+												<li><a href="<?= base_url('objetivo/asignar_pesos');?>">Responsabilidades Por Área</a></li>
+											<?php endif; if($this->session->userdata('tipo') > 1): ?>
+												<li><a href="<?= base_url('evaluacion');?>">Evaluaciones</a></li>
+												<li><a href="<?= base_url('evaluacion/por_evaluador');?>">Evaluaciones por Evaluador</a></li>
+												<li><a href="<?= base_url('ver_requisiciones');?>">Requisiciones</a></li>
+											<?php endif;?>
+										</ul>
+									</li>
+									<?php if($this->session->userdata('tipo') > 1): ?>
+										<li role="separator" class="divider"></li>
+										<li class="dropdown-submenu"><a tabindex="-1" href="#">ABC</a>
+											<ul class="dropdown-menu">
+												<li><a href="<?= base_url('area');?>">Areas de Especialidad</a></li>
+												<li><a href="<?= base_url('track');?>">Tracks y Posiciones</a></li>
+												<li><a href="<?= base_url('administrar_usuarios'); ?>">Colaboradores</a></li>
+												<li><a href="<?= base_url('administrar_dominios');?>">Responsabilidades Funcionales</a></li>
+												<li><a href="<?= base_url('administrar_indicadores');?>">Competencias Laborales</a></li>
+												<li><a href="<?= base_url('indicador/asignar_comportamientos');?>">Comportamientos por Posición</a></li>
+												<li><a href="<?= base_url('evaluaciones');?>">Evaluación de Desempeño</a></li>
+												<li><a href="<?= base_url('evaluacion/proyecto');?>">Evaluación por Proyecto</a></li>
+											</ul>
+										</li>
+									<?php endif; ?>
 								</ul>
 							</li>
-							<li role="separator" class="divider"></li>
-							<li class="dropdown-submenu"><a tabindex="-1" href="#">ABC</a>
-								<ul class="dropdown-menu">
-									<li><a href="<?= base_url('area');?>">Areas de Especialidad</a></li>
-									<li><a href="<?= base_url('track');?>">Tracks y Posiciones</a></li>
-									<li><a href="<?= base_url('administrar_usuarios'); ?>">Colaboradores</a></li>
-									<li><a href="<?= base_url('administrar_dominios');?>">Responsabilidades Funcionales</a></li>
-									<li><a href="<?= base_url('administrar_indicadores');?>">Competencias Laborales</a></li>
-									<li><a href="<?= base_url('indicador/asignar_comportamientos');?>">Comportamientos por Posición</a></li>
-									<li><a href="<?= base_url('evaluaciones');?>">Evaluación de Desempeño</a></li>
-									<li><a href="<?= base_url('evaluacion/proyecto');?>">Evaluación por Proyecto</a></li>
-								</ul>
-							</li>
-							<!--<li role="separator" class="divider"></li>
-							<li class="dropdown-submenu"><a tabindex="-1" href="#">Carga Masiva</a>
-								<ul class="dropdown-menu">
-									<li><a href="<?= base_url('carga_comp_resp');?>">Competencias y Responsabilidades</a></li>
-								</ul>
-							</li>-->
-						</ul>
-					</li>
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
-							Servicios<span class="caret"></span></a>
-						<ul class="dropdown-menu">
-							<li><a href="<?= base_url('requisiciones');?>">Requisiciones</a></li>
-							<li><a href="<?= base_url('evaluar');?>">Evaluaciones</a></li>
-						</ul>
-					</li>
-					<!--
-					<li><a href="<?= base_url('estructura_organizacional'); ?>">Estructura Organizacional</a></li>
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
-							Políticas <span class="caret"></span></a>
-						<ul class="dropdown-menu">
-							<li><a href="<?= base_url('cartas_constancias');?>">Cartas y Constancias Laborales</a></li>
-							<li><a href="<?= base_url('sap'); ?>">Certificación SAP</a></li>
-							<li><a href="<?= base_url('viaticos'); ?>">Viáticos y Gastos de Viaje</a></li>
-							<li><a href="<?= base_url('vacaciones');?>">Vacaciones</a></li>
-							<li><a href="<?= base_url('permisos');?>">Permisos</a></li>
-							<li><a href="<?= base_url('vestimenta');?>">Código de Vestimenta</a></li>
-							<li><a href="#">Horarios</a></li>
-							<li><a href="#">Días Festivos</a></li>
-						</ul>
-					</li>
-					<li><a href="#about">Evaluación de Desempeño y Guía de Crecimiento</a></li>
-					<li><a href="#about">SGMM</a></li>
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
-							e-Learning <span class="caret"></span></a>
-						<ul class="dropdown-menu">
-							<li><a href="#">SAP modules</a></li>
-						</ul>
-					</li>
-					<li><a href="#about">Cumpleaños del Mes</a></li>
-					<li><a href="#about">Eventos Internos</a></li>
-					-->
+						<?php endif; ?>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
+								Servicios<span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<?php if($this->session->userdata('tipo') == 1 || $this->session->userdata('tipo') == 3) ?>
+								<li><a href="<?= base_url('requisiciones');?>">Requisiciones</a></li>
+								<li><a href="<?= base_url('evaluar');?>">Evaluaciones</a></li>
+							</ul>
+						</li>
+						<!--
+						<li><a href="<?= base_url('estructura_organizacional'); ?>">Estructura Organizacional</a></li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
+								Políticas <span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="<?= base_url('cartas_constancias');?>">Cartas y Constancias Laborales</a></li>
+								<li><a href="<?= base_url('sap'); ?>">Certificación SAP</a></li>
+								<li><a href="<?= base_url('viaticos'); ?>">Viáticos y Gastos de Viaje</a></li>
+								<li><a href="<?= base_url('vacaciones');?>">Vacaciones</a></li>
+								<li><a href="<?= base_url('permisos');?>">Permisos</a></li>
+								<li><a href="<?= base_url('vestimenta');?>">Código de Vestimenta</a></li>
+								<li><a href="#">Horarios</a></li>
+								<li><a href="#">Días Festivos</a></li>
+							</ul>
+						</li>
+						<li><a href="#about">Evaluación de Desempeño y Guía de Crecimiento</a></li>
+						<li><a href="#about">SGMM</a></li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
+								e-Learning <span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="#">SAP modules</a></li>
+							</ul>
+						</li>
+						<li><a href="#about">Cumpleaños del Mes</a></li>
+						<li><a href="#about">Eventos Internos</a></li>
+						-->
+					<?php endif; ?>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<?php $idU=$this->session->userdata('id'); if(!empty($idU)): ?>

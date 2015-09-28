@@ -7,6 +7,7 @@ class Dominio extends CI_Controller {
 
     function __construct(){
     	parent::__construct();
+      $this->valida_sesion();
     	$this->load->model('dominio_model');
     	$this->load->model('objetivo_model');
     	$this->load->model('metrica_model');
@@ -121,5 +122,10 @@ class Dominio extends CI_Controller {
         $this->nuevo(null,"Se ha actualizado el dominio");
       else
         $this->ver($id,"Error al agregar dominio");
+    }
+
+    private function valida_sesion() {
+      if($this->session->userdata('id') == "")
+        redirect('login');
     }
 }

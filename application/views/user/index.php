@@ -39,7 +39,7 @@
             <th class="col-sm-1" data-halign="center" data-field="empresa">Empresa</th>
             <th class="col-sm-1" data-halign="center" data-field="track">Track</th>
             <th class="col-sm-1" data-halign="center" data-field="posicion">Posición</th>
-            <th class="col-sm-1" data-halign="center" data-field="area">Área</th>
+            <th class="col-sm-2" data-halign="center" data-field="area">Área</th>
             <th class="col-sm-1" data-halign="center" data-field="plaza">Plaza</th>
             <th data-halign="center" data-align="center" data-field="estatus">Estatus</th>
           </tr>

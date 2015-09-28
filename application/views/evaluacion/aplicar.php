@@ -89,10 +89,9 @@
 		</style>\
 	');
 </script>
-<!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron">
 	<div class="container">
-		<h2 style="cursor:default;">Seguimiento de Evaluación - <?php if($evaluacion->tipo == 0) echo"Proyecto";else echo"Anual";?></h2>
+		<h2 style="cursor:default;">Seguimiento de Evaluación - <?= $evaluacion->nombre;?></h2>
 	</div>
 </div>
 <div class="container">

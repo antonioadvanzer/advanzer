@@ -39,6 +39,8 @@ class Evaluacion extends CI_Controller {
             'estatus'=>$this->input->post('estatus')
         );
         if($this->input->post('tipo') == 0){
+            $datos['inicio_periodo']=$this->input->post('inicio_p');
+            $datos['fin_periodo']=$this->input->post('fin_p');
             $datos['lider']=$this->input->post('lider');
             $agregar = $this->input->post('agregar');
             $quitar = $this->input->post('quitar');
@@ -169,10 +171,10 @@ class Evaluacion extends CI_Controller {
                 if(mm<10)
                     mm='0'+mm
                 today = yyyy+'-'+mm+'-'+dd;
-                $('#inicio').datepicker({
-                    dateFormat: 'yy-mm-dd'
-                });
+                $('#inicio').datepicker({dateFormat: 'yy-mm-dd'});
                 $('#fin').datepicker({dateFormat: 'yy-mm-dd'});
+                $('#inicio_p').datepicker({dateFormat: 'yy-mm-dd'});
+                $('#fin_p').datepicker({dateFormat: 'yy-mm-dd'});
                 $("#evaluacion").change(function() {
                     $("#evaluacion option:selected").each(function() {
                         evaluacion = $('#evaluacion').val();
@@ -212,6 +214,8 @@ class Evaluacion extends CI_Controller {
                             $("#lider option:selected").each(function() {
                                 lider = $('#lider').val();
                             });
+                            inicio_periodo = $("#inicio_p").val();
+                            fin_periodo = $("#fin_p").val();
                             var agregar = [];
                             $('#agregar option').each(function(i,select) {
                                 agregar[i] = $(select).val();
@@ -224,7 +228,7 @@ class Evaluacion extends CI_Controller {
                                 url: '<?= base_url("evaluacion/gestionar");?>',
                                 type: 'post',
                                 data: {'evaluacion':evaluacion,'inicio':inicio,'fin':fin,'estatus':estatus,'lider':lider,
-                                    'agregar':agregar,'quitar':quitar,'tipo':tipo},
+                                    'agregar':agregar,'quitar':quitar,'tipo':tipo,'inicio_p':inicio_periodo,'fin_p':fin_periodo},
                                 beforeSend: function(xhr) {
                                     $('#update').hide('slow');
                                     $('#cargando').show('slow');
@@ -286,78 +290,97 @@ class Evaluacion extends CI_Controller {
                 });
             });
         </script>
-        <input type="hidden" id="tipo" value="<?= $info->tipo;?>">
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="inicio">Inicia:</label>
-            <input data-provide="datepicker" data-date-format="yyyy-mm-dd" name="inicio" id="inicio" 
-            onchange="setFin(this);" value="<?= $info->inicio; ?>" class="form-control" style="max-width:300px;text-align:center;">
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="fin">Termina:</label>
-              <input data-provide="datepicker" data-date-format="yyyy-mm-dd" name="fin" id="fin" 
-                value="<?= $info->fin;?>" 
-                class="form-control" style="max-width:300px;text-align:center;">
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="estatus">Estatus:</label>
-            <select id="estatus" name="estatus" class="form-control" style="max-width:300px;text-align:center">
-              <option selected disabled>-- Estatus --</option>
-              <option value="0" <?php if($info->estatus == 0) echo "selected"; ?>>Deshabilitado</option>
-              <option value="1" <?php if($info->estatus == 1) echo "selected"; ?>>Habilitado</option>
-            </select>
-          </div>
+        <div class="row" align="center">
+            <input type="hidden" id="tipo" value="<?= $info->tipo;?>">
+            <div class="col-md-1"></div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon">Período de Evaluación</span>
+                    <input data-provide="datepicker" data-date-format="yyyy-mm-dd" name="inicio" id="inicio" onchange="setFin(this);" 
+                        value="<?= $info->inicio; ?>" class="form-control" style="max-width:150px;text-align:center;">
+                    <input data-provide="datepicker" data-date-format="yyyy-mm-dd" name="fin" id="fin" value="<?= $info->fin;?>" 
+                        class="form-control" style="max-width:150px;text-align:center;">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon">Estatus</span>
+                    <select id="estatus" name="estatus" class="form-control" style="max-width:300px;text-align:center">
+                      <option value="0" <?php if($info->estatus == 0) echo "selected"; ?>>Deshabilitado</option>
+                      <option value="1" <?php if($info->estatus == 1) echo "selected"; ?>>Habilitado</option>
+                    </select>
+                </div>
+              </div>
+            </div>
         </div>
         <?php if($info->tipo == 0) : ?>
-            <div class="col-md-12">
-                <div class="form-group" align="center">
-                    <label for="lider">Líder de Proyecto</label>
-                    <select id="lider" name="lider" class="form-control" style="max-width:300px">
-                        <option value="<?= $lider->id;?>" selected>
-                            <?= "$lider->nombre - $lider->posicion ($lider->track)";?></option>
-                        <?php foreach($participantes as $colaborador) : ?>
-                            <option value="<?= $colaborador->id;?>">
-                                <?= "$colaborador->nombre - $colaborador->posicion ($colaborador->track)";?></option>
-                        <?php endforeach; ?>
-                    </select>
+            <div class="row" align="center">
+                <div class="col-md-1"></div>
+                <div class="col-md-4">
+                    <div class="form-group" align="center">
+                        <div class="input-group">
+                            <span class="input-group-addon">Líder</span>
+                            <select id="lider" name="lider" class="form-control" style="max-width:310px">
+                                <option value="<?= $lider->id;?>" selected>
+                                    <?= "$lider->nombre - $lider->posicion ($lider->track)";?></option>
+                                <?php foreach($participantes as $colaborador) : ?>
+                                    <option value="<?= $colaborador->id;?>">
+                                        <?= "$colaborador->nombre - $colaborador->posicion ($colaborador->track)";?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2"></div>
+                <div class="col-md-5">
+                    <div class="form-group" align="center">
+                        <div class="input-group">
+                            <span class="input-group-addon">Período del Proyecto</span>
+                            <input data-provide="datepicker" data-date-format="yyyy-mm-dd" name="inicio_p" id="inicio_p" onchange="$('#fin_p').value=this.value;" 
+                                value="<?= $info->inicio_periodo; ?>" class="form-control" style="max-width:150px;text-align:center;">
+                            <input data-provide="datepicker" data-date-format="yyyy-mm-dd" name="fin_p" id="fin_p" value="<?= $info->fin_periodo;?>" 
+                                class="form-control" style="max-width:150px;text-align:center;">
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-5">
-                <div class="form-group" align="center">
-                    <label for="participantes">Participantes</label>
-                    <select id="agregar" name="agregar" multiple class="form-control" style="overflow-y:auto;
-                        overflow-x:auto;min-height:200px;max-height:700px">
-                        <?php foreach($participantes as $colaborador) : ?>
-                            <option value="<?= $colaborador->id;?>">
-                                <?= "$colaborador->nombre - $colaborador->posicion ($colaborador->track)";?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
+            <div class="row" align="center">
+                <div class="col-md-5">
+                    <div class="form-group" align="center">
+                        <label for="participantes">Participantes</label>
+                        <select id="agregar" name="agregar" multiple class="form-control" style="overflow-y:auto;
+                            overflow-x:auto;min-height:200px;max-height:700px">
+                            <?php foreach($participantes as $colaborador) : ?>
+                                <option value="<?= $colaborador->id;?>">
+                                    <?= "$colaborador->nombre - $colaborador->posicion ($colaborador->track)";?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-2"><div class="form-group">&nbsp;</div>
-                <div class="form-group">
-                    <button type="button" id="btnQuitar" style="max-width:100px" class="form-control">Quitar&raquo;</button>
+                <div class="col-md-2"><div class="form-group">&nbsp;</div>
+                    <div class="form-group">
+                        <button type="button" id="btnQuitar" style="max-width:100px" class="form-control">Quitar&raquo;</button>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" id="btnAgregar" style="max-width:100px" class="form-control">&laquo;Agregar</button>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <button type="button" id="btnAgregar" style="max-width:100px" class="form-control">&laquo;Agregar</button>
-                </div>
-            </div>
-            <div class="col-md-5">
-                <div class="form-group" align="center">
-                    <label for="participantes">Colaboradores Disponibles</label>
-                    <select id="quitar" name="quitar" multiple class="form-control" style="overflow-y:auto;
-                        overflow-x:auto;min-height:200px;max-height:700px">
-                        <?php foreach($disponibles as $colaborador) : ?>
-                            <option value="<?= $colaborador->id;?>">
-                                <?= "$colaborador->nombre - $colaborador->posicion ($colaborador->track)";?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
+                <div class="col-md-5">
+                    <div class="form-group" align="center">
+                        <label for="participantes">Colaboradores Disponibles</label>
+                        <select id="quitar" name="quitar" multiple class="form-control" style="overflow-y:auto;
+                            overflow-x:auto;min-height:200px;max-height:700px">
+                            <?php foreach($disponibles as $colaborador) : ?>
+                                <option value="<?= $colaborador->id;?>">
+                                    <?= "$colaborador->nombre - $colaborador->posicion ($colaborador->track)";?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
                 </div>
             </div>
             <script>
@@ -445,6 +468,8 @@ class Evaluacion extends CI_Controller {
         $data=array();
         $area = $this->session->userdata('area');
         $posicion = $this->session->userdata('posicion');
+        if($posicion < 3)
+            $posicion=3;
         if(!empty($area) && !empty($posicion)){
             //get perfil de evaluación de responsabilidades
             $data['dominios'] = $this->evaluacion_model->getResponsabilidadByArea($area);
@@ -549,7 +574,8 @@ class Evaluacion extends CI_Controller {
 
     public function evaluar() {
         $evaluador=$this->session->userdata('id');
-        $this->genera_autoevaluacion($evaluador);
+        if($this->evaluacion_model->getEvaluacionAnual())
+            $this->genera_autoevaluacion($evaluador);
         $data['colaboradores']=$this->evaluacion_model->getEvaluacionesByEvaluador($evaluador);
         $data['yo'] = $evaluador;
         $this->layout->title('Advanzer - Evaluaciones');
@@ -560,7 +586,13 @@ class Evaluacion extends CI_Controller {
         $data['evaluacion']=$this->evaluacion_model->getEvaluacionByAsignacion($asignacion);
         $this->layout->title('Advanzer - Aplicar Evaluación');
         $this->layout->view('evaluacion/aplicar',$data);
-    }    
+    }
+
+    public function evaluaProyecto($asignacion) {
+        $data['evaluacion']=$this->evaluacion_model->getProyectoByAsignacion($asignacion);
+        $this->layout->title('Advanzer - Aplicar Evaluación');
+        $this->layout->view('evaluacion/evaluaProyecto',$data);
+    }
 
     public function evaluaciones($msg=null) {
         $data['evaluacion'] = $this->evaluacion_model->getEvaluacionAnual();
