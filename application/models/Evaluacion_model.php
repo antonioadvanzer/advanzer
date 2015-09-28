@@ -369,7 +369,7 @@ class Evaluacion_model extends CI_Model{
 		$evaluacion=$this->getEvaluacionAnual();
 		foreach ($result as $user) :
 			$user->total_evaluadores = $this->db->select('count(evaluador) total')
-			->where(array('evaluado'=>$user->id,'estatus <'=>2,'evaluacion'=>$evaluacion))->get('Evaluadores')->first_row()->total;
+			->where(array('evaluador !='=>$user->id,'evaluado'=>$user->id,'estatus <'=>2,'evaluacion'=>$evaluacion))->get('Evaluadores')->first_row()->total;
 		endforeach;
 		return $result;
 	}
@@ -396,7 +396,7 @@ class Evaluacion_model extends CI_Model{
 
 	function getEvaluadoresByColaborador($colaborador) {
 		$evaluacion=$this->getEvaluacionAnual();
-		$this->db->select('Ev.evaluador id,Us.nombre,P.nombre posicion,T.nombre track');
+		$this->db->select('Ev.evaluador id,Us.nombre,P.nombre posicion,T.nombre track,Ev.estatus');
 		$this->db->where(array('evaluado'=>$colaborador,'evaluacion'=>$evaluacion,'evaluador !='=>$colaborador));
 		$this->db->from('Evaluadores Ev');
 		$this->db->join('Users Us','Ev.evaluador = Us.id');

@@ -298,7 +298,7 @@ class Evaluacion extends CI_Controller {
                 <div class="input-group">
                     <span class="input-group-addon">Período de Evaluación</span>
                     <input data-provide="datepicker" data-date-format="yyyy-mm-dd" name="inicio" id="inicio" onchange="setFin(this);" 
-                        value="<?= $info->inicio; ?>" class="form-control" style="max-width:150px;text-align:center;">
+                        value="<?= $info->inicio; ?>" class="form-control" style="max-width:150px;text-align:center;"<?php if($info->estatus != 0)echo"disabled"; ?>>
                     <input data-provide="datepicker" data-date-format="yyyy-mm-dd" name="fin" id="fin" value="<?= $info->fin;?>" 
                         class="form-control" style="max-width:150px;text-align:center;">
                 </div>
@@ -308,7 +308,7 @@ class Evaluacion extends CI_Controller {
               <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon">Estatus</span>
-                    <select id="estatus" name="estatus" class="form-control" style="max-width:300px;text-align:center">
+                    <select id="estatus" name="estatus" class="form-control" style="max-width:300px;text-align:center" <?php if($info->estatus != 0)echo"disabled"; ?>>
                       <option value="0" <?php if($info->estatus == 0) echo "selected"; ?>>Deshabilitado</option>
                       <option value="1" <?php if($info->estatus == 1) echo "selected"; ?>>Habilitado</option>
                     </select>
@@ -352,7 +352,7 @@ class Evaluacion extends CI_Controller {
                     <div class="form-group" align="center">
                         <label for="participantes">Participantes</label>
                         <select id="agregar" name="agregar" multiple class="form-control" style="overflow-y:auto;
-                            overflow-x:auto;min-height:200px;max-height:700px">
+                            overflow-x:auto;min-height:200px;max-height:700px" <?php if($info->estatus != 0)echo"disabled"; ?>>
                             <?php foreach($participantes as $colaborador) : ?>
                                 <option value="<?= $colaborador->id;?>">
                                     <?= "$colaborador->nombre - $colaborador->posicion ($colaborador->track)";?>
@@ -363,17 +363,17 @@ class Evaluacion extends CI_Controller {
                 </div>
                 <div class="col-md-2"><div class="form-group">&nbsp;</div>
                     <div class="form-group">
-                        <button type="button" id="btnQuitar" style="max-width:100px" class="form-control">Quitar&raquo;</button>
+                        <button type="button" id="btnQuitar" style="max-width:100px" class="form-control" <?php if($info->estatus != 0)echo"disabled"; ?>>Quitar&raquo;</button>
                     </div>
                     <div class="form-group">
-                        <button type="button" id="btnAgregar" style="max-width:100px" class="form-control">&laquo;Agregar</button>
+                        <button type="button" id="btnAgregar" style="max-width:100px" class="form-control" <?php if($info->estatus != 0)echo"disabled"; ?>>&laquo;Agregar</button>
                     </div>
                 </div>
                 <div class="col-md-5">
                     <div class="form-group" align="center">
                         <label for="participantes">Colaboradores Disponibles</label>
                         <select id="quitar" name="quitar" multiple class="form-control" style="overflow-y:auto;
-                            overflow-x:auto;min-height:200px;max-height:700px">
+                            overflow-x:auto;min-height:200px;max-height:700px" <?php if($info->estatus != 0)echo"disabled"; ?>>
                             <?php foreach($disponibles as $colaborador) : ?>
                                 <option value="<?= $colaborador->id;?>">
                                     <?= "$colaborador->nombre - $colaborador->posicion ($colaborador->track)";?>

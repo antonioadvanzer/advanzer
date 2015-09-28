@@ -19,7 +19,7 @@
 	  	  <div class="panel-heading">Evaluadores Asignados</div>
 			<select id="quitar" name="quitar" multiple class="form-control" style="overflow-y:auto;overflow-x:auto;min-height:300px;max-height:700px">
 			  <?php foreach($evaluadores as $colaborador) : ?>
-	            <option value="<?= $colaborador->id;?>">
+	            <option value="<?= $colaborador->id;?>" <?php if($colaborador->estatus != 0) echo "disabled"; ?>>
 	                <?= "$colaborador->nombre - $colaborador->posicion ($colaborador->track)";?>
 	            </option>?>
 			  <?php endforeach; ?>
