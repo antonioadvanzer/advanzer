@@ -39,7 +39,7 @@
 				<div class="form-group" align="center">
 					<label>Resultado:</label>
 					<input type="text" class="form-control" style="max-width:80px;background-color: #fff;" 
-						disabled value="<?= $colaborador->total;?>">
+						disabled value="<?= number_format($colaborador->total,2);?>">
 					<label for="nombre">Rating:</label>
 					<select id="rating" class="form-control" style="max-width:80px">
 						<option value="" selected disabled>-- Selecciona un valor --</option>
@@ -79,20 +79,22 @@
 						<tr>
 							<th data-halign="center" data-field="foto"></th>
 							<th class="col-md-4" data-halign="center" data-field="evaluador">Evaluador</th>
-							<th class "col-md-2" data-halign="center" data-field="responsabilidades">Responsabilidades</th>
-							<th class "col-md-2" data-halign="center" data-field="competencias">Competencias</th>
+							<th class "col-md-1" data-halign="center" data-field="responsabilidades">Responsabilidades</th>
+							<th class "col-md-1" data-halign="center" data-field="competencias">Competencias</th>
 							<th class "col-md-2" data-halign="center" data-field="resultado">Resultado</th>
+							<th class "col-md-2" data-halign="center" data-field="comentarios">Comentarios</th>
 						</tr>
 					</thead>
 					<tbody>
 						<?php foreach ($colaborador->evaluadores as $evaluador):?>
 							<tr>
-								<td><img height="25px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;;?>"></td>
+								<td><img height="25px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></td>
 								<td><?= $evaluador->nombre;?></td>
 								<td><?php if($evaluador->responsabilidad) echo number_format($evaluador->responsabilidad,2);?></td>
 								<td><?php if($evaluador->competencia) echo number_format($evaluador->competencia,2);?></td>
 								<td><?php if($evaluador->competencia) echo number_format(($evaluador->competencia*0.3+
 									$evaluador->responsabilidad*0.7),2);?></td>
+								<td><?php if($evaluador->comentarios) echo $evaluador->comentarios;?></td>
 							</tr>
 						<?php endforeach; ?>
 					</tbody>
@@ -112,14 +114,40 @@
 					<tbody>
 						<?php foreach ($colaborador->evaluadores360 as $evaluador):?>
 							<tr>
-								<td><img height="25px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;;?>"></td>
+								<td><img height="25px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></td>
 								<td><?= $evaluador->nombre;?></td>
 								<td><?php if($evaluador->competencia) echo number_format($evaluador->competencia,2);?></td>
 							</tr>
 						<?php endforeach; ?>
 					</tbody>
 				</table>
-			<?php endif; ?>
+			<?php endif;
+			if(isset($colaborador->evaluadoresProyecto) && count($colaborador->evaluadoresProyecto) > 0): ?>
+				<table id="tbl" align="center" class="sortable table-hover table-striped table-condensed" data-toggle="table" data-toolbar="#filterbar" 
+					data-pagination="true" data-show-columns="true" data-show-filter="true" data-hover="true" 
+					data-striped="true" data-show-toggle="true" data-show-export="true">
+					<thead>
+						<tr>
+							<th data-halign="center" data-field="foto"></th>
+							<th class="col-md-4" data-halign="center" data-field="evaluador">Líder de Proyecto</th>
+							<th class "col-md-3" data-halign="center" data-field="responsabilidades">Proyecto</th>
+							<th class "col-md-1" data-halign="center" data-field="competencias">Resultado</th>
+							<th class "col-md-2" data-halign="center" data-field="comentarios">Comentarios</th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php foreach ($colaborador->evaluadoresProyecto as $evaluador):?>
+							<tr>
+								<td><img height="25px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></td>
+								<td><?= $evaluador->nombre;?></td>
+								<td><?php if($evaluador->evaluacion) echo $evaluador->evaluacion;?></td>
+								<td><?php if($evaluador->responsabilidad) echo number_format($evaluador->responsabilidad,2);?></td>
+								<td><?php if($evaluador->comentarios) echo $evaluador->comentarios;?></td>
+							</tr>
+						<?php endforeach; ?>
+					</tbody>
+				</table>
+			<?php endif;?>
 		</div>
 	</div>
 	<script>

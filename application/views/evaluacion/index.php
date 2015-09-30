@@ -23,7 +23,7 @@
           <tr>
             <th data-halign="center" data-align="center" data-field="foto" data-defaultsort="disabled"></th>
             <th class="col-md-2" data-halign="center" data-field="nombre">Nombre</th>
-            <th data-halign="center" data-field="autoevaluacion">Autoevaluación</th>
+            <th data-halign="center" data-field="autoevaluacion">Auto</th>
             <th data-defaultsort="asc" data-halign="center" data-field="rating">Rating</th>
             <th data-halign="center" data-field="total">Total</th>
             <th class="col-md-5" data-halign="center" data-field="evaluadores">Evaluadores</th>
@@ -39,8 +39,7 @@
             <td><small><?= $colab->autoevaluacion;?></small></td>
             <td><small><?= $colab->rating;?></small></td>
             <td><small><?= number_format($colab->total,2);?></small></td>
-            <td data-sortable="false" class="rowlink-skip"><?php if(count($colab->evaluadores) > 0): ?>
-              <hr>
+            <td data-sortable="false" class="rowlink-skip"><hr><?php if(count($colab->evaluadores) > 0): ?>
               <div class="row" align="center">
                   <div class="col-sm-3"><small><b>Responsabilidades</b></small></div>
                   <div class="col-sm-2"><small><b>Competencias</b></small></div>
@@ -57,7 +56,6 @@
                 <hr>
               <?php endif; 
               if(isset($colab->evaluadores360) && count($colab->evaluadores360) > 0): ?>
-                <hr>
                 <div class="row" align="center">
                   <div class="col-sm-3"><small><b>Resultado</b></small></div>
                   <div class="col-sm-9"><small><b>Evaluador 360</b></small></div>

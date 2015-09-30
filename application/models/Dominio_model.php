@@ -22,12 +22,11 @@ class Dominio_model extends CI_Model{
 		return $this->db->get('Dominios')->result();
 	}
 
-	function create($nombre) {
-		$this->db->insert('Dominios',array('nombre'=>$nombre));
+	function create($datos) {
+		$this->db->insert('Dominios',$datos);
 		if($this->db->affected_rows() == 1)
 			return true;
-		else
-			return false;
+		return false;
 	}
 
 	function getEstatusById($id) {
@@ -50,12 +49,11 @@ class Dominio_model extends CI_Model{
 		return $this->db->get('Dominios')->first_row();
 	}
 
-	function update($id,$nombre) {
+	function update($id,$datos) {
 		$this->db->where('id',$id);
-		$this->db->update('Dominios',array('nombre'=>$nombre));
+		$this->db->update('Dominios',$datos);
 		if($this->db->affected_rows() == 1)
 			return true;
-		else
-			return false;
+		return false;
 	}
 }

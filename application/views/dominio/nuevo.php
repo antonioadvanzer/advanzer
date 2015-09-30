@@ -35,7 +35,6 @@
   </div>
   <form role="form" method="post" action="<?= base_url('dominio/create');?>" class="form-signin">
   	<div class="row" align="center">
-    <div class="col-md-2"></div>
   	  <div class="col-md-4">
     		<div class="form-group">
     		  <label for="nombre">Nombre:</label>
@@ -43,6 +42,13 @@
     			id="nombre" required value="" placeholder="Nombre">
     		</div>
   	  </div>
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="descripcion">Criterio:</label>
+          <textarea class="form-control" rows="3" style="max-width:300px; text-align:center;" id="descripcion" name="descripcion" 
+            placeholder="Criterio de Evaluación del Dominio" required></textarea>
+        </div>
+      </div>
   	  <div class="col-md-4">
   	  	<label for="nombre">&nbsp;</label>
   		<button type="submit" class="btn btn-lg btn-primary btn-block" style="max-width:200px; text-align:center;">
@@ -57,6 +63,7 @@
         <thead>
           <tr>
             <th data-halign="center" data-field="nombre" data-sortable="true">Nombre</th>
+            <th data-halign="center" data-field="criterio" data-sortable="true">Criterio</th>
             <th data-halign="center" data-align="center"></th>
           </tr>
         </thead>
@@ -67,6 +74,8 @@
               location.href='<?= base_url('dominio/ver/');?>/'+<?= $dominio->id;?>"></span> 
               <span style="cursor:pointer" onclick="location.href='<?= base_url('dominio/ver/');?>/'+
               <?= $dominio->id;?>"><?= $dominio->nombre;?></span></small></td>
+            <td><small><span style="cursor:pointer" onclick="location.href='<?= base_url('dominio/ver/');?>/'+
+              <?= $dominio->id;?>"><?= $dominio->descripcion;?></span></small></td>
             <td align="right"><small><span style="cursor:pointer;" onclick="
               if(confirm('Seguro que desea cambiar el estatus del dominio: \n <?= $dominio->nombre;?>'))location.href=
               '<?= base_url('dominio/ch_estatus/');?>/'+<?= $dominio->id;?>;" class="glyphicon 

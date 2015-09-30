@@ -86,8 +86,11 @@ class Dominio extends CI_Controller {
     }
 
     public function create() {
-        $nombre=$this->input->post('nombre');
-        if($id = $this->dominio_model->create($nombre))
+        $datos = array(
+          'nombre'=>$this->input->post('nombre'),
+          'descripcion'=>$this->input->post('descripcion')
+        );
+        if($id = $this->dominio_model->create($datos))
             $this->nuevo(null,"Dominio registrado satisfactoriamente");
         else
             $this->nuevo("Error al agregar objetivo. Intenta de nuevo");
@@ -117,8 +120,11 @@ class Dominio extends CI_Controller {
     }
 
     public function update($id) {
-      $nombre=$this->input->post('nombre');
-      if($this->dominio_model->update($id,$nombre))
+      $datos=array(
+        'nombre'=>$this->input->post('nombre'),
+        'descripcion'=>$this->input->post('descripcion')
+      );
+      if($this->dominio_model->update($id,$datos))
         $this->nuevo(null,"Se ha actualizado el dominio");
       else
         $this->ver($id,"Error al agregar dominio");

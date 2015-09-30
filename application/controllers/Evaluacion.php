@@ -102,7 +102,9 @@ class Evaluacion extends CI_Controller {
                 $this->evaluacion_model->addEvaluadorToColaborador(array('evaluador'=>$lider,
                     'evaluado'=>$colaborador,'evaluacion'=>$evaluacion));
             endforeach;
-        }
+            $jefe=$lider;
+        }else
+            $this->evaluacion_model->autogenera($this->user_model->getAll(),$evaluacion);
         if($this->db->trans_status() === FALSE){
             $this->db->trans_rollback();
             $response['msg'] = "Ha habido un error. Intenta de nuevo";
@@ -511,11 +513,25 @@ class Evaluacion extends CI_Controller {
         echo json_encode($response);
     }
 
+    public function guardar_avanceProyecto() {
+        $response['msg']="Error al guardar";
+        $asignacion = $this->input->post('asignacion');
+        $respuesta = $this->input->post('respuesta');
+        $dominio = $this->input->post('dominio');
+        $justificacion = $this->input->post('justificacion');
+        $comentarios = $this->input->post('comentarios');
+        if($this->evaluacion_model->guardaDominio($asignacion,$respuesta,$dominio,$justificacion,$comentarios))
+            $response['msg'] = "Dominio guardado";
+        $this->evaluacion_model->ch_estatus($asignacion);
+        echo json_encode($response);
+    }
+
     public function finalizar_evaluacion() {
         $asignacion = $this->input->post('asignacion');
         $tipo = $this->input->post('tipo');
+        $comentarios = $this->input->post('comentarios');
         $this->db->trans_begin();
-        $this->evaluacion_model->finalizar_evaluacion($asignacion,$tipo);
+        $this->evaluacion_model->finalizar_evaluacion($asignacion,$tipo,$comentarios);
         if($this->db->trans_status() === FALSE){
             $this->db->trans_rollback();
             $data['msg'] = "Error al finalizar la evaluación. Verifica tus respuestas e intenta de nuevo";

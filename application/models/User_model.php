@@ -157,7 +157,7 @@ class User_model extends CI_Model{
 	function getAll($tipo=null) {
 		if($tipo == 1)
 			$this->db->where('P.nivel <=',5);
-		$this->db->select('U.id,U.nombre,U.email,U.foto,U.empresa,U.categoria,U.nomina,
+		$this->db->select('U.id,U.nombre,U.email,U.foto,U.empresa,U.categoria,U.nomina,U.fecha_ingreso,
 			U.area,U.plaza,P.nombre posicion,T.nombre track');
 		$this->db->join('Posicion_Track PT','PT.id = U.posicion_track');
 		$this->db->join('Posiciones P','P.id = PT.posicion');

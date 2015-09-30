@@ -32,8 +32,8 @@
         <tbody data-link="row">
           <?php foreach ($colaboradores as $colab):?>
           <tr>
-            <td><small><a href='<?php if($colab->tipo==0) echo base_url("evaluacion/evaluaProyecto/$colab->asignacion");
-              else echo base_url("evaluacion/aplicar/$colab->asignacion");?>'>
+            <td><small><a <?php if($colab->estatus != 2):?> href='<?php if($colab->tipo==0) echo base_url("evaluacion/evaluaProyecto/$colab->asignacion");
+              else echo base_url("evaluacion/aplicar/$colab->asignacion");?>' <?php endif;?>>
               <img height="25px" src="<?= base_url('assets/images/fotos')."/".$colab->foto;?>"></a></small></td>
             <td><small><?php if($colab->id == $this->session->userdata('id')) echo"AUTOEVALUACIÓN";else echo"$colab->nombre ($colab->nomina)";?></small></td>
             <td><small><?= $colab->area;?></small></td>
@@ -41,7 +41,7 @@
             <td><small><?= $colab->evaluacion;?></small></td>
             <td><small><?php $inicio=strtotime($colab->inicio);$fin=strtotime($colab->fin); 
               echo strftime('%d %h',$inicio)." - ".strftime('%d %h',$fin);?></small></td>
-            <td><small><?php if($colab->estatus == 0) echo"Pendiente"; elseif($colab->estatus == 1) echo"En proceso";?></small></td>
+            <td><small><?php if($colab->estatus == 0) echo"Pendiente"; elseif($colab->estatus == 1) echo"En proceso";else echo"Finalizada";?></small></td>
           </tr>
           <?php endforeach; ?>
         </tbody>

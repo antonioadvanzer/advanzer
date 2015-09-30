@@ -22,14 +22,10 @@
 		<!-- Indicators -->
 		<ol class="carousel-indicators">
 			<li data-target="#carousel" data-slide-to="0" class="active"></li>
-			<li data-target="#carousel" data-slide-to="1"></li>
-			<li data-target="#carousel" data-slide-to="2"></li>
-			<li data-target="#carousel" data-slide-to="3"></li>
-			<li data-target="#carousel" data-slide-to="4"></li>
-			<li data-target="#carousel" data-slide-to="5"></li>
-			<li data-target="#carousel" data-slide-to="6"></li>
-			<li data-target="#carousel" data-slide-to="7"></li>
-			<li data-target="#carousel" data-slide-to="8"></li>
+			<?php for ($i=1; $i <= count($evaluacion->dominios); $i++) : ?>
+				<li data-target="#carousel" data-slide-to="<?= $i;?>"></li>
+			<?php endfor; ?>
+			<li data-target="#carousel" data-slide-to="<?= count($evaluacion->dominios)+1;?>"></li>
 		</ol>
 		<div class="carousel-inner" style="background-color:#dedede;" role="listbox">
 			<div class="item active" align="center" style="min-height:300px;">
@@ -39,179 +35,49 @@
 						case 1:echo"Continuar Evaluación...";break;}?></h3>
 				</div>
 			</div>
-			<div class="item" align="center" style="min-height:300px;">
-				<div style="width:60%;position:absolute;top:5%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
-					<div class="col-md-12">
-						<div class="form-group" align="center">
-							<label>Llevó a cabo acciones que permitieron eficientar los gastos del proyecto en el que participó, así como 
-								aprovechar al máximo los recursos disponibles.</label>
-							<select id="respuesta" name="estatus" class="form-control" style="max-width:60px;text-align:center" 
-								onchange="verify(this);">
-								<option value="5" <?php if($evaluacion->costo && $evaluacion->costo->respuesta==5) echo "selected"; ?>>5</option>
-								<option value="4" <?php if($evaluacion->costo && $evaluacion->costo->respuesta==4) echo "selected"; ?>>4</option>
-								<option value="3" <?php if($evaluacion->costo && $evaluacion->costo->respuesta==3) echo "selected"; ?>>3</option>
-								<option value="2" <?php if($evaluacion->costo && $evaluacion->costo->respuesta==2) echo "selected"; ?>>2</option>
-								<option value="1" <?php if($evaluacion->costo && $evaluacion->costo->respuesta==1) echo "selected"; ?>>1</option>
-							</select>
-						</div>
+			<?php foreach ($evaluacion->dominios as $dominio) : ?>
+				<div class="item" align="center" style="min-height:300px;">
+					<div style="width:60%;position:absolute;top:5%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
+						<form onsubmit="return verify(this);" action="javascript:" class="form-signin" role="form">
+							<input type="hidden" value="<?= $dominio->id;?>" id="dominio">
+							<input type="hidden" value="<?= $evaluacion->id;?>" id="asignacion">
+							<div class="col-md-12">
+								<div class="form-group" align="center">
+									<label><?= $dominio->descripcion;?></label>
+									<select id="respuesta" name="estatus" class="form-control" style="max-width:60px;text-align:center"
+										onchange="verify(this.form);" required>
+										<option value="" selected disabled>--</option>
+										<?php for ($i=5; $i > 0; $i--) : ?>
+											<option value="<?= $i;?>" <?php if($dominio->respuesta==$i)echo"selected";?>><?= $i;?></option>
+										<?php endfor; ?>
+									</select>
+								</div>
+							</div>
+							<div class="col-md-12">
+								<div class="form-group" align="center">
+									<textarea id="justificacion" class="form-control" rows="2" style="max-width:300px;text-align:center" 
+										onkeyup="if(this.value.split(' ').length >= 4){ this.form.boton.style.display='';
+											}else{ this.form.boton.style.display='none';}" placeholder="Justifique su respuesta"
+										required <?php if(!$dominio->justificacion)echo"style='display:none'";?>><?= $dominio->justificacion;?></textarea>
+								</div>
+								<div class="form-group" align="center">
+									<input id="boton" class="btn btn-lg btn-primary btn-block" style="display:none;max-width:200px;
+										text-align:center;" type="submit" value="Guardar">
+								</div>
+							</div>
+						</form>
 					</div>
-					<div class="col-md-12">
-						<div class="form-group" align="center">
-							<label>Justifique su respuesta</label>
-							<textarea id="justificacion1" class="form-control" rows="2" style="max-width:300px;text-align:center" required></textarea>
-						</div>
-					</div>
+					<div class="carousel-caption"><h3 style="cursor:default;"><?= $dominio->nombre;?></h3></div>
 				</div>
-				<div class="carousel-caption"><h3 style="cursor:default;">Costo</h3></div>
-			</div>
-			<div class="item" align="center" style="min-height:300px;">
-				<div style="width:60%;position:absolute;top:5%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
-					<div class="col-md-12">
-						<div class="form-group" align="center">
-							<label>Cumplió con los plazos acordados para la entrega de información requerida.</label>
-							<select id="respuesta" name="estatus" class="form-control" style="max-width:300px;text-align:center">
-								<option value="5" <?php if($evaluacion->costo->respuesta==5) echo "selected"; ?>>5</option>
-								<option value="4" <?php if($evaluacion->costo->respuesta==4) echo "selected"; ?>>4</option>
-								<option value="3" <?php if($evaluacion->costo->respuesta==3) echo "selected"; ?>>3</option>
-								<option value="2" <?php if($evaluacion->costo->respuesta==2) echo "selected"; ?>>2</option>
-								<option value="1" <?php if($evaluacion->costo->respuesta==1) echo "selected"; ?>>1</option>
-							</select>
-						</div>
-					</div>
-					<div class="col-md-12">
-						<div class="form-group" align="center">
-							<label>Justifique su respuesta</label>
-							<textarea id="justificacion" class="form-control" rows="2" style="max-width:300px;text-align:center" required></textarea>
-						</div>
-					</div>
-				</div>
-				<div class="carousel-caption"><h3 style="cursor:default;">Tiempo</h3></div>
-			</div>
-			<div class="item" align="center" style="min-height:300px;">
-				<div style="width:60%;position:absolute;top:5%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
-					<div class="col-md-12">
-						<div class="form-group" align="center">
-							<label>Realizo cada una de sus actividades y/o asignaciones con el nivel de excelencia requerido.</label>
-							<select id="respuesta" name="estatus" class="form-control" style="max-width:300px;text-align:center">
-								<option value="5" <?php if($evaluacion->costo->respuesta==5) echo "selected"; ?>>5</option>
-								<option value="4" <?php if($evaluacion->costo->respuesta==4) echo "selected"; ?>>4</option>
-								<option value="3" <?php if($evaluacion->costo->respuesta==3) echo "selected"; ?>>3</option>
-								<option value="2" <?php if($evaluacion->costo->respuesta==2) echo "selected"; ?>>2</option>
-								<option value="1" <?php if($evaluacion->costo->respuesta==1) echo "selected"; ?>>1</option>
-							</select>
-						</div>
-					</div>
-					<div class="col-md-12">
-						<div class="form-group" align="center">
-							<label>Justifique su respuesta</label>
-							<textarea id="justificacion" class="form-control" rows="2" style="max-width:300px;text-align:center" required></textarea>
-						</div>
-					</div>
-				</div>
-				<div class="carousel-caption"><h3 style="cursor:default;">Calidad</h3></div>
-			</div>
-			<div class="item" align="center" style="min-height:300px;">
-				<div style="width:60%;position:absolute;top:5%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
-					<div class="col-md-12">
-						<div class="form-group" align="center">
-							<label>Entregó los productos comprometidos cumpliendo con las especificaciones acordadas/necesarias.</label>
-							<select id="respuesta" name="estatus" class="form-control" style="max-width:300px;text-align:center">
-								<option value="5" <?php if($evaluacion->costo->respuesta==5) echo "selected"; ?>>5</option>
-								<option value="4" <?php if($evaluacion->costo->respuesta==4) echo "selected"; ?>>4</option>
-								<option value="3" <?php if($evaluacion->costo->respuesta==3) echo "selected"; ?>>3</option>
-								<option value="2" <?php if($evaluacion->costo->respuesta==2) echo "selected"; ?>>2</option>
-								<option value="1" <?php if($evaluacion->costo->respuesta==1) echo "selected"; ?>>1</option>
-							</select>
-						</div>
-					</div>
-					<div class="col-md-12">
-						<div class="form-group" align="center">
-							<label>Justifique su respuesta</label>
-							<textarea id="justificacion" class="form-control" rows="2" style="max-width:300px;text-align:center" required></textarea>
-						</div>
-					</div>
-				</div>
-				<div class="carousel-caption"><h3 style="cursor:default;">Entregables</h3></div>
-			</div>
-			<div class="item" align="center" style="min-height:300px;">
-				<div style="width:60%;position:absolute;top:5%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
-					<div class="col-md-12">
-						<div class="form-group" align="center">
-							<label>Desarrolló vínculos efectivos de colaboración con cada uno de los clientes a los que les dio servicio, 
-								sin importar que fueran internos o externos.</label>
-							<select id="respuesta" name="estatus" class="form-control" style="max-width:300px;text-align:center">
-								<option value="5" <?php if($evaluacion->costo->respuesta==5) echo "selected"; ?>>5</option>
-								<option value="4" <?php if($evaluacion->costo->respuesta==4) echo "selected"; ?>>4</option>
-								<option value="3" <?php if($evaluacion->costo->respuesta==3) echo "selected"; ?>>3</option>
-								<option value="2" <?php if($evaluacion->costo->respuesta==2) echo "selected"; ?>>2</option>
-								<option value="1" <?php if($evaluacion->costo->respuesta==1) echo "selected"; ?>>1</option>
-							</select>
-						</div>
-					</div>
-					<div class="col-md-12">
-						<div class="form-group" align="center">
-							<label>Justifique su respuesta</label>
-							<textarea id="justificacion" class="form-control" rows="2" style="max-width:300px;text-align:center" required></textarea>
-						</div>
-					</div>
-				</div>
-				<div class="carousel-caption"><h3 style="cursor:default;">Relación con Clientes</h3></div>
-			</div>
-			<div class="item" align="center" style="min-height:300px;">
-				<div style="width:60%;position:absolute;top:5%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
-					<div class="col-md-12">
-						<div class="form-group" align="center">
-							<label>Capitalizó su interacción con el cliente externo para identificar y sugerir/plantear alguna oportunidad 
-								comercial.</label>
-							<select id="respuesta" name="estatus" class="form-control" style="max-width:300px;text-align:center">
-								<option value="5" <?php if($evaluacion->costo->respuesta==5) echo "selected"; ?>>5</option>
-								<option value="4" <?php if($evaluacion->costo->respuesta==4) echo "selected"; ?>>4</option>
-								<option value="3" <?php if($evaluacion->costo->respuesta==3) echo "selected"; ?>>3</option>
-								<option value="2" <?php if($evaluacion->costo->respuesta==2) echo "selected"; ?>>2</option>
-								<option value="1" <?php if($evaluacion->costo->respuesta==1) echo "selected"; ?>>1</option>
-							</select>
-						</div>
-					</div>
-					<div class="col-md-12">
-						<div class="form-group" align="center">
-							<label>Justifique su respuesta</label>
-							<textarea id="justificacion" class="form-control" rows="2" style="max-width:300px;text-align:center" required></textarea>
-						</div>
-					</div>
-				</div>
-				<div class="carousel-caption"><h3 style="cursor:default;">Generación de Negocio</h3></div>
-			</div>
-			<div class="item" align="center" style="min-height:300px;">
-				<div style="width:60%;position:absolute;top:5%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
-					<div class="col-md-12">
-						<div class="form-group" align="center">
-							<label>Demostró la expertise necesaria (conocimientos, aptitudes, destrezas, etc.) para dar respuesta a las 
-								demandas del proyecto/asignación.</label>
-							<select id="respuesta" name="estatus" class="form-control" style="max-width:300px;text-align:center">
-								<option value="5" <?php if($evaluacion->costo->respuesta==5) echo "selected"; ?>>5</option>
-								<option value="4" <?php if($evaluacion->costo->respuesta==4) echo "selected"; ?>>4</option>
-								<option value="3" <?php if($evaluacion->costo->respuesta==3) echo "selected"; ?>>3</option>
-								<option value="2" <?php if($evaluacion->costo->respuesta==2) echo "selected"; ?>>2</option>
-								<option value="1" <?php if($evaluacion->costo->respuesta==1) echo "selected"; ?>>1</option>
-							</select>
-						</div>
-					</div>
-					<div class="col-md-12" id="justifica">
-						<div class="form-group" align="center">
-							<label>Justifique su respuesta</label>
-							<textarea id="justificacion" class="form-control" rows="2" style="max-width:300px;text-align:center" required></textarea>
-						</div>
-					</div>
-				</div>
-				<div class="carousel-caption"><h3 style="cursor:default;">Habilidades</h3></div>
-			</div>
+			<?php endforeach; ?>
 			<div class="item" align="center" style="min-height:300px;">
 				<img width="100%" style="opacity:0.3;position:absolute" src="<?= base_url('assets/images/gracias.jpg');?>">
 				<div style="width:60%;position:absolute;top:10%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
 					<div class="col-md-12">
-						<div class="form-group" align="center">
+						<div class="form-group" align="center" id="finalizar">
 							<label>¿Tienes algún comentario adicional para el colaborador?</label>
-							<textarea id="justificacion" class="form-control" rows="2" style="max-width:300px;text-align:center"></textarea>
+							<textarea id="comentarios" class="form-control" rows="2" style="max-width:300px;text-align:center">
+								<?= $evaluacion->comentarios;?></textarea>
 						</div>
 					</div>
 				</div>
@@ -230,25 +96,42 @@
 	</div>
 	<script type="text/javascript">
 		$(document).ready(function() {
-			$('#finalizar').hide();
+			$('[id^=finalizar]').hide();
 			revisar();
 		});
 		function revisar() {
 			flag=true;
-			$('[id^=resp] option:selected').each(function(i,select) {
-				console.log($(select).val());
+			$('[id^=respuesta] option:selected').each(function(i,select) {
 				if($(select).val() == ""){
 					flag = false;
 				}
 			});
 			if(flag)
-				$('#finalizar').show();
+				$('[id^=finalizar]').show();
 		}
 
-		function verify(select) {
-			if (select.value != 3) {
-				alert('Justifica tu respuesta porfavor');
-			};
+		function verify(form) {
+			var respuesta = form.respuesta.options[form.respuesta.selectedIndex].value;
+			if (respuesta != 3 && form.justificacion.value.split(' ').length < 4)
+				form.justificacion.style.display='';
+			else{
+				var asignacion = form.asignacion.value;
+				var dominio = form.dominio.value;
+				var justificacion = form.justificacion.value;
+				console.log(asignacion,dominio,respuesta,justificacion);
+				$.ajax({
+					url: '<?= base_url("evaluacion/guardar_avanceProyecto");?>',
+					type: 'post',
+					data: {'asignacion':asignacion,'dominio':dominio,'respuesta':respuesta,'justificacion':justificacion},
+					success: function(data){
+						var returnedData = JSON.parse(data);
+						revisar();
+						console.log(returnedData);
+						form.boton.style.display='none';
+					}
+				});
+			}
+			return false;
 		}
 
 		function finalizar(asignacion,tipo) {
@@ -257,7 +140,7 @@
 				$.ajax({
 					url: '<?= base_url("evaluacion/finalizar_evaluacion");?>',
 					type: 'post',
-					data: {'asignacion':asignacion,'tipo':tipo},
+					data: {'asignacion':asignacion,'tipo':tipo,'comentarios':$('#comentarios').val()},
 					success: function(data){
 						console.log(data);
 						var returnData = JSON.parse(data);
@@ -267,19 +150,5 @@
 						}
 					}
 				});
-		}
-		function guardar(valor,elemento,tipo) {
-			var asignacion = <?= $evaluacion->id;?>;
-			console.log(valor.value,tipo,asignacion,elemento);
-			$.ajax({
-				url: '<?= base_url("evaluacion/guardar_avance");?>',
-				type: 'post',
-				data: {'asignacion':asignacion,'tipo':tipo,'valor':valor.value,'elemento':elemento},
-				success: function(data){
-					var returnedData = JSON.parse(data);
-					revisar();
-					console.log(returnedData);
-				}
-			});
 		}
 	</script>
