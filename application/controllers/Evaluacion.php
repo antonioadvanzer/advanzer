@@ -546,9 +546,11 @@ class Evaluacion extends CI_Controller {
     }
 
     public function asignar_evaluador($colaborador){
-        $data['colaborador']=$this->user_model->searchById($colaborador);
-        $data['evaluadores']=$this->evaluacion_model->getEvaluadoresByColaborador($colaborador);
-        $data['no_evaluadores']=$this->evaluacion_model->getNotEvaluadoresByColaborador($colaborador,$data['evaluadores']);
+        $colaborador=$this->user_model->searchById($colaborador);
+        $colaborador->anual = $this->evaluacion_model->getEvaluadorAnual($colaborador->id);
+        $data['colaborador']=$colaborador;
+        $data['evaluadores']=$this->evaluacion_model->getEvaluadoresByColaborador($colaborador->id);
+        $data['no_evaluadores']=$this->evaluacion_model->getNotEvaluadoresByColaborador($colaborador->id,$data['evaluadores']);
 
         $this->layout->title('Capital Humano - Asignar Evaluadores');
         $this->layout->view('evaluacion/asignar_evaluador',$data);
@@ -556,6 +558,7 @@ class Evaluacion extends CI_Controller {
 
     public function guarda_evaluadores() {
         $colaborador=$this->input->post('colaborador');
+        $anual=$this->input->post('anual');
         $agregar=$this->input->post('agregar');
         $this->input->post('evaluacion') ? $evaluacion=$this->input->post('evaluacion') : $evaluacion=$this->evaluacion_model->getEvaluacionAnual();
         $this->db->trans_begin();
@@ -570,6 +573,7 @@ class Evaluacion extends CI_Controller {
                 $this->evaluacion_model->delEvaluadorFromColaborador(
                     array('evaluador'=>$evaluador,'evaluado'=>$colaborador,'evaluacion'=>$evaluacion));
             endforeach;
+        $this->evaluacion_model->updateEvaluadorAnual($colaborador,$anual);
         if($this->db->trans_status() === FALSE){
             $this->db->trans_rollback();
             $response['msg'] = "Ha habido un error. Intenta de nuevo";

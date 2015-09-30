@@ -70,7 +70,7 @@ class User_model extends CI_Model{
 
 	function searchById($id) {
 		$this->db->select('U.id,U.email,U.nombre,U.foto,U.empresa,U.estatus,U.categoria,U.nomina,U.area,U.plaza,
-			U.tipo,U.jefe,U.fecha_ingreso,P.id posicion, T.id track');
+			U.tipo,U.jefe,U.fecha_ingreso,P.id posicion, T.id track,P.nivel nivel_posicion');
 		$this->db->join('Posicion_Track PT','PT.id = U.posicion_track','LEFT OUTER');
 		$this->db->join('Posiciones P','P.id = PT.posicion','LEFT OUTER');
 		$this->db->join('Tracks T','T.id = PT.track','LEFT OUTER');

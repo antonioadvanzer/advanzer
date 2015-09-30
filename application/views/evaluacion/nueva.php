@@ -29,7 +29,7 @@
 		  <div class="form-group" align="center">
 			<label for="nombre">Año de Evaluación:</label>
 			<input class="form-control" style="max-width:300px;text-align:center;" type="text" id="anio" 
-				value="<?= date('Y');?>" required>
+				value="<?= date('Y')-1;?>" required>
 		  </div>
 		</div>
 		<div class="col-md-3">

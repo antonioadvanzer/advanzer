@@ -13,7 +13,24 @@
   <hr>
   	<form id="update" role="form" method="post" action="javascript:" class="form-signin">
 	  <input type="hidden" id="colaborador" value="<?= $colaborador->id;?>">
-	  <div class="row" align="center" id>
+	  <?php if($colaborador->nivel_posicion <= 3) : ?>
+	  	<div class="row" align="center">
+	  		<div class="col-md-12">
+	  			<div class="form-group">
+		  			<label for="anual">Evaluador anual</label>
+		  			<select class="form-control" style="max-width:300px;text-align:center" id="anual">
+		  				<option value="" selected disabled>-- Evaluador Anual --</option>
+		  				<?php foreach($evaluadores as $evaluador) : ?>
+							<option value="<?= $evaluador->id;?>" <?php if($evaluador->estatus != 0) echo "disabled"; 
+							if($evaluador->id == $colaborador->anual) echo"selected";?>>
+								<?= "$evaluador->nombre - $evaluador->posicion ($evaluador->track)";?></option>
+						<?php endforeach; ?>
+		  			</select>
+		  		</div>
+	  		</div>
+	  	</div>
+	  <?php endif;?>
+	  <div class="row" align="center">
 	  	<div class="col-md-5">
 	  	  <div class="panel panel-primary">
 	  	  <div class="panel-heading">Evaluadores Asignados</div>
@@ -62,6 +79,7 @@
 					$('#agregar :selected').each(function(i,select) {
 						$('#agregar').find($(select)).remove();
 						$('#quitar').append($('<option>',{value:$(select).val()}).text($(select).text()));
+						$('#anual').append($('<option>',{value:$(select).val()}).text($(select).text()));
 					});
 				}
 			});
@@ -69,6 +87,7 @@
 				if($('#quitar :selected').length > 0){
 					$('#quitar :selected').each(function(i,select) {
 						$('#quitar').find($(select)).remove();
+						$('#anual').find("option[value='"+$(select).val()+"']").remove();
 						$('#agregar').append($('<option>',{value:$(select).val()}).text($(select).text()));
 					});
 				}
@@ -81,15 +100,18 @@
 				$('#agregar option').each(function(i,select) {
 					quitar[i] = $(select).val();
 				});
+				$('#anual option:selected').each(function(i,select) {
+					anual = $(select).val();
+				});
 				var agregar = [];
 				$('#quitar option').each(function(i,select) {
 					agregar[i] = $(select).val();
 				});
-				console.log(agregar,quitar,colaborador);
+				console.log(agregar,quitar,colaborador,anual);
 				$.ajax({
 					url: '<?= base_url("evaluacion/guarda_evaluadores");?>',
 					type: 'POST',
-					data: {'colaborador':colaborador,'agregar':agregar,'quitar':quitar},
+					data: {'colaborador':colaborador,'agregar':agregar,'quitar':quitar,'anual':anual},
 					success: function(data) {
 						console.log(data);
 						var returnData = JSON.parse(data);

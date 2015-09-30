@@ -69,7 +69,7 @@
                 <?php endforeach; ?>
                 <hr>
               <?php endif;
-              if(count($colab->evaluadoresProyecto) > 0): ?>
+              if(isset($colab->evaluadoresProyecto) && count($colab->evaluadoresProyecto) > 0): ?>
                 <div class="row" align="center">
                   <div class="col-sm-3"><small><b>Resultado</b></small></div>
                   <div class="col-sm-5"><small><b>Evaluador</b></small></div>
