@@ -15,10 +15,11 @@ class Evaluacion extends CI_Controller {
     }
 
     //basicas
-    public function index() {
+    public function index($flag=false) {
         if(!$this->evaluacion_model->getEvaluacionAnual())
             redirect('evaluacion/proyecto');
         else{
+            $data['flag']=$flag;
             $data['colaboradores'] = $this->evaluacion_model->getEvaluados();
             $this->layout->title('Advanzer - Evaluaciones');
             $this->layout->view('evaluacion/index',$data);
@@ -89,7 +90,9 @@ class Evaluacion extends CI_Controller {
             'tipo'=>$this->input->post('tipo'),
             'nombre'=>$this->input->post('nombre'),
             'inicio'=>$this->input->post('inicio'),
-            'fin'=>$this->input->post('fin')
+            'fin'=>$this->input->post('fin'),
+            'inicio_periodo'=>$this->input->post('inicio_p'),
+            'fin_periodo'=>$this->input->post('fin_p')
         );
         $tipo=$this->input->post('tipo');
         $lider=$this->input->post('lider');
@@ -300,7 +303,7 @@ class Evaluacion extends CI_Controller {
                 <div class="input-group">
                     <span class="input-group-addon">Período de Evaluación</span>
                     <input data-provide="datepicker" data-date-format="yyyy-mm-dd" name="inicio" id="inicio" onchange="setFin(this);" 
-                        value="<?= $info->inicio; ?>" class="form-control" style="max-width:150px;text-align:center;"<?php if($info->estatus != 0)echo"disabled"; ?>>
+                        value="<?= $info->inicio; ?>" class="form-control" style="max-width:150px;text-align:center;"<?php if($info->estatus > 1)echo"disabled"; ?>>
                     <input data-provide="datepicker" data-date-format="yyyy-mm-dd" name="fin" id="fin" value="<?= $info->fin;?>" 
                         class="form-control" style="max-width:150px;text-align:center;">
                 </div>
@@ -310,7 +313,7 @@ class Evaluacion extends CI_Controller {
               <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon">Estatus</span>
-                    <select id="estatus" name="estatus" class="form-control" style="max-width:300px;text-align:center" <?php if($info->estatus != 0)echo"disabled"; ?>>
+                    <select id="estatus" name="estatus" class="form-control" style="max-width:300px;text-align:center" <?php if($info->estatus > 1)echo"disabled"; ?>>
                       <option value="0" <?php if($info->estatus == 0) echo "selected"; ?>>Deshabilitado</option>
                       <option value="1" <?php if($info->estatus == 1) echo "selected"; ?>>Habilitado</option>
                     </select>
@@ -325,10 +328,10 @@ class Evaluacion extends CI_Controller {
                     <div class="form-group" align="center">
                         <div class="input-group">
                             <span class="input-group-addon">Líder</span>
-                            <select id="lider" name="lider" class="form-control" style="max-width:310px">
+                            <select id="lider" name="lider" class="form-control" style="max-width:310px"<?php if($lider->estatus)echo "disabled";?>>
                                 <option value="<?= $lider->id;?>" selected>
                                     <?= "$lider->nombre - $lider->posicion ($lider->track)";?></option>
-                                <?php foreach($participantes as $colaborador) : ?>
+                                <?php foreach($participantes as $colaborador) :?>
                                     <option value="<?= $colaborador->id;?>">
                                         <?= "$colaborador->nombre - $colaborador->posicion ($colaborador->track)";?></option>
                                 <?php endforeach; ?>
@@ -354,9 +357,9 @@ class Evaluacion extends CI_Controller {
                     <div class="form-group" align="center">
                         <label for="participantes">Participantes</label>
                         <select id="agregar" name="agregar" multiple class="form-control" style="overflow-y:auto;
-                            overflow-x:auto;min-height:200px;max-height:700px" <?php if($info->estatus != 0)echo"disabled"; ?>>
+                            overflow-x:auto;min-height:200px;max-height:700px" <?php if($info->estatus > 1)echo"disabled"; ?>>
                             <?php foreach($participantes as $colaborador) : ?>
-                                <option value="<?= $colaborador->id;?>">
+                                <option <?php if($colaborador->estatus != 0) echo"disabled" ;?> value="<?= $colaborador->id;?>">
                                     <?= "$colaborador->nombre - $colaborador->posicion ($colaborador->track)";?>
                                 </option>
                             <?php endforeach; ?>
@@ -365,17 +368,17 @@ class Evaluacion extends CI_Controller {
                 </div>
                 <div class="col-md-2"><div class="form-group">&nbsp;</div>
                     <div class="form-group">
-                        <button type="button" id="btnQuitar" style="max-width:100px" class="form-control" <?php if($info->estatus != 0)echo"disabled"; ?>>Quitar&raquo;</button>
+                        <button type="button" id="btnQuitar" style="max-width:100px" class="form-control" <?php if($info->estatus > 1)echo"disabled"; ?>>Quitar&raquo;</button>
                     </div>
                     <div class="form-group">
-                        <button type="button" id="btnAgregar" style="max-width:100px" class="form-control" <?php if($info->estatus != 0)echo"disabled"; ?>>&laquo;Agregar</button>
+                        <button type="button" id="btnAgregar" style="max-width:100px" class="form-control" <?php if($info->estatus > 1)echo"disabled"; ?>>&laquo;Agregar</button>
                     </div>
                 </div>
                 <div class="col-md-5">
                     <div class="form-group" align="center">
                         <label for="participantes">Colaboradores Disponibles</label>
                         <select id="quitar" name="quitar" multiple class="form-control" style="overflow-y:auto;
-                            overflow-x:auto;min-height:200px;max-height:700px" <?php if($info->estatus != 0)echo"disabled"; ?>>
+                            overflow-x:auto;min-height:200px;max-height:700px">
                             <?php foreach($disponibles as $colaborador) : ?>
                                 <option value="<?= $colaborador->id;?>">
                                     <?= "$colaborador->nombre - $colaborador->posicion ($colaborador->track)";?>

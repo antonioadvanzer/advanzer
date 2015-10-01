@@ -22,16 +22,25 @@
 				<div class="form-group" align="center">
 					<label title="El(la) colaborador(a) presenta sus Gastos de Viaje, bajo los procedimientos establecidos, a más tardar 7 días hábiles a partir de su fecha de regreso en al menos el 90% de sus viajes.">
 						Comprobación de Gastos de Viaje?</label>
-					<input id="gastos" type="text" class="form-control" style="max-width:50px;background-color: #fff;" disabled 
-						value="<?= $colaborador->cumple_gastos;?>">
+					<div><?php if(isset($colaborador->cumple_gastos) && $colaborador->cumple_gastos == "SI"): ?>
+						<label><span class="glyphicon glyphicon glyphicon-ok"></span></label>
+					<?php else: ?>
+						<label><span class="glyphicon glyphicon glyphicon-remove"></span></label>
+					<?php endif; ?></div>
 					<label title="El(la) colaborador(a) captura sus horas asignadas a cada proyecto los días lunes con un máximo de tres semanas de desfase acumulado al año.">
 						Captura de Asignaciones en Harvest?</label>
-					<input id="harvest" type="text" class="form-control" style="max-width:50px;background-color: #fff;" disabled 
-						value="<?= $colaborador->cumple_harvest;?>">
+					<div><?php if(isset($colaborador->cumple_harvest) && $colaborador->cumple_harvest == "SI"): ?>
+						<label><span class="glyphicon glyphicon glyphicon-ok"></span></label>
+					<?php else: ?>
+						<label><span class="glyphicon glyphicon glyphicon-remove"></span></label>
+					<?php endif; ?></div>
 					<label title="El(la) colaborador(a) actualiza su CV Advanzer correctamente, cada Junio y Diciembre, en la Carpeta de Documentación Personal on line.">
 						Actualización de CV Advanzer?</label>
-					<input id="cv" type="text" class="form-control" style="max-width:50px;background-color: #fff;" disabled 
-						value="<?= $colaborador->cumple_cv;?>">
+					<div><?php if(isset($colaborador->cumple_cv) && $colaborador->cumple_cv == "SI"): ?>
+						<label><span class="glyphicon glyphicon glyphicon-ok"></span></label>
+					<?php else: ?>
+						<label><span class="glyphicon glyphicon glyphicon-remove"></span></label>
+					<?php endif; ?></div>
 				</div>
 			</div>
 			<div class="col-md-4">
@@ -52,7 +61,16 @@
 					<label for="nombre">FeedBack:</label>
 					<select id="feedback" class="form-control" style="max-width:300px" required>
 						<option selected disabled value="">-- Asigna al FeedBack --</option>
+						<option value="<?= $colaborador->feedback->feedbacker;?>" selected><?= $colaborador->feedback->nombre;?></option>
 						<?php foreach ($colaborador->evaluadores as $evaluador) : ?>
+							<option value="<?= $evaluador->id;?>" <?php if($colaborador->feedback && $evaluador->id == $colaborador->feedback->feedbacker) echo "selected";?>>
+								<?= $evaluador->nombre;?></option>
+						<?php endforeach; ?>
+						<?php foreach ($colaborador->evaluadores360 as $evaluador) : ?>
+							<option value="<?= $evaluador->id;?>" <?php if($colaborador->feedback && $evaluador->id == $colaborador->feedback->feedbacker) echo "selected";?>>
+								<?= $evaluador->nombre;?></option>
+						<?php endforeach; ?>
+						<?php foreach ($colaborador->evaluadoresProyecto as $evaluador) : ?>
 							<option value="<?= $evaluador->id;?>" <?php if($colaborador->feedback && $evaluador->id == $colaborador->feedback->feedbacker) echo "selected";?>>
 								<?= $evaluador->nombre;?></option>
 						<?php endforeach; ?>
@@ -152,13 +170,13 @@
 	</div>
 	<script>
 	function verificaRating() {
-		gastos = $('#gastos').val();
-		harvest = $('#harvest').val();
-		cv = $('#cv').val();
+		gastos = "<?= $colaborador->cumple_gastos;?>";
+		harvest = "<?= $colaborador->cumple_harvest;?>";
+		cv = "<?= $colaborador->cumple_cv;?>";
 		if(gastos=="NO" || harvest=="NO" || cv=="NO"){
-			$('#rating option[value="A"]').attr("disabled","disabled");
-			$('#rating option[value="B"]').attr("disabled","disabled");
-			$('#rating option[value="C"]').attr("disabled","disabled");
+			$('#rating option[value="A"]').remove();
+			$('#rating option[value="B"]').remove();
+			$('#rating option[value="C"]').remove();
 			$('#rating option[value=""]').attr("selected","selected");
 		}
 	}

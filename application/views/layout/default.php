@@ -91,6 +91,7 @@
 												<li><a href="<?= base_url('objetivo/asignar_pesos');?>">Responsabilidades Por Área</a></li>
 											<?php //endif; if($this->session->userdata('tipo') > 1): ?>
 												<li><a href="<?= base_url('evaluacion');?>">Evaluaciones</a></li>
+												<li><a href="<?= base_url('evaluacion/index/true');?>">Evaluaciones Confidencial</a></li>
 												<li><a href="<?= base_url('evaluacion/por_evaluador');?>">Evaluaciones por Evaluador</a></li>
 												<li><a href="<?= base_url('ver_requisiciones');?>">Requisiciones</a></li>
 											<?php //endif;?>

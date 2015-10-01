@@ -55,10 +55,11 @@
 							</div>
 							<div class="col-md-12">
 								<div class="form-group" align="center">
-									<textarea id="justificacion" class="form-control" rows="2" style="max-width:300px;text-align:center" 
+									<textarea id="justificacion" class="form-control" rows="2" style="max-width:300px;text-align:center;
+										<?php if($dominio->respuesta == 3)echo'display:none;';?>" 
 										onkeyup="if(this.value.split(' ').length >= 4){ this.form.boton.style.display='';
 											}else{ this.form.boton.style.display='none';}" placeholder="Justifique su respuesta"
-										required <?php if(!$dominio->justificacion)echo"style='display:none'";?>><?= $dominio->justificacion;?></textarea>
+										required><?= $dominio->justificacion;?></textarea>
 								</div>
 								<div class="form-group" align="center">
 									<input id="boton" class="btn btn-lg btn-primary btn-block" style="display:none;max-width:200px;
@@ -76,8 +77,7 @@
 					<div class="col-md-12">
 						<div class="form-group" align="center" id="finalizar">
 							<label>¿Tienes algún comentario adicional para el colaborador?</label>
-							<textarea id="comentarios" class="form-control" rows="2" style="max-width:300px;text-align:center">
-								<?= $evaluacion->comentarios;?></textarea>
+							<textarea id="comentarios" class="form-control" rows="2" style="max-width:300px;text-align:center"><?= $evaluacion->comentarios;?></textarea>
 						</div>
 					</div>
 				</div>
@@ -115,6 +115,7 @@
 			if (respuesta != 3 && form.justificacion.value.split(' ').length < 4)
 				form.justificacion.style.display='';
 			else{
+				form.justificacion.style.display='none';
 				var asignacion = form.asignacion.value;
 				var dominio = form.dominio.value;
 				var justificacion = form.justificacion.value;
