@@ -13,7 +13,8 @@
   <hr>
   	<form id="update" role="form" method="post" action="javascript:" class="form-signin">
 	  <input type="hidden" id="colaborador" value="<?= $colaborador->id;?>">
-	  <?php if($colaborador->nivel_posicion <= 3) : ?>
+	  <input type="hidden" id="posicion" value="<?= $colaborador->nivel_posicion;?>">
+	  <?php if($colaborador->nivel_posicion <= 5) : ?>
 	  	<div class="row" align="center">
 	  		<div class="col-md-12">
 	  			<div class="form-group">
@@ -74,12 +75,14 @@
 
 	<script type="text/javascript">
 		$(document).ready(function() {
+			var flag = $('#posicion').val();
 			$('#btnAgregar').click(function() {
 				if($('#agregar :selected').length > 0){
 					$('#agregar :selected').each(function(i,select) {
 						$('#agregar').find($(select)).remove();
 						$('#quitar').append($('<option>',{value:$(select).val()}).text($(select).text()));
-						$('#anual').append($('<option>',{value:$(select).val()}).text($(select).text()));
+						if(flag <= 5)
+							$('#anual').append($('<option>',{value:$(select).val()}).text($(select).text()));
 					});
 				}
 			});
@@ -87,7 +90,8 @@
 				if($('#quitar :selected').length > 0){
 					$('#quitar :selected').each(function(i,select) {
 						$('#quitar').find($(select)).remove();
-						$('#anual').find("option[value='"+$(select).val()+"']").remove();
+						if(flag <= 5)
+							$('#anual').find("option[value='"+$(select).val()+"']").remove();
 						$('#agregar').append($('<option>',{value:$(select).val()}).text($(select).text()));
 					});
 				}
@@ -100,9 +104,12 @@
 				$('#agregar option').each(function(i,select) {
 					quitar[i] = $(select).val();
 				});
-				$('#anual option:selected').each(function(i,select) {
-					anual = $(select).val();
-				});
+				if(flag<=5)
+					$('#anual option:selected').each(function(i,select) {
+						anual = $(select).val();
+					});
+				else
+					anual=null;
 				var agregar = [];
 				$('#quitar option').each(function(i,select) {
 					agregar[i] = $(select).val();

@@ -573,7 +573,8 @@ class Evaluacion extends CI_Controller {
                 $this->evaluacion_model->delEvaluadorFromColaborador(
                     array('evaluador'=>$evaluador,'evaluado'=>$colaborador,'evaluacion'=>$evaluacion));
             endforeach;
-        $this->evaluacion_model->updateEvaluadorAnual($colaborador,$anual);
+        if(!empty($anual))
+            $this->evaluacion_model->updateEvaluadorAnual($colaborador,$anual);
         if($this->db->trans_status() === FALSE){
             $this->db->trans_rollback();
             $response['msg'] = "Ha habido un error. Intenta de nuevo";
