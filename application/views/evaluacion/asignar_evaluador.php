@@ -109,7 +109,9 @@
 						anual = $(select).val();
 					});
 				else
-					anual=null;
+					$('#quitar option').each(function(i,select) {
+						anual = $(select).val();
+					});
 				var agregar = [];
 				$('#quitar option').each(function(i,select) {
 					agregar[i] = $(select).val();

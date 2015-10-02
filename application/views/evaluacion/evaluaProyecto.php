@@ -56,7 +56,7 @@
 							<div class="col-md-12">
 								<div class="form-group" align="center">
 									<textarea id="justificacion" class="form-control" rows="2" style="max-width:300px;text-align:center;
-										<?php if($dominio->respuesta == 3)echo'display:none;';?>" 
+										<?php if($dominio->respuesta == 3 || $dominio->respuesta == 0)echo'display:none;';?>" 
 										onkeyup="if(this.value.split(' ').length >= 4){ this.form.boton.style.display='';
 											}else{ this.form.boton.style.display='none';}" placeholder="Justifique su respuesta"
 										required><?= $dominio->justificacion;?></textarea>
@@ -94,6 +94,10 @@
 		<a class="right carousel-control" href="#carousel" role="button" data-slide="next">
 			<span class="glyphicon glyphicon-chevron-right"></span></a>
 	</div>
+	<div class="row" align="center">
+		<div class="col-md-12"><div id="cargando" style="display:none;">
+			<img src="<?= base_url('assets/images/loading.gif');?>"></div></div>
+	</div>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			$('[id^=finalizar]').hide();
@@ -115,7 +119,10 @@
 			if (respuesta != 3 && form.justificacion.value.split(' ').length < 4)
 				form.justificacion.style.display='';
 			else{
-				form.justificacion.style.display='none';
+				if(respuesta==3){
+					form.justificacion.value="";
+					form.justificacion.style.display='none';
+				}
 				var asignacion = form.asignacion.value;
 				var dominio = form.dominio.value;
 				var justificacion = form.justificacion.value;
@@ -124,11 +131,17 @@
 					url: '<?= base_url("evaluacion/guardar_avanceProyecto");?>',
 					type: 'post',
 					data: {'asignacion':asignacion,'dominio':dominio,'respuesta':respuesta,'justificacion':justificacion},
+					beforeSend: function (xhr) {
+						$('#carousel').hide('slow');
+						$('#cargando').show('slow');
+					},
 					success: function(data){
 						var returnedData = JSON.parse(data);
 						revisar();
 						console.log(returnedData);
 						form.boton.style.display='none';
+						$('#cargando').hide('slow');
+						$('#carousel').show('slow');
 					}
 				});
 			}
@@ -142,13 +155,21 @@
 					url: '<?= base_url("evaluacion/finalizar_evaluacion");?>',
 					type: 'post',
 					data: {'asignacion':asignacion,'tipo':tipo,'comentarios':$('#comentarios').val()},
+					beforeSend: function (xhr) {
+						$('#carousel').hide('slow');
+						$('#cargando').show('slow');
+					},
 					success: function(data){
 						console.log(data);
 						var returnData = JSON.parse(data);
+						$('#cargando').hide('slow');
 						if(returnData['redirecciona'] == "si"){
 							alert(returnData['msg'])
 							location.href="<?= base_url('evaluar');?>";
 						}
+					},
+					error: function(data){
+						console.log(data.status,data.responseText);
 					}
 				});
 		}

@@ -505,11 +505,12 @@ class Evaluacion extends CI_Controller {
         $tipo = $this->input->post('tipo');
         $valor = $this->input->post('valor');
         $elemento = $this->input->post('elemento');
+        $justificacion = $this->input->post('justificacion');
         if($tipo=="responsabilidad"){
-            if($this->evaluacion_model->guardaMetrica($asignacion,$valor,$elemento)) //metrica=valor,obj=elem
+            if($this->evaluacion_model->guardaMetrica($asignacion,$valor,$elemento,$justificacion)) //metrica=valor,obj=elem
                 $response['msg'] = "Métrica Guardada";
         }else{
-            if($this->evaluacion_model->guardaComportamiento($asignacion,$valor,$elemento)) //resp=valor,comp=elem
+            if($this->evaluacion_model->guardaComportamiento($asignacion,$valor,$elemento,$justificacion)) //resp=valor,comp=elem
                 $response['msg'] = "Comportamiento Guardado";
         }
         $this->evaluacion_model->ch_estatus($asignacion);
@@ -590,7 +591,8 @@ class Evaluacion extends CI_Controller {
     }
 
     //estructuras
-    public function revisar($colaborador) {
+    public function revisar($colaborador,$flag) {
+        $data['flag']=$flag;
         $data['colaborador'] = $this->evaluacion_model->getResultadosByColaborador($this->user_model->searchById($colaborador));
         $this->layout->title('Advanzer - Revisión');
         $this->layout->view('evaluacion/revisar',$data);

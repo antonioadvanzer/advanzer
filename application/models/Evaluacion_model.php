@@ -9,6 +9,7 @@ class Evaluacion_model extends CI_Model{
 	}
 
 	function getComportamientoByCompetencia($competencia,$posicion,$asignacion=null) {
+		$this->db->distinct();
 		$this->db->select('C.id,C.descripcion,C.competencia')->from('Comportamientos C');
 		$this->db->join('Comportamiento_Posicion CP','CP.comportamiento = C.id','LEFT OUTER');
 		$this->db->where(array('C.competencia'=>$competencia,'CP.nivel_posicion'=>$posicion));
@@ -17,7 +18,13 @@ class Evaluacion_model extends CI_Model{
 		foreach ($result as $comportamiento) :
 			$res = $this->db->from('Detalle_ev_Competencia')->
 				where(array('asignacion'=>$asignacion,'comportamiento'=>$comportamiento->id))->get();
-			($res->num_rows() == 1) ? $comportamiento->respuesta = $res->first_row()->respuesta : $comportamiento->respuesta = 0;
+			if($res->num_rows() == 1){
+				$comportamiento->respuesta = $res->first_row()->respuesta;
+				$comportamiento->justificacion = $res->first_row()->justificacion;
+			}else{
+				$comportamiento->respuesta = 0;
+				$comportamiento->justificacion = "";
+			}
 		endforeach;
 		return $result;
 	}
@@ -239,7 +246,10 @@ class Evaluacion_model extends CI_Model{
 		//obtener evaluacion360 si es de nivel 3-4-5
 		$posicion=$this->getPosicionByColaborador($colaborador->id);
 		if($posicion >=3 && $posicion <= 5){
-			$jefe=$this->db->select('jefe')->from('Users')->where('id',$colaborador->id)->get()->first_row()->jefe;
+			$jefe=$this->db->select('evaluador')->where(array('evaluado'=>$colaborador->id,'anual'=>1,'evaluacion'=>$evaluacion))
+				->get('Evaluadores');
+			if($jefe->num_rows() ==1)
+				$jefe=$jefe->first_row()->evaluador;
 			$this->db->select('U.id,U.foto,U.nombre,E.id asignacion,E.comentarios')->from('Users U');
 			$this->db->join('Evaluadores E','E.evaluador = U.id');
 			$this->db->join('Evaluaciones Ev','Ev.id = E.evaluacion','LEFT OUTER');
@@ -303,7 +313,8 @@ class Evaluacion_model extends CI_Model{
 	function calculaResultado($asignacion) {
 		$evaluacion=$this->getEvaluacionAnual();
 		$posicion=$this->getPosicionByColaborador($asignacion->evaluado);
-		$jefe=$this->db->select('jefe')->from('Users')->where('id',$asignacion->evaluado)->get()->first_row()->jefe;
+		$jefe=$this->db->select('evaluador')->where(array('evaluado'=>$asignacion->evaluado,'anual'=>1,'evaluacion'=>$evaluacion))
+			->get('Evaluadores')->first_row()->evaluador;
 		$competencia=0;
 		$responsabilidad=0;
 		//si es de gerente a director se evalúa 360
@@ -311,7 +322,7 @@ class Evaluacion_model extends CI_Model{
 			$this->db->select('AVG(RC.total) total360')->from('Resultados_ev_Competencia RC')
 				->join('Evaluadores Ev','Ev.id = RC.asignacion')
 				->where(array('Ev.evaluado'=>$asignacion->evaluado,'Ev.evaluacion'=>$evaluacion,'Ev.evaluador !='=>$jefe,
-				'Ev.evaluador !='=>$asignacion->evaluado,'E.anual'=>0));
+				'Ev.evaluador !='=>$asignacion->evaluado,'Ev.anual'=>0));
 			$res = $this->db->get();
 			if($res->num_rows() == 1)
 				(double)$competencia += (double)($res->first_row()->total360)*0.1;
@@ -366,7 +377,7 @@ class Evaluacion_model extends CI_Model{
 		$res=$this->db->get();
 		if($res->num_rows() == 1)
 			(double)$r_anual = ($res->first_row()->total);
-		(isset($r_proyectos)) ? (double)$responsabilidad = (($r_anual + $r_proyectos)/2)*.7 : (double)$responsabilidad = $r_anual;
+		(isset($r_proyectos)) ? (double)$responsabilidad = (($r_anual + $r_proyectos)/2)*.7 : (double)$responsabilidad = $r_anual*.7;
 
 		(double)$total = $responsabilidad+$competencia;
 		$res = $this->db->where(array('evaluacion'=>$asignacion->evaluacion,'colaborador'=>$asignacion->evaluado))->get('Resultados_Evaluacion');
@@ -491,29 +502,38 @@ class Evaluacion_model extends CI_Model{
 	}
 
 	function getRespuestaByAsignacionResponsabilidad($asignacion,$objetivo) {
-		$result = $this->db->from('Detalle_Evaluacion')->where(array('asignacion'=>$asignacion,'objetivo'=>$objetivo))->get();
+		$result = $this->db->from('Detalle_Evaluacion')->where(array('asignacion'=>$asignacion,'objetivo'=>$objetivo->id))->get();
 		if($result->num_rows() == 1){
 			$id_m = $result->first_row()->metrica;
-			return $this->db->from('Metricas')->where('id',$id_m)->get()->first_row()->valor;
-		}else
-			return 0;
+			$objetivo->respuesta = $this->db->from('Metricas')->where('id',$id_m)->get()->first_row()->valor;
+			$objetivo->justificacion = $result->first_row()->justificacion;
+		}else{
+			$objetivo->respuesta = 0;
+			$objetivo->justificacion="";
+		}
+		return $objetivo;
 	}
 
 	function getEvaluacionByAsignacion($asignacion) {
 		$result = $this->searchAsignacionById($asignacion);
 		$posicion=$this->getPosicionByColaborador($result->evaluado);
-		foreach ($result->indicadores = $this->getIndicadoresByPosicion($posicion) as $indicador) :
+		$result->indicadores = $this->getIndicadoresByPosicion($posicion);
+		$result->total_competencias=count($result->indicadores);
+		$result->total_responsabilidades=0;
+		foreach ($result->indicadores as $indicador) :
 			foreach ($indicador->competencias = $this->getCompetenciasByIndicador($indicador->id,$posicion) as $competencia ) :
 				$competencia->comportamientos = $this->getComportamientoByCompetencia($competencia->id,$posicion,$asignacion);
 			endforeach;
 		endforeach;
 		if($result->anual == 1){
 			$area = $this->getAreaByColaborador($result->evaluado);
-			foreach ($result->dominios=$this->getResponsabilidadByArea($area,$posicion) as $dominio) :
+			$result->dominios=$this->getResponsabilidadByArea($area,$posicion);
+			foreach ($result->dominios as $dominio) :
 				foreach ($dominio->responsabilidades=$this->getObjetivosByDominio($dominio->id,$area,$posicion) as $responsabilidad) :
-					$responsabilidad->respuesta = $this->getRespuestaByAsignacionResponsabilidad($asignacion,$responsabilidad->id);
+					$responsabilidad = $this->getRespuestaByAsignacionResponsabilidad($asignacion,$responsabilidad);
 					$responsabilidad->metricas = $this->getMetricaByObjetivo($responsabilidad->id);
 				endforeach;
+				$result->total_responsabilidades += count($indicador->competencias);
 			endforeach;
 		}
 		return $result;
@@ -537,14 +557,15 @@ class Evaluacion_model extends CI_Model{
 		return $result;
 	}
 
-	function guardaMetrica($asignacion,$metrica,$objetivo) {
+	function guardaMetrica($asignacion,$metrica,$objetivo,$justificacion) {
 		$id_m=$this->db->select('id')->where(array('objetivo'=>$objetivo,'valor'=>$metrica))->get('Metricas')->first_row()->id;
 		$result = $this->db->from('Detalle_Evaluacion')->where(array('objetivo'=>$objetivo,'asignacion'=>$asignacion))->get();
 		if($result->num_rows() == 1){
 			$id_detalle=$result->first_row()->id;
-			$this->db->where('id',$id_detalle)->update('Detalle_Evaluacion',array('metrica'=>$id_m));
+			$this->db->where('id',$id_detalle)->update('Detalle_Evaluacion',array('metrica'=>$id_m,'justificacion'=>$justificacion));
 		}else
-			$this->db->insert('Detalle_Evaluacion',array('asignacion'=>$asignacion,'objetivo'=>$objetivo,'metrica'=>$id_m));
+			$this->db->insert('Detalle_Evaluacion',array('asignacion'=>$asignacion,'objetivo'=>$objetivo,'metrica'=>$id_m,
+				'justificacion'=>$justificacion));
 		if($this->db->affected_rows() == 1)
 			return true;
 		return false;
@@ -563,13 +584,14 @@ class Evaluacion_model extends CI_Model{
 		return false;
 	}
 
-	function guardaComportamiento($asignacion,$respuesta,$comportamiento) {
+	function guardaComportamiento($asignacion,$respuesta,$comportamiento,$justificacion) {
 		$result = $this->db->from('Detalle_ev_Competencia')->where(array('asignacion'=>$asignacion,'comportamiento'=>$comportamiento))->get();
 		if($result->num_rows() == 1){
 			$id_detalle=$result->first_row()->id;
-			$this->db->where('id',$id_detalle)->update('Detalle_ev_Competencia',array('respuesta'=>$respuesta));
+			$this->db->where('id',$id_detalle)->update('Detalle_ev_Competencia',array('respuesta'=>$respuesta,'justificacion'=>$justificacion));
 		}else
-			$this->db->insert('Detalle_ev_Competencia',array('respuesta'=>$respuesta,'asignacion'=>$asignacion,'comportamiento'=>$comportamiento));
+			$this->db->insert('Detalle_ev_Competencia',array('respuesta'=>$respuesta,'asignacion'=>$asignacion,'comportamiento'=>$comportamiento,
+				'justificacion'=>$justificacion));
 		if($this->db->affected_rows() == 1){
 			$this->ch_estatus($asignacion);
 			return true;
@@ -619,7 +641,8 @@ class Evaluacion_model extends CI_Model{
 		$info = $this->searchAsignacionById($asignacion);
 		$posicion = $this->getPosicionByColaborador($info->evaluado);
 		$area = $this->getAreaByColaborador($info->evaluado);
-		$jefe=$this->db->select('jefe')->from('Users')->where('id',$info->evaluado)->get()->first_row()->jefe;
+		$jefe=$this->db->select('evaluador')->where(array('evaluado'=>$info->evaluado,'anual'=>1,'evaluacion'=>$info->evaluacion))
+			->get('Evaluadores')->first_row()->evaluador;
 		switch ($tipo) { //tipo 1 = anual
 			case 1:
 				if($jefe == $info->evaluador) { //si el evaluador es el jefe, guarda las responsabilidades
@@ -656,7 +679,7 @@ class Evaluacion_model extends CI_Model{
 			if($diferencia->format('%R') == '+'):
 				$jefe=$this->db->select('jefe')->from('Users')->where('id',$colaborador->id)->get()->first_row()->jefe;
 				if($colaborador->id != $jefe)
-					$this->evaluacion_model->addEvaluadorToColaborador(array('evaluador'=>$jefe,
+					$this->addEvaluadorToColaborador(array('evaluador'=>$jefe,
                     	'evaluado'=>$colaborador->id,'evaluacion'=>$evaluacion));
 				$this->db->where(array('evaluador'=>$jefe,'evaluado'=>$colaborador->id,'evaluacion'=>$evaluacion))->update('Evaluadores',
 					array('anual'=>1));
