@@ -41,6 +41,7 @@
 					<?php else: ?>
 						<label><span class="glyphicon glyphicon glyphicon-remove"></span></label>
 					<?php endif; ?></div>
+					<label>Autoevaluación: <?= number_format($colaborador->autoevaluacion,2);?></label>
 				</div>
 			</div>
 			<div class="col-md-4">
@@ -61,23 +62,37 @@
 					<label for="nombre">FeedBack:</label>
 					<select id="feedback" class="form-control" style="max-width:300px" required>
 						<option selected disabled value="">-- Asigna al FeedBack --</option>
-						<option value="<?= $colaborador->feedback->feedbacker;?>" selected><?= $colaborador->feedback->nombre;?></option>
-						<?php foreach ($colaborador->evaluadores as $evaluador) : 
-							if($colaborador->feedback->feedbacker != $evaluador->id): ?>
-								<option value="<?= $evaluador->id;?>" <?php if($colaborador->feedback && $evaluador->id == $colaborador->feedback->feedbacker) echo "selected";?>>
-									<?= $evaluador->nombre;?></option>
+						<?php if(isset($colaborador->feedback)): ?>
+							<option value="<?= $colaborador->feedback->feedbacker;?>" selected><?= $colaborador->feedback->nombre;?></option>
+						<?php endif;
+						foreach ($colaborador->evaluadores as $evaluador) :
+							if(isset($colaborador->feedback->feedbacker)):
+								if($colaborador->feedback->feedbacker != $evaluador->id): ?>
+									<option value="<?= $evaluador->id;?>" <?php if($colaborador->feedback && $evaluador->id == $colaborador->feedback->feedbacker) echo "selected";?>>
+										<?= $evaluador->nombre;?></option>
+								<?php endif; 
+							else: ?> 
+								<option value="<?= $evaluador->id;?>"><?= $evaluador->nombre;?></option>
 							<?php endif;
 						endforeach; ?>
 						<?php foreach ($colaborador->evaluadores360 as $evaluador) :
-							if($colaborador->feedback->feedbacker != $evaluador->id): ?>
-								<option value="<?= $evaluador->id;?>" <?php if($colaborador->feedback && $evaluador->id == $colaborador->feedback->feedbacker) echo "selected";?>>
+							if(isset($colaborador->feedback->feedbacker)):
+								if($colaborador->feedback->feedbacker != $evaluador->id): ?>
+									<option value="<?= $evaluador->id;?>" <?php if($colaborador->feedback && $evaluador->id == $colaborador->feedback->feedbacker) echo "selected";?>>
 									<?= $evaluador->nombre;?></option>
+								<?php endif;
+							else: ?>
+								<option value="<?= $evaluador->id;?>"><?= $evaluador->nombre;?></option>
 							<?php endif;
 						endforeach; ?>
 						<?php foreach ($colaborador->evaluadoresProyecto as $evaluador) :
-							if($colaborador->feedback->feedbacker != $evaluador->id): ?>
-								<option value="<?= $evaluador->id;?>" <?php if($colaborador->feedback && $evaluador->id == $colaborador->feedback->feedbacker) echo "selected";?>>
+							if(isset($colaborador->feedback->feedbacker)):
+								if($colaborador->feedback->feedbacker != $evaluador->id): ?>
+									<option value="<?= $evaluador->id;?>" <?php if($colaborador->feedback && $evaluador->id == $colaborador->feedback->feedbacker) echo "selected";?>>
 									<?= $evaluador->nombre;?></option>
+								<?php endif;
+							else: ?>
+								<option value="<?= $evaluador->id;?>"><?= $evaluador->nombre;?></option>
 							<?php endif;
 						endforeach; ?>
 					</select>
@@ -101,7 +116,7 @@
 					data-striped="true" data-show-toggle="true" data-show-export="true">
 					<thead>
 						<tr>
-							<?php if($flag == false): ?>
+							<?php if($flag == true): ?>
 								<th data-halign="center" data-field="foto"></th>
 								<th class="col-md-4" data-halign="center" data-field="evaluador">Evaluador</th>
 							<?php endif; ?>
@@ -114,7 +129,7 @@
 					<tbody>
 						<?php foreach ($colaborador->evaluadores as $evaluador):?>
 							<tr>
-								<?php if($flag == false): ?>
+								<?php if($flag == true): ?>
 									<td><img height="25px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></td>
 									<td><?= $evaluador->nombre;?></td>
 								<?php endif; ?>
@@ -135,7 +150,7 @@
 					data-striped="true" data-show-toggle="true" data-show-export="true">
 					<thead>
 						<tr>
-							<?php if($flag == false): ?>
+							<?php if($flag == true): ?>
 								<th data-halign="center" data-field="foto"></th>
 								<th class="col-md-4" data-halign="center" data-field="evaluador">Evaluador 360</th>
 							<?php endif; ?>
@@ -146,7 +161,7 @@
 					<tbody>
 						<?php foreach ($colaborador->evaluadores360 as $evaluador):?>
 							<tr>
-								<?php if($flag == false): ?>
+								<?php if($flag == true): ?>
 									<td><img height="25px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></td>
 									<td><?= $evaluador->nombre;?></td>
 								<?php endif; ?>
@@ -164,7 +179,7 @@
 					data-striped="true" data-show-toggle="true" data-show-export="true">
 					<thead>
 						<tr>
-							<?php if($flag == false): ?>
+							<?php if($flag == true): ?>
 								<th data-halign="center" data-field="foto"></th>
 								<th class="col-md-4" data-halign="center" data-field="evaluador">Líder de Proyecto</th>
 							<?php endif; ?>
@@ -176,7 +191,7 @@
 					<tbody>
 						<?php foreach ($colaborador->evaluadoresProyecto as $evaluador):?>
 							<tr>
-								<?php if($flag == false): ?>
+								<?php if($flag == true): ?>
 									<td><img height="25px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></td>
 									<td><?= $evaluador->nombre;?></td>
 								<?php endif; ?>

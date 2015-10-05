@@ -118,6 +118,12 @@ class Evaluacion extends CI_Controller {
         echo json_encode($response);
     }
 
+    public function ci() {
+        $data['colaboradores'] = $this->evaluacion_model->getEvaluados();
+        $this->layout->title('Advanzer - Compromisos Internos');
+        $this->layout->view('evaluacion/ci',$data);
+    }
+
     //validaciones
     private function genera_autoevaluacion($colaborador) {
         $evaluacion = $this->evaluacion_model->getEvaluacionAnual();
@@ -130,6 +136,15 @@ class Evaluacion extends CI_Controller {
     }
 
     //procesos ajax carga/consulta info
+    public function asigna_ci() {
+        $colaborador = $this->input->post('colaborador');
+        $valor = $this->input->post('valor');
+        $tipo = $this->input->post('tipo');
+        if($this->evaluacion_model->asigna_ci($colaborador,$valor,$tipo))
+            $response['msg']="ok";
+        echo json_encode($response);
+    }
+
     public function asigna_rating() {
         $response['msg'] = "Error al asignar rating. Intenta de nuevo";
         $colaborador = $this->input->post('colaborador');

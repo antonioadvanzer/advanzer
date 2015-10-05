@@ -8,6 +8,12 @@ class Evaluacion_model extends CI_Model{
 		parent::__construct();
 	}
 
+	/*function getCompromisosInternos() {
+		foreach ($this->getEvaluados() as $colaborador) :
+			
+		endforeach;
+	}*/
+
 	function getComportamientoByCompetencia($competencia,$posicion,$asignacion=null) {
 		$this->db->distinct();
 		$this->db->select('C.id,C.descripcion,C.competencia')->from('Comportamientos C');
@@ -223,6 +229,23 @@ class Evaluacion_model extends CI_Model{
 	function updateFeedbacker($where,$datos) {
 		$res = $this->db->where($where)->get('Resultados_Evaluacion')->first_row();
 		$this->db->where('resultado',$res->id)->update('Feedbacks',$datos);
+	}
+
+	function asigna_ci($colaborador,$valor,$field) {
+		$evaluacion=$this->getEvaluacionAnual();
+		if($valor == "true")
+			$valor="SI";
+		else
+			$valor="NO";
+		$res =$this->db->where(array('colaborador'=>$colaborador,'evaluacion'=>$evaluacion))->get('Resultados_Evaluacion');
+		if($res->num_rows() == 1){
+			$resultado = $res->first_row()->id;
+			$this->db->where('id',$resultado)->update('Resultados_Evaluacion',array($field=>$valor));
+		}else
+			$this->db->insert('Resultados_Evaluacion',array('evaluacion'=>$evaluacion,'colaborador'=>$colaborador,"$field"=>$valor));
+		if($this->db->affected_rows() == 1)
+			return true;
+		return false;
 	}
 
 	function getResultadosByColaborador($colaborador) {
