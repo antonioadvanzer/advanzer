@@ -80,7 +80,7 @@
 			<div id="navbar" class="navbar-collapse collapse" aria-expanded="false" style="height: 1px;">
 				<ul class="nav navbar-nav">
 					<?php if($this->session->userdata('id') != ""):
-							//if($this->session->userdata('tipo') > 1 || $this->session->userdata('posicion') <= 3): ?>
+							//if($this->session->userdata('tipo') > 3 || $this->session->userdata('posicion') <= 3): ?>
 							<li class="dropdown">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
 									Administración<span class="caret"></span></a>
@@ -89,7 +89,7 @@
 										<ul class="dropdown-menu">
 											<?php //if($this->session->userdata('posicion') <= 3): ?>
 												<li><a href="<?= base_url('objetivo/asignar_pesos');?>">Responsabilidades Por Área</a></li>
-											<?php //endif; if($this->session->userdata('tipo') > 1): ?>
+											<?php //endif; if($this->session->userdata('tipo') > 3): ?>
 												<li><a href="<?= base_url('evaluacion');?>">Evaluaciones</a></li>
 												<li><a href="<?= base_url('evaluacion/index/true');?>">Evaluaciones Confidencial</a></li>
 												<li><a href="<?= base_url('evaluacion/por_evaluador');?>">Evaluaciones por Evaluador</a></li>
@@ -97,7 +97,7 @@
 											<?php //endif;?>
 										</ul>
 									</li>
-									<?php //if($this->session->userdata('tipo') > 1): ?>
+									<?php //if($this->session->userdata('tipo') > 3): ?>
 										<li role="separator" class="divider"></li>
 										<li class="dropdown-submenu"><a tabindex="-1" href="#">ABC</a>
 											<ul class="dropdown-menu">
@@ -119,9 +119,10 @@
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
 								Servicios<span class="caret"></span></a>
 							<ul class="dropdown-menu">
-								<?php //if($this->session->userdata('tipo') == 1 || $this->session->userdata('tipo') == 3) ?>
+								<?php //if($this->session->userdata('tipo') == 3 || $this->session->userdata('tipo') == 5) ?>
 								<li><a href="<?= base_url('requisiciones');?>">Requisiciones</a></li>
 								<li><a href="<?= base_url('evaluar');?>">Evaluaciones</a></li>
+								<li><a href="<?= base_url('evaluacion/ci');?>">Compromisos Internos</a></li>
 							</ul>
 						</li>
 						<!--
@@ -172,14 +173,4 @@
 	</footer>
 	</div> <!-- /container -->
 </body>
-<script type="text/javascript">
-$(document).ready(function() {
-    setTimeout(function() {
-        $("#alert").fadeOut(1500);
-    },3000);
-    setTimeout(function() {
-        $("#alert_success").fadeOut(1500);
-    },3000);
-});
-</script>
 </html>

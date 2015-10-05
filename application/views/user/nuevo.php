@@ -7,17 +7,18 @@
 <div class="container">
   <div class="row" align="center">
 	<a href="<?= base_url('administrar_usuarios');?>">&laquo;Regresar</a>
-	<div class="col-md-12" align="center">
-	  	<div class="form-group">
-		  <div align="center">
-			<div id="alert" style="display:none" class="alert alert-danger" role="alert" style="max-width:400px;">
-		      <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-		      <span class="sr-only">Error:</span>
-		      <label id="msg"></label>
-		    </div>
-		  </div>
-		</div>
+	<div id="alert" style="display:none" class="alert alert-danger" role="alert" style="max-width:400px;">
+		<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+		<span class="sr-only">Error:</span>
+		<label id="msg"></label>
 	</div>
+  </div>
+  <hr>
+  <div class="row" align="center">
+	<div class="col-md-12"><div id="cargando" style="display:none; color: green;">
+		<img src="<?= base_url('assets/images/loading.gif');?>"></div></div>
+  </div>
+  <div class="row" align="center">
 	<form id="create" role="form" method="post" action="javascript:" class="form-signin">
 	  <div class="col-md-4">
 		  <div class="form-group">
@@ -101,9 +102,11 @@
 			<label for="tipo">Tipo de Acceso:</label>
 			<select class="form-control" style="max-width:300px; text-align:center;" id="tipo">
 				<option value="0">Colaborador</option>
-				<option value="1">Requisiciones</option>
-				<option value="2">Administrador</option>
-				<option value="3">Requisiciones y Administrador</option>
+				<option value="1">Capturista (Gastos de Viaje)</option>
+				<option value="2">Capturista (Harvest)</option>
+				<option value="3">Requisiciones</option>
+				<option value="4">Administrador</option>
+				<option value="5">Requisiciones y Administrador</option>
 			</select>
 		  </div>
 	  </div>
@@ -148,15 +151,34 @@
 					data: {'nombre':nombre,'email':email,'empresa':empresa,'jefe':jefe,'plaza':plaza,
 						'track':track,'posicion':posicion,'area':area,'ingreso':ingreso,'nomina':nomina,
 						'categoria':categoria,'tipo':tipo},
+					beforeSend: function() {
+						$('#create').hide('slow');
+						$('#cargando').show('slow');
+					},
 					success: function(data){
 						var returnedData = JSON.parse(data);
 						console.log(returnedData['msg']);
 						if(returnedData['msg']=="ok")
 							window.document.location='<?= base_url("user/ver");?>/'+returnedData['id'];
 						else{
-							$('#alert').prop('display',true).show();
+							$('#cargando').hide('slow');
+							$('#create').show('slow');
+							$('#alert').prop('display',true).show('slow');
 							$('#msg').html(returnedData['msg']);
+							setTimeout(function() {
+								$("#alert").fadeOut(1500);
+							},3000);
 						}
+					},
+					error: function(xhr) {
+						console.log(xhr);
+						$('#cargando').hide('slow');
+						$('#create').show('slow');
+						$('#alert').prop('display',true).show('slow');
+						$('#msg').html('Error, intenta de nuevo o contacta al Administrador de la Aplicación');
+						setTimeout(function() {
+							$("#alert").fadeOut(1500);
+						},3000);
 					}
 				});
 			else

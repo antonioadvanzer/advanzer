@@ -591,7 +591,7 @@ class Evaluacion extends CI_Controller {
     }
 
     //estructuras
-    public function revisar($colaborador,$flag) {
+    public function revisar($colaborador,$flag=false) {
         $data['flag']=$flag;
         $data['colaborador'] = $this->evaluacion_model->getResultadosByColaborador($this->user_model->searchById($colaborador));
         $this->layout->title('Advanzer - Revisión');

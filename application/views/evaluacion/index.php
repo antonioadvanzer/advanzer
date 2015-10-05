@@ -47,11 +47,11 @@
                   <?php if($flag == false): ?><div class="col-sm-5"><small><b>Evaluador</b></small></div><?php endif; ?>
                 </div>
                 <?php foreach ($colab->evaluadores as $evaluador) : ?>
-                  <div class="row" align="center" title="Comentarios: <?= $evaluador->comentarios;?>">
+                  <div class="row" align="center">
                     <div class="col-sm-2"><small><?= number_format($evaluador->total,2);?></small></div>
                     <div class="col-sm-3"><small><?= number_format($evaluador->responsabilidad,2);?></small></div>
                     <div class="col-sm-2"><small><?= number_format($evaluador->competencia,2);?></small></div>
-                    <?php if($flag == false): ?><div class="col-sm-5" title="<?= $evaluador->comentarios;?>">
+                    <?php if($flag == false): ?><div class="col-sm-5" title="Comentarios: <?= $evaluador->comentarios;?>">
                       <img style="float:left" height="30px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"> 
                       <small><?= $evaluador->nombre;?></small></div><?php endif; ?>
                   </div>
@@ -64,9 +64,10 @@
                   <?php if($flag == false): ?><div class="col-sm-9"><small><b>Evaluador 360</b></small></div><?php endif;?>
                 </div>
                 <?php foreach ($colab->evaluadores360 as $evaluador) : ?>
-                  <div class="row" align="center" title="Comentarios: <?= $evaluador->comentarios;?>">
+                  <div class="row" align="center">
                     <div class="col-sm-3"><small><?= number_format($evaluador->competencia,2);?></small></div>
-                    <?php if($flag == false): ?><div class="col-sm-9"><small><img style="float:left" height="30px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"> 
+                    <?php if($flag == false): ?><div class="col-sm-9" title="Comentarios: <?= $evaluador->comentarios;?>">
+                      <small><img style="float:left" height="30px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"> 
                       <?= $evaluador->nombre;?></small></div><?php endif; ?>
                   </div>
                 <?php endforeach; ?>
@@ -79,10 +80,11 @@
                   <?php if($flag == false): ?><div class="col-sm-6"><small><b>Evaluador</b></small></div><?php endif; ?>
                 </div>
                 <?php foreach ($colab->evaluadoresProyecto as $evaluador) : ?>
-                  <div class="row" align="center" title="Comentarios: <?= $evaluador->comentarios;?>">
+                  <div class="row" align="center">
                     <div class="col-sm-2"><small><?= number_format($evaluador->responsabilidad,2);?></small></div>
                     <div class="col-sm-4"><small><?= $evaluador->evaluacion;?></small></div>
-                    <?php if($flag == false): ?><div class="col-sm-6"><img style="float:left" height="30px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"> 
+                    <?php if($flag == false): ?><div class="col-sm-6" title="Comentarios: <?= $evaluador->comentarios;?>">
+                      <img style="float:left" height="30px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"> 
                       <small><?= $evaluador->nombre;?></small></div><?php endif;?>
                   </div>
                 <?php endforeach; ?>

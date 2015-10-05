@@ -7,7 +7,19 @@
 <div class="container">
   <div align="center" class="row">
   	<a href="<?= base_url('administrar_usuarios');?>">&laquo;Regresar</a>
-	<form id="update_foto" role="form" method="post" enctype="multipart/form-data" action="<?= base_url('user/upload_photo');?>" class="form-signin">
+  	<div id="alert" style="display:none" class="alert alert-danger" role="alert" style="max-width:400px;">
+		<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+		<span class="sr-only">Error:</span>
+		<label id="msg"></label>
+	</div>
+  </div>
+  <hr>
+  <div class="row" align="center">
+  	<div class="col-md-12"><div id="cargando" style="display:none; color: green;">
+  		<img src="<?= base_url('assets/images/loading.gif');?>"></div></div>
+  </div>
+  <div class="row" align="center">
+  	<form id="update_foto" role="form" method="post" enctype="multipart/form-data" action="<?= base_url('user/upload_photo');?>" class="form-signin">
 		<input type="hidden" id="id" name="id" value="<?= $user->id;?>">
 	  <div class="col-md-6">
 		  <div class="form-group">
@@ -116,9 +128,11 @@
 			<label for="tipo">Tipo de Acceso:</label>
 			<select class="form-control" style="max-width:300px; text-align:center;" id="tipo">
 				<option value="0" <?php if($user->tipo == 0) echo "selected"; ?>>Colaborador</option>
-				<option value="1" <?php if($user->tipo == 1) echo "selected"; ?>>Requisiciones</option>
-				<option value="2" <?php if($user->tipo == 2) echo "selected"; ?>>Administrador</option>
-				<option value="3" <?php if($user->tipo == 3) echo "selected"; ?>>Requisiciones y Administrador</option>
+				<option value="1" <?php if($user->tipo == 1) echo "selected"; ?>>Capturista (Gastos de Viaje)</option>
+				<option value="2" <?php if($user->tipo == 2) echo "selected"; ?>>Capturista (Harvest)</option>
+				<option value="3" <?php if($user->tipo == 3) echo "selected"; ?>>Requisiciones</option>
+				<option value="4" <?php if($user->tipo == 4) echo "selected"; ?>>Administrador</option>
+				<option value="5" <?php if($user->tipo == 5) echo "selected"; ?>>Requisiciones y Administrador</option>
 			</select>
 		</div>
 	  </div>
@@ -139,17 +153,6 @@
 	  </div>
 	</div>
   </form>
-  <div class="col-md-12" align="center">
-  	<div class="form-group">
-	  <div align="center">
-		<div id="alert" style="display:none" class="alert alert-danger" role="alert" style="max-width:400px;">
-	      <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-	      <span class="sr-only">Error:</span>
-	      <label id="msg"></label>
-	    </div>
-	  </div>
-	</div>
-  </div>
   <form id="recision" style="display:none" role="form" method="post" action="javascript:" class="form-signin">
 	  <div class="row" align="center">
 	  	<div class="col-md-4">
@@ -242,15 +245,37 @@
 				data: {'id':id,'nombre':nombre,'email':email,'empresa':empresa,'jefe':jefe,'plaza':plaza,
 					'track':track,'posicion':posicion,'area':area,'ingreso':ingreso,'nomina':nomina,
 					'categoria':categoria,'tipo':tipo},
+				beforeSend: function() {
+					$('#update').hide('slow');
+					$('#update_foto').hide('slow');
+					$('#cargando').show('slow');
+				},
 				success: function(data){
 					var returnedData = JSON.parse(data);
 					console.log(returnedData['msg']);
 					if(returnedData['msg']=="ok")
 						window.document.location='<?= base_url("administrar_usuarios");?>';
 					else{
-						$('#alert').prop('display',true).show();
+						$('#cargando').hide('slow');
+						$('#update_foto').show('slow');
+						$('#update').show('slow');
+						$('#alert').prop('display',true).show('slow');
 						$('#msg').html(returnedData['msg']);
+						setTimeout(function() {
+							$("#alert").fadeOut(1500);
+						},3000);
 					}
+				},
+				error: function(xhr) {
+					console.log(xhr);
+					$('#cargando').hide('slow');
+					$('#update_foto').show('slow');
+					$('#update').show('slow');
+					$('#alert').prop('display',true).show('slow');
+					$('#msg').html('Error, intenta de nuevo o contacta al Administrador de la Aplicación');
+					setTimeout(function() {
+						$("#alert").fadeOut(1500);
+					},3000);
 				}
 			});
 
@@ -268,15 +293,34 @@
 				url: '<?= base_url("user/recision");?>',
 				type: 'post',
 				data: {'id':id,'fecha_baja':fecha_baja,'tipo_baja':tipo_baja,'motivo':motivo},
+				beforeSend: function() {
+					$('#recision').hide('slow');
+					$('#cargando').show('slow');
+				},
 				success: function(data){
 					var returnedData = JSON.parse(data);
 					console.log(returnedData['msg']);
 					if(returnedData['msg']=="ok")
 						window.document.location='<?= base_url("administrar_usuarios");?>';
 					else{
-						$('#alert').prop('display',true).show();
+						$('#cargando').hide('slow');
+						$('#recision').show('slow');
+						$('#alert').prop('display',true).show('slow');
 						$('#msg').html(returnedData['msg']);
+						setTimeout(function() {
+							$("#alert").fadeOut(1500);
+						},3000);
 					}
+				},
+				error: function(xhr) {
+					console.log(xhr);
+					$('#cargando').hide('slow');
+					$('#recision').show('slow');
+					$('#alert').prop('display',true).show('slow');
+					$('#msg').html('Error, intenta de nuevo o contacta al Administrador de la Aplicación');
+					setTimeout(function() {
+						$("#alert").fadeOut(1500);
+					},3000);
 				}
 			});
 
@@ -290,15 +334,34 @@
 				url: '<?= base_url("user/rehab");?>',
 				type: 'post',
 				data: {'id':id,'reingreso':reingreso},
+				beforeSend: function() {
+					$('#rehab').hide('slow');
+					$('#cargando').show('slow');
+				},
 				success: function(data){
 					var returnedData = JSON.parse(data);
 					console.log(returnedData['msg']);
 					if(returnedData['msg']=="ok")
 						window.document.location='<?= base_url("administrar_usuarios");?>';
 					else{
-						$('#alert').prop('display',true).show();
+						$('#cargando').hide('slow');
+						$('#rehab').show('slow');
+						$('#alert').prop('display',true).show('slow');
 						$('#msg').html(returnedData['msg']);
+						setTimeout(function() {
+							$("#alert").fadeOut(1500);
+						},3000);
 					}
+				},
+				error: function(xhr) {
+					console.log(xhr);
+					$('#cargando').hide('slow');
+					$('#rehab').show('slow');
+					$('#alert').prop('display',true).show('slow');
+					$('#msg').html('Error, intenta de nuevo o contacta al Administrador de la Aplicación');
+					setTimeout(function() {
+						$("#alert").fadeOut(1500);
+					},3000);
 				}
 			});
 
