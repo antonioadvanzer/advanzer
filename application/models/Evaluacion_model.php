@@ -229,6 +229,8 @@ class Evaluacion_model extends CI_Model{
 	function updateFeedbacker($where,$datos) {
 		$res = $this->db->where($where)->get('Resultados_Evaluacion')->first_row();
 		$this->db->where('resultado',$res->id)->update('Feedbacks',$datos);
+		if($this->db->affected_rows() == 0)
+			$this->db->insert('Feedbacks',array('resultado'=>$res->id,'feedbacker'=>$datos['feedbacker']));
 	}
 
 	function asigna_ci($colaborador,$valor,$field) {
@@ -259,8 +261,12 @@ class Evaluacion_model extends CI_Model{
 			$colaborador->cumple_cv = $res->first_row()->cumple_cv;
 			$res = $this->db->select('F.id,F.estatus,F.feedbacker,F.contenido,U.nombre')->from('Feedbacks F')
 				->join('Users U','U.id = F.feedbacker')
-				->where(array('F.resultado'=>$res->first_row()->id))->get();
-			($res->num_rows() == 1) ? $colaborador->feedback = $res->first_row() : $colaborador->feedback = null;
+				->where('F.resultado',$res->first_row()->id)->get();
+			if($res->num_rows() == 0){
+				$jefe=$this->db->select('jefe')->from('Users')->where('id',$colaborador->id)->get()->first_row()->jefe;
+				$res = $this->db->select('id feedbacker,nombre')->where('id',$jefe)->get('Users');
+			}
+			$colaborador->feedback = $res->first_row();
 		}else{
 			$colaborador->rating = null;
 			$colaborador->total = 0;
@@ -719,8 +725,7 @@ class Evaluacion_model extends CI_Model{
 	}
 
 	function getEvaluacionAnual() {
-		$result = $this->db->where_in('estatus',array(1,2))->where(array('tipo'=>1,'inicio <='=>date('Y-m-d'),'fin >='=>date('Y-m-d')))
-			->get('Evaluaciones');
+		$result = $this->db->select('MAX(id) id')->where_in('estatus',array(1,2))->where('tipo',1)->get('Evaluaciones');
 		if($result->num_rows() != 0)
 			return $result->first_row()->id;
 		return false;

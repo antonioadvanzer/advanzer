@@ -13,6 +13,10 @@
 		</div>
 	</div>
 	<div align="center"><a href="<?= base_url("evaluacion/index/$flag");?>">&laquo;Regresar</a></div>
+	<div class="row" align="center">
+		<div class="col-md-12"><div id="cargando" style="display:none; color: green;">
+			<img src="<?= base_url('assets/images/loading.gif');?>"></div></div>
+	</div>
 	<hr>
 	<form id="save" class="form-signin" role="form" method="post" action="javascript:">
 		<div class="row" align="center">
@@ -242,18 +246,34 @@
 				url: '<?= base_url("evaluacion/asigna_rating");?>',
 				type: 'POST',
 				data: {'colaborador':colaborador,'rating':rating,'feedback':feedback},
+				beforeSend: function() {
+					$('#save').hide('slow');
+					$('#cargando').show('slow');
+				},
 				success: function(data) {
 					console.log(data);
 					var returnData = JSON.parse(data);
 					if(returnData['msg'] == "ok")
-						window.document.location = "<?= base_url('evaluacion');?>";
+						window.document.location = '<?= base_url("evaluacion/index/$flag");?>';
 					else{
+						$('#cargando').hide('slow');
+						$('#save').show('slow');
 						$('#alert').prop('display',true).show();
 						$('#msg').html(returnData['msg']);
 						setTimeout(function() {
 							$("#alert").fadeOut(1500);
 						},3000);
 					}
+				},
+				error: function(xhr) {
+					console.log(xhr.responseText);
+					$('#cargando').hide('slow');
+					$('#save').show('slow');
+					$('#alert').prop('display',true).show('slow');
+					$('#msg').html('Error, intenta de nuevo o contacta al Administrador de la Aplicación');
+					setTimeout(function() {
+						$("#alert").fadeOut(1500);
+					},3000);
 				}
 			});
 

@@ -59,8 +59,8 @@
 							<?php endif;
 							if(isset($colab->evaluadores360) && count($colab->evaluadores360) > 0): ?>
 								<div class="row" align="center">
-									<div class="col-sm-3"><small><b>Resultado</b></small></div><?php if($flag == false): ?>
-										<div class="col-sm-9"><small><b>Evaluador 360</b></small></div><?php endif;?>
+									<div class="col-sm-3"><small><b>Resultado</b></small></div>
+									<?php if($flag == true): ?><div class="col-sm-9"><small><b>Evaluador 360</b></small></div><?php endif;?>
 								</div>
 								<?php foreach ($colab->evaluadores360 as $evaluador) : ?>
 									<div class="row" align="center">
@@ -90,8 +90,9 @@
 								<hr>
 							<?php endif; ?></td>
 							<td><small><?php if($colab->feedback){ echo$colab->feedback->nombre." <i>("; 
-								if($colab->feedback->estatus == 0) echo"Pendiente"; 
-								elseif($colab->feedback->estatus == 1) echo"Enviado"; else echo"Enterado"; echo")</i>";}?></small></td>
+								if(isset($colab->feedback->estatus))
+									if($colab->feedback->estatus == 0) echo"Pendiente"; 
+									elseif($colab->feedback->estatus == 1) echo"Enviado"; else echo"Enterado"; echo")</i>";}?></small></td>
 						</tr>
 					<?php endforeach; ?>
 				</tbody>
