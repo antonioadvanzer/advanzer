@@ -230,7 +230,7 @@ class Evaluacion_model extends CI_Model{
 
 	function getEvaluacionesByEvaluador($evaluador) {
 		$evaluacion=$result = $this->db->select('MAX(id) id, estatus')->where('tipo',1)->get('Evaluaciones');
-		if($evaluacion->num_rows() == 1 && $evaluacion->first_row()->estatus != 2){
+		if($evaluacion->num_rows() == 1 && $evaluacion->first_row()->estatus == 2){
 			$evaluacion = $evaluacion->first_row()->id;
 			redirect("evaluacion/defineFeedback/$evaluacion");
 		}
