@@ -60,7 +60,9 @@
 					<tbody data-link="row">
 						<?php foreach ($propias as $colab):?>
 							<tr>
-								<td><a href="<?= base_url("evaluacion/update_feedback/$colab->feedback/true");?>">
+								<td><?php if($colab->estatus_f!=0): ?>
+										<a href="<?= base_url("evaluacion/update_feedback/$colab->feedback/true");?>">
+									<?php endif; ?>
 									<img height="25px" src="<?= base_url('assets/images/fotos')."/".$colab->foto;?>"></a></td>
 								<td><small><?= $colab->nombre;?></small></td>
 								<td><small><?= substr($colab->contenido,0,50)."...";?></small></td>
