@@ -189,18 +189,61 @@ class Evaluacion_model extends CI_Model{
 		return $this->db->where('estatus',1)->count_all_results('Users');
 	}
 
+	function getInfoFeedback($id,$flag) {
+		if($flag==true)
+			$this->db->join('Users U','U.id = F.feedbacker');
+		else
+			$this->db->join('Users U','U.id = RE.colaborador');
+		$this->db->select('F.id,F.contenido,F.estatus,U.nombre,U.foto,RE.rating')->from('Feedbacks F')
+			->join('Resultados_Evaluacion RE','RE.id = F.resultado')
+			->where('F.id',$id);
+		return $this->db->get()->first_row();
+	}
+
+	function getFeedbacksByColaborador($evaluacion,$colaborador) {
+		$this->db->select('U.id,U.foto,U.nombre,F.id feedback,F.estatus estatus_f,F.contenido')
+			->from('Resultados_Evaluacion RE')
+			->join('Feedbacks F','RE.id = F.resultado')
+			->join('Users U','U.id = F.feedbacker')
+			->join('Areas A','A.id = U.area','LEFT OUTER')
+			->join('Posicion_Track PT','PT.id = U.posicion_track','LEFT OUTER')
+			->join('Posiciones P','P.id = PT.posicion','LEFT OUTER')
+			->join('Tracks T','T.id = PT.track','LEFT OUTER')
+			->where(array('RE.colaborador'=>$colaborador,'RE.evaluacion'=>$evaluacion,'U.estatus'=>1))
+			->order_by('F.estatus,U.nombre');
+		return $this->db->get()->result();
+	}
+
+	function getFeedbacksByEvaluador($evaluacion,$evaluador) {
+		$this->db->select('U.id,U.foto,U.nombre,A.nombre area,P.nombre posicion,RE.rating,T.nombre track,F.id feedback,F.estatus estatus_f')
+			->from('Resultados_Evaluacion RE')
+			->join('Feedbacks F','RE.id = F.resultado')
+			->join('Users U','U.id = RE.colaborador')
+			->join('Areas A','A.id = U.area','LEFT OUTER')
+			->join('Posicion_Track PT','PT.id = U.posicion_track','LEFT OUTER')
+			->join('Posiciones P','P.id = PT.posicion','LEFT OUTER')
+			->join('Tracks T','T.id = PT.track','LEFT OUTER')
+			->where(array('F.feedbacker'=>$evaluador,'RE.evaluacion'=>$evaluacion,'U.estatus'=>1))
+			->order_by('F.estatus,U.nombre');
+		return $this->db->get()->result();
+	}
+
 	function getEvaluacionesByEvaluador($evaluador) {
+		$evaluacion=$result = $this->db->select('MAX(id) id, estatus')->where('tipo',1)->get('Evaluaciones');
+		if($evaluacion->num_rows() == 1 && $evaluacion->first_row()->estatus != 2){
+			$evaluacion = $evaluacion->first_row()->id;
+			redirect("evaluacion/defineFeedback/$evaluacion");
+		}
 		$this->db->select('U.id,U.foto,U.nombre,U.nomina,A.nombre area,P.nombre posicion,Ev.nombre evaluacion,E.estatus,E.id asignacion,
-			Ev.inicio,Ev.fin,Ev.tipo');
-		$this->db->from('Users U');
-		$this->db->join('Areas A','A.id = U.area','LEFT OUTER');
-		$this->db->join('Posicion_Track PT','PT.id = U.posicion_track','LEFT OUTER');
-		$this->db->join('Posiciones P','P.id = PT.posicion','LEFT OUTER');
-		$this->db->join('Tracks T','T.id = PT.track','LEFT OUTER');
-		$this->db->join('Evaluadores E','E.evaluado = U.id','LEFT OUTER');
-		$this->db->join('Evaluaciones Ev','Ev.id = E.evaluacion','LEFT OUTER');
-		$this->db->where(array('E.evaluador'=>$evaluador,'U.estatus'=>1));
-		$this->db->order_by('E.estatus,Ev.nombre,U.nombre');
+			Ev.inicio,Ev.fin,Ev.tipo,Ev.estatus estatus_ev,T.nombre track')->from('Users U')
+			->join('Areas A','A.id = U.area','LEFT OUTER')
+			->join('Posicion_Track PT','PT.id = U.posicion_track','LEFT OUTER')
+			->join('Posiciones P','P.id = PT.posicion','LEFT OUTER')
+			->join('Tracks T','T.id = PT.track','LEFT OUTER')
+			->join('Evaluadores E','E.evaluado = U.id','LEFT OUTER')
+			->join('Evaluaciones Ev','Ev.id = E.evaluacion','LEFT OUTER')
+			->where(array('E.evaluador'=>$evaluador,'U.estatus'=>1))
+			->order_by('E.estatus,Ev.nombre,U.nombre');
 		return $this->db->get()->result();
 	}
 
@@ -231,6 +274,13 @@ class Evaluacion_model extends CI_Model{
 		$this->db->where('resultado',$res->id)->update('Feedbacks',$datos);
 		if($this->db->affected_rows() == 0)
 			$this->db->insert('Feedbacks',array('resultado'=>$res->id,'feedbacker'=>$datos['feedbacker']));
+	}
+
+	function updateFeedback($id,$datos) {
+		$this->db->where('id',$id)->update('Feedbacks',$datos);
+		if($this->db->affected_rows() == 1)
+			return true;
+		return false;
 	}
 
 	function asigna_ci($colaborador,$valor,$field) {

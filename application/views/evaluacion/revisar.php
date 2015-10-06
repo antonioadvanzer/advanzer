@@ -106,9 +106,13 @@
 				<div class="form-group" align="center">
 					<label>&nbsp;</label>
 					<label>&nbsp;</label>
-					<button class="btn btn-lg btn-primary btn-block" style="max-width:250px" type="submit">Guardar Datos</button>
+					<button id="submit" class="btn btn-lg btn-primary btn-block" style="max-width:250px" type="submit">Guardar Datos</button>
 				</div>
 			</div>
+			<?php if(isset($colaborador->feedback->estatus) && $colaborador->feedback->estatus != 0): ?>
+				<div class="col-md-12"><label> 
+				<?="Feedback: <i>".$colaborador->feedback->contenido."</i>";?></label><hr></div>
+			<?php endif; ?>
 		</div>
 	</form>
 	<div class="row">
@@ -222,6 +226,12 @@
 		}
 	}
 	$(document).ready(function() {
+		estatus=<?= $colaborador->feedback->estatus;?>;
+		if(estatus != 0){
+			$('#rating').prop('disabled',true);
+			$('#feedback').prop('disabled',true);
+			$('#submit').css('display','none');
+		}
 		verificaRating();
 
 		$('#gastos').change(function() {

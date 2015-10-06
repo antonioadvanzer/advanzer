@@ -127,7 +127,9 @@ class Evaluacion extends CI_Controller {
     //validaciones
     private function genera_autoevaluacion($colaborador) {
         $evaluacion = $this->evaluacion_model->getEvaluacionAnual();
-        $this->evaluacion_model->genera_autoevaluacion($evaluacion,$colaborador);
+        $info = $this->user_mode->searchById($colaborador);
+        if($info->fecha_ingreso <= (date('Y')-1)."-10-31")
+            $this->evaluacion_model->genera_autoevaluacion($evaluacion,$colaborador);
     }
 
     private function valida_sesion() {
@@ -136,6 +138,34 @@ class Evaluacion extends CI_Controller {
     }
 
     //procesos ajax carga/consulta info
+    public function update_feedback($feedback,$flag=false) {
+        if($flag==true)
+            $this->evaluacion_model->updateFeedback($feedback,array('estatus'=>2));
+        $data['feedback'] = $this->evaluacion_model->getInfoFeedback($feedback,$flag);
+        $this->layout->title('Advanzer - Feedback');
+        $this->layout->view('evaluacion/detalle_feedback',$data);
+    }
+
+    public function updateFeedback() {
+        $id=$this->input->post('id');
+        $datos['contenido']=trim($this->input->post('contenido'));
+        if($this->evaluacion_model->updateFeedback($id,$datos))
+            $response['msg'] = "ok";
+        else
+            $response['msg'] = "Error al actualizar feedback. Intenta de nuevo.";
+        echo json_encode($response);
+    }
+
+    public function updateEstatusFeedback() {
+        $id=$this->input->post('id');
+        $datos['estatus']=$this->input->post('estatus');
+        if($this->evaluacion_model->updateFeedback($id,$datos))
+            $response['msg'] = "ok";
+        else
+            $response['msg'] = "Error al enviar feedback. Intenta de nuevo.";
+        echo json_encode($response);
+    }
+
     public function asigna_ci() {
         $colaborador = $this->input->post('colaborador');
         $valor = $this->input->post('valor');
@@ -651,5 +681,12 @@ class Evaluacion extends CI_Controller {
         $data['evaluadores'] = $this->evaluacion_model->getEvaluadores();
         $this->layout->title('Advanzer - Evaluadores');
         $this->layout->view('evaluacion/por_evaluador',$data);
+    }
+
+    public function defineFeedback($evaluacion) {
+        $data['asignaciones'] = $this->evaluacion_model->getFeedbacksByEvaluador($evaluacion,$this->session->userdata('id'));
+        $data['propias'] = $this->evaluacion_model->getFeedbacksByColaborador($evaluacion,$this->session->userdata('id'));
+        $this->layout->title('Advanzer - Asignar Feedback');
+        $this->layout->view('evaluacion/asignar_feedback',$data);
     }
 }
