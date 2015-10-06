@@ -463,7 +463,7 @@ class Evaluacion extends CI_Controller {
     public function load_perfil() {
         $area = $this->input->post('area');
         $posicion = $this->input->post('posicion');
-        foreach ($this->evaluacion_model->getResponsabilidadByArea($area) as $dominio) :
+        foreach ($this->evaluacion_model->getResponsabilidadByArea($area,$posicion) as $dominio) :
             $dominio->responsabilidades = $this->evaluacion_model->getObjetivosByDominio($dominio->id,$area,$posicion);
             if(count($dominio->responsabilidades) > 0): ?>
                 <h1><?= $dominio->nombre;?></h1>
@@ -492,7 +492,7 @@ class Evaluacion extends CI_Controller {
             $posicion=3;
         if(!empty($area) && !empty($posicion)){
             //get perfil de evaluación de responsabilidades
-            $data['dominios'] = $this->evaluacion_model->getResponsabilidadByArea($area);
+            $data['dominios'] = $this->evaluacion_model->getResponsabilidadByArea($area,$posicion);
             foreach ($data['dominios'] as $dominio) :
                 $dominio->responsabilidades = $this->evaluacion_model->getObjetivosByDominio($dominio->id,$area,$posicion);
                 foreach ($dominio->responsabilidades as $responsabilidad) :
