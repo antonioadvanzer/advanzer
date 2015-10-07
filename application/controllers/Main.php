@@ -141,4 +141,20 @@ class Main extends CI_Controller {
         if($this->session->userdata('id') == "")
             redirect('login');
     }
+
+    public function check_evaluation_period() {
+    	$this->load->model('evaluacion_model');
+    	$this->load->helper('file');
+    	$msg="";
+    	if($response = $this->evaluacion_model->check_for_evaluations()){
+    		foreach ($response as $evaluacion) :
+    			$this->evaluacion_model->finaliza_periodo($evaluacion->id);
+    			$msg .= "Evaluation: '".$evaluacion->nombre."' with id: ".$evaluacion->id." has been closed with no errors\n\t";
+    		endforeach;
+    		$msg = date("Y-m-d H:i:s")." - Succesfully executed with activity:\n\t".$msg."\n\n";
+    	}else
+    		$msg = date("Y-m-d H:i:s")." - Succesfully executed with no activity.\n\n";
+    	
+    	echo $msg;
+    }
 }

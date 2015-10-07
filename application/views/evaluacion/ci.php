@@ -1,7 +1,7 @@
 <!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron">
 	<div class="container">
-		<h2>Resultados Evaluaciones</h2>
+		<h2>Revisión de Compromisos Internos</h2>
 	</div>
 </div>
 <div class="container">
@@ -23,13 +23,13 @@
 					<tr>
 						<th class="col-md-1" data-halign="center" data-align="center" data-field="foto" data-defaultsort="disabled"></th>
 						<th class="col-md-5" data-halign="center" data-field="nombre">Nombre</th>
-						<?php if($this->session->userdata('tipo') == 1): ?>
+						<?php //if($this->session->userdata('tipo') == 1): ?>
 							<th class="col-md-1" data-halign="center" data-field="gastos">Cumple Gastos?</th>
-						<?php elseif($this->session->userdata('tipo') == 2): ?>
+						<?php //elseif($this->session->userdata('tipo') == 2): ?>
 							<th class="col-md-1" data-halign="center" data-field="harvest">Cumple Harvest?</th>
-						<?php elseif($this->session->userdata('tipo') >= 4): ?>
+						<?php //elseif($this->session->userdata('tipo') >= 4): ?>
 							<th class="col-md-1" data-halign="center" data-field="cv">Cumple CV?</th>
-						<?php endif; ?>
+						<?php //endif; ?>
 					</tr>
 				</thead>
 				<tbody>
@@ -37,19 +37,19 @@
 						<tr>
 							<td><img height="25px" src="<?= base_url('assets/images/fotos')."/".$colab->foto;?>"></td>
 							<td><small><?= "$colab->nombre ($colab->posicion - $colab->track)";?></small></td>
-							<?php if($this->session->userdata('tipo') == 1): ?>
+							<?php //if($this->session->userdata('tipo') == 1): ?>
 								<td style="vertical-align:middle;text-align:center;"><input type="checkbox" 
 									<?php if(isset($colab->cumple_gastos) && $colab->cumple_gastos=="SI")echo "checked";?> 
 									onclick="change(this.checked,<?= $colab->id;?>,'cumple_gastos');"></td>
-							<?php elseif($this->session->userdata('tipo') == 2): ?>
+							<?php //elseif($this->session->userdata('tipo') == 2): ?>
 								<td style="vertical-align:middle;text-align:center;"><input type="checkbox" 
 									<?php if(isset($colab->cumple_harvest) && $colab->cumple_harvest=="SI")echo "checked";?> 
 									onclick="change(this.checked,<?= $colab->id;?>,'cumple_harvest');"></td>
-							<?php elseif($this->session->userdata('tipo') >= 4): ?>
+							<?php //elseif($this->session->userdata('tipo') >= 4): ?>
 								<td style="vertical-align:middle;text-align:center;"><input type="checkbox" 
 									<?php if(isset($colab->cumple_cv) && $colab->cumple_cv=="SI")echo "checked";?> 
 									onclick="change(this.checked,<?= $colab->id;?>,'cumple_cv');"></td>
-							<?php endif; ?>
+							<?php //endif; ?>
 						</tr>
 					<?php endforeach; ?>
 				</tbody>

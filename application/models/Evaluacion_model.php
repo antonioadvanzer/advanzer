@@ -803,4 +803,15 @@ class Evaluacion_model extends CI_Model{
 		$this->db->where(array('evaluado'=>$colaborador,'evaluacion'=>$evaluacion))->update('Evaluadores',array('anual'=>0));
 		$this->db->where(array('evaluado'=>$colaborador,'evaluador'=>$anual,'evaluacion'=>$evaluacion))->update('Evaluadores',array('anual'=>1));
 	}
+
+	function finaliza_periodo($evaluacion){
+		$this->db->where('id',$evaluacion)->update('Evaluaciones',array('estatus'=>2));
+	}
+
+	function check_for_evaluations() {
+		$result = $this->db->from('Evaluaciones')->where(array('estatus !='=>2,'fin <'=>date('Y-m-d')))->get();
+		if($result->num_rows() != 0)
+			return $result->result();
+		return false;
+	}
 }
