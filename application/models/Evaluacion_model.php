@@ -553,7 +553,7 @@ class Evaluacion_model extends CI_Model{
 	}
 
 	function getEvaluacionesSinAplicar() {
-		$this->db->where('estatus <',3);
+		$this->db->where('estatus <',2);
 		$this->db->order_by('nombre','desc');
 		return $this->db->get('Evaluaciones')->result();
 	}
