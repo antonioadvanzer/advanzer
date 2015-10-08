@@ -222,7 +222,7 @@ class Evaluacion extends CI_Controller {
                     mm='0'+mm
                 today = yyyy+'-'+mm+'-'+dd;
                 $('#inicio').datepicker({dateFormat: 'yy-mm-dd'});
-                $('#fin').datepicker({dateFormat: 'yy-mm-dd'});
+                $('#fin').datepicker({dateFormat: 'yy-mm-dd',minDate: '<?= date("Y-m-d");?>'});
                 $('#inicio_p').datepicker({dateFormat: 'yy-mm-dd'});
                 $('#fin_p').datepicker({dateFormat: 'yy-mm-dd'});
                 $("#evaluacion").change(function() {
@@ -358,7 +358,7 @@ class Evaluacion extends CI_Controller {
               <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon">Estatus</span>
-                    <select id="estatus" name="estatus" class="form-control" style="max-width:300px;text-align:center" <?php if($info->estatus > 1)echo"disabled"; ?>>
+                    <select id="estatus" name="estatus" class="form-control" style="max-width:300px;text-align:center" <?php if($info->inicio < date('Y-m-d'))echo"disabled"; ?>>
                       <option value="0" <?php if($info->estatus == 0) echo "selected"; ?>>Deshabilitado</option>
                       <option value="1" <?php if($info->estatus == 1) echo "selected"; ?>>Habilitado</option>
                     </select>
