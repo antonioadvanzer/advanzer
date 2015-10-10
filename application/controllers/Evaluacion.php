@@ -15,7 +15,7 @@ class Evaluacion extends CI_Controller {
     }
 
     //basicas
-    public function index($flag=false) {
+    public function index($flag=true) {
         if(!$this->evaluacion_model->getEvaluacionAnual())
             redirect('evaluacion/proyecto');
         else{
@@ -222,7 +222,7 @@ class Evaluacion extends CI_Controller {
                 if(mm<10)
                     mm='0'+mm
                 today = yyyy+'-'+mm+'-'+dd;
-                $('#inicio').datepicker({dateFormat: 'yy-mm-dd'});
+                $('#inicio').datepicker({dateFormat: 'yy-mm-dd',minDate: '<?= date("Y-m-d");?>'});
                 $('#fin').datepicker({dateFormat: 'yy-mm-dd',minDate: '<?= date("Y-m-d");?>'});
                 $('#inicio_p').datepicker({dateFormat: 'yy-mm-dd'});
                 $('#fin_p').datepicker({dateFormat: 'yy-mm-dd'});

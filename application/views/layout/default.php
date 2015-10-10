@@ -88,10 +88,12 @@
 									<li class="dropdown-submenu"><a tabindex="-1" href="#">Servicios</a>
 										<ul class="dropdown-menu">
 											<?php //if($this->session->userdata('posicion') <= 3): ?>
-												<li><a href="<?= base_url('objetivo/asignar_pesos');?>">Responsabilidades Por Área</a></li>
+												<?php if($this->session->userdata('periodo_edicion') == 1): ?>
+													<li><a href="<?= base_url('objetivo/asignar_pesos');?>">Responsabilidades Por Área</a></li>
+												<?php endif; ?>
 											<?php //endif; if($this->session->userdata('tipo') > 3): ?>
 												<li><a href="<?= base_url('evaluacion');?>">Evaluaciones</a></li>
-												<li><a href="<?= base_url('evaluacion/index/true');?>">Evaluaciones Confidencial</a></li>
+												<li><a href="<?= base_url('evaluacion/index/false');?>">Evaluaciones Confidencial</a></li>
 												<li><a href="<?= base_url('evaluacion/por_evaluador');?>">Evaluaciones por Evaluador</a></li>
 												<li><a href="<?= base_url('ver_requisiciones');?>">Requisiciones</a></li>
 											<?php //endif;?>
@@ -106,7 +108,9 @@
 												<li><a href="<?= base_url('administrar_usuarios'); ?>">Colaboradores</a></li>
 												<li><a href="<?= base_url('administrar_dominios');?>">Responsabilidades Funcionales</a></li>
 												<li><a href="<?= base_url('administrar_indicadores');?>">Competencias Laborales</a></li>
-												<li><a href="<?= base_url('indicador/asignar_comportamientos');?>">Comportamientos por Posición</a></li>
+												<?php if($this->session->userdata('periodo_edicion') == 1): ?>
+													<li><a href="<?= base_url('indicador/asignar_comportamientos');?>">Comportamientos por Posición</a></li>
+												<?php endif; ?>
 												<li><a href="<?= base_url('evaluaciones');?>">Evaluación de Desempeño</a></li>
 												<li><a href="<?= base_url('evaluacion/proyecto');?>">Evaluación por Proyecto</a></li>
 											</ul>

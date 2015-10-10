@@ -543,8 +543,10 @@ class Evaluacion_model extends CI_Model{
 	}
 
 	function addEvaluadorToColaborador($datos) {
-		if($this->db->where($datos)->get('Evaluadores')->num_rows() == 0)
+		if($this->db->where($datos)->get('Evaluadores')->num_rows() == 0){
 			$this->db->insert('Evaluadores',$datos);
+			return $this->db->insert_id();
+		}
 	}
 
 	function delEvaluadorFromColaborador($datos) {
@@ -754,14 +756,16 @@ class Evaluacion_model extends CI_Model{
 
 	function autogenera($colaboradores,$evaluacion) {
 		foreach ($colaboradores as $colaborador) :
-			$diferencia=date_diff(date_create($colaborador->fecha_ingreso),date_create((date('Y')-1).'-10-31'));
-			if($diferencia->format('%R') == '+'):
-				$jefe=$this->db->select('jefe')->from('Users')->where('id',$colaborador->id)->get()->first_row()->jefe;
-				if($colaborador->id != $jefe)
-					$this->addEvaluadorToColaborador(array('evaluador'=>$jefe,
-                    	'evaluado'=>$colaborador->id,'evaluacion'=>$evaluacion));
-				$this->db->where(array('evaluador'=>$jefe,'evaluado'=>$colaborador->id,'evaluacion'=>$evaluacion))->update('Evaluadores',
-					array('anual'=>1));
+			if($colaborador->nivel_posicion > 8 || $colaborador->nivel_posicion < 3):
+				$diferencia=date_diff(date_create($colaborador->fecha_ingreso),date_create((date('Y')-1).'-10-31'));
+				if($diferencia->format('%R') == '+'):
+					$jefe=$this->db->select('jefe')->from('Users')->where('id',$colaborador->id)->get()->first_row()->jefe;
+					if($colaborador->id != $jefe):
+						$asignacion = $this->addEvaluadorToColaborador(array('evaluador'=>$jefe,
+	                    	'evaluado'=>$colaborador->id,'evaluacion'=>$evaluacion));
+						$this->db->where('id',$asignacion)->update('Evaluadores',array('anual'=>1));
+					endif;
+				endif;
 			endif;
 		endforeach;
 	}
@@ -813,5 +817,23 @@ class Evaluacion_model extends CI_Model{
 		if($result->num_rows() != 0)
 			return $result->result();
 		return false;
+	}
+
+	function setPeriodoEdicion() {
+		$fecha=date('Y-m-d');
+		$fin=strtotime('+1 month',strtotime($fecha));
+		$fin=date('Y-m-d',$fin);
+		$this->db->insert('Bitacora',array('accion'=>4,'descripcion'=>$fin,'valor'=>1));
+	}
+
+	function check_PeriodoEdicion() {
+		$result = $this->db->where(array('descripcion'=>date('Y-m-d'),'accion'=>4,'valor'=>1))->update('Bitacora',array('valor'=>0));
+	}
+
+	function getPeriodoEdicion() {
+		$result=$this->db->select('MAX(id), valor')->where('accion',4)->get('Bitacora');
+		if($result->num_rows() == 1)
+			return $result->first_row()->valor;
+		return 0;
 	}
 }

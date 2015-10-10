@@ -8,6 +8,7 @@ class Main extends CI_Controller {
     function __construct(){
     	parent::__construct();
     	$this->load->model('user_model');
+    	$this->load->model('evaluacion_model');
     }
  
     public function index() {
@@ -20,6 +21,7 @@ class Main extends CI_Controller {
 
     public function login($err=null) {
     	$data=array();
+    	$periodo_edicion = $this->evaluacion_model->getPeriodoEdicion();
     	if($err!=null)
     		$data['err_msg']=$err;
     	$email = $this->input->post('email');
@@ -37,7 +39,8 @@ class Main extends CI_Controller {
     				'posicion' =>$result->nivel_posicion,
     				'area' =>$result->area,
     				'direccion'=>$result->direccion,
-    				'tipo'=>$result->tipo
+    				'tipo'=>$result->tipo,
+    				'periodo_edicion'=>$periodo_edicion
     			);
     			$data['email'] = $result->email;
     			$this->session->set_userdata($sess_array);
@@ -101,7 +104,8 @@ class Main extends CI_Controller {
     				'posicion' =>$result->nivel_posicion,
     				'area' =>$result->area,
     				'direccion'=>$result->direccion,
-    				'tipo'=>$result->tipo
+    				'tipo'=>$result->tipo,
+    				'periodo_edicion'=>$periodo_edicion
     			);
     			$data['email'] = $result->email;
     			$this->session->set_userdata($sess_array);
@@ -143,18 +147,19 @@ class Main extends CI_Controller {
     }
 
     public function check_evaluation_period() {
-    	$this->load->model('evaluacion_model');
-    	$this->load->helper('file');
     	$msg="";
     	if($response = $this->evaluacion_model->check_for_evaluations()){
     		foreach ($response as $evaluacion) :
     			$this->evaluacion_model->finaliza_periodo($evaluacion->id);
     			$msg .= "Evaluation: '".$evaluacion->nombre."' with id: ".$evaluacion->id." has been closed with no errors\n\t";
     		endforeach;
+    		$this->evaluacion_model->setPeriodoEdicion();
     		$msg = date("Y-m-d H:i:s")." - Succesfully executed with activity:\n\t".$msg."\n\n";
     	}else
     		$msg = date("Y-m-d H:i:s")." - Succesfully executed with no activity.\n\n";
-    	
+
+    	$this->evaluacion_model->check_PeriodoEdicion();
+
     	echo $msg;
     }
 }

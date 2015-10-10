@@ -9,23 +9,24 @@ class User_model extends CI_Model{
 	}
 
 	function do_login($email,$password=null){
-		$this->db->select('U.id,U.email,U.nombre,U.foto,U.empresa,U.tipo,P.nivel nivel_posicion,A.id area,T.nombre track,A.direccion');
-		$this->db->from('Users U');
-		$this->db->join('Areas A','A.id = U.area','LEFT OUTER');
-		$this->db->join('Posicion_Track PT','PT.id = U.posicion_track','LEFT OUTER');
-		$this->db->join('Posiciones P','P.id = PT.posicion','LEFT OUTER');
-		$this->db->join('Tracks T','T.id = PT.track','LEFT OUTER');
-		$this->db->where('U.email',$email);
-		$this->db->where('U.estatus',1);
+		$this->db->select('U.id,U.email,U.nombre,U.foto,U.empresa,U.tipo,P.nivel nivel_posicion,A.id area,T.nombre track,A.direccion')
+			->from('Users U')->join('Areas A','A.id = U.area','LEFT OUTER')
+			->join('Posicion_Track PT','PT.id = U.posicion_track','LEFT OUTER')
+			->join('Posiciones P','P.id = PT.posicion','LEFT OUTER')
+			->join('Tracks T','T.id = PT.track','LEFT OUTER')
+			->where('U.email',$email)
+			->where('U.estatus',1);
 		if($password != null)
 			$this->db->where('U.password',md5($password));
 		$this->db->limit(1);
 
 		$query=$this->db->get();
-		if ($query->num_rows() == 1) 
+		if ($query->num_rows() == 1){
+			$descripcion = 'ingreso al sistema de: '.$query->first_row()->email;
+			$this->db->insert('Bitacora',array('accion'=>5,'descripcion'=>$descripcion,'valor'=>$query->first_row()->id));
 			return $query->first_row();
-		else
-			return false;
+		}
+		return false;
 	}
 
 	function getCountUsers($valor=null,$estatus=null) {
@@ -158,7 +159,7 @@ class User_model extends CI_Model{
 		if($tipo == 1)
 			$this->db->where('P.nivel <=',5);
 		$this->db->select('U.id,U.nombre,U.email,U.foto,U.empresa,U.categoria,U.nomina,U.fecha_ingreso,
-			U.area,U.plaza,P.nombre posicion,T.nombre track');
+			U.area,U.plaza,P.nombre posicion,T.nombre track,P.nivel nivel_posicion');
 		$this->db->join('Posicion_Track PT','PT.id = U.posicion_track');
 		$this->db->join('Posiciones P','P.id = PT.posicion');
 		$this->db->join('Tracks T','T.id = PT.track');
