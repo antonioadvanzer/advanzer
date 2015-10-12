@@ -26,9 +26,6 @@
 	.accordion h1:not(:last-of-type) {
 	  border-bottom: 1px dotted #FFF;
 	}
-	.accordion div, .accordion p, .accordion span {
-	  display: none;
-	}
 	.accordion h2 {
 	  padding: 5px 25px;
 	  background: -webkit-gradient(linear, left bottom, left top, from(#B0B914), to(#FFF));
@@ -63,7 +60,7 @@
 	.accordion p {
 	  padding: 15px 35px;
 	  background-color: #ddd;
-	  font-size: .4rem;
+	  font-size: 1.2rem;
 	  color: #333;
 	}
 	.accordion span {
@@ -83,8 +80,6 @@
 <div class="jumbotron">
   <div class="container">
     <h2 style="cursor:default;">Perfil de Evaluación</h2>
-    <p>Las responsabilidades miden los puntos clave de desempeño aplicados al proyecto y/o asignación 
-    	en los cuales te has desempeñado durante el año.</p>
   </div>
 </div>
 <div class="container">
@@ -111,8 +106,14 @@
   	<div class="col-md-12"><div id="cargando" style="display:none; color: green;">
   		<img src="<?= base_url('assets/images/loading.gif');?>"></div></div>
   </div>
+  <div class="row" id="label">
+    <div class="col-md-12">
+    	<label style="float:left;cursor:pointer" onclick="switchView();">Ver Competencias</label>
+    </div>
+  </div>
   <div id="vista" class="row" align="center">
-  	<div class="col-md-6">
+  	<div class="col-md-2"></div>
+  	<div class="col-md-8" id="resp">
 	  <label>Responsabilidades</label>
       <aside id="perfil" class="accordion">
   		<?php foreach ($dominios as $dominio) : if(count($dominio->responsabilidades) > 0): ?>
@@ -122,18 +123,18 @@
 			<h2><?= $resp->nombre;?><span style="float:right;"><?= $resp->valor;?>%</span></h2>
 			<div align="left">
 				<label><?= $resp->descripcion;?></label>
-				<p><ol reversed>
+				<ol reversed>
 					<?php foreach ($resp->metricas as $metrica): ?>
 					<li><?= $metrica->descripcion;?></li>
 				<?php endforeach; ?>
-				</ol></p>
+				</ol>
 			</div>
 			<?php endforeach; ?>
 		</div>
 		<?php endif; endforeach; ?>
 	  </aside>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-8" id="comp" style="display:none">
 	  <label>Competencias</label>
 	  <aside id="competencias" class="accordion">
 		<?php foreach ($indicadores as $indicador) : if(count($indicador->competencias)): ?>
@@ -142,12 +143,11 @@
 			<?php foreach ($indicador->competencias as $comp) : ?>
 			<h2><?= $comp->nombre;?></h2>
 			<div align="left">
-				<label><?= $comp->descripcion;?></label>
-				<p><ul type="square">
+				<label><?= $comp->descripcion;?><p>
 					<?php foreach ($comp->comportamientos as $comportamiento) : ?>
-						<span class="glyphicon glyphicon-ok-circle"><?= $comportamiento->descripcion;?></span>
+						<span class="glyphicon glyphicon-ok"><?= $comportamiento->descripcion;?></span>
 					<?php endforeach; ?>
-				</ul></p>
+				</p></label>
 			</div>
 			<?php endforeach; ?>
 		</div>
@@ -157,6 +157,18 @@
   </div>
 
   <script type="text/javascript">
+  	function switchView() {
+  		if($('#comp').css('display') == 'block'){
+  			$('#comp').hide('slow');
+  			$('#resp').show('slow');
+  			$('#label>div>label').html('Ver Competencias');
+  		}else if($('#resp').css('display') == 'block'){
+  			$('#comp').show('slow');
+  			$('#resp').hide('slow');
+  			$('#label>div>label').html('Ver Responsabilidades');
+  		}
+  	}
+
 	$(document).ready(function() {
 		$("#area").change(function() {
 			$("#area option:selected").each(function() {
@@ -220,7 +232,7 @@
 		});
     });
   
-    var headers = ["H1","H2","H3","H4","H5","H6"];
+    var headers = ["H1","H2"];
 
 	$(".accordion").click(function(e) {
 	  var target = e.target,
@@ -231,7 +243,7 @@
 	    
 	    //slideUp all elements (except target) at current depth or greater
 	    var depth = $(subItem).parents().length;
-	    var allAtDepth = $(".accordion p, .accordion div").filter(function() {
+	    var allAtDepth = $(".accordion ul").filter(function() {
 	      if($(this).parents().length >= depth && this !== subItem.get(0)) {
 	        return true; 
 	      }

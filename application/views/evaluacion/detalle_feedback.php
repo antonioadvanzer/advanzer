@@ -26,18 +26,34 @@
 	<form id="update" role="form" method="post" action="javascript:" class="form-signin">
 		<input type="hidden" id="id" value="<?= $feedback->id;?>">
 		<div class="row" align="center">
-			<div class="col-md-4">
+			<div class="col-md-3">
 				<img src="<?= base_url("assets/images/fotos/$feedback->foto");?>" height="120px">
 				<label><?= $feedback->nombre;?> - <small><?= $feedback->rating;?></small></label>
 			</div>
-			<div class="col-md-4">
+			<div class="col-md-3">
 				<div class="form-group">
-					<label for="contenido">Descripción:</label>
+					<label for="fortalezas">Fortalezas/Logros:</label>
 					<textarea onkeyup="$('#guardar').show('slow');$('#enviar').hide('slow');" class="form-control" style="max-width:300px;text-align:center;" rows="4" 
-						id="contenido" required <?php if($feedback->estatus !=0)echo"disabled";?>><?= $feedback->contenido;?></textarea>
+						id="fortalezas" required <?php if($feedback->estatus !=0)echo"disabled";?>><?= $feedback->fortalezas;?></textarea>
 				</div>
 			</div>
-			<div class="col-md-2">
+			<div class="col-md-3">
+				<div class="form-group">
+					<label for="oportunidad">Área(s) de Oportunidad:</label>
+					<textarea onkeyup="$('#guardar').show('slow');$('#enviar').hide('slow');" class="form-control" style="max-width:300px;text-align:center;" rows="4" 
+						id="oportunidad" required <?php if($feedback->estatus !=0)echo"disabled";?>><?= $feedback->oportunidad;?></textarea>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<label for="compromisos">Compromisos:</label>
+					<textarea onkeyup="$('#guardar').show('slow');$('#enviar').hide('slow');" class="form-control" style="max-width:300px;text-align:center;" rows="4" 
+						id="compromisos" required <?php if($feedback->estatus !=0)echo"disabled";?>><?= $feedback->compromisos;?></textarea>
+				</div>
+			</div>
+		</div>
+		<div class="row" align="center">
+			<div class="col-md-12">
 				<div class="form-group">
 					<label for="boton">&nbsp;</label>
 					<?php if($feedback->estatus ==0): ?>
@@ -45,21 +61,66 @@
 							display:none">
 							Guardar</button>
 						<button id="enviar" type="button" class="btn btn-lg btn-primary btn-block" style="max-width:200px;text-align:center;
-							<?php if($feedback->contenido == "")echo 'display:none' ?>">Enviar</button>
+							<?php if($feedback->fortalezas == "" || $feedback->oportunidad == "" || $feedback->compromisos == "")
+							echo 'display:none' ?>">Enviar</button>
 					<?php endif; ?>
 				</div>
 			</div>
 		</div>
 	</form>
+	<div class="row">
+		<div class="col-md-12">
+			<?php if(count($evaluaciones->evaluadores) > 0): ?>
+				<h3><b>Evaluaciones:</b></h3>
+				<table id="tbl" align="center" class="sortable table-hover table-striped table-condensed" data-toggle="table" 
+					 data-show-columns="true" data-hover="true" data-striped="true" data-show-toggle="true">
+					<thead>
+						<tr>
+							<th data-halign="center" data-field="foto"></th>
+							<th class="col-md-4" data-halign="center" data-field="evaluador">Evaluador</th>
+							<th class "col-md-6" data-halign="center" data-field="comentarios">Comentarios</th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php foreach ($evaluaciones->evaluadores as $evaluador):?>
+							<tr>
+								<td><img height="25px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></td>
+								<td><?= $evaluador->nombre;?></td>
+								<td><?php if($evaluador->comentarios) echo $evaluador->comentarios;?></td>
+							</tr>
+						<?php endforeach;
+						if(isset($evaluaciones->evaluadores360) && count($evaluaciones->evaluadores360) > 0)
+							foreach ($evaluaciones->evaluadores360 as $evaluador):?>
+								<tr>
+									<td><img height="25px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></td>
+									<td><?= $evaluador->nombre;?></td>
+									<td><?= $evaluador->comentarios;?></td>
+								</tr>
+							<?php endforeach;
+						if(isset($evaluaciones->evaluadoresProyecto) && count($evaluaciones->evaluadoresProyecto) > 0)
+							foreach ($evaluaciones->evaluadoresProyecto as $evaluador):?>
+								<tr>
+									<td><img height="25px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></td>
+									<td><?= $evaluador->nombre;?></td>
+									<td><?php if($evaluador->comentarios) echo $evaluador->comentarios;?></td>
+								</tr>
+							<?php endforeach; ?>
+					</tbody>
+				</table>
+			<?php endif; ?>
+		</div>
+	</div>
 	<script>
 	$(document).ready(function() {
 		$('#update').submit(function(event){
-			contenido=$('#contenido').val();
+			fortalezas=$('#fortalezas').val();
+			oportunidad=$('#oportunidad').val();
+			compromisos=$('#compromisos').val();
 			id=$('#id').val();
 			$.ajax({
 				url: '<?= base_url("evaluacion/updateFeedback");?>',
 				type: 'POST',
-				data: {'id':id,'contenido':contenido},
+				data: {'id':id,'compromisos':compromisos,'fortalezas':fortalezas,'oportunidad':oportunidad},
 				beforeSend: function() {
 					$('#update').hide('slow');
 					$('#cargando').show('slow');

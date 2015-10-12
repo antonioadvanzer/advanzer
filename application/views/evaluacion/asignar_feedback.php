@@ -65,7 +65,7 @@
 									<?php endif; ?>
 									<img height="25px" src="<?= base_url('assets/images/fotos')."/".$colab->foto;?>"></a></td>
 								<td><small><?= $colab->nombre;?></small></td>
-								<td><small><?= substr($colab->contenido,0,50)."...";?></small></td>
+								<td><small><?= substr($colab->fortalezas,0,50)."...";?></small></td>
 								<td><small><?php if($colab->estatus_f==0 || $colab->estatus_f==1)echo"Pendiente";else echo"Leído";?></small></td>
 							</tr>
 						<?php endforeach; ?>

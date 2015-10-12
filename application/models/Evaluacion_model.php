@@ -8,11 +8,9 @@ class Evaluacion_model extends CI_Model{
 		parent::__construct();
 	}
 
-	/*function getCompromisosInternos() {
-		foreach ($this->getEvaluados() as $colaborador) :
-			
-		endforeach;
-	}*/
+	function getInfoCaptura() {
+		return $this->db->where(array('accion'=>3,'descripcion'=>$this->session->userdata('tipo')))->get('Bitacora')->result();
+	}
 
 	function getComportamientoByCompetencia($competencia,$posicion,$asignacion=null) {
 		$this->db->distinct();
@@ -190,18 +188,18 @@ class Evaluacion_model extends CI_Model{
 	}
 
 	function getInfoFeedback($id,$flag) {
+		$this->db->select('F.id,F.compromisos,F.oportunidad,F.fortalezas,F.estatus,U.nombre,U.foto,RE.rating,RE.colaborador')->from('Feedbacks F')
+			->join('Resultados_Evaluacion RE','RE.id = F.resultado')
+			->where('F.id',$id);
 		if($flag==true)
 			$this->db->join('Users U','U.id = F.feedbacker');
 		else
 			$this->db->join('Users U','U.id = RE.colaborador');
-		$this->db->select('F.id,F.contenido,F.estatus,U.nombre,U.foto,RE.rating')->from('Feedbacks F')
-			->join('Resultados_Evaluacion RE','RE.id = F.resultado')
-			->where('F.id',$id);
 		return $this->db->get()->first_row();
 	}
 
 	function getFeedbacksByColaborador($evaluacion,$colaborador) {
-		$this->db->select('U.id,U.foto,U.nombre,F.id feedback,F.estatus estatus_f,F.contenido')
+		$this->db->select('U.id,U.foto,U.nombre,F.id feedback,F.estatus estatus_f,F.compromisos,F.oportunidad,F.fortalezas')
 			->from('Resultados_Evaluacion RE')
 			->join('Feedbacks F','RE.id = F.resultado')
 			->join('Users U','U.id = F.feedbacker')
@@ -309,7 +307,7 @@ class Evaluacion_model extends CI_Model{
 			$colaborador->cumple_gastos = $res->first_row()->cumple_gastos;
 			$colaborador->cumple_harvest = $res->first_row()->cumple_harvest;
 			$colaborador->cumple_cv = $res->first_row()->cumple_cv;
-			$res = $this->db->select('F.id,F.estatus,F.feedbacker,F.contenido,U.nombre')->from('Feedbacks F')
+			$res = $this->db->select('F.id,F.estatus,F.feedbacker,F.fortalezas,F.oportunidad,F.compromisos,U.nombre')->from('Feedbacks F')
 				->join('Users U','U.id = F.feedbacker')
 				->where('F.resultado',$res->first_row()->id)->get();
 			if($res->num_rows() == 0){
@@ -835,5 +833,30 @@ class Evaluacion_model extends CI_Model{
 		if($result->num_rows() == 1)
 			return $result->first_row()->valor;
 		return 0;
+	}
+
+	function cierra_captura($tipo,$archivo) {
+		$this->db->insert('Bitacora',array('accion'=>3,'descripcion'=>$tipo,'valor'=>$archivo));
+		switch ($tipo) {
+			case 1:
+				$cumple="cumple_gastos";
+				break;
+			case 2:
+				$cumple="cumple_harvest";
+				break;
+			default:
+				$cumple="cumple_cv";
+				break;
+		}
+		foreach ($this->getEvaluados() as $colaborador) :
+			$evaluacion=$this->getEvaluacionAnual();
+			if(!isset($colaborador->$cumple) || $colaborador->$cumple == null){
+				$res=$this->db->where(array('evaluacion'=>$evaluacion,'colaborador'=>$colaborador->id))->get('Resultados_Evaluacion');
+				if($res->num_rows() == 1)
+					$this->db->where('id',$res->first_row()->id)->update('Resultados_Evaluacion',array("$cumple"=>"NO"));
+				else
+					$this->db->insert('Resultados_Evaluacion',array("$cumple"=>"NO",'colaborador'=>$colaborador->id,'evaluacion'=>$evaluacion));
+			}
+		endforeach;
 	}
 }

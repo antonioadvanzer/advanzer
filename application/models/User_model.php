@@ -70,13 +70,17 @@ class User_model extends CI_Model{
 	}
 
 	function searchById($id) {
-		$this->db->select('U.id,U.email,U.nombre,U.foto,U.empresa,U.estatus,U.categoria,U.nomina,U.area,U.plaza,
-			U.tipo,U.jefe,U.fecha_ingreso,P.id posicion, T.id track,P.nivel nivel_posicion');
+		$this->db->select('U.id,U.email,U.nombre,U.foto,U.empresa,U.estatus,U.categoria,U.nomina,U.area,U.plaza,A.nombre nombre_area,U.tipo,U.jefe,
+			U.fecha_ingreso,P.id posicion, T.id track,P.nivel nivel_posicion,T.nombre nombre_track,P.nombre nombre_posicion,U.fecha_ingreso');
 		$this->db->join('Posicion_Track PT','PT.id = U.posicion_track','LEFT OUTER');
 		$this->db->join('Posiciones P','P.id = PT.posicion','LEFT OUTER');
 		$this->db->join('Tracks T','T.id = PT.track','LEFT OUTER');
+		$this->db->join('Areas A','A.id = U.area','LEFT OUTER');
 		$this->db->where('U.id',$id);
-		return $this->db->get('Users U')->first_row();
+		$result = $this->db->get('Users U')->first_row();
+		$res = $this->db->select('nombre')->where('id',$result->jefe)->get('Users');
+		(($res->num_rows()) > 0) ? $result->nombre_jefe = $res->first_row()->nombre :$result->nombre_jefe="";
+		return $result;
 	}
 
 	function getTrackByUser($user) {

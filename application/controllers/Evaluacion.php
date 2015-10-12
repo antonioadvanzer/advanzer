@@ -120,6 +120,7 @@ class Evaluacion extends CI_Controller {
 
     public function ci() {
         $data['colaboradores'] = $this->evaluacion_model->getEvaluados();
+        $data['info_archivos'] = $this->evaluacion_model->getInfoCaptura();
         $data['evaluacion'] = $this->evaluacion_model->getEvaluacionById($this->evaluacion_model->getEvaluacionAnual());
         $this->layout->title('Advanzer - Compromisos Internos');
         $this->layout->view('evaluacion/ci',$data);
@@ -143,6 +144,10 @@ class Evaluacion extends CI_Controller {
         if($flag==true)
             $this->evaluacion_model->updateFeedback($feedback,array('estatus'=>2));
         $data['feedback'] = $this->evaluacion_model->getInfoFeedback($feedback,$flag);
+        if($flag==false){
+            $colaborador = $this->user_model->searchById($data['feedback']->colaborador);
+            $data['evaluaciones'] = $this->evaluacion_model->getResultadosByColaborador($colaborador);
+        }
         $this->layout->title('Advanzer - Feedback');
         $this->layout->view('evaluacion/detalle_feedback',$data);
     }
@@ -478,12 +483,11 @@ class Evaluacion extends CI_Controller {
                     foreach ($indicador->competencias as $comp) : ?>
                         <h2><?= $comp->nombre;?></h2>
                         <div align="left">
-                            <label><?= $comp->descripcion;?></label>
-                            <p><ul type="square"> <?php
+                            <label><?= $comp->descripcion;?><p><?php
                                 foreach ($this->evaluacion_model->getComportamientoByCompetencia($comp->id,$posicion) as $comportamiento) : ?>
-                                        <span style="display:block;float:left" class="glyphicon glyphicon-ok"></span><?= $comportamiento->descripcion;?><br>
+                                        <span class="glyphicon glyphicon-ok"><?= $comportamiento->descripcion;?></span>
                                 <?php endforeach; ?>
-                            </ul></p>
+                            </p></label>
                         </div> <?php
                     endforeach; ?>
                 </div> <?php
@@ -503,11 +507,11 @@ class Evaluacion extends CI_Controller {
                     <h2><?= $responsabilidad->nombre;?><span style="float:right;"><?= $responsabilidad->valor;?>%</span></h2>
                     <div align="left">
                         <label><?= $responsabilidad->descripcion;?></label>
-                        <p><ol reversed>
+                        <ol reversed>
                             <?php foreach ($this->evaluacion_model->getMetricaByObjetivo($responsabilidad->id) as $metrica) :?>
                                 <li><?= $metrica->descripcion;?></li>
                             <?php endforeach; ?>
-                        </ol></p>
+                        </ol>
                     </div>
                 <?php endforeach; ?>
                 </div>
@@ -689,5 +693,43 @@ class Evaluacion extends CI_Controller {
         $data['propias'] = $this->evaluacion_model->getFeedbacksByColaborador($evaluacion,$this->session->userdata('id'));
         $this->layout->title('Advanzer - Asignar Feedback');
         $this->layout->view('evaluacion/asignar_feedback',$data);
+    }
+
+    public function captura() {
+        $tipo=$this->input->post('tipo');
+        switch ($tipo) {
+            case 1:
+                $nombre="Gastos de Viaje_".date('Y-m-d');
+                break;
+            case 2:
+                $nombre="Harvest_".date('Y-m-d');
+                break;
+            default:
+                $nombre="CV_".date('Y-m-d');
+                break;
+        }
+        //set preferences
+        $config['upload_path'] = './assets/docs/';
+        $config['allowed_types'] = '*';
+        $ext = explode(".", $_FILES['archivo']['name']);
+        $config['file_name'] = $nombre.'.'.end($ext);
+        $config['overwrite'] = TRUE;
+
+        //load upload class library
+        $this->load->library('upload', $config);
+
+        if (!$this->upload->do_upload('archivo')) {
+            // case - failure
+            $msg = $this->upload->display_errors();
+            echo $msg;exit();
+            redirect('evaluacion/ci');
+        }else {
+            // case - success
+            //update info in DB
+            $this->evaluacion_model->cierra_captura($tipo,$config['file_name']);
+            $upload_data = $this->upload->data();
+            chgrp($upload_data['file_path'], 'apache');
+            redirect();
+        }
     }
 }
