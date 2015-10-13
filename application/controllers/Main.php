@@ -144,16 +144,20 @@ class Main extends CI_Controller {
 	private function valida_sesion() {
         if($this->session->userdata('id') == "")
             redirect('login');
-    }
+	}
 
-    public function check_evaluation_period() {
+	public function check_evaluation_period() {
     	$msg="";
     	if($response = $this->evaluacion_model->check_for_evaluations()){
     		foreach ($response as $evaluacion) :
     			$this->evaluacion_model->finaliza_periodo($evaluacion->id);
     			$msg .= "Evaluation: '".$evaluacion->nombre."' with id: ".$evaluacion->id." has been closed with no errors\n\t";
+    			if($evaluacion->tipo == 1)
+    				$anual=true;
     		endforeach;
     		$this->evaluacion_model->setPeriodoEdicion();
+    		if(isset($anual) && $anual==true)
+    			$this->exportAnualFile();
     		$msg = date("Y-m-d H:i:s")." - Succesfully executed with activity:\n\t".$msg."\n\n";
     	}else
     		$msg = date("Y-m-d H:i:s")." - Succesfully executed with no activity.\n\n";
@@ -161,5 +165,220 @@ class Main extends CI_Controller {
     	$this->evaluacion_model->check_PeriodoEdicion();
 
     	echo $msg;
-    }
+	}
+
+	public function sendMail($file) {
+		$this->load->library("email");
+
+		//configuracion para gmail
+		$config = array(
+			'protocol' => 'smtp',
+			'smtp_host' => 'ssl://smtp.gmail.com',
+			'smtp_port' => 465,
+			'smtp_user' => 'jesus.salas@advanzer.com',
+			'smtp_pass' => 'yaucjurn',
+			'mailtype' => 'html',
+			'charset' => 'utf-8',
+			'newline' => "\r\n"
+		);
+
+		$this->email->initialize($config);
+
+		$this->email->clear(TRUE);
+
+		$this->email->from('jesus.salas@advanzer.com','Portal de Evaluación Advanzer-Entuizer');
+		$this->email->to("jesus_js92@outlook.com");
+		$this->email->subject('Captura de Compromisos Internos');
+		$this->email->message('<h2>Se ha adjuntado el archivo de soporte de la captura de Compromisos Internos</h2><hr>');
+		$this->email->attach(base_url("assets/docs/$file"));
+
+		if(!$this->email->send())
+			var_dump($this->email->print_debugger());
+		else
+			redirect();
+	}
+
+	public function exportAnualFile() {
+		$this->load->library('excel');
+
+		//get Info Evaluados
+		$colaboradores = $this->evaluacion_model->getEvaluados();
+
+		$objPHPExcel = new PHPExcel();
+		$objPHPExcel->getProperties()->setCreator("Portal de Evaluación Advanzer de México")
+			->setLastModifiedBy("Portal de Evaluación")
+			->setTitle("Reporte Anual de Evaluación")
+			->setSubject("Reporte Anual de Evaluación")
+			->setDescription("Concentrado de resultados de evaluación anual y proyectos durante el año en cuestión");
+		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+
+		$objSheet = $objPHPExcel->getActiveSheet(0);
+		$objSheet->setTitle('Junta de Desempeño');
+		$objSheet->getStyle('A1:R1')->getFont()->setBold(true)->setName('Verdana')->setSize(11)->getColor()->setRGB('FFFFFF');
+		$objSheet->getStyle('A1:R1')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+		$objSheet->getStyle('A1:R1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$objSheet->getStyle('A1:R1')->getFill('')->applyFromArray(array('type'=>PHPExcel_Style_Fill::FILL_SOLID, 'startcolor'=>array('rgb'=>'000A75')));
+		$objSheet->getRowDimension(1)->setRowHeight(50);
+
+		// write header
+			$objSheet->getCell('A1')->setValue('No.');
+			$objSheet->getCell('B1')->setValue('Colaborador');
+			$objSheet->getCell('C1')->setValue('Fecha de Ingreso');
+			$objSheet->getCell('D1')->setValue('Track');
+			$objSheet->getCell('E1')->setValue('Posición');
+			$objSheet->getCell('F1')->setValue('Evaluadores');
+			$objSheet->getCell('G1')->setValue('Competencias');
+			$objSheet->getCell('H1')->setValue('Responsabilidades');
+			$objSheet->getCell('I1')->setValue('360°');
+			$objSheet->getCell('J1')->setValue('Promedio');
+			$objSheet->getCell('K1')->setValue('Rating 2012');
+			$objSheet->getCell('L1')->setValue('Rating 2013');
+			$objSheet->getCell('M1')->setValue('Rating 2014');
+			$objSheet->getCell('N1')->setValue('Rating 2015');
+			$objSheet->getCell('O1')->setValue('Encargado de Feedback');
+			$objSheet->getCell('P1')->setValue('Comentarios de Desempeño');
+			$objSheet->getCell('Q1')->setValue('Observaciones de la Junta');
+			$objSheet->getCell('R1')->setValue('Acciones a Tomar');
+
+		$column=2;
+		foreach ($colaboradores as $colaborador) :
+			$total_competencias=null;
+			$total_responsabilidades=null;
+			$total_proyectos=null;
+			$total_360=null;
+			$colaborador->total_360=null;
+			$colaborador->rating_2012=null;
+			$colaborador->rating_2013=null;
+			$colaborador->rating_2014=null;
+			$evaluadores="";
+			$comentarios="";
+			foreach ($colaborador->evaluadores as $evaluador) :
+				$evaluadores .= $evaluador->nombre." / ";
+				$comentarios .= $evaluador->comentarios." / ";
+				$total_responsabilidades = $evaluador->responsabilidad;
+				$total_competencias = $evaluador->competencia;
+			endforeach;
+			if(isset($colaborador->evaluadoresProyecto)):
+				$dias_total=0;
+				foreach ($colaborador->evaluadoresProyecto as $evaluador) :
+					$evaluadores .= $evaluador->nombre." / ";
+					$comentarios .= $evaluador->comentarios." / ";
+					$diferencia=date_diff(date_create($evaluador->inicio_periodo),date_create($evaluador->fin_periodo));
+					$dias=(int)$diferencia->format("%a");
+					$dias_total+=$dias;
+				endforeach;
+				foreach ($colaborador->evaluadoresProyecto as $evaluador) :
+					$total_proyectos += $evaluador->responsabilidad*($dias/$dias_total);
+				endforeach;
+			endif;
+			if($colaborador->nivel_posicion <= 5):
+				$cont=0;
+				foreach ($colaborador->evaluadores360 as $evaluador) :
+					$evaluadores .= $evaluador->nombre." / ";
+					$comentarios .= $evaluador->comentarios." / ";
+					$total_360 += $evaluador->competencia;
+					$cont++;
+				endforeach;
+				($total_360) ? $total_360 = $total_360/$cont : $total_360 = null;
+				(double)$total_competencias = ($total_competencias + $total_360 + $colaborador->autoevaluacion)/3;
+			else:
+				(double)$total_competencias = ($total_competencias + $colaborador->autoevaluacion)/2;
+			endif;
+			(isset($total_proyectos)) ? (double)$total_responsabilidades = (($total_responsabilidades + $total_proyectos)/2) : 
+				(double)$total_responsabilidades = $total_responsabilidades;
+			
+			$objSheet->getCell('A'.$column)->setValue($colaborador->nomina);
+			$objSheet->getCell('B'.$column)->setValue($colaborador->nombre);
+			$objSheet->getCell('C'.$column)->setValue($colaborador->fecha_ingreso);
+			$objSheet->getCell('D'.$column)->setValue($colaborador->track);
+			$objSheet->getCell('E'.$column)->setValue($colaborador->posicion);
+			$objSheet->getCell('F'.$column)->setValue($evaluadores);
+			if($total_competencias)
+				$objSheet->getCell('G'.$column)->setValue(number_format($total_competencias,2));
+			if($total_responsabilidades)
+				$objSheet->getCell('H'.$column)->setValue(number_format($total_responsabilidades,2));
+			if($total_360)
+				$objSheet->getCell('I'.$column)->setValue(number_format($total_360,2));
+			if($colaborador->total)
+				$objSheet->getCell('J'.$column)->setValue(number_format($colaborador->total,2));
+			$objSheet->getCell('K'.$column)->setValue($colaborador->rating_2012);
+			$objSheet->getCell('L'.$column)->setValue($colaborador->rating_2013);
+			$objSheet->getCell('M'.$column)->setValue($colaborador->rating_2014);
+			$objSheet->getCell('P'.$column)->setValue($comentarios);
+			$objSheet->getStyle('A'.$column.':'.'R'.$column)->getAlignment()->setWrapText(true);
+			$column++;
+		endforeach;
+		$column -= 1;
+
+		$objSheet->getStyle('A2:R'.$column)->getFont()->setSize(10);
+		$objSheet->getStyle('A2:R'.$column)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+		// create some borders
+			// first, create the whole grid around the table
+			$objSheet->getStyle('A1:R'.$column)->getBorders()->
+			getAllBorders()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+			// create medium border around the table
+			$objSheet->getStyle('A1:R'.$column)->getBorders()->
+			getOutline()->setBorderStyle(PHPExcel_Style_Border::BORDER_MEDIUM);
+			// create a medium border on the header line
+			$objSheet->getStyle('A1:R1')->getBorders()->
+			getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_MEDIUM);
+
+		// autosize the columns
+			$objSheet->getColumnDimension('A')->setAutoSize(true);
+			$objSheet->getColumnDimension('B')->setAutoSize(true);
+			$objSheet->getColumnDimension('C')->setAutoSize(true);
+			$objSheet->getColumnDimension('D')->setAutoSize(true);
+			$objSheet->getColumnDimension('E')->setAutoSize(true);
+			$objSheet->getColumnDimension('F')->setWidth(40);
+			$objSheet->getColumnDimension('G')->setAutoSize(true);
+			$objSheet->getColumnDimension('H')->setAutoSize(true);
+			$objSheet->getColumnDimension('I')->setAutoSize(true);
+			$objSheet->getColumnDimension('J')->setAutoSize(true);
+			$objSheet->getColumnDimension('K')->setAutoSize(true);
+			$objSheet->getColumnDimension('L')->setAutoSize(true);
+			$objSheet->getColumnDimension('M')->setAutoSize(true);
+			$objSheet->getColumnDimension('N')->setAutoSize(true);
+			$objSheet->getColumnDimension('O')->setWidth(20);
+			$objSheet->getColumnDimension('P')->setWidth(40);
+			$objSheet->getColumnDimension('Q')->setWidth(40);
+			$objSheet->getColumnDimension('R')->setWidth(40);
+		
+		$file_name = "Reporte_Anual_".(date('Y')-1).".xlsx";
+
+		/*header('Content-Type: application/vnd.ms-excel');
+		header('Content-Disposition: attachment;filename="'.$file_name.'"');
+		header('Cache-Control: max-age=0');*/
+		$objWriter->setPreCalculateFormulas(false);
+		
+		//$objWriter->save($file_name);
+		$objWriter->save(getcwd()."/assets/docs/$file_name");
+
+		$this->load->library("email");
+
+		//configuracion para gmail
+		$config = array(
+			'protocol' => 'smtp',
+			'smtp_host' => 'ssl://smtp.gmail.com',
+			'smtp_port' => 465,
+			'smtp_user' => 'jesus.salas@advanzer.com',
+			'smtp_pass' => 'yaucjurn',
+			'mailtype' => 'html',
+			'charset' => 'utf-8',
+			'newline' => "\r\n"
+		);
+
+		$this->email->initialize($config);
+
+		$this->email->clear(TRUE);
+
+		$this->email->from('jesus.salas@advanzer.com','Portal de Evaluación Advanzer-Entuizer');
+		$this->email->to("jesus_js92@outlook.com");
+		$this->email->subject('Reporte de Evaluación para Junta Anual');
+		$this->email->message('<h2>Se ha generado el archivo de Reporte de Evaluación para la Junta Anual</h2><hr>');
+		$this->email->attach(base_url("assets/docs/$file_name"));
+
+		if(!$this->email->send())
+			var_dump($this->email->print_debugger());
+	}
 }

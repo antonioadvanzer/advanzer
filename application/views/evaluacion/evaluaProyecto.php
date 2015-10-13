@@ -73,19 +73,22 @@
 			<?php endforeach; ?>
 			<div class="item" align="center" style="min-height:300px;">
 				<img width="100%" style="opacity:0.3;position:absolute" src="<?= base_url('assets/images/gracias.jpg');?>">
-				<div style="width:60%;position:absolute;top:10%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
-					<div class="col-md-12">
-						<div class="form-group" align="center" id="finalizar">
-							<label>¿Tienes algún comentario adicional para el colaborador?</label>
-							<textarea id="comentarios" class="form-control" rows="2" style="max-width:300px;text-align:center"><?= $evaluacion->comentarios;?></textarea>
+				<form onsubmit="return finalizar(<?= $evaluacion->id;?>,<?= $evaluacion->tipo;?>);" class="form-signin" 
+					action="javascript:" id="finalizar">
+					<div style="width:60%;position:absolute;top:10%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
+						<div class="col-md-12">
+							<div class="form-group" align="center" id="finalizar">
+								<label>¿Tienes algún comentario adicional para el colaborador?</label>
+								<textarea id="comentarios" class="form-control" rows="2" style="max-width:300px;text-align:center" 
+									required><?= $evaluacion->comentarios;?></textarea>
+							</div>
 						</div>
 					</div>
-				</div>
-				<div class="carousel-caption" align="center">
-					<button id="finalizar" class="btn btn-lg btn-primary" onclick="finalizar(<?= $evaluacion->id;?>,<?= $evaluacion->tipo;?>);" 
-					style="max-width:200px; text-align:center;">Enviar Evaluación</button>
-					<h3 style="cursor:default;">Gracias por tu tiempo...!</h3>
-				</div>
+					<div class="carousel-caption" align="center">
+						<button class="btn btn-lg btn-primary" style="max-width:200px; text-align:center;">Enviar Evaluación</button>
+						<h3 style="cursor:default;">Gracias por tu tiempo...!</h3>
+					</div>
+				</form>
 			</div>
 		</div>
 		<!-- Controls -->
@@ -172,5 +175,6 @@
 						console.log(data.status,data.responseText);
 					}
 				});
+			return false;
 		}
 	</script>

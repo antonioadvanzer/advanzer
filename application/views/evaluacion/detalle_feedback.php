@@ -12,6 +12,13 @@
 			<label id="msg"></label>
 		</div>
 	</div>
+	<div align="center" id="alert_success" style="display:none">
+		<div class="alert alert-success" role="alert" style="max-width:400px;">
+			<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+			<span class="sr-only">Error:</span>
+			<label id="msg_success"></label>
+		</div>
+	</div>
 	<div class="row" align="center">
 		<div class="col-md-12">
 			<a href="<?= base_url('evaluacion/evaluar');?>">&laquo;Regresar</a>
@@ -26,9 +33,12 @@
 	<form id="update" role="form" method="post" action="javascript:" class="form-signin">
 		<input type="hidden" id="id" value="<?= $feedback->id;?>">
 		<div class="row" align="center">
+			<div class="col-md-12">
+				<label>Rating Obtenido:</label><br><span><big><?= $feedback->rating;?></big></span>
+			</div>
 			<div class="col-md-3">
 				<img src="<?= base_url("assets/images/fotos/$feedback->foto");?>" height="120px">
-				<label><?= $feedback->nombre;?> - <small><?= $feedback->rating;?></small></label>
+				<label><?= $feedback->nombre;?></label>
 			</div>
 			<div class="col-md-3">
 				<div class="form-group">
@@ -70,7 +80,7 @@
 	</form>
 	<div class="row">
 		<div class="col-md-12">
-			<?php if(count($evaluaciones->evaluadores) > 0): ?>
+			<?php if(isset($evaluaciones->evaluadores) && count($evaluaciones->evaluadores) > 0): ?>
 				<h3><b>Evaluaciones:</b></h3>
 				<table id="tbl" align="center" class="sortable table-hover table-striped table-condensed" data-toggle="table" 
 					 data-show-columns="true" data-hover="true" data-striped="true" data-show-toggle="true">
@@ -133,6 +143,11 @@
 					if(returnData['msg'] == "ok"){
 						$('#guardar').hide('slow');
 						$('#enviar').show('slow');
+						$('#alert_success').prop('display',true).show();
+						$('#msg_success').html('Se ha guardado el feedback. Presiona "Enviar" para hacerlo llegar al Colaborador');
+						setTimeout(function() {
+							$("#alert_success").fadeOut(1500);
+						},3000);
 					}else{
 						$('#alert').prop('display',true).show();
 						$('#msg').html(returnData['msg']);
@@ -142,7 +157,7 @@
 					}
 				},
 				error: function(xhr) {
-					console.log(xhr);
+					console.log(xhr.responseText);
 					$('#cargando').hide('slow');
 					$('#update').show('slow');
 					$('#alert').prop('display',true).show('slow');

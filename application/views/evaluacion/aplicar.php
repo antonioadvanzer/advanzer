@@ -327,18 +327,4 @@
 				});
 			return false;
 		}
-		function guardar(valor,elemento,tipo) {
-			var asignacion = <?= $evaluacion->id;?>;
-			console.log(valor.value,tipo,asignacion,elemento);
-			$.ajax({
-				url: '<?= base_url("evaluacion/guardar_avance");?>',
-				type: 'post',
-				data: {'asignacion':asignacion,'tipo':tipo,'valor':valor.value,'elemento':elemento},
-				success: function(data){
-					var returnedData = JSON.parse(data);
-					revisar();
-					console.log(returnedData);
-				}
-			});
-		}
 	</script>

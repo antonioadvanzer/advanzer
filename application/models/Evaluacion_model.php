@@ -246,7 +246,7 @@ class Evaluacion_model extends CI_Model{
 	}
 
 	function getEvaluados() {
-		$this->db->select('U.id,U.foto,U.nombre,U.nomina,P.nombre posicion,T.nombre track');
+		$this->db->select('U.id,U.foto,U.nombre,U.nomina,P.nombre posicion,T.nombre track,U.fecha_ingreso,P.nivel nivel_posicion');
 		$this->db->from('Users U');
 		$this->db->join('Posicion_Track PT','PT.id = U.posicion_track','LEFT OUTER');
 		$this->db->join('Posiciones P','P.id = PT.posicion','LEFT OUTER');
@@ -320,6 +320,8 @@ class Evaluacion_model extends CI_Model{
 			$colaborador->total = 0;
 			$colaborador->feedback = null;
 		}
+		$colaborador->evaluadores360 = new stdClass();
+		$colaborador->evaluadoresProyecto = new stdClass();
 		//obtener evaluacion360 si es de nivel 3-4-5
 		$posicion=$this->getPosicionByColaborador($colaborador->id);
 		if($posicion >=3 && $posicion <= 5){
@@ -371,8 +373,8 @@ class Evaluacion_model extends CI_Model{
 			$ids = array();
 			foreach ($proyectos as $row)
 				array_push($ids, $row->id);
-			$this->db->select('U.id,U.foto,U.nombre,E.id asignacion,Ev.nombre evaluacion,E.comentarios')->from('Users U')
-				->join('Evaluadores E','E.evaluador = U.id')
+			$this->db->select('U.id,U.foto,U.nombre,E.id asignacion,Ev.nombre evaluacion,E.comentarios,Ev.fin_periodo,Ev.inicio_periodo')
+				->from('Users U')->join('Evaluadores E','E.evaluador = U.id')
 				->join('Evaluaciones Ev','Ev.id = E.evaluacion','LEFT OUTER')
 				->where_in('Ev.id',$ids)->where(array('Ev.estatus !='=>0,'E.evaluado'=>$colaborador->id,'E.evaluador !='=>$colaborador->id))
 				->order_by('Ev.nombre,U.nombre');
@@ -395,7 +397,7 @@ class Evaluacion_model extends CI_Model{
 		$competencia=0;
 		$responsabilidad=0;
 		//si es de gerente a director se evalúa 360
-		if($posicion >= 3 && $posicion <= 5){
+		if($posicion <= 5){
 			$this->db->select('AVG(RC.total) total360')->from('Resultados_ev_Competencia RC')
 				->join('Evaluadores Ev','Ev.id = RC.asignacion')
 				->where(array('Ev.evaluado'=>$asignacion->evaluado,'Ev.evaluacion'=>$evaluacion,'Ev.evaluador !='=>$jefe,
@@ -755,7 +757,7 @@ class Evaluacion_model extends CI_Model{
 	function autogenera($colaboradores,$evaluacion) {
 		foreach ($colaboradores as $colaborador) :
 			if($colaborador->nivel_posicion > 8 || $colaborador->nivel_posicion < 3):
-				$diferencia=date_diff(date_create($colaborador->fecha_ingreso),date_create((date('Y')-1).'-10-31'));
+				$diferencia=date_diff(date_create($colaborador->fecha_ingreso),date_create((date('Y')-1).'-09-30'));
 				if($diferencia->format('%R') == '+'):
 					$jefe=$this->db->select('jefe')->from('Users')->where('id',$colaborador->id)->get()->first_row()->jefe;
 					if($colaborador->id != $jefe):

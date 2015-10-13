@@ -154,7 +154,9 @@ class Evaluacion extends CI_Controller {
 
     public function updateFeedback() {
         $id=$this->input->post('id');
-        $datos['contenido']=trim($this->input->post('contenido'));
+        $datos['compromisos']=trim($this->input->post('compromisos'));
+        $datos['fortalezas']=trim($this->input->post('fortalezas'));
+        $datos['oportunidad']=trim($this->input->post('oportunidad'));
         if($this->evaluacion_model->updateFeedback($id,$datos))
             $response['msg'] = "ok";
         else
@@ -729,7 +731,7 @@ class Evaluacion extends CI_Controller {
             $this->evaluacion_model->cierra_captura($tipo,$config['file_name']);
             $upload_data = $this->upload->data();
             chgrp($upload_data['file_path'], 'apache');
-            redirect();
+            redirect("main/sendMail/".$upload_data['file_name']);
         }
     }
 }

@@ -40,7 +40,7 @@
 					<div class="row">
 						<div class="col-md-12"><h3>
 							<span class="btn label label-default pull-left" onclick="location.href='<?= base_url("evaluar");?>';">
-								<i class="glyphicon glyphicon-pencil"></i> Evaluar</span>&nbsp;&nbsp;
+								<i class="glyphicon glyphicon-pencil"></i> Evaluación</span>&nbsp;&nbsp;
 							<span class="btn label label-default pull-left" onclick="location.href='<?= base_url("historial");?>';">
 								<i class="glyphicon glyphicon-eye-open"></i> Mis Resultados</span>
 							<span class="btn label label-default pull-left" onclick="location.href='<?= base_url("evaluacion/perfil");?>';">
