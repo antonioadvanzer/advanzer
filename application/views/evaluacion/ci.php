@@ -73,11 +73,12 @@
 						<div class="form-group">
 							<div class="input-group">
 								<span class="input-group-addon">Elige el archivo</span>
-								<input class="form-control" type="file" name="archivo" size="40" style="height:120%;max-width:400px;text-align:center;" required/>
+								<input class="form-control" type="file" name="archivo" size="40" style="height:120%;max-width:400px;text-align:center;" 
+								required onchange="$('#boton').show('slow');">
 							</div>
 						</div>
 						<div class="form-group">
-							<button class="btn btn-primary" type="submit">
+							<button id="boton" class="btn btn-primary" type="submit" style="display:none">
 								<span class="glyphicon glyphicon-upload" aria-hidden="true"></span>Subir Archivo</button>
 						</div>
 					</form>

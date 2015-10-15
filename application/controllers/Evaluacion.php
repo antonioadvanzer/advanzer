@@ -678,7 +678,7 @@ class Evaluacion extends CI_Controller {
     }
 
     public function evaluaciones($msg=null) {
-        $data['evaluacion'] = $this->evaluacion_model->getEvaluacionAnual();
+        $data['evaluacion'] = $this->evaluacion_model->getEvaluacionAnualVigente();
         $data['colaboradores'] = $this->evaluacion_model->getPagination();
     	
         $this->layout->title('Advanzer - Evaluaciones');
