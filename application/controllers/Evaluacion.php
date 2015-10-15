@@ -443,7 +443,9 @@ class Evaluacion extends CI_Controller {
             </div>
             <script>
                 $(document).ready(function() {
-                    $('#agregar').append($('<option>',{value:$('#lider option:selected').val()}).text($('#lider option:selected').text()));
+                    <?php if(!$lider->estatus) :?>
+                        $('#agregar').append($('<option>',{value:$('#lider option:selected').val()}).text($('#lider option:selected').text()));
+                    <?php endif; ?>
                     $('#agregar option').each(function(i,select) {
                         $('#quitar').find("option[value='"+$(select).val()+"']").remove();
                     });
