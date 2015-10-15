@@ -4,6 +4,8 @@
 	}
 	.accordion h1, h2, h3, h4 {
 	  cursor: pointer;
+	  -webkit-margin-before: 0em;
+	  -webkit-margin-after: 0em;
 	}
 	.accordion h1 {
 	  padding: 15px 20px;
@@ -116,7 +118,7 @@
   	<div class="col-md-8" id="resp">
 	  <label>Responsabilidades</label>
       <aside id="perfil" class="accordion">
-  		<?php foreach ($dominios as $dominio) : if(count($dominio->responsabilidades) > 0): ?>
+  		<?php if(isset($dominios)) foreach ($dominios as $dominio) : if(count($dominio->responsabilidades) > 0): ?>
 		<h1><?= $dominio->nombre;?></h1>
 		<div>
 			<?php foreach ($dominio->responsabilidades as $resp) : ?>
@@ -137,7 +139,7 @@
     <div class="col-md-8" id="comp" style="display:none">
 	  <label>Competencias</label>
 	  <aside id="competencias" class="accordion">
-		<?php foreach ($indicadores as $indicador) : if(count($indicador->competencias)): ?>
+		<?php if(isset($indicadores)) foreach ($indicadores as $indicador) : if(count($indicador->competencias)): ?>
 		<h1><?= $indicador->nombre;?></h1>
 		<div>
 			<?php foreach ($indicador->competencias as $comp) : ?>

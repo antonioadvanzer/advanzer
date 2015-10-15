@@ -8,6 +8,11 @@
 	  margin: 40px auto;
 	  text-align: center;
 	}
+	.accordion h1, h2, h3, h4 {
+	  cursor: pointer;
+	  -webkit-margin-before: 0em;
+	  -webkit-margin-after: 0em;
+	}
 	.accordion h1 {
 	  padding: 15px 20px;
 	  background-color: #444;
