@@ -371,7 +371,7 @@ class Main extends CI_Controller {
 				'code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00)
 				);
 
-			$letras=array('A','B','C','D','E','0.05','0.15','0.65','0.10','0.05');
+			$letras=array('A','B','C','D','E','.05','.15','.65','.10','.05');
 			for ($i=1; $i <= 5; $i++) :
 				$objSheet->getCell('G'.($column+$i))->setValue($letras[$i-1]);
 				$objSheet->getCell('H'.($column+$i))->setValue('=COUNTIF($N$2:$N$'.($column-5).',"'.$letras[$i-1].'")');
@@ -408,23 +408,24 @@ class Main extends CI_Controller {
 				range(0, count($dsv)-1),
 				$dsl,
 				$xal,
-				$dsv,
-				true,
-				PHPExcel_Chart_DataSeries::STYLE_MARKER
+				$dsv
 			);
+			$layout = new PHPExcel_Chart_Layout();
+			$ds->setSmoothLine(PHPExcel_Chart_DataSeries::STYLE_SMOOTHMARKER);
+			$layout->setShowPercent(TRUE);
 
 			//plot area & legend
-			$pa=new PHPExcel_Chart_PlotArea(null, array($ds));
+			$pa=new PHPExcel_Chart_PlotArea($layout, array($ds));
 			$legend=new PHPExcel_Chart_Legend(PHPExcel_Chart_Legend::POSITION_RIGHT, NULL, false);
 			//title of chart
-			$title=new PHPExcel_Chart_Title('Gráfica Anual');
+			$title=new PHPExcel_Chart_Title('Curva de Desempeño');
 			//chart
 			$chart= new PHPExcel_Chart(
 				'chart1',
 				$title,
 				$legend,
 				$pa,
-				true,
+				null,
 				0,
 				NULL,
 				NULL
@@ -436,16 +437,19 @@ class Main extends CI_Controller {
 
 		$file_name = "Reporte_Anual_".(date('Y')-1).".xlsx";
 
-		header('Content-Type: application/vnd.ms-excel');
-		header('Content-Disposition: attachment;filename="'.$file_name.'"');
-		header('Cache-Control: max-age=0');
 		$objWriter->setPreCalculateFormulas(true);
 		$objWriter->setIncludeCharts(true);
 		
-		$objWriter->save('php://output');
-		//$objWriter->save(getcwd()."/assets/docs/$file_name");
+		/*//output to browser
+		header('Content-Type: application/vnd.ms-excel');
+		header('Content-Disposition: attachment;filename="'.$file_name.'"');
+		header('Cache-Control: max-age=0');
+		$objWriter->save('php://output');*/
+		
+		//output to server
+		$objWriter->save(getcwd()."/assets/docs/$file_name");
 
-		/*$this->load->library("email");
+		$this->load->library("email");
 
 		//configuracion para gmail
 		$config = array(
@@ -470,6 +474,6 @@ class Main extends CI_Controller {
 		$this->email->attach(base_url("assets/docs/$file_name"));
 
 		if(!$this->email->send())
-			var_dump($this->email->print_debugger());*/
+			var_dump($this->email->print_debugger());
 	}
 }
