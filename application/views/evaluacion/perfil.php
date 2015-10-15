@@ -42,7 +42,6 @@
 	.accordion label {
 	  width: 100%;
 	  padding: 5px 30px;
-	  background-color: #dadada;
 	  font-size: 1.2rem;
 	  color: #000; 
 	}
@@ -122,9 +121,10 @@
 		<h1><?= $dominio->nombre;?></h1>
 		<div>
 			<?php foreach ($dominio->responsabilidades as $resp) : ?>
-			<h2><?= $resp->nombre;?><span style="float:right;"><?= $resp->valor;?>%</span></h2>
-			<div align="left">
+			<h2><?= $resp->nombre;?><span style="float:right;"><?= $resp->valor;?>%</span>
 				<label><?= $resp->descripcion;?></label>
+			</h2>
+			<div align="left">
 				<ol reversed>
 					<?php foreach ($resp->metricas as $metrica): ?>
 					<li><?= $metrica->descripcion;?></li>
@@ -143,13 +143,15 @@
 		<h1><?= $indicador->nombre;?></h1>
 		<div>
 			<?php foreach ($indicador->competencias as $comp) : ?>
-			<h2><?= $comp->nombre;?></h2>
+			<h2><?= $comp->nombre;?>
+			<label><?= $comp->descripcion;?></label>
+			</h2>
 			<div align="left">
-				<label><?= $comp->descripcion;?><p>
+				<label>
 					<?php foreach ($comp->comportamientos as $comportamiento) : ?>
 						<span class="glyphicon glyphicon-ok"><?= $comportamiento->descripcion;?></span>
 					<?php endforeach; ?>
-				</p></label>
+				</label>
 			</div>
 			<?php endforeach; ?>
 		</div>

@@ -485,13 +485,15 @@ class Evaluacion extends CI_Controller {
                 <h1><?= $indicador->nombre;?></h1>
                 <div> <?php 
                     foreach ($indicador->competencias as $comp) : ?>
-                        <h2><?= $comp->nombre;?></h2>
+                        <h2><?= $comp->nombre;?>
+                        <label><?= $comp->descripcion;?></label>
+                        </h2>
                         <div align="left">
-                            <label><?= $comp->descripcion;?><p><?php
+                            <label><?php
                                 foreach ($this->evaluacion_model->getComportamientoByCompetencia($comp->id,$posicion) as $comportamiento) : ?>
                                         <span class="glyphicon glyphicon-ok"><?= $comportamiento->descripcion;?></span>
                                 <?php endforeach; ?>
-                            </p></label>
+                            </label>
                         </div> <?php
                     endforeach; ?>
                 </div> <?php
@@ -508,9 +510,10 @@ class Evaluacion extends CI_Controller {
                 <h1><?= $dominio->nombre;?></h1>
                 <div>
                 <?php foreach ($dominio->responsabilidades as $responsabilidad): ?>
-                    <h2><?= $responsabilidad->nombre;?><span style="float:right;"><?= $responsabilidad->valor;?>%</span></h2>
-                    <div align="left">
+                    <h2><?= $responsabilidad->nombre;?><span style="float:right;"><?= $responsabilidad->valor;?>%</span>
                         <label><?= $responsabilidad->descripcion;?></label>
+                    </h2>
+                    <div align="left">
                         <ol reversed>
                             <?php foreach ($this->evaluacion_model->getMetricaByObjetivo($responsabilidad->id) as $metrica) :?>
                                 <li><?= $metrica->descripcion;?></li>

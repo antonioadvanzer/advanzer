@@ -39,10 +39,8 @@
 	.accordion label {
 	  width: 100%;
 	  padding: 5px 30px;
-	  background-color: #dadada;
 	  font-size: 1.4rem;
-	  color: #000; 
-	  border-radius: 10px 10px 10px 10px;
+	  color: #000;
 	}
 	.accordion h3:hover {
 	  background-color: #000;
@@ -129,17 +127,18 @@
 									<div class="col-md-12">
 										<div class="form-group" align="center">
 											<h2><?= $resp->nombre;?><span style="min-width:100px;float:right;">
-												<i>Respuesta</i>: 
-												<select onchange="verify(this.form);" class="form-control" id="respuesta" 
-													style="height:15px;padding: 0px 10px;font-size:10px;max-width:50px;display:inline">
-													<option disabled selected value="">-- Selecciona tu respuesta --</option>
-													<?php for ($i=5; $i >= 1; $i--) : ?>
-														<option <?php if($resp->respuesta == $i) echo "selected";?>><?= $i;?></option>
-													<?php endfor; ?>
-												</select>
-											</span></h2>
-											<div align="left">
+													<i>Respuesta</i>: 
+													<select onchange="verify(this.form);" class="form-control" id="respuesta" 
+														style="height:15px;padding: 0px 10px;font-size:10px;max-width:50px;display:inline">
+														<option disabled selected value="">-- Selecciona tu respuesta --</option>
+														<?php for ($i=5; $i >= 1; $i--) : ?>
+															<option <?php if($resp->respuesta == $i) echo "selected";?>><?= $i;?></option>
+														<?php endfor; ?>
+													</select>
+												</span>
 												<label><?= $resp->descripcion;?></label>
+											</h2>
+											<div align="left">
 												<p><ol reversed>
 												<?php foreach ($resp->metricas as $metrica) : ?>
 													<li><?= $metrica->descripcion;?></li>
@@ -180,10 +179,11 @@
 						<h1><?= $indicador->nombre;?></h1>
 						<div class="col-md-12">
 						<?php foreach ($indicador->competencias as $comp) : ?>
-							<h2><?= $comp->nombre;?></h2>
-							<div align="left">
+							<h2><?= $comp->nombre;?>
 								<label><?= $comp->descripcion;?></label>
-								<p><ul type="square"><label>
+							</h2>
+							<div align="left">
+								<ul type="square"><label>
 								<?php foreach ($comp->comportamientos as $comportamiento) : ?>
 									<form onsubmit="return verify(this);" action="javascript:" class="form-signin" role="form">
 										<input type="hidden" value="<?= $comportamiento->id;?>" id="elemento">
