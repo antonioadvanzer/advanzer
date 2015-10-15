@@ -213,7 +213,7 @@ class Main extends CI_Controller {
 		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 
 		$objSheet = $objPHPExcel->getActiveSheet(0);
-		$objSheet->setTitle('Junta de Desempeño');
+		$objSheet->setTitle('Junta_Anual');
 		$objSheet->getStyle('A1:R1')->getFont()->setBold(true)->setName('Verdana')->setSize(11)->getColor()->setRGB('FFFFFF');
 		$objSheet->getStyle('A1:R1')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 		$objSheet->getStyle('A1:R1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
@@ -240,8 +240,9 @@ class Main extends CI_Controller {
 			$objSheet->getCell('Q1')->setValue('Observaciones de la Junta');
 			$objSheet->getCell('R1')->setValue('Acciones a Tomar');
 
-		$column=2;
+		$column=1;
 		foreach ($colaboradores as $colaborador) :
+			$column++;
 			$total_competencias=null;
 			$total_responsabilidades=null;
 			$total_proyectos=null;
@@ -306,11 +307,13 @@ class Main extends CI_Controller {
 			$objSheet->getCell('M'.$column)->setValue($colaborador->rating_2014);
 			$objSheet->getCell('P'.$column)->setValue($comentarios);
 			$objSheet->getStyle('A'.$column.':'.'R'.$column)->getAlignment()->setWrapText(true);
-			$column++;
+			$objSheet->getRowDimension($column)->setRowHeight(-1);
 		endforeach;
-		$column -= 1;
 
-		$objSheet->getStyle('A2:R'.$column)->getFont()->setSize(10);
+		$objSheet->getStyle('A2:R'.$column)->getFont()->setSize(12);
+		$objSheet->getStyle('G2:I'.$column)->getFont()->setSize(16);
+		$objSheet->getStyle('J2:J'.$column)->getFont()->setSize(18);
+		$objSheet->getStyle('M2:M'.$column)->getFont()->setSize(24);
 		$objSheet->getStyle('A2:R'.$column)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
 		// create some borders
@@ -343,18 +346,106 @@ class Main extends CI_Controller {
 			$objSheet->getColumnDimension('P')->setWidth(40);
 			$objSheet->getColumnDimension('Q')->setWidth(40);
 			$objSheet->getColumnDimension('R')->setWidth(40);
+
+
+		//tabla de resumen en hoja principal
+			$column+=5;
+			$objSheet->getStyle('G'.$column.':J'.($column+5))->getBorders()->
+			getAllBorders()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+			// create medium border around the table
+			$objSheet->getStyle('G'.$column.':J'.($column+5))->getBorders()->
+			getOutline()->setBorderStyle(PHPExcel_Style_Border::BORDER_MEDIUM);
+			// create a medium border on the header line
+			$objSheet->getStyle('G'.$column.':J'.$column)->getBorders()->
+			getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_MEDIUM);
+
+			$objSheet->getStyle('G'.$column.':J'.($column+6))->getFont()->setBold(true)->setName('Verdana')->setSize(10);
+			$objSheet->getStyle('I'.($column+1).':I'.($column+6))->getFont()->setBold(true)->setName('Verdana')->setSize(10)->getColor()->setRGB('FF0000');
+
+			$objSheet->getCell('G'.$column)->setValue('Rating');
+			$objSheet->getCell('H'.$column)->setValue('Conteo');
+			$objSheet->getCell('I'.$column)->setValue('% Real');
+			$objSheet->getCell('J'.$column)->setValue('% Requerida');
+
+			$objSheet->getStyle('I'.($column+1).':J'.($column+6))->getNumberFormat()->applyFromArray(array( 
+				'code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00)
+				);
+
+			$letras=array('A','B','C','D','E','0.05','0.15','0.65','0.10','0.05');
+			for ($i=1; $i <= 5; $i++) :
+				$objSheet->getCell('G'.($column+$i))->setValue($letras[$i-1]);
+				$objSheet->getCell('H'.($column+$i))->setValue('=COUNTIF($N$2:$N$'.($column-5).',"'.$letras[$i-1].'")');
+				$objSheet->getCell('I'.($column+$i))->setValue('=H'.($column+$i).'/$H$'.($column+6));
+				$objSheet->getCell('J'.($column+$i))->setValue($letras[$i+4]);
+			endfor;
+			$column+=6;
+			$objSheet->getCell('H'.$column)->setValue('=SUM(H'.($column-5).':H'.($column-1).')');
+			$objSheet->getCell('I'.$column)->setValue('=SUBTOTAL(9,I'.($column-5).':I'.($column-1).')');
+			$objSheet->getCell('J'.$column)->setValue('=SUBTOTAL(9,J'.($column-5).':J'.($column-1).')');
+
 		
+		//line chart
+			$objSheet = $objPHPExcel->createSheet(1);
+			$objSheet->setTitle('Resumen');
+			//data series label
+			$dsl = array(
+				new PHPExcel_Chart_DataSeriesValues('String', 'Junta_Anual!I'.($column-6), null, 1),
+				new PHPExcel_Chart_DataSeriesValues('String', 'Junta_Anual!J'.($column-6), null, 1)
+			);
+			//X axis value label
+			$xal=array(
+				new PHPExcel_Chart_DataSeriesValues('String', 'Junta_Anual!$G$'.($column-5).':$G$'.($column-1), NULL, 5),
+			);
+			//data series values
+			$dsv=array(
+				new PHPExcel_Chart_DataSeriesValues('Number', 'Junta_Anual!$I$'.($column-5).':$I$'.($column-1), NULL, 5),
+				new PHPExcel_Chart_DataSeriesValues('Number', 'Junta_Anual!$J$'.($column-5).':$J$'.($column-1), NULL, 5),
+			);
+			//data series values
+			$ds=new PHPExcel_Chart_DataSeries(
+				PHPExcel_Chart_DataSeries::TYPE_LINECHART,
+				PHPExcel_Chart_DataSeries::GROUPING_STANDARD,
+				range(0, count($dsv)-1),
+				$dsl,
+				$xal,
+				$dsv,
+				true,
+				PHPExcel_Chart_DataSeries::STYLE_MARKER
+			);
+
+			//plot area & legend
+			$pa=new PHPExcel_Chart_PlotArea(null, array($ds));
+			$legend=new PHPExcel_Chart_Legend(PHPExcel_Chart_Legend::POSITION_RIGHT, NULL, false);
+			//title of chart
+			$title=new PHPExcel_Chart_Title('Gráfica Anual');
+			//chart
+			$chart= new PHPExcel_Chart(
+				'chart1',
+				$title,
+				$legend,
+				$pa,
+				true,
+				0,
+				NULL,
+				NULL
+			);
+
+			$chart->setTopLeftPosition('B3');
+			$chart->setBottomRightPosition('K25');
+			$objSheet->addChart($chart);
+
 		$file_name = "Reporte_Anual_".(date('Y')-1).".xlsx";
 
-		/*header('Content-Type: application/vnd.ms-excel');
+		header('Content-Type: application/vnd.ms-excel');
 		header('Content-Disposition: attachment;filename="'.$file_name.'"');
-		header('Cache-Control: max-age=0');*/
-		$objWriter->setPreCalculateFormulas(false);
+		header('Cache-Control: max-age=0');
+		$objWriter->setPreCalculateFormulas(true);
+		$objWriter->setIncludeCharts(true);
 		
-		//$objWriter->save($file_name);
-		$objWriter->save(getcwd()."/assets/docs/$file_name");
+		$objWriter->save('php://output');
+		//$objWriter->save(getcwd()."/assets/docs/$file_name");
 
-		$this->load->library("email");
+		/*$this->load->library("email");
 
 		//configuracion para gmail
 		$config = array(
@@ -379,6 +470,6 @@ class Main extends CI_Controller {
 		$this->email->attach(base_url("assets/docs/$file_name"));
 
 		if(!$this->email->send())
-			var_dump($this->email->print_debugger());
+			var_dump($this->email->print_debugger());*/
 	}
 }
