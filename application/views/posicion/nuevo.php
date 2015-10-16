@@ -23,14 +23,14 @@
 			id="nombre" required value="" placeholder="Nombre">
 		</div>
 		<div class="form-group">
-		  <label for="nivel">Nivel:</label>
+		  <label for="nivel">Nivel en Organigrama:</label>
 		  <select id="nivel" style="max-width:300px" class="form-control" required>
 		  	<option disabled value="">--Selecciona un nivel de escalabilidad --</option>
 			<option value="8" selected>Analista</option>
 			<option value="7">Consultor</option>
 			<option value="6">Consultor Sr</option>
-			<option value="5">Gerente / Master</option>
-			<option value="4">Gerente Sr / Experto</option>
+			<option value="5">Gerente</option>
+			<option value="4">Gerente Sr</option>
 			<option value="3">Director</option>
 		  </select>
 		</div>
