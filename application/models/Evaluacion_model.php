@@ -694,7 +694,9 @@ class Evaluacion_model extends CI_Model{
 	function getPosicionByColaborador($evaluado) {
 		$this->db->select('P.nivel')->from('Users U')->join('Posicion_Track PT','PT.id = U.posicion_track');
 		$this->db->join('Posiciones P','P.id = PT.posicion');
-		return $this->db->where('U.id',$evaluado)->get()->first_row()->nivel;
+		$res = $this->db->where('U.id',$evaluado)->get();
+		($res->num_rows() > 0) ? $res = $res->first_row()->nivel : $res = false;
+		return $res;
 	}
 
 	function searchAsignacionById($id) {
