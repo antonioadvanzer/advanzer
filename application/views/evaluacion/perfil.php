@@ -85,6 +85,12 @@
 </div>
 <div class="container">
   <div class="row" align="center">
+  	<div class="col-md-12">
+	  <a href="<?= base_url();?>">&laquo;Regresar</a>
+  	</div>
+  </div>
+  <hr>
+  <div class="row" align="center">
   	<div class="input-group">
 	  <span class="input-group-addon">Área</span>
 	  <select name="area" id="area" class="form-control">

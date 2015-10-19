@@ -15,6 +15,7 @@ class Main extends CI_Controller {
     	$this->valida_sesion();
     	$data=array();
     	$data['colaborador'] = $this->user_model->searchById($this->session->userdata('id'));
+    	$data['evaluacion'] = $this->evaluacion_model->getActiveEvaluation();
 		$this->layout->title('Advanzer - Inicio');
 		$this->layout->view('main/index', $data);
 	}
@@ -310,6 +311,7 @@ class Main extends CI_Controller {
 			$objSheet->getRowDimension($column)->setRowHeight(-1);
 		endforeach;
 
+		$objSheet->getStyle('C2:C'.$column)->getNumberFormat()->setFormatCode('yyyy-mm-dd');
 		$objSheet->getStyle('A2:R'.$column)->getFont()->setSize(12);
 		$objSheet->getStyle('G2:I'.$column)->getFont()->setSize(16);
 		$objSheet->getStyle('J2:J'.$column)->getFont()->setSize(18);
