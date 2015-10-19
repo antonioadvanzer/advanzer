@@ -80,28 +80,28 @@
 			<div id="navbar" class="navbar-collapse collapse" aria-expanded="false" style="height: 1px;">
 				<ul class="nav navbar-nav">
 					<?php if($this->session->userdata('id') != ""):
-							//if($this->session->userdata('tipo') > 3 || $this->session->userdata('posicion') <= 3): ?>
+							if($this->session->userdata('tipo') > 3 || $this->session->userdata('posicion') <= 3): ?>
 							<li class="dropdown">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
 									Administración<span class="caret"></span></a>
 								<ul class="dropdown-menu">
 									<li class="dropdown-submenu"><a tabindex="-1" href="#">Servicios</a>
 										<ul class="dropdown-menu">
-											<?php //if($this->session->userdata('posicion') <= 3): ?>
+											<?php if($this->session->userdata('posicion') <= 3): ?>
 												<?php if($this->session->userdata('periodo_edicion') == 1): ?>
 													<li><a href="<?= base_url('objetivo/asignar_pesos');?>">Responsabilidades Por Área</a></li>
 												<?php endif; ?>
-											<?php //endif; if($this->session->userdata('tipo') > 3): 
+											<?php endif; if($this->session->userdata('tipo') > 3): 
 												if(isset($evaluacion) && $evaluacion):?>
 													<li><a href="<?= base_url('evaluacion');?>">Evaluaciones</a></li>
 													<li><a href="<?= base_url('evaluacion/index/false');?>">Evaluaciones Confidencial</a></li>
 													<li><a href="<?= base_url('evaluacion/por_evaluador');?>">Evaluaciones por Evaluador</a></li>
 												<?php endif; ?>
 												<li><a href="<?= base_url('ver_requisiciones');?>">Requisiciones</a></li>
-											<?php //endif;?>
+											<?php endif;?>
 										</ul>
 									</li>
-									<?php //if($this->session->userdata('tipo') > 3): ?>
+									<?php if($this->session->userdata('tipo') > 3): ?>
 										<li role="separator" class="divider"></li>
 										<li class="dropdown-submenu"><a tabindex="-1" href="#">ABC</a>
 											<ul class="dropdown-menu">
@@ -117,15 +117,15 @@
 												<li><a href="<?= base_url('evaluacion/proyecto');?>">Evaluación por Proyecto</a></li>
 											</ul>
 										</li>
-									<?php //endif; ?>
+									<?php endif; ?>
 								</ul>
 							</li>
-						<?php //endif; ?>
+						<?php endif; ?>
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
 								Servicios<span class="caret"></span></a>
 							<ul class="dropdown-menu">
-								<?php //if($this->session->userdata('tipo') == 3 || $this->session->userdata('tipo') == 5) ?>
+								<?php if($this->session->userdata('tipo') == 3 || $this->session->userdata('tipo') == 5) ?>
 								<li><a href="<?= base_url('requisiciones');?>">Requisiciones</a></li>
 								<?php if(isset($evaluacion) && $evaluacion): ?>
 									<li><a href="<?= base_url('evaluar');?>">Evaluaciones</a></li>
