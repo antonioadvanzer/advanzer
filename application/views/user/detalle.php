@@ -134,6 +134,7 @@
 				<option value="3" <?php if($user->tipo == 3) echo "selected"; ?>>Requisiciones</option>
 				<option value="4" <?php if($user->tipo == 4) echo "selected"; ?>>Administrador</option>
 				<option value="5" <?php if($user->tipo == 5) echo "selected"; ?>>Requisiciones y Administrador</option>
+				<option value="6" <?php if($user->tipo == 6) echo "selected"; ?>>Soporte Técnico</option>
 			</select>
 		</div>
 	  </div>

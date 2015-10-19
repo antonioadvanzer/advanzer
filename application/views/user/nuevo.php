@@ -107,6 +107,7 @@
 				<option value="3">Requisiciones</option>
 				<option value="4">Administrador</option>
 				<option value="5">Requisiciones y Administrador</option>
+				<option value="6">Soporte Técnico</option>
 			</select>
 		  </div>
 	  </div>

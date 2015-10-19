@@ -9,7 +9,29 @@
 		<div class="col-md-12">
 			<div class="panel panel-default">
 				<div class="panel-body">
-					<div class="row"><div class="col-md-12 lead">Perfil del Colaborador<hr></div></div>
+					<div class="row"><div class="col-md-12 lead">Perfil del Colaborador <?php if($this->session->userdata('tipo')!=0)
+					switch ($this->session->userdata('tipo')) {
+						case 1:
+						case 2:
+							echo " (Capturista de Compromisos Internos)";
+							break;
+						case 3:
+							echo " (Requisiciones)";
+							break;
+						case 4:
+							echo " (Administrador)";
+							break;
+						case 5:
+							echo " (Administrador y Requisiciones)";
+							break;
+						case 6:
+							echo " (Soporte Técnico)";
+							break;
+						default:
+							# code...
+							break;
+					}
+					?><hr></div></div>
 					<div class="row">
 						<div class="col-md-4 text-center">
 							<img height="150px" class="img-circle avatar avatar-original" style="-webkit-user-select:none; 
