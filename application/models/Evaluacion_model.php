@@ -477,7 +477,7 @@ class Evaluacion_model extends CI_Model{
 	function getPagination() {
 		$this->db->select('U.id,U.foto,U.nombre,A.nombre area')
 			->join('Areas A','A.id = U.area')
-			->where('U.fecha_ingreso <=','2015-10-31')
+			->where('U.fecha_ingreso <=',(date('Y')-1).'-09-30')
 			->group_by('U.id')
 			->order_by('U.nombre');
 		$result = $this->db->get('Users U')->result();
@@ -788,7 +788,7 @@ class Evaluacion_model extends CI_Model{
 	}
 	
 	function getEvaluacionAnual() {
-		$result = $this->db->select('MAX(id) id')->where_in('estatus',array(1,2))->where(array('tipo'=>1,'inicio <'=>date('Y-m-d'),
+		$result = $this->db->select('MAX(id) id')->where_in('estatus',array(1,2))->where(array('tipo'=>1,'inicio <='=>date('Y-m-d'),
 			'fin >='=>date('Y-m-d')))->get('Evaluaciones');
 		if($result->num_rows() != 0)
 			return $result->first_row()->id;
@@ -873,9 +873,17 @@ class Evaluacion_model extends CI_Model{
 	}
 
 	function getActiveEvaluation() {
-		$result = $this->db->where(array('inicio <'=>date('Y-m-d'),'fin >='=>date('Y-m-d'),'estatus'=>1))->get('Evaluaciones');
+		$result = $this->db->where(array('inicio <='=>date('Y-m-d'),'fin >='=>date('Y-m-d'),'estatus'=>1))->get('Evaluaciones');
 		if($result->num_rows() > 0)
 			return true;
 		return false;
+	}
+
+	function getEvaluadoresPendientesByEvaluacion($evaluacion) {
+		$result = $this->db->select('U.id,U.nombre,U.email,Ev.id evaluacion')->join('Evaluaciones Ev','Ev.lider = U.id')->where('Ev.id',$evaluacion)
+			->get('Users U')->first_row();
+		$result->evaluaciones = $this->db->select('U.nombre,E.estatus')->from('Users U')
+			->join('Evaluadores E','E.evaluador = U.id')->where(array('E.estatus !='=>2,'evaluador'=>$result->id))->get()->result();
+		return $result;
 	}
 }

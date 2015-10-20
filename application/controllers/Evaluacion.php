@@ -130,7 +130,7 @@ class Evaluacion extends CI_Controller {
     private function genera_autoevaluacion($colaborador) {
         $evaluacion = $this->evaluacion_model->getEvaluacionAnual();
         $info = $this->user_model->searchById($colaborador);
-        if($info->fecha_ingreso <= (date('Y')-1)."-10-31")
+        if($info->fecha_ingreso <= (date('Y')-1)."-09-30")
             $this->evaluacion_model->genera_autoevaluacion($evaluacion,$colaborador);
     }
 

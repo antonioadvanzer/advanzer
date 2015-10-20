@@ -159,6 +159,7 @@ class User_model extends CI_Model{
 			$this->db->where('U.estatus',$estatus);
 		return $this->db->get('Users U')->result();
 	}
+	
 	function getAll($tipo=null) {
 		if($tipo == 1)
 			$this->db->where('P.nivel <=',5);
@@ -169,4 +170,13 @@ class User_model extends CI_Model{
 		$this->db->join('Tracks T','T.id = PT.track');
 		return $this->db->where('U.estatus',1)->order_by('nombre','asc')->get('Users U')->result();
 	}
+
+	function logout($id,$email) {
+		$descripcion = "cerró sesión: $email";
+		$this->db->insert('Bitacora',array('accion'=>5,'descripcion'=>$descripcion,'valor'=>$id));
+		if($this->db->affected_rows() == 1)
+			return true;
+		return false;
+	}
+
 }

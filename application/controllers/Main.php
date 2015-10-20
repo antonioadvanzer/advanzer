@@ -131,8 +131,10 @@ class Main extends CI_Controller {
     // Unset session and logout
 	public function logout($err=null) {
 		unset($_SESSION['access_token']);
-		$this->session->userdata=array();
-		$this->login($err);
+		if($this->user_model->logout($this->session->userdata('id'),$this->session->userdata('email'))){
+			$this->session->userdata=array();
+			$this->login($err);
+		}
 		//redirect("https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=".base_url('login'),"refresh");
 	}
 
@@ -175,9 +177,9 @@ class Main extends CI_Controller {
 		$config = array(
 			'protocol' => 'smtp',
 			'smtp_host' => 'ssl://smtp.gmail.com',
-			'smtp_port' => 465,
-			'smtp_user' => 'jesus.salas@advanzer.com',
-			'smtp_pass' => 'yaucjurn',
+			'smtp_port' => 587,
+			'smtp_user' => 'notificaciones.ch@advanzer.com',
+			'smtp_pass' => 'CapitalAdv1',
 			'mailtype' => 'html',
 			'charset' => 'utf-8',
 			'newline' => "\r\n"
@@ -187,7 +189,7 @@ class Main extends CI_Controller {
 
 		$this->email->clear(TRUE);
 
-		$this->email->from('jesus.salas@advanzer.com','Portal de Evaluación Advanzer-Entuizer');
+		$this->email->from('notificaciones.ch@advanzer.com','Portal de Evaluación Advanzer-Entuizer');
 		$this->email->to("jesus_js92@outlook.com");
 		$this->email->subject('Captura de Compromisos Internos');
 		$this->email->message('<h2>Se ha adjuntado el archivo de soporte de la captura de Compromisos Internos</h2><hr>');
@@ -457,9 +459,9 @@ class Main extends CI_Controller {
 		$config = array(
 			'protocol' => 'smtp',
 			'smtp_host' => 'ssl://smtp.gmail.com',
-			'smtp_port' => 465,
-			'smtp_user' => 'jesus.salas@advanzer.com',
-			'smtp_pass' => 'yaucjurn',
+			'smtp_port' => 587,
+			'smtp_user' => 'notificaciones.ch@advanzer.com',
+			'smtp_pass' => 'CapitalAdv1',
 			'mailtype' => 'html',
 			'charset' => 'utf-8',
 			'newline' => "\r\n"
@@ -477,5 +479,77 @@ class Main extends CI_Controller {
 
 		if(!$this->email->send())
 			var_dump($this->email->print_debugger());
+	}
+
+	public function recordatorioEvProyecto() {
+		$msg="";
+		$proyectos = $this->evaluacion_model->getEvaluacionesProyecto();
+		if($proyectos)
+			foreach ($proyectos as $proyecto) :
+				if($proyecto->inicio <= date('Y-m-d') && $proyecto->fin >= date('Y-m-d')):
+					$msg2 = "Evaluation: '".$proyecto->nombre."' with id: ".$evaluacion->id."\n";
+					$info = $this->evaluacion_model->getEvaluadoresPendientesByEvaluacion($proyecto->id);
+					$mensaje="<h2>Estimado Colaborador,</h2><hr>Le recordamos que cuenta con evaluaciones pendientes de realizar correspondientes a: ";
+					$mensaje.="<i><b>$evaluacion->nombre</b></i><br>Favor de ingresar al <a style='text-decoration:none;' href='http://intranet.advanzer.com/evaluar'>Portal de Evaluación</a>";
+					$mensaje.=" para terminar el proceso de la evaluación.<br>";
+					if($response = $this->enviaRecordatorio($info->email,$mensaje))
+						$msg .= date("Y-m-d H:i:s")." - Succesfully executed with errors:\n $msg2\t$response";
+					else
+						$msg .= date("Y-m-d H:i:s")." - Succesfully executed with activity:\n$msg2\tMail sent to project leader";
+					$msg .= "\n\n";
+				endif;
+			endforeach;
+		if($msg == "")
+			$msg = date("Y-m-d H:i:s")." - Succesfully executed with no activity.";
+
+		echo "$msg\n\n";
+	}
+
+	public function recordatorioEvAnual() {
+		$msg="";
+		$evaluacion = $this->evaluacion_model->getEvaluacionById($this->evaluacion_model->getEvaluacionAnual());
+		if($evaluacion)
+			if($evaluacion->inicio <= date('Y-m-d') && $evaluacion->fin >= date('Y-m-d')):
+				$msg2 = "Evaluation: '".$evaluacion->nombre."' with id: ".$evaluacion->id."\n";
+				$info = $this->evaluacion_model->getEvaluadoresPendientesByEvaluacion($evaluacion->id);
+				$mensaje="<h2>Estimado Colaborador,</h2><hr>Le recordamos que cuenta con evaluaciones pendientes de realizar correspondientes a: ";
+				$mensaje.="<i><b>$evaluacion->nombre</b></i><br>Favor de ingresar al <a style='text-decoration:none;' href='http://intranet.advanzer.com/evaluar'>Portal de Evaluación</a>";
+				$mensaje.=" para terminar el proceso de la evaluación.<br>";
+				if($response = $this->enviaRecordatorio($info->email,$mensaje))
+					$msg = date("Y-m-d H:i:s")." - Succesfully executed with errors:\n $msg2\t$response";
+				else
+					$msg = date("Y-m-d H:i:s")." - Succesfully executed with activity:\n$msg2";
+			endif;
+		if($msg == "")
+			$msg = date("Y-m-d H:i:s")." - Succesfully executed with no activity.";
+
+		echo "$msg\n\n";
+	}
+
+	private function enviaRecordatorio($destinatario,$mensaje) {
+		$this->load->library("email");
+
+		$config = array(
+			'protocol' => 'smtp',
+			'smtp_host' => 'ssl://smtp.gmail.com',
+			'smtp_port' => 587,
+			'smtp_user' => 'notificaciones.ch@advanzer.com',
+			'smtp_pass' => 'CapitalAdv1',
+			'mailtype' => 'html',
+			'charset' => 'utf-8',
+			'newline' => "\r\n"
+		);
+
+		$this->email->initialize($config);
+		$this->email->clear(TRUE);
+
+		$this->email->from('notificaciones.ch@advanzer.com','Portal de Evaluación Advanzer-Entuizer');
+		$this->email->to("jesus_js92@outlook.com"); //$this->email->to($destinatario);
+		$this->email->subject('Recordatorio de Evaluación');
+		$this->email->message($mensaje);
+
+		if(!$this->email->send())
+			return $this->email->print_debugger();
+		return false;
 	}
 }
