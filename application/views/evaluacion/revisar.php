@@ -134,7 +134,8 @@
 						<?php foreach ($colaborador->evaluadores as $evaluador):?>
 							<tr>
 								<?php if($flag == true): ?>
-									<td><img height="25px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></td>
+									<td><a href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion");?>">
+										<img height="25px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></a></td>
 									<td><?= $evaluador->nombre;?></td>
 								<?php endif; ?>
 								<td><?php if($evaluador->responsabilidad) echo number_format($evaluador->responsabilidad,2);?></td>
@@ -166,7 +167,8 @@
 						<?php foreach ($colaborador->evaluadores360 as $evaluador):?>
 							<tr>
 								<?php if($flag == true): ?>
-									<td><img height="25px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></td>
+									<td><a href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion");?>">
+										<img height="25px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></a></td>
 									<td><?= $evaluador->nombre;?></td>
 								<?php endif; ?>
 								<td><?php if($evaluador->competencia) echo number_format($evaluador->competencia,2);?></td>
@@ -196,7 +198,8 @@
 						<?php foreach ($colaborador->evaluadoresProyecto as $evaluador):?>
 							<tr>
 								<?php if($flag == true): ?>
-									<td><img height="25px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></td>
+									<td><a href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion/1");?>">
+										<img height="25px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></a></td>
 									<td><?= $evaluador->nombre;?></td>
 								<?php endif; ?>
 								<td><?php if($evaluador->evaluacion) echo $evaluador->evaluacion;?></td>

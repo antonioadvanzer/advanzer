@@ -78,7 +78,7 @@
 					<div style="width:60%;position:absolute;top:10%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
 						<div class="col-md-12">
 							<div class="form-group" align="center" id="finalizar">
-								<label>¿Tienes algún comentario adicional para el colaborador?</label>
+								<label>Escribe un comentario adicional respecto al desempeño del colaborador en el Proyecto</label>
 								<textarea id="comentarios" class="form-control" rows="2" style="max-width:300px;text-align:center" 
 									required><?= $evaluacion->comentarios;?></textarea>
 							</div>

@@ -7,6 +7,7 @@ class Indicador extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->valida_sesion();
+		$this->valida_acceso();
 		$this->load->model('indicador_model');
 	}
 
@@ -151,7 +152,12 @@ class Indicador extends CI_Controller {
 	}
 
 	private function valida_sesion() {
-        if($this->session->userdata('id') == "")
-            redirect('login');
-    }
+		if($this->session->userdata('id') == "")
+			redirect('login');
+	}
+
+	private function valida_acceso() {
+		if($this->session->userdata('tipo') < 4)
+		redirect();
+	}
 }

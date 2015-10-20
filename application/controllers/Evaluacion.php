@@ -16,6 +16,7 @@ class Evaluacion extends CI_Controller {
 
     //basicas
     public function index($flag=true) {
+        $this->valida_acceso();
         if(!$this->evaluacion_model->getEvaluacionAnual())
             redirect('evaluacion/proyecto');
         else{
@@ -27,12 +28,14 @@ class Evaluacion extends CI_Controller {
     }
 
     public function proyecto() {
+        $this->valida_acceso();
         $data['evaluaciones'] = $this->evaluacion_model->getEvaluacionesSinAplicar();
         $this->layout->title('Advanzer - Gestión de Proyectos');
         $this->layout->view('evaluacion/proyecto',$data);
     }
 
     public function gestionar() {
+        $this->valida_acceso();
         $evaluacion=$this->input->post('evaluacion');
         $datos=array(
             'inicio'=>$this->input->post('inicio'),
@@ -78,6 +81,7 @@ class Evaluacion extends CI_Controller {
     }
 
     public function nueva() {
+        $this->valida_acceso();
         $data['colaboradores'] = $this->user_model->getAll();
         $data['participantes']=array();
         $this->layout->title('Advanzer - Nueva Evaluación');
@@ -85,6 +89,7 @@ class Evaluacion extends CI_Controller {
     }
 
     public function registrar() {
+        $this->valida_acceso();
         $datos=array(
             'anio'=>$this->input->post('anio'),
             'tipo'=>$this->input->post('tipo'),
@@ -119,6 +124,7 @@ class Evaluacion extends CI_Controller {
     }
 
     public function ci() {
+        $this->valida_acceso('ci');
         $data['colaboradores'] = $this->evaluacion_model->getEvaluados();
         $data['info_archivos'] = $this->evaluacion_model->getInfoCaptura();
         $data['evaluacion'] = $this->evaluacion_model->getEvaluacionById($this->evaluacion_model->getEvaluacionAnual());
@@ -139,7 +145,33 @@ class Evaluacion extends CI_Controller {
             redirect('login');
     }
 
+    private function valida_acceso($tipo=null) {
+        switch ($tipo) {
+            case null:
+                if($this->session->userdata('tipo') < 4)
+                    redirect();
+                break;
+            case 'ci':
+                if(!in_array($this->session->userdata('tipo'),array(1,2,4,5,6)))
+                    redirect();
+                break;
+            default:
+                redirect();
+                break;
+        }
+    }
+
     //procesos ajax carga/consulta info
+    public function detalle_asignacion($asignacion,$proyecto=null) {
+        $data=array();
+        if($proyecto==null)
+            $data['evaluacion'] = $this->evaluacion_model->getEvaluacionByAsignacion($asignacion);
+        else
+            $data['evaluacion'] = $this->evaluacion_model->getProyectoByAsignacion($asignacion);
+        $this->layout->title('Advanzer - Detalle de Evaluación');
+        $this->layout->view('evaluacion/detalle_asignacion',$data);
+    }
+
     public function update_feedback($feedback,$flag=false) {
         if($flag==true)
             $this->evaluacion_model->updateFeedback($feedback,array('estatus'=>2));
@@ -607,6 +639,7 @@ class Evaluacion extends CI_Controller {
     }
 
     public function asignar_evaluador($colaborador){
+        $this->valida_acceso();
         $colaborador=$this->user_model->searchById($colaborador);
         $colaborador->anual = $this->evaluacion_model->getEvaluadorAnual($colaborador->id);
         $data['colaborador']=$colaborador;
@@ -618,6 +651,7 @@ class Evaluacion extends CI_Controller {
     }
 
     public function guarda_evaluadores() {
+        $this->valida_acceso();
         $colaborador=$this->input->post('colaborador');
         $anual=$this->input->post('anual');
         $agregar=$this->input->post('agregar');
@@ -649,6 +683,7 @@ class Evaluacion extends CI_Controller {
 
     //estructuras
     public function revisar($colaborador,$flag=false) {
+        $this->valida_acceso();
         $data['flag']=$flag;
         $data['colaborador'] = $this->evaluacion_model->getResultadosByColaborador($this->user_model->searchById($colaborador));
         $this->layout->title('Advanzer - Revisión');
@@ -678,6 +713,7 @@ class Evaluacion extends CI_Controller {
     }
 
     public function evaluaciones($msg=null) {
+        $this->valida_acceso();
         $data['evaluacion'] = $this->evaluacion_model->getEvaluacionAnualVigente();
         $data['colaboradores'] = $this->evaluacion_model->getPagination();
     	
@@ -689,6 +725,7 @@ class Evaluacion extends CI_Controller {
     }
 
     public function por_evaluador() {
+        $this->valida_acceso();
         $data=array();
         $data['evaluadores'] = $this->evaluacion_model->getEvaluadores();
         $this->layout->title('Advanzer - Evaluadores');

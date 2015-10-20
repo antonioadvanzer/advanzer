@@ -15,6 +15,7 @@ class User extends CI_Controller {
     }
 
     public function index($msg=null){
+        $this->valida_acceso();
         $data['users'] = $this->user_model->getPagination();
 
         if($msg!=null && $msg!='(:num)')
@@ -24,6 +25,7 @@ class User extends CI_Controller {
     }
 
     public function ver($id,$err_msg=null,$msg=null) {
+        $this->valida_acceso();
     	$data=array();
     	if (!empty($err_msg))
     		$data['err_msg'] = $err_msg;
@@ -39,6 +41,7 @@ class User extends CI_Controller {
     }
 
     public function upload_photo() {
+        $this->valida_acceso();
         $id=$this->input->post('id');
     	//set preferences
     	$config['upload_path'] = './assets/images/fotos/';
@@ -66,6 +69,7 @@ class User extends CI_Controller {
     }
 
     public function update() {
+        $this->valida_acceso();
         $array=array(
         	'nombre' => $this->input->post('nombre'),
         	'email' => $this->input->post('email'),
@@ -98,42 +102,8 @@ class User extends CI_Controller {
         <?php endforeach;
     }
 
-    public function searchByText() {
-        $estatus = $this->input->post('estatus');
-		$valor = $this->input->post('valor');
-        $orden = $this->input->post('orden');
-		$resultados = $this->user_model->getByText($valor,$estatus,$orden);
-		foreach ($resultados as $user) : ?>
-			<tr>
-                <td><img height="25px" src="<?= base_url('assets/images/fotos')."/".$user->foto;?>"></td>
-                <td><span class="glyphicon glyphicon-eye-open" style="cursor:pointer" onclick="
-                  location.href='<?= base_url('user/ver/');?>/'+<?= $user->id;?>"></span> 
-                  <span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
-                  <?= $user->id;?>"><?= $user->nomina;?></span></td>
-                <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
-                  <?= $user->id;?>"><?= $user->nombre;?></span></td>
-                <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
-                  <?= $user->id;?>"><?= $user->email;?></span></td>
-                <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
-          <?= $user->id;?>"><img width="60px"src="<?= base_url('assets/images').'/'.$user->empresa.'.png';?>"></span></td>
-                <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver');?>/'+
-                  <?= $user->id;?>"><?= $user->track;?></span></td>
-                <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
-                  <?= $user->id;?>"><?= $user->posicion;?></span></td>
-                <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
-                  <?= $user->id;?>"><?= $user->area;?></span></td>
-                <td><span style="cursor:pointer" onclick="location.href='<?= base_url('user/ver/');?>/'+
-                  <?= $user->id;?>"><?= $user->plaza;?></span></td>
-                <td align="right"><span style="cursor:pointer;" onclick="
-                  if(confirm('Seguro que desea cambiar el estatus del usuario: \n <?= $user->nombre;?>'))location.href=
-                  '<?= base_url('user/del/');?>/'+<?= $user->id;?>;" class="glyphicon 
-                  <?php if($user->estatus ==1 ) echo "glyphicon-ok"; else echo "glyphicon-ban-circle"; ?>"></span></td>
-            </tr>
-	        <script type="text/javascript">$("#pagination").hide('slow');</script>
-		<?php endforeach;
-    }
-
     public function nuevo($msg=null) {
+        $this->valida_acceso();
     	$data=array();
     	if($msg!=null)
     		$data['err_msg'] = $msg;
@@ -173,6 +143,7 @@ class User extends CI_Controller {
     }
 
     public function recision() {
+        $this->valida_acceso();
     	$id = $this->input->post('id');
         $datos = array(
             'fecha_baja'=>$this->input->post('fecha_baja'),
@@ -188,6 +159,7 @@ class User extends CI_Controller {
     }
 
     public function rehab() {
+        $this->valida_acceso();
         $id = $this->input->post('id');
         $datos = array(
             'fecha_ingreso'=>$this->input->post('reingreso'),
@@ -203,5 +175,10 @@ class User extends CI_Controller {
     private function valida_sesion() {
         if($this->session->userdata('id') == "")
             redirect('login');
+    }
+
+    private function valida_acceso() {
+        if($this->session->userdata('tipo') < 4)
+        redirect();
     }
 }

@@ -16,6 +16,7 @@ class Objetivo extends CI_Controller {
     }
 
     function ver($id,$msg=null) {
+        $this->valida_acceso();
     	$data=array();
     	if (!empty($msg))
     		$data['err_msg'] = $msg;
@@ -28,6 +29,7 @@ class Objetivo extends CI_Controller {
     }
 
     function update() {
+        $this->valida_acceso();
         $id = $this->input->post('id');
         $datos = array(
             'nombre' => $this->input->post('nombre'),
@@ -63,6 +65,7 @@ class Objetivo extends CI_Controller {
     }
 
     function ch_estatus($id) {
+        $this->valida_acceso();
         if($this->objetivo_model->ch_estatus($id))
             redirect('administrar_dominios');
         else{
@@ -72,6 +75,7 @@ class Objetivo extends CI_Controller {
     }
 
     function nuevo($msg=null) {
+        $this->valida_acceso();
         if ($msg != null)
             $data['err_msg'] = $msg;
         $data['dominios'] = $this->dominio_model->getAll();
@@ -160,5 +164,10 @@ class Objetivo extends CI_Controller {
     private function valida_sesion() {
         if($this->session->userdata('id') == "")
             redirect('login');
+    }
+
+    private function valida_acceso() {
+        if($this->session->userdata('tipo') < 4)
+        redirect();
     }
 }
