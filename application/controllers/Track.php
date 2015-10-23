@@ -8,7 +8,7 @@ class Track extends CI_Controller {
     function __construct(){
     	parent::__construct();
         $this->valida_sesion();
-        $this->valida_accesoo();
+        $this->valida_acceso();
         $this->load->model('track_model');
         $this->load->model('posicion_model');
     }
