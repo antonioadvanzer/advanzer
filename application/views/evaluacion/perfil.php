@@ -153,11 +153,9 @@
 			<label><?= $comp->descripcion;?></label>
 			</h2>
 			<div align="left">
-				<label>
-					<?php foreach ($comp->comportamientos as $comportamiento) : ?>
-						<span class="glyphicon glyphicon-ok"><?= $comportamiento->descripcion;?></span>
-					<?php endforeach; ?>
-				</label>
+				<p><?php foreach ($comp->comportamientos as $comportamiento) : ?>
+					<span class="glyphicon glyphicon-ok"><?= $comportamiento->descripcion;?></span>
+				<?php endforeach; ?></p>
 			</div>
 			<?php endforeach; ?>
 		</div>

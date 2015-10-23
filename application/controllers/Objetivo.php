@@ -136,9 +136,6 @@ class Objetivo extends CI_Controller {
     }
 
     function asignar_pesos() {
-        if($this->session->userdata('tipo') < 2)
-            if($this->session->userdata('posicion') > 3)
-                redirect(base_url());
         $data=array();
         $direccion = $this->session->userdata('direccion');
         $data['areas'] = $this->porcentaje_objetivo_model->getPorcentajes($direccion);;
