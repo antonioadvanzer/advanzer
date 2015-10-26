@@ -16,9 +16,9 @@
 		<div class="col-md-12">
 			<h3><b>Evaluadores:</b></h3>
 			<div id="filterbar"> </div>
-			<table id="tbl" align="center" class="sortable table-hover table-striped table-condensed" data-toggle="table" 
+			<table id="tbl" align="center" class="table-hover table-striped table-condensed" data-toggle="table" 
 				data-toolbar="#filterbar" data-pagination="true" data-show-columns="true" data-show-filter="true" data-hover="true" 
-				data-striped="true" data-show-toggle="true" data-show-export="true">
+				data-striped="true" data-show-toggle="true">
 				<thead>
 					<tr>
 						<th class="col-md-1" data-halign="center" data-align="center" data-field="foto" data-defaultsort="disabled"></th>

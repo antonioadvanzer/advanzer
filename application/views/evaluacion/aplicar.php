@@ -112,9 +112,11 @@
 			<?php if(isset($evaluacion->dominios)): ?>
 				<div class="item" align="center" style="min-height:550px;">
 					<img width="100%" style="opacity:0.3;position:absolute" src="<?= base_url('assets/images/responsabilidades.jpg');?>">
+					<h2 style="width:60%;position:absolute;top:40%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
+						Selecciona la métrica que consideres correcta (1-5) para cada Responsabilidad</h2>
 					<div class="carousel-caption"><h3 style="cursor:default;">Responsabilidades</h3></div>
 				</div>
-				<?php foreach ($evaluacion->dominios as $dominio) : ?>
+				<?php foreach ($evaluacion->dominios as $dominio) : if(count($dominio->responsabilidades) > 0): ?>
 					<div class="item" style="min-height:470px;">
 						<aside class="accordion" style="max-width:70%;">
 							<h1><?= $dominio->nombre;?></h1>
@@ -167,10 +169,12 @@
 							<?php endforeach; ?>
 						</aside>
 					</div>
-				<?php endforeach; 
+				<?php endif; endforeach; 
 			endif; ?>
 			<div class="item" align="center" style="min-height:550px;">
 				<img width="100%" style="opacity:0.3;position:absolute" src="<?= base_url('assets/images/competencias.jpg');?>">
+				<h2 style="width:60%;position:absolute;top:40%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
+					Selecciona el valor que consideres correcto (1-5) para cada Comportamiento</h2>
 				<div class="carousel-caption"><h3 style="cursor:default;">Competencias</h3></div>
 			</div>
 			<?php foreach ($evaluacion->indicadores as $indicador) : ?>

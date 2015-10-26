@@ -61,7 +61,7 @@ class Evaluacion_model extends CI_Model{
 		$this->db->from('Objetivos O');
 		$this->db->join('Objetivos_Areas OA','OA.objetivo = O.id','LEFT OUTER');
 		$this->db->join('Porcentajes_Objetivos PO','PO.objetivo_area = OA.id','LEFT OUTER');
-		$this->db->where(array('O.dominio'=>$dominio,'OA.area'=>$area,'PO.nivel_posicion'=>$posicion,'O.estatus'=>1));
+		$this->db->where(array('O.dominio'=>$dominio,'OA.area'=>$area,'PO.nivel_posicion'=>$posicion,'O.estatus'=>1,'PO.valor !='=>0));
 		$this->db->order_by('O.tipo,O.nombre');
 		return $this->db->get()->result();
 	}
@@ -251,7 +251,7 @@ class Evaluacion_model extends CI_Model{
 		$this->db->join('Posicion_Track PT','PT.id = U.posicion_track','LEFT OUTER');
 		$this->db->join('Posiciones P','P.id = PT.posicion','LEFT OUTER');
 		$this->db->join('Tracks T','T.id = PT.track','LEFT OUTER');
-		$this->db->where('U.estatus',1);
+		$this->db->where(array('U.estatus'=>1,'U.fecha_ingreso <='=>(date('Y')-1).'-09-30'));
 		$this->db->order_by('U.nombre');
 		$result = $this->db->get()->result();
 		foreach ($result as $colaborador) : // getEvaluadores
@@ -393,7 +393,8 @@ class Evaluacion_model extends CI_Model{
 		$evaluacion=$this->getEvaluacionAnual();
 		$posicion=$this->getPosicionByColaborador($asignacion->evaluado);
 		$jefe=$this->db->select('evaluador')->where(array('evaluado'=>$asignacion->evaluado,'anual'=>1,'evaluacion'=>$evaluacion))
-			->get('Evaluadores')->first_row()->evaluador;
+			->get('Evaluadores');
+		($jefe->num_rows() > 0) ? $jefe=$jefe->first_row()->evaluador : $jefe=null;
 		$competencia=0;
 		$responsabilidad=0;
 		//si es de gerente a director se evalúa 360
@@ -724,10 +725,10 @@ class Evaluacion_model extends CI_Model{
 		$info = $this->searchAsignacionById($asignacion);
 		$posicion = $this->getPosicionByColaborador($info->evaluado);
 		$area = $this->getAreaByColaborador($info->evaluado);
-		$jefe=$this->db->select('evaluador')->where(array('evaluado'=>$info->evaluado,'anual'=>1,'evaluacion'=>$info->evaluacion))
-			->get('Evaluadores')->first_row()->evaluador;
 		switch ($tipo) { //tipo 1 = anual
 			case 1:
+				$jefe=$this->db->select('evaluador')->where(array('evaluado'=>$info->evaluado,'anual'=>1,'evaluacion'=>$info->evaluacion))
+					->get('Evaluadores')->first_row()->evaluador;
 				if($jefe == $info->evaluador) { //si el evaluador es el jefe, guarda las responsabilidades
 					// tomamos las responsabilidades de la tabla detalles para hacer los calculos
 					$total = $this->db->select('SUM(PO.valor/100*M.valor) total')->from('Detalle_Evaluacion DE')
@@ -749,7 +750,8 @@ class Evaluacion_model extends CI_Model{
 				$this->db->insert('Resultados_ev_Responsabilidad',array('asignacion'=>$asignacion,'total'=>$total));
 				break;
 		}
-		$this->calculaResultado($info);
+		if($this->getEvaluacionAnual())
+			$this->calculaResultado($info);
 		$this->db->where('id',$info->id)->update('Evaluadores',array('comentarios'=>$comentarios));
 		if($this->ch_estatus($asignacion,2))
 			return true;
@@ -758,7 +760,7 @@ class Evaluacion_model extends CI_Model{
 
 	function autogenera($colaboradores,$evaluacion) {
 		foreach ($colaboradores as $colaborador) :
-			if($colaborador->nivel_posicion > 8 || $colaborador->nivel_posicion < 3):
+			if($colaborador->nivel_posicion <= 8 && $colaborador->nivel_posicion > 3):
 				$diferencia=date_diff(date_create($colaborador->fecha_ingreso),date_create((date('Y')-1).'-09-30'));
 				if($diferencia->format('%R') == '+'):
 					$jefe=$this->db->select('jefe')->from('Users')->where('id',$colaborador->id)->get()->first_row()->jefe;

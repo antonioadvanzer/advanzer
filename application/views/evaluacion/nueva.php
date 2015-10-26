@@ -70,7 +70,7 @@
 		<div class="col-md-4">
 			<div class="form-group" align="center">
 				<label for="lider">Líder de Proyecto</label>
-				<select id="lider" name="lider" class="form-control" style="max-width:300px" required>
+				<select id="lider" name="lider" class="form-control" style="max-width:300px">
 					<option value="" disabled selected>-- Selecciona un líder --</option>
 				</select>
 			</div>
@@ -94,7 +94,7 @@
 			<div class="form-group" align="center">
 				<label for="participantes">Participantes</label>
 				<select id="agregar" name="agregar" multiple class="form-control" style="overflow-y:auto;
-					overflow-x:auto;min-height:200px;max-height:700px" required></select>
+					overflow-x:auto;min-height:200px;max-height:700px"></select>
 			</div>
 		</div>
 		<div class="col-md-2"><div class="form-group">&nbsp;</div>
@@ -109,12 +109,12 @@
 			<div class="form-group" align="center">
 				<label for="participantes">Colaboradores Disponibles</label>
 				<select id="quitar" name="quitar" multiple class="form-control" style="overflow-y:auto;
-					overflow-x:auto;min-height:200px;max-height:700px" required>
-					<?php foreach($colaboradores as $colaborador) : ?>
+					overflow-x:auto;min-height:200px;max-height:700px">
+					<?php foreach($colaboradores as $colaborador) : if($colaborador->nivel_posicion <= 8): ?>
 						<option value="<?= $colaborador->id;?>">
 							<?= "$colaborador->nombre - $colaborador->posicion ($colaborador->track)";?>
 						</option>?>
-					<?php endforeach; ?>
+					<?php endif; endforeach; ?>
 				</select>
 			</div>
 		</div>
@@ -156,7 +156,9 @@
 			$('#create').submit(function(event){
 				$('#alert').prop('display',false).hide();
 				anio=$('#anio').val();
-				tipo=$('#tipo').val();
+				$('#tipo option:selected').each(function(i,select) {
+					tipo = $(select).val();
+				});
 				nombre=$('#nombre').val();
 				fin=$('#fin').val();
 				inicio=$('#inicio').val();
@@ -170,6 +172,7 @@
 					if($(select).val() != lider)
 						agregar[i] = $(select).val();
 				});
+				console.log(anio,tipo,nombre,fin,inicio,lider,agregar,fin_p,inicio_p);
 				$.ajax({
 					url: '<?= base_url("evaluacion/registrar");?>',
 					type: 'POST',
@@ -187,6 +190,9 @@
 							$('#alert').prop('display',true).show();
 							$('#msg').html(returnData['msg']);
 						}
+					},
+					error: function(xdr) {
+						console.log(xdr.responseText);
 					}
 				});
 				event.preventDefault();

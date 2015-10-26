@@ -39,7 +39,7 @@
 			  <?php foreach($evaluadores as $colaborador) : ?>
 	            <option value="<?= $colaborador->id;?>" <?php if($colaborador->estatus != 0) echo "disabled"; ?>>
 	                <?= "$colaborador->nombre - $colaborador->posicion ($colaborador->track)";?>
-	            </option>?>
+	            </option>
 			  <?php endforeach; ?>
 			</select>
 	  	  </div>
@@ -130,6 +130,9 @@
 							$('#alert').prop('display',true).show();
 							$('#msg').html(returnData['msg']);
 						}
+					},
+					error: function(xhr) {
+						console.log(xhr.responseText);
 					}
 				});
 				event.preventDefault();

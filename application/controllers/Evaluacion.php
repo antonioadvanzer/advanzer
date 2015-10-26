@@ -17,7 +17,7 @@ class Evaluacion extends CI_Controller {
     //basicas
     public function index($flag=true) {
         $this->valida_acceso();
-        if(!$this->evaluacion_model->getEvaluacionAnual())
+        if(!$this->evaluacion_model->getActiveEvaluation())
             redirect('evaluacion/proyecto');
         else{
             $data['flag']=$flag;
@@ -30,6 +30,8 @@ class Evaluacion extends CI_Controller {
     public function proyecto() {
         $this->valida_acceso();
         $data['evaluaciones'] = $this->evaluacion_model->getEvaluacionesSinAplicar();
+        if(count($data['evaluaciones']) == 0)
+            redirect('evaluacion/nueva');
         $this->layout->title('Advanzer - Gestión de Proyectos');
         $this->layout->view('evaluacion/proyecto',$data);
     }
@@ -95,17 +97,18 @@ class Evaluacion extends CI_Controller {
             'tipo'=>$this->input->post('tipo'),
             'nombre'=>$this->input->post('nombre'),
             'inicio'=>$this->input->post('inicio'),
-            'fin'=>$this->input->post('fin'),
-            'inicio_periodo'=>$this->input->post('inicio_p'),
-            'fin_periodo'=>$this->input->post('fin_p')
+            'fin'=>$this->input->post('fin')
         );
         $tipo=$this->input->post('tipo');
         $lider=$this->input->post('lider');
         $this->db->trans_begin();
-        if($tipo == 0)
+        if($tipo == 0){
             $datos['lider'] = $lider;
+            $datos['inicio_periodo']=$this->input->post('inicio_p');
+            $datos['fin_periodo']=$this->input->post('fin_p');
+        }
         $evaluacion=$this->evaluacion_model->create($datos);
-        if($this->input->post('tipo') == 0){
+        if($tipo == 0){
             foreach ($this->input->post('agregar') as $colaborador) :
                 $this->evaluacion_model->addEvaluadorToColaborador(array('evaluador'=>$lider,
                     'evaluado'=>$colaborador,'evaluacion'=>$evaluacion));
@@ -719,7 +722,7 @@ class Evaluacion extends CI_Controller {
     	
         $this->layout->title('Advanzer - Evaluaciones');
         if(!$data['evaluacion'])
-            redirect('evaluacion/proyecto');
+            redirect('evaluacion/nueva');
         else
     	   $this->layout->view('evaluacion/evaluaciones',$data);
     }

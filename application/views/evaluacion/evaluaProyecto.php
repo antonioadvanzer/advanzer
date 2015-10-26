@@ -28,15 +28,17 @@
 			<li data-target="#carousel" data-slide-to="<?= count($evaluacion->dominios)+1;?>"></li>
 		</ol>
 		<div class="carousel-inner" style="background-color:#dedede;" role="listbox">
-			<div class="item active" align="center" style="min-height:300px;">
+			<div class="item active" align="center" style="min-height:350px;">
 				<img height="100%" style="opacity:0.3;position:absolute" src="<?= base_url('assets/images/evaluacion.jpg');?>">
+				<h2 style="width:20%;position:absolute;top:20%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
+					Selecciona el valor que consideres correcto (1-5) para cada Dominio</h2>
 				<div class="carousel-caption">
 					<h3 style="cursor:default;"><?php switch($evaluacion->estatus){ case 0:echo"Comenzar Evaluación";break;
 						case 1:echo"Continuar Evaluación...";break;}?></h3>
 				</div>
 			</div>
 			<?php foreach ($evaluacion->dominios as $dominio) : ?>
-				<div class="item" align="center" style="min-height:300px;">
+				<div class="item" align="center" style="min-height:350px;">
 					<div style="width:60%;position:absolute;top:5%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
 						<form onsubmit="return verify(this);" action="javascript:" class="form-signin" role="form">
 							<input type="hidden" value="<?= $dominio->id;?>" id="dominio">
@@ -71,7 +73,7 @@
 					<div class="carousel-caption"><h3 style="cursor:default;"><?= $dominio->nombre;?></h3></div>
 				</div>
 			<?php endforeach; ?>
-			<div class="item" align="center" style="min-height:300px;">
+			<div class="item" align="center" style="min-height:350px;">
 				<img width="100%" style="opacity:0.3;position:absolute" src="<?= base_url('assets/images/gracias.jpg');?>">
 				<form onsubmit="return finalizar(<?= $evaluacion->id;?>,<?= $evaluacion->tipo;?>);" class="form-signin" 
 					action="javascript:" id="finalizar">
@@ -172,6 +174,8 @@
 						}
 					},
 					error: function(data){
+						$('#cargando').hide('slow');
+						$('#carousel').show('slow');
 						console.log(data.status,data.responseText);
 					}
 				});
