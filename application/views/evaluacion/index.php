@@ -44,7 +44,8 @@
 									<div class="col-sm-2"><small><b>Resultado</b></small></div>
 									<div class="col-sm-3"><small><b>Responsabilidades</b></small></div>
 									<div class="col-sm-2"><small><b>Competencias</b></small></div>
-								<?php if($flag == true): ?><div class="col-sm-5"><small><b>Evaluador</b></small></div><?php endif;?></div>
+									<?php if($flag == true): ?><div class="col-sm-5"><small><b>Evaluador</b></small></div><?php endif;?>
+								</div>
 								<?php foreach ($colab->evaluadores as $evaluador) : ?>
 									<div class="row" align="center">
 										<div class="col-sm-2"><small><?= number_format($evaluador->total,2);?></small></div>

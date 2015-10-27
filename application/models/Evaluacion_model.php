@@ -320,8 +320,8 @@ class Evaluacion_model extends CI_Model{
 			$colaborador->total = 0;
 			$colaborador->feedback = null;
 		}
-		$colaborador->evaluadores360 = new stdClass();
-		$colaborador->evaluadoresProyecto = new stdClass();
+		$colaborador->evaluadores360 = null;
+		$colaborador->evaluadoresProyecto = null;
 		//obtener evaluacion360 si es de nivel 3-4-5
 		$posicion=$this->getPosicionByColaborador($colaborador->id);
 		if($posicion >=3 && $posicion <= 5){
