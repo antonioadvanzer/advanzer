@@ -160,7 +160,7 @@ class Main extends CI_Controller {
     		endforeach;
     		$this->evaluacion_model->setPeriodoEdicion();
     		if(isset($anual) && $anual==true)
-    			$this->exportAnualFile();
+    			$msg.=$this->exportAnualFile();
     		$msg = date("Y-m-d H:i:s")." - Succesfully executed with activity:\n\t".$msg."\n\n";
     	}else
     		$msg = date("Y-m-d H:i:s")." - Succesfully executed with no activity.\n\n";
@@ -177,7 +177,7 @@ class Main extends CI_Controller {
 		$config = array(
 			'protocol' => 'smtp',
 			'smtp_host' => 'ssl://smtp.gmail.com',
-			'smtp_port' => 587,
+			'smtp_port' => 465,
 			'smtp_user' => 'notificaciones.ch@advanzer.com',
 			'smtp_pass' => 'CapitalAdv1',
 			'mailtype' => 'html',
@@ -414,7 +414,8 @@ class Main extends CI_Controller {
 				range(0, count($dsv)-1),
 				$dsl,
 				$xal,
-				$dsv
+				$dsv,
+				PHPExcel_Chart_DataSeries::STYLE_SMOOTHMARKER
 			);
 			$layout = new PHPExcel_Chart_Layout();
 			$ds->setSmoothLine(PHPExcel_Chart_DataSeries::STYLE_SMOOTHMARKER);
@@ -461,7 +462,7 @@ class Main extends CI_Controller {
 		$config = array(
 			'protocol' => 'smtp',
 			'smtp_host' => 'ssl://smtp.gmail.com',
-			'smtp_port' => 587,
+			'smtp_port' => 465,
 			'smtp_user' => 'notificaciones.ch@advanzer.com',
 			'smtp_pass' => 'CapitalAdv1',
 			'mailtype' => 'html',
@@ -481,6 +482,8 @@ class Main extends CI_Controller {
 
 		if(!$this->email->send())
 			var_dump($this->email->print_debugger());
+		else
+			echo "Se ha enviado reporte anual";
 	}
 
 	public function recordatorioEvProyecto() {
@@ -569,7 +572,7 @@ class Main extends CI_Controller {
 		$config = array(
 			'protocol' => 'smtp',
 			'smtp_host' => 'ssl://smtp.gmail.com',
-			'smtp_port' => 587,
+			'smtp_port' => 465,
 			'smtp_user' => 'notificaciones.ch@advanzer.com',
 			'smtp_pass' => 'CapitalAdv1',
 			'mailtype' => 'html',

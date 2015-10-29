@@ -820,8 +820,7 @@ class Evaluacion_model extends CI_Model{
 	}
 	
 	function getEvaluacionAnual() {
-		$result = $this->db->select('MAX(id) id')->where_in('estatus',array(1,2))->where(array('tipo'=>1,'inicio <='=>date('Y-m-d'),
-			'fin >='=>date('Y-m-d')))->get('Evaluaciones');
+		$result = $this->db->select('MAX(id) id')->where_in('estatus',array(1,2))->where(array('tipo'=>1,'anio'=>date('Y')-1))->get('Evaluaciones');
 		if($result->num_rows() != 0)
 			return $result->first_row()->id;
 		return false;
