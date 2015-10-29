@@ -911,10 +911,8 @@ class Evaluacion_model extends CI_Model{
 	}
 
 	function getEvaluadoresPendientesByEvaluacion($evaluacion) {
-		$result = $this->db->select('U.id,U.nombre,U.email,Ev.id evaluacion')->join('Evaluaciones Ev','Ev.lider = U.id')->where('Ev.id',$evaluacion)
-			->get('Users U')->first_row();
-		$result->evaluaciones = $this->db->select('U.nombre,E.estatus')->from('Users U')
-			->join('Evaluadores E','E.evaluador = U.id')->where(array('E.estatus !='=>2,'evaluador'=>$result->id))->get()->result();
+		$result = $this->db->select('U.id,U.nombre,U.email,Ev.evaluacion')->join('Evaluadores Ev','Ev.evaluador = U.id')
+			->where(array('Ev.evaluacion'=>$evaluacion,'Ev.estatus'=>1))->get('Users U')->result();
 		return $result;
 	}
 }

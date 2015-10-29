@@ -549,13 +549,17 @@ class Main extends CI_Controller {
 			endif;
 		endforeach;
 		if($evaluacion)
-			if($evaluacion->inicio == date('Y-m-d')):
+			if($evaluacion->inicio == date('Y-m-d') || $evaluacion->fin == date('Y-m-d')):
+				$response="";
 				$msg2 = "\n\nEvaluation: '".$evaluacion->nombre."' with id: ".$evaluacion->id."\n";
-				$info = $this->evaluacion_model->getEvaluadoresPendientesByEvaluacion($evaluacion->id);
-				$mensaje="<h2>Estimado Colaborador,</h2><hr> Se le informa que cuenta con evaluaciones correspondientes a: ";
-				$mensaje.="<i><b>$evaluacion->nombre</b></i><br>Favor de ingresar al <a style='text-decoration:none;' href='http://intranet.advanzer.com:3000/evaluar'>Portal de Evaluación</a>";
-				$mensaje.=" para iniciar el proceso de la evaluación.<br>";
-				if($response = $this->enviaRecordatorio($info->email,$mensaje))
+				$evaluadores = $this->evaluacion_model->getEvaluadoresPendientesByEvaluacion($evaluacion->id);
+				foreach ($evaluadores as $info) :
+					$mensaje="<h2>Estimado Colaborador,</h2><hr> Se le informa que cuenta con evaluaciones correspondientes a: ";
+					$mensaje.="<i><b>$evaluacion->nombre</b></i><br>Favor de ingresar al <a style='text-decoration:none;' href='http://intranet.advanzer.com:3000/evaluar'>Portal de Evaluación</a>";
+					$mensaje.=" para iniciar el proceso de la evaluación.<br>";
+					$response .= $this->enviaRecordatorio($info->email,$mensaje);
+				endforeach;
+				if($response != "")
 					$msg .= date("Y-m-d H:i:s")." - Succesfully executed with errors:\n $msg2\t$response";
 				else
 					$msg .= date("Y-m-d H:i:s")." - Succesfully executed with activity:\n$msg2";
