@@ -483,7 +483,7 @@ class Main extends CI_Controller {
 		if(!$this->email->send())
 			var_dump($this->email->print_debugger());
 		else
-			echo "Se ha enviado reporte anual";
+			return "Se ha enviado reporte anual";
 	}
 
 	public function recordatorioEvProyecto() {
