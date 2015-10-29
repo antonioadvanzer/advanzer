@@ -277,13 +277,15 @@ class Main extends CI_Controller {
 			endif;
 			if($colaborador->nivel_posicion <= 5):
 				$cont=0;
-				foreach ($colaborador->evaluadores360 as $evaluador) :
-					$evaluadores .= $evaluador->nombre." / ";
-					$comentarios .= $evaluador->comentarios." / ";
-					$total_360 += $evaluador->competencia;
-					$cont++;
-				endforeach;
-				($total_360) ? $total_360 = $total_360/$cont : $total_360 = null;
+				if(isset($colaborador->evaluadores360)):
+					foreach ($colaborador->evaluadores360 as $evaluador) :
+						$evaluadores .= $evaluador->nombre." / ";
+						$comentarios .= $evaluador->comentarios." / ";
+						$total_360 += $evaluador->competencia;
+						$cont++;
+					endforeach;
+				endif;
+				($total_360) ? $total_360 = $total_360/$cont : $total_360 = 0;
 				(double)$total_competencias = ($total_competencias + $total_360 + $colaborador->autoevaluacion)/3;
 			else:
 				(double)$total_competencias = ($total_competencias + $colaborador->autoevaluacion)/2;
@@ -527,6 +529,7 @@ class Main extends CI_Controller {
 	}
 
 	public function recordatorioDiario() {
+		$msg="";
 		$proyectos = $this->evaluacion_model->getEvaluacionesProyecto();
 		$evaluacion = $this->evaluacion_model->getEvaluacionById($this->evaluacion_model->getEvaluacionAnual());
 		foreach ($proyectos as $proyecto):
