@@ -23,20 +23,33 @@
 		<!-- Indicators -->
 		<ol class="carousel-indicators">
 			<li data-target="#carousel" data-slide-to="0" class="active"></li>
+			<li data-target="#carousel" data-slide-to="1"></li>
 			<?php for ($i=1; $i <= count($evaluacion->dominios); $i++) : ?>
-				<li data-target="#carousel" data-slide-to="<?= $i;?>"></li>
+				<li data-target="#carousel" data-slide-to="<?= $i+1;?>"></li>
 			<?php endfor; ?>
-			<li data-target="#carousel" data-slide-to="<?= count($evaluacion->dominios)+1;?>"></li>
+			<li data-target="#carousel" data-slide-to="<?= count($evaluacion->dominios)+2;?>"></li>
 		</ol>
 		<div class="carousel-inner" style="background-color:#dedede;" role="listbox">
 			<div class="item active" align="center" style="min-height:350px;">
-				<img height="100%" style="opacity:0.3;position:absolute" src="<?= base_url('assets/images/evaluacion.jpg');?>">
-				<h2 style="width:20%;position:absolute;top:20%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
-					Selecciona el valor que consideres correcto (1-5) para cada Dominio</h2>
+				<img height="100%" style="opacity:0.1;position:absolute" src="<?= base_url('assets/images/evaluacion.jpg');?>">
+				<div style="display:block;width:60%;position:absolute;top:20%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
+					<h2><b>Analiza cada rubro conforme a lo que crees que califica de manera correcta</b></h2><hr>
+					<h3><li>Si tu respuesta es diferente a "3" deberás forzosamente justificar tu respuesta con un mínimo de 3 palabras y así, 
+						permitirte enviar tu respuesta</li>
+						<li>Tu avance se guarda automáticamente para que retomes la evaluación cuando desees</li>
+						<li>Al final se te solicitará que envíes comentarios generales de la evaluación para enviar y cerrar la evaluación</li></h3>
+				</div>
 				<div class="carousel-caption">
 					<h3 style="cursor:default;"><?php switch($evaluacion->estatus){ case 0:echo"Comenzar Evaluación";break;
 						case 1:echo"Continuar Evaluación...";break;}?></h3>
 				</div>
+			</div>
+			<div class="item" align="center" style="min-height:350px">
+				<img width="100%" style="opacity:0.3;position:absolute" src="<?= base_url('assets/images/responsabilidades.jpg');?>">
+				<div style="width:60%;position:absolute;top:40%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
+					<h2>Selecciona el valor que consideres correcto (1-5) para cada Dominio...</h2>
+				</div>
+				<div class="carousel-caption"><h3 style="cursor:default;">Responsabilidades</h3></div>
 			</div>
 			<?php foreach ($evaluacion->dominios as $dominio) : ?>
 				<div class="item" align="center" style="min-height:350px;">
