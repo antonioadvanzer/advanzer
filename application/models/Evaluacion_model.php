@@ -316,9 +316,9 @@ class Evaluacion_model extends CI_Model{
 			}
 			$colaborador->feedback = $res->first_row();
 		}else{
+			$colaborador->feedback = $this->db->select('id feedbacker,nombre')->where('id',1)->get('Users')->first_row();
 			$colaborador->rating = null;
 			$colaborador->total = 0;
-			$colaborador->feedback = null;
 		}
 		$colaborador->evaluadores360 = null;
 		$colaborador->evaluadoresProyecto = null;
