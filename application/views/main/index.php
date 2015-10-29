@@ -64,11 +64,13 @@
 							<?php if($evaluacion): ?>
 								<span class="btn label label-default pull-left" onclick="location.href='<?= base_url("evaluar");?>';">
 									<i class="glyphicon glyphicon-pencil"></i> Evaluación</span>&nbsp;&nbsp;
+							<?php endif;
+							if($this->session->userdata('posicion') <= 8 && !in_array($this->session->userdata('id'), array(1,2,51))): ?>
+								<span class="btn label label-default pull-left" onclick="location.href='<?= base_url("historial");?>';">
+									<i class="glyphicon glyphicon-list-alt"></i> Mis Resultados</span>
+								<span class="btn label label-default pull-left" onclick="location.href='<?= base_url("evaluacion/perfil");?>';">
+									<i class="glyphicon glyphicon-info-sign"></i> ¿Qué me evalúan?</span>
 							<?php endif; ?>
-							<span class="btn label label-default pull-left" onclick="location.href='<?= base_url("historial");?>';">
-								<i class="glyphicon glyphicon-list-alt"></i> Mis Resultados</span>
-							<span class="btn label label-default pull-left" onclick="location.href='<?= base_url("evaluacion/perfil");?>';">
-								<i class="glyphicon glyphicon-info-sign"></i> ¿Qué me evalúan?</span>
 						</h3></div>
 					</div>
 				</div>

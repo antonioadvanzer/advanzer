@@ -18,10 +18,10 @@
 			<div id="filterbar"> </div>
 			<table id="tbl" align="center" class="sortable table-hover table-striped table-condensed" data-toggle="table" data-toolbar="#filterbar" 
 				data-pagination="true" data-show-columns="true" data-show-filter="true" data-hover="true" 
-				data-striped="true" data-show-toggle="true" data-show-export="true">
+				data-striped="true" data-show-toggle="true">
 				<thead>
 					<tr>
-						<th class="col-md-1" data-halign="center" data-align="center" data-field="foto" data-defaultsort="disabled"></th>
+						<th class="col-sm-1" data-halign="center" data-align="center" data-field="foto" data-defaultsort="disabled"></th>
 						<th class="col-md-2" data-halign="center" data-field="nombre">Nombre</th>
 						<th data-halign="center" data-field="autoevaluacion">Auto</th>
 						<th data-defaultsort="asc" data-halign="center" data-field="rating">Rating</th>
@@ -38,7 +38,7 @@
 							<td><small><?= "$colab->nombre ($colab->posicion - $colab->track)";?></small></td>
 							<td><small><?= number_format($colab->autoevaluacion,2);?></small></td>
 							<td><small><?= $colab->rating;?></small></td>
-							<td><small><?= number_format($colab->total,2);?></small></td>
+							<td><small><?= number_format(floor($colab->total * 100) / 100,2);?></small></td>
 							<td data-sortable="false" class="rowlink-skip"><hr><?php if(count($colab->evaluadores) > 0): ?>
 								<div class="row" align="center">
 									<div class="col-sm-2"><small><b>Resultado</b></small></div>

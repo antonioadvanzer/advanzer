@@ -8,6 +8,7 @@
 <div class="jumbotron">
 	<div class="container">
 		<h2 style="cursor:default;">Seguimiento de Evaluación - <?= $evaluacion->nombre;?></h2>
+		<p><small>Evaluando a: <i><?= $colaborador->nombre;?></i></small></p>
 	</div>
 </div>
 <div class="container">
@@ -59,7 +60,7 @@
 								<div class="form-group" align="center">
 									<textarea id="justificacion" class="form-control" rows="2" style="max-width:300px;text-align:center;
 										<?php if($dominio->respuesta == 3 || $dominio->respuesta == 0)echo'display:none;';?>" 
-										onkeyup="if(this.value.split(' ').length >= 4){ this.form.boton.style.display='';
+										onkeyup="if(this.value.trim().split(' ').length >= 4){ this.form.boton.style.display='';
 											}else{ this.form.boton.style.display='none';}" placeholder="Justifique su respuesta"
 										required><?= $dominio->justificacion;?></textarea>
 								</div>
@@ -117,11 +118,13 @@
 			});
 			if(flag)
 				$('[id^=finalizar]').show();
+			else
+				$('[id^=finalizar]').hide();
 		}
 
 		function verify(form) {
 			var respuesta = form.respuesta.options[form.respuesta.selectedIndex].value;
-			if (respuesta != 3 && form.justificacion.value.split(' ').length < 4)
+			if (respuesta != 3 && form.justificacion.value.trim().split(' ').length < 4)
 				form.justificacion.style.display='';
 			else{
 				if(respuesta==3){

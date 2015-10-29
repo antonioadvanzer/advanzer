@@ -20,7 +20,7 @@
   <div class="row" align="center">
     <div class="col-md-12">
       <?php if(count($colaboradores) == 0): ?>
-        <h3><b>Aún no comienza el proceso de evaluación...</b></h3>
+        <h3><b>No tienes asignadas evaluaciones por responder aún...</b></h3>
       <?php else: ?>
         <div id="filterbar"> </div>
         <table id="tbl" align="center"class="sortable table-hover table-striped table-condensed" data-toggle="table" data-toolbar="#filterbar" 
@@ -42,12 +42,12 @@
               <td><small><a <?php if($colab->estatus != 2):?> href='<?php if($colab->tipo==0) echo base_url("evaluacion/evaluaProyecto/$colab->asignacion");
                 else echo base_url("evaluacion/aplicar/$colab->asignacion");?>' <?php endif;?>>
                 <img height="25px" src="<?= base_url('assets/images/fotos')."/".$colab->foto;?>"></a></small></td>
-              <td><small><?php if($colab->id == $this->session->userdata('id')) echo"AUTOEVALUACIÓN";else echo"$colab->nombre ($colab->nomina)";?></small></td>
+              <td><small><?php if($colab->id == $this->session->userdata('id')) echo"AUTOEVALUACIÓN";else echo"$colab->nombre";?></small></td>
               <td><small><?= $colab->area;?></small></td>
               <td><small><?= $colab->posicion;?></small></td>
               <td><small><?= $colab->evaluacion;?></small></td>
-              <td><small><?php $inicio=strtotime($colab->inicio);$fin=strtotime($colab->fin); 
-                echo strftime('%d %h',$inicio)." - ".strftime('%d %h',$fin);?></small></td>
+              <td><small><?php $inicio=strtotime($colab->inicio);$fin=strtotime($colab->fin);
+                echo strftime('%d %b',$inicio)." - ".strftime('%d %b',$fin);?></small></td>
               <td><small><?php if($colab->estatus == 0) echo"Pendiente"; elseif($colab->estatus == 1) echo"En proceso";else echo"Finalizada";?></small></td>
             </tr>
             <?php endforeach; ?>

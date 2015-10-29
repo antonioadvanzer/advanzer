@@ -110,74 +110,11 @@
 						case 1:echo"Continuar Evaluación...";break;}?></h3>
 				</div>
 			</div>
-			<?php if(isset($evaluacion->dominios)): ?>
-				<div class="item" align="center" style="min-height:550px;">
-					<img width="100%" style="opacity:0.3;position:absolute" src="<?= base_url('assets/images/responsabilidades.jpg');?>">
-					<div style="width:60%;position:absolute;top:40%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
-						<h2>Selecciona la metrica que consideres correcta para cada responsabilidad...</h2>
-					</div>
-					<div class="carousel-caption"><h3 style="cursor:default;">Responsabilidades</h3></div>
-				</div>
-				<?php foreach ($evaluacion->dominios as $dominio) : if(count($dominio->responsabilidades) > 0): ?>
-					<div class="item" style="min-height:470px;">
-						<aside class="accordion" style="max-width:70%;">
-							<h1><?= $dominio->nombre;?></h1>
-							<?php foreach ($dominio->responsabilidades as $resp) : ?>
-								<label>
-								<form onsubmit="return verify(this);" action="javascript:" class="form-signin" role="form">
-									<input type="hidden" value="<?= $resp->id;?>" id="elemento">
-									<input type="hidden" value="<?= $evaluacion->id;?>" id="asignacion">
-									<input type="hidden" id="tipo" value="responsabilidad">
-									<div class="col-md-12">
-										<div class="form-group" align="center">
-											<h2><?= $resp->nombre;?><span style="min-width:100px;float:right;">
-													<i>Respuesta</i>: 
-													<select onchange="verify(this.form);" class="form-control" id="respuesta" 
-														style="height:15px;padding: 0px 10px;font-size:10px;max-width:60px;display:inline">
-														<option disabled selected value="">-- Selecciona tu respuesta --</option>
-														<?php for ($i=5; $i >= 1; $i--) : ?>
-															<option <?php if($resp->respuesta == $i) echo "selected";?>><?= $i;?></option>
-														<?php endfor; ?>
-													</select>
-												</span>
-												<label><?= $resp->descripcion;?></label>
-											</h2>
-											<div align="left">
-												<p><ol reversed>
-												<?php foreach ($resp->metricas as $metrica) : ?>
-													<li><?= $metrica->descripcion;?></li>
-												<?php endforeach; ?>
-												</ol></p>
-											</div>
-										</div>
-									</div>
-									<div class="col-md-8">
-										<div class="form-group" align="center">
-											<textarea id="justificacion" class="form-control" rows="2" style="max-width:300px;text-align:center;
-												<?php if($resp->respuesta=="" || $resp->respuesta == 3)echo'display:none;';?>" 
-												onkeyup="if(this.value.trim().split(' ').length >= 4){ this.form.boton.style.display='';
-													}else{ this.form.boton.style.display='none';}" placeholder="Justifique su respuesta"
-												required><?= $resp->justificacion;?></textarea>
-										</div>
-									</div>
-									<div class="col-md-4">
-										<div class="form-group" align="center">
-											<input id="boton" class="btn btn-lg btn-primary btn-block" style="display:none;max-width:200px;
-												text-align:center;" type="submit" value="Guardar">
-										</div>
-									</div>
-								</form>
-								</label>
-							<?php endforeach; ?>
-						</aside>
-					</div>
-				<?php endif; endforeach; 
-			endif; ?>
 			<div class="item" align="center" style="min-height:550px;">
 				<img width="100%" style="opacity:0.3;position:absolute" src="<?= base_url('assets/images/competencias.jpg');?>">
 				<div style="width:60%;position:absolute;top:40%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
 					<h2>
-						Selecciona el valor que consideres correcto para cada comportamiento donde...</h2>
+						Selecciona el valor que consideres correcto para cada competencia donde...</h2>
 					<p>
 						<ol type="1" reversed style="float:left">
 							<li>Es un modelo a seguir para toda la organización</li>
@@ -195,54 +132,51 @@
 					<aside class="accordion" style="max-width:70%;">
 						<h1><?= $indicador->nombre;?></h1>
 						<div class="col-md-12">
-						<?php foreach ($indicador->competencias as $comp) : ?>
-							<h2><?= $comp->nombre;?>
-								<label><?= $comp->descripcion;?></label>
-							</h2>
-							<div align="left">
-								<ul type="square"><label>
-								<?php foreach ($comp->comportamientos as $comportamiento) : ?>
-									<form onsubmit="return verify(this);" action="javascript:" class="form-signin" role="form">
-										<input type="hidden" value="<?= $comportamiento->id;?>" id="elemento">
-										<input type="hidden" value="<?= $evaluacion->id;?>" id="asignacion">
-										<input type="hidden" value="" id="tipo">
-										<label><?= $comportamiento->descripcion;?><span style="min-width:70px;float:right">
-											<i>Respuesta</i>: 
-											<select onchange="this.form.justificacion.html='';
-												verify(this.form);" class="form-control" id="respuesta" 
-												style="height:15px;padding: 0px 10px;font-size:10px;max-width:60px;display:inline">
-												<option disabled selected value="">-- Selecciona tu respuesta --</option>
-												<?php for ($i=5; $i >= 1; $i--) : ?>
-													<option <?php if(isset($comportamiento->respuesta) && $comportamiento->respuesta == $i) echo "selected";?>><?= $i;?></option>
-												<?php endfor; ?>
-											</select>
-										</span></label>
-										<div class="col-md-6">
-											<div class="form-group" align="center">
-												<textarea id="justificacion" class="form-control" rows="2" style="max-width:300px;text-align:center;
-													<?php if($comportamiento->respuesta=="" || $comportamiento->respuesta == 3)echo'display:none;';?>" 
-													onkeyup="if(this.value.trim().split(' ').length >= 4){ this.form.boton.style.display='';
-														}else{ this.form.boton.style.display='none';}" placeholder="Justifique su respuesta"
-													required><?= $comportamiento->justificacion;?></textarea>
+							<?php foreach ($indicador->competencias as $comp) : if(count($comp->comportamientos) > 0): ?>
+								<form onsubmit="return verify(this);" action="javascript:" class="form-signin" role="form">
+									<input type="hidden" value="<?= $comp->id;?>" id="elemento">
+									<input type="hidden" value="<?= $evaluacion->id;?>" id="asignacion">
+									<input type="hidden" value="360" id="tipo">
+									<h2><?= $comp->nombre;?><label><?= $comp->descripcion;?></label></h2>
+									<div align="left">
+										<ul type="square"><label>
+											<label><span style="min-width:70px;float:right">
+												<i>Respuesta</i>: 
+												<select onchange="this.form.justificacion.html='';
+													verify(this.form);" class="form-control" id="respuesta" 
+													style="height:15px;padding: 0px 10px;font-size:10px;max-width:60px;display:inline">
+													<option disabled selected value="">-- Selecciona tu respuesta --</option>
+													<?php for ($i=5; $i >= 1; $i--) : ?>
+														<option <?php if(isset($comp->respuesta) && $comp->respuesta == $i) echo "selected";?>><?= $i;?></option>
+													<?php endfor; ?>
+												</select>
+											</span></label>
+											<div class="col-md-6">
+												<div class="form-group" align="center">
+													<textarea id="justificacion" class="form-control" rows="2" style="max-width:300px;text-align:center;
+														<?php if($comp->respuesta=="" || $comp->respuesta == 3)echo'display:none;';?>" 
+														onkeyup="if(this.value.trim().split(' ').length >= 4){ this.form.boton.style.display='';
+															}else{ this.form.boton.style.display='none';}" placeholder="Justifique su respuesta"
+														required><?= $comp->justificacion;?></textarea>
+												</div>
 											</div>
-										</div>
-										<div class="col-md-6">
-											<div class="form-group" align="center">
-												<input id="boton" class="btn btn-lg btn-primary btn-block" style="display:none;max-width:200px;
-													text-align:center;" type="submit" value="Guardar">
+											<div class="col-md-6">
+												<div class="form-group" align="center">
+													<input id="boton" class="btn btn-lg btn-primary btn-block" style="display:none;max-width:200px;
+														text-align:center;" type="submit" value="Guardar">
+												</div>
 											</div>
-										</div>
-									</form>
-								<?php endforeach; ?></label></ul></p>
-							</div>
-						<?php endforeach; ?>
+										</label></ul>
+									</div>
+								</form>
+							<?php endif; endforeach; ?>
 						</div>
 					</aside>
 				</div>
 			<?php endforeach; ?>
 			<div class="item" align="center" style="min-height:480px;">
 				<img width="100%" style="opacity:0.3;position:absolute" src="<?= base_url('assets/images/gracias.jpg');?>">
-				<form onsubmit="return finalizar(<?= $evaluacion->id;?>,<?= $evaluacion->tipo;?>);" class="form-signin" 
+				<form onsubmit="return finalizar(<?= $evaluacion->id;?>,360);" class="form-signin" 
 					action="javascript:" id="finalizar">
 					<div style="width:60%;position:absolute;top:15%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
 						<div class="col-md-12">

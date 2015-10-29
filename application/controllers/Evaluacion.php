@@ -17,14 +17,10 @@ class Evaluacion extends CI_Controller {
     //basicas
     public function index($flag=true) {
         $this->valida_acceso();
-        if(!$this->evaluacion_model->getActiveEvaluation())
-            redirect('evaluacion/proyecto');
-        else{
-            $data['flag']=$flag;
-            $data['colaboradores'] = $this->evaluacion_model->getEvaluados();
-            $this->layout->title('Advanzer - Evaluaciones');
-            $this->layout->view('evaluacion/index',$data);
-        }
+        $data['flag']=$flag;
+        $data['colaboradores'] = $this->evaluacion_model->getEvaluados();
+        $this->layout->title('Advanzer - Evaluaciones');
+        $this->layout->view('evaluacion/index',$data);
     }
 
     public function proyecto() {
@@ -171,8 +167,13 @@ class Evaluacion extends CI_Controller {
             $data['evaluacion'] = $this->evaluacion_model->getEvaluacionByAsignacion($asignacion);
         else
             $data['evaluacion'] = $this->evaluacion_model->getProyectoByAsignacion($asignacion);
+        $data['evaluador'] = $this->user_model->searchById($data['evaluacion']->evaluador);
+        $data['evaluado'] = $this->user_model->searchById($data['evaluacion']->evaluado);
         $this->layout->title('Advanzer - Detalle de Evaluación');
-        $this->layout->view('evaluacion/detalle_asignacion',$data);
+        if($data['evaluacion']->tipo == 0 || $data['evaluacion']->anual == 0)
+            $this->layout->view('evaluacion/detalle_asignacion_especial',$data);
+        else
+            $this->layout->view('evaluacion/detalle_asignacion',$data);
     }
 
     public function update_feedback($feedback,$flag=false) {
@@ -601,6 +602,9 @@ class Evaluacion extends CI_Controller {
         if($tipo=="responsabilidad"){
             if($this->evaluacion_model->guardaMetrica($asignacion,$valor,$elemento,$justificacion)) //metrica=valor,obj=elem
                 $response['msg'] = "Métrica Guardada";
+        }elseif($tipo==360){
+            if($this->evaluacion_model->guardaCompetencia($asignacion,$valor,$elemento,$justificacion)) //metrica=valor,obj=elem
+                $response['msg'] = "Competencia Guardada";
         }else{
             if($this->evaluacion_model->guardaComportamiento($asignacion,$valor,$elemento,$justificacion)) //resp=valor,comp=elem
                 $response['msg'] = "Comportamiento Guardado";
@@ -705,12 +709,17 @@ class Evaluacion extends CI_Controller {
 
     public function aplicar($asignacion) {
         $data['evaluacion']=$this->evaluacion_model->getEvaluacionByAsignacion($asignacion);
+        $data['colaborador']=$this->user_model->searchById($data['evaluacion']->evaluado);
         $this->layout->title('Advanzer - Aplicar Evaluación');
-        $this->layout->view('evaluacion/aplicar',$data);
+        if($data['evaluacion']->tipo == 1 && $data['evaluacion']->anual == 0) //si es evaluacion 360 muestra otra vista
+            $this->layout->view('evaluacion/aplicar360',$data);
+        else
+            $this->layout->view('evaluacion/aplicar',$data);
     }
 
     public function evaluaProyecto($asignacion) {
         $data['evaluacion']=$this->evaluacion_model->getProyectoByAsignacion($asignacion);
+        $data['colaborador']=$this->user_model->searchById($data['evaluacion']->evaluado);
         $this->layout->title('Advanzer - Aplicar Evaluación');
         $this->layout->view('evaluacion/evaluaProyecto',$data);
     }
