@@ -2,6 +2,9 @@
 <div class="jumbotron">
 	<div class="container">
 		<h2>Detalle Feedback</h2>
+		<p><li>Define cada punto del feedback y presiona "Guardar" (En la sección inferior están los comentarios de los colaboradores que 
+			evaluaron a <i><?= $feedback->nombre;?></i>).</li>
+			<li>Luego presiona "Enviar" para que el colaborador tenga acceso al mismo (una vez enviado no será posible editarlo).</li></p>
 	</div>
 </div>
 <div class="container">
