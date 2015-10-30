@@ -63,7 +63,8 @@
 						<div class="col-md-12"><h3>
 							<?php if($evaluacion): ?>
 								<span class="btn label label-default pull-left" onclick="location.href='<?= base_url("evaluar");?>';">
-									<i class="glyphicon glyphicon-pencil"></i> Evaluación</span>&nbsp;&nbsp;
+									<i class="glyphicon glyphicon-pencil"></i> <?php if($evaluacion->estatus == 1) echo "Evaluación"; 
+										else echo "Feedback"; ?></span>
 							<?php endif;
 							if($this->session->userdata('posicion') <= 8 && !in_array($this->session->userdata('id'), array(1,2,51))): ?>
 								<span class="btn label label-default pull-left" onclick="location.href='<?= base_url("historial");?>';">
