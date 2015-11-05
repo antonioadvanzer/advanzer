@@ -39,24 +39,51 @@
 			-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#488FCD, endColorstr=#ffffff)";
 			filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#488FCD', endColorstr='#ffffff');
 		}
+		.navbar-inverse {
+			background-image: -webkit-linear-gradient(top, #3c3c3c 0%, #222 100%);
+			background-image: -o-linear-gradient(top, #3c3c3c 0%, #222 100%);
+			background-image: -webkit-gradient(linear, left top, left bottom, from(#3c3c3c), to(#222));
+			background-image: linear-gradient(to bottom, #3c3c3c 0%, #222 100%);
+			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff3c3c3c', endColorstr='#ff222222', GradientType=0);
+			filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+			background-repeat: repeat-x;
+			border-radius: 4px;
+		}
 	</style>
 	<script>
-		var empresa = <?=$this->session->userdata('empresa');?>;
+		var empresa = <?php if(!empty($this->session->userdata('empresa'))) echo $this->session->userdata('empresa');else echo 0;?>;
+		var color = "";
 		switch(empresa){
 			case 1:
-				var color = "#B0B914";
+				color = "#B0B914";
 			break;
 			case 2:
-				var color = "#488FCD";
+				color = "#488FCD";
 			break;
 		}
-		document.write('\
-			<style>\
-				.jumbotron {\
-					background: -webkit-gradient(linear, left bottom, left top, from(#fff), to('+color+'));\
-				}\
-			</style>\
-		');
+		if(color != "")
+			document.write('\
+				<style>\
+					.jumbotron {\
+						background: -webkit-gradient(linear, left bottom, left top, from(#fff), to('+color+'));\
+					}\
+				</style>\
+			');
+		else
+			document.write('\
+				<style>\
+					.navbar-inverse {\
+						background-image: -moz-linear-gradient(left, #B0B914, #488FCD);\
+						background-image: -ms-linear-gradient(left, #B0B914, #488FCD);\
+						background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#B0B914), to(#488FCD));\
+						background-image: -webkit-linear-gradient(left, #B0B914, #488FCD);\
+						background-image: -o-linear-gradient(left, #B0B914, #488FCD);\
+						background-image: linear-gradient(left, #B0B914, #488FCD);\
+						background-repeat: repeat-x;\
+						border-radius: 4px;\
+					}\
+				</style>\
+			');
 	</script>
 </head>
 <body>
@@ -69,15 +96,11 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<?php $empresa=$this->session->userdata('empresa'); if(!empty($empresa)): ?>
-					<a id="logo" class="navbar-brand" href="<?= base_url(); ?>"><img style="max-height:30px" class="logo" 
-						src="<?= base_url('assets/images/'.$this->session->userdata("empresa").'.png'); ?>"></a>
-				<?php else: ?>
-					<a id="logo" class="navbar-brand" href="<?= base_url(); ?>"><img style="max-height:30px" class="logo" 
-						src="<?= base_url('assets/images/0.png'); ?>"></a>
+				<?php if(!empty($this->session->userdata('id'))): ?>
+					<a class="navbar-brand" href="<?= base_url(); ?>">INICIO</a>
 				<?php endif; ?>
 			</div>
-			<div id="navbar" class="navbar-collapse collapse" aria-expanded="false" style="height: 1px;">
+			<div id="navbar" class="navbar-collapse collapse" aria-expanded="false">
 				<ul class="nav navbar-nav">
 					<?php if($this->session->userdata('id') != ""):
 							if(in_array($this->session->userdata('tipo'), array(3,4,5,6)) || $this->session->userdata('posicion') <= 3): ?>
@@ -164,10 +187,8 @@
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<?php $idU=$this->session->userdata('id'); if(!empty($idU)): ?>
-						<li><a href="<?= base_url('evaluacion/perfil');?>"><?= $this->session->userdata('nombre');?></a></li>
+						<li><a href="#" style="cursor:default"><?= $this->session->userdata('nombre');?></a></li>
 						<li><a href="<?= base_url('logout'); ?>">LogOut</a></li>
-					<?php else: ?>
-						<li><a href="<?= base_url("login") ?>">LogIn</a></li>
 					<?php endif; ?>
 				</ul>
 			</div>
@@ -175,7 +196,7 @@
 	</nav>
 	<?=$content_for_layout?>
 	<hr>
-	<footer>
+	<footer align="center">
 		<p>&copy; Advanzer De México, S.A de C.V. 2015</p>
 	</footer>
 	</div> <!-- /container -->

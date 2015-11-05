@@ -129,6 +129,14 @@ class Main extends CI_Controller {
     	$this->layout->view($re, $data);
     }
 
+    public function historial() {
+    	$email=$this->session->userdata('email');
+    	$data['colaborador'] = $this->user_model->searchById($this->session->userdata('id'));
+    	$data['info'] = $this->user_model->getHistorialById($email);
+    	$this->layout->title('Advanzer - Mi Historial de Desempeño');
+    	$this->layout->view('main/historial',$data);
+    }
+
     // Unset session and logout
 	public function logout($err=null) {
 		unset($_SESSION['access_token']);

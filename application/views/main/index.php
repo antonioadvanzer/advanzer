@@ -1,7 +1,13 @@
 <!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron">
 	<div class="container">
-	<h2>Bienvenido(a)</h2>
+		<div class="col-md-6">
+			<?php $empresa=$this->session->userdata('empresa'); if(!empty($empresa)): ?>
+				<img style="max-height:70px" class="logo" 
+					src="<?= base_url('assets/images/'.$this->session->userdata("empresa").'.png'); ?>">
+			<?php endif; ?>
+		</div>
+		<div class="col-md-6" align="right"><h2>¡Bienvenido(a)!</h2></div>
 	</div>
 </div>
 <div class="container">
@@ -46,8 +52,9 @@
 									<span class="text-muted">Empresa: </span><?php if($colaborador->empresa == 1) echo "Advanzer";else echo"Entuizer";?><br>
 									<span class="text-muted">Plaza: </span><?= $colaborador->plaza;?><br>
 									<!--<span class="text-muted">Categoría: </span><?= $colaborador->categoria;?><br>-->
-									<span class="text-muted"># Empleado: </span><?= $colaborador->nomina;?><br><br>
-									<small class="text-muted">Fecha de ingreso: <?php $fecha=date_create($colaborador->fecha_ingreso); echo date_format($fecha,'l, F j\t\h, Y')?></small>
+									<span class="text-muted"># Empleado: </span><?= $colaborador->nomina;?><br>
+									<span class="text-muted">Fecha de ingreso: </span><?php $fecha=date_create($colaborador->fecha_ingreso);
+										echo date_format($fecha,'l, F j\t\h, Y')?>
 								</div>
 								<div class="col-md-6">
 									<span class="text-muted">Jefe: </span><?= $colaborador->nombre_jefe;?><br>
@@ -67,10 +74,14 @@
 										else echo "Feedback"; ?></span>
 							<?php endif;
 							if($this->session->userdata('posicion') <= 8 && !in_array($this->session->userdata('id'), array(1,2,51))): ?>
-								<span class="btn label label-default pull-left" onclick="location.href='<?= base_url("historial");?>';">
-									<i class="glyphicon glyphicon-list-alt"></i> Mis Resultados</span>
 								<span class="btn label label-default pull-left" onclick="location.href='<?= base_url("evaluacion/perfil");?>';">
 									<i class="glyphicon glyphicon-info-sign"></i> ¿Qué me evalúan?</span>
+								<?php if(!empty($colaborador->historial)):?>
+									<span class="btn label label-default pull-left" onclick="location.href='<?= base_url("historial");?>';">
+										<i class="glyphicon glyphicon-list-alt"></i> Historial de Desempeño</span>
+								<?php endif; ?>
+								<span class="btn label label-default pull-left" onclick="location.href='<?= base_url("evaluacion/perfil");?>';">
+									<i class="glyphicon glyphicon-tag"></i> Mi plan de Capacitación</span>
 							<?php endif; ?>
 						</h3></div>
 					</div>

@@ -80,6 +80,7 @@ class User_model extends CI_Model{
 		$result = $this->db->get('Users U')->first_row();
 		$res = $this->db->select('nombre')->where('id',$result->jefe)->get('Users');
 		(($res->num_rows()) > 0) ? $result->nombre_jefe = $res->first_row()->nombre :$result->nombre_jefe="";
+		$result->historial = $this->getHistorialById($result->email);
 		return $result;
 	}
 
@@ -169,6 +170,10 @@ class User_model extends CI_Model{
 		$this->db->join('Posiciones P','P.id = PT.posicion');
 		$this->db->join('Tracks T','T.id = PT.track');
 		return $this->db->where('U.estatus',1)->order_by('nombre','asc')->get('Users U')->result();
+	}
+
+	function getHistorialById($email) {
+		return $this->db->where('email',$email)->get('Historial')->result();
 	}
 
 	function logout($id,$email) {

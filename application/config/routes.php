@@ -67,6 +67,7 @@ $route['administrar_indicadores'] = 'indicador';
 //$route['evaluaciones'] = 'evaluacion';
 $route['evaluacion/(:num)'] = 'evaluacion/index/(:num)';
 $route['evaluar'] = 'evaluacion/evaluar';
+$route['historial'] = 'main/historial';
 /*
 $route['estructura_organizacional'] = 'info/estructura';
 $route['cartas_constancias'] = 'info/cartas_constancias';

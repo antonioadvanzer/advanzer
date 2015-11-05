@@ -11,27 +11,6 @@ img.logo{
     -webkit-filter: box-shadow(0px 0px 2px #fff);
     filter: drop-shadow(0px 0px 2px #fff);
 }
-a.ghost{
-    -webkit-transform: translateX(-50%) translateY(-50%);
-    -ms-transform: translateX(-50%) translateY(-50%);
-    transform: translateX(-50%) translateY(-50%);
-    font-family: Tahoma, Verdana, Segoe, sans-serif;
-    font-size: 1.5em;
-    letter-spacing: 0.1em;
-    color: #000;
-    text-decoration: none;
-    text-transform: uppercase;
-    border: 0.15em solid #fff;
-    padding: 0.2em 0.3em;
-    -webkit-transition: color 300ms, background 500ms, border-color 700ms;
-    transition: color 300ms, background 500ms, border-color 700ms;
-}
-a.ghost:hover {
-    background: #828282;
-    border-color: #FFFFFF;
-    color: black;
-    text-transform: uppercase;
-}
 div.iframe{
     padding:10px;
     background:#000;
