@@ -51,7 +51,7 @@
 		}
 	</style>
 	<script>
-		var empresa = <?php if(!empty($this->session->userdata('empresa'))) echo $this->session->userdata('empresa');else echo 0;?>;
+		var empresa = <?php if($this->session->userdata('empresa')) echo $this->session->userdata('empresa');else echo 0;?>;
 		var color = "";
 		switch(empresa){
 			case 1:

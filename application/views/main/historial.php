@@ -7,7 +7,6 @@
 					src="<?= base_url('assets/images/'.$this->session->userdata("empresa").'.png'); ?>">
 			<?php endif; ?>
 		</div>
-		<div class="col-md-6" align="right"><h2>¡Bienvenido(a)!</h2></div>
 	</div>
 </div>
 <div class="container" align="center">
@@ -17,7 +16,7 @@
 		<div class="col-md-12">
 			<div class="panel panel-default">
 				<div class="panel-body">
-					<div class="row"><div class="col-md-12 lead">Perfil del Colaborador <?php if($this->session->userdata('tipo')!=0)
+					<div class="row"><div class="col-md-12 lead">Historial de Desempeño <?php if($this->session->userdata('tipo')!=0)
 					switch ($this->session->userdata('tipo')) {
 						case 1:
 						case 2:

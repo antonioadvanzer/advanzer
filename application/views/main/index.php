@@ -80,7 +80,7 @@
 									<span class="btn label label-default pull-left" onclick="location.href='<?= base_url("historial");?>';">
 										<i class="glyphicon glyphicon-list-alt"></i> Historial de Desempeño</span>
 								<?php endif; ?>
-								<span class="btn label label-default pull-left" onclick="location.href='<?= base_url("evaluacion/perfil");?>';">
+								<span class="btn label label-default pull-left" onclick="">
 									<i class="glyphicon glyphicon-tag"></i> Mi plan de Capacitación</span>
 							<?php endif; ?>
 						</h3></div>

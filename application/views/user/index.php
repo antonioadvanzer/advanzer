@@ -52,8 +52,8 @@
             <td><small><?= $user->nomina;?></small></td>
             <td><small><?= $user->nombre;?></small></td>
             <td><small><?= $user->email;?></small></td>
-            <td data-value="<?= $user->empresa;?>"><small><img width="60px"
-              src="<?= base_url('assets/images').'/'.$user->empresa.'.png';?>"></small></td>
+            <?php if($user->empresa == 1) $empresa="Advanzer"; else $empresa="Entuizer"; ?>
+            <td><small><?= $empresa; ?></small></td>
             <td><small><?= $user->track;?></small></td>
             <td><small><?= $user->posicion;?></small></td>
             <td><small><?= $user->area;?></small></td>
