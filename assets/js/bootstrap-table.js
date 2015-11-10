@@ -907,6 +907,7 @@
         html = [sprintf('<div class="columns columns-%s btn-group pull-%s">',
             this.options.buttonsAlign, this.options.buttonsAlign)];
 
+
         if (typeof this.options.icons === 'string') {
             this.options.icons = calculateObjectValue(null, this.options.icons);
         }
