@@ -11,7 +11,7 @@
 		<div class="col-md-4">
 			<a href="<?= $authUrl; ?>"><img vspace="8%" src="<?= base_url('assets/images/login.png');?>" align="center" height="80px">
 				<label style="position:relative"><small style="cursor:pointer">(Click para iniciar sesión)</small></label></a>
-			<!--<form role="form" method="post" action="<?= base_url('main/login');?>" class="form-signin">
+			<form role="form" method="post" action="<?= base_url('main/login');?>" class="form-signin">
 			  <div class="form-group">
 				<label for="email" class="sr-only">E-Mail</label>
 				<input name="email" type="email" id="email" class="form-control" style="max-width:200px; text-align:center;" placeholder="E-Mail" 
@@ -25,7 +25,7 @@
 			  <div class="form-group">
 				<button class="btn btn-lg btn-primary btn-block" style="max-width:200px; text-align:center;" type="submit">Entrar</button>
 			  </div>
-			</form>-->
+			</form>
 		</div>
 		<div class="col-md-1"></div>
 		<div class="col-md-6">

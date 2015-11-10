@@ -43,11 +43,12 @@ class User extends CI_Controller {
     public function upload_photo() {
         $this->valida_acceso();
         $id=$this->input->post('id');
+        $nomina=$this->user_model->searchById($id)->nomina;
     	//set preferences
     	$config['upload_path'] = './assets/images/fotos/';
         $config['allowed_types'] = '*';
         $ext = explode(".", $_FILES['foto']['name']);
-        $config['file_name'] = $id.'.'.end($ext);
+        $config['file_name'] = $nomina.'.'.end($ext);
         $config['overwrite'] = TRUE;
 
         //load upload class library
