@@ -43,7 +43,7 @@
         <tbody data-link="row" class="rowlink">
           <?php foreach ($users as $user): ?>
           <tr class="click-row">
-            <td><small><a href='<?= base_url("user/ver/").'/'.$user->id;?>'><img height="40px" class="img-circle avatar avatar-original" 
+            <td align="center"><small><a href='<?= base_url("user/ver/").'/'.$user->id;?>'><img height="40px" class="img-circle avatar avatar-original" 
               src="<?= base_url('assets/images/fotos')."/".$user->foto;?>"></a></small></td>
             <td><small><?= $user->nomina;?></small></td>
             <td><small><?= $user->nombre;?></small></td>

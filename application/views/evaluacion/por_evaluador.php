@@ -26,7 +26,7 @@
 				<tbody>
 					<?php foreach ($evaluadores as $colab): $count=0;?>
 						<tr>
-							<td><img height="25px" src="<?= base_url('assets/images/fotos')."/".$colab->foto;?>"></td>
+							<td align="center"><img height="25px" src="<?= base_url('assets/images/fotos')."/".$colab->foto;?>"></td>
 							<td><small><?= $colab->nombre;?></small></td>
 							<td data-sortable="false">
 								<hr>
