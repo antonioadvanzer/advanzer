@@ -10,8 +10,8 @@
 </div>
 <div class="container">
   <div>
-    <span style="cursor:pointer" class="glyphicon glyphicon-plus" 
-        onclick="location.href='<?= base_url('nuevo_usuario/');?>'">Nuevo Colaborador</span>
+    <label style="cursor:pointer" onclick="location.href='<?= base_url('nuevo_usuario/');?>'">
+    <span class="glyphicon glyphicon-plus"></span>Nuevo Colaborador</label>
   </div>
   <div class="row">
     <div class="col-md-12">
@@ -28,7 +28,7 @@
       <table id="tbl" class="display" align="center" data-toggle="table" data-show-export="true">
         <thead>
           <tr>
-            <th data-halign="center" data-align="center">Foto</th>
+            <th data-halign="center" data-align="center"></th>
             <th data-halign="center">Nómina</th>
             <th class="col-sm-2" data-halign="center">Nombre</th>
             <th class="col-sm-2" data-halign="center">E-Mail</th>

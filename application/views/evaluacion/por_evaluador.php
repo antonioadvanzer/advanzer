@@ -14,16 +14,12 @@
 	</div>
 	<div class="row">
 		<div class="col-md-12">
-			<h3><b>Evaluadores:</b></h3>
-			<div id="filterbar"> </div>
-			<table id="tbl" align="center" class="table-hover table-striped table-condensed" data-toggle="table" 
-				data-toolbar="#filterbar" data-pagination="true" data-show-columns="true" data-show-filter="true" data-hover="true" 
-				data-striped="true" data-show-toggle="true">
+			<table id="tbl" align="center" class="display">
 				<thead>
 					<tr>
-						<th class="col-md-1" data-halign="center" data-align="center" data-field="foto" data-defaultsort="disabled"></th>
-						<th class="col-md-4" data-halign="center" data-field="evaluador">Evaluador</th>
-						<th class="col-md-6" data-halign="center" data-field="evaluadores">Evaluaciones</th>
+						<th data-halign="center" data-align="center" data-defaultsort="disabled"></th>
+						<th data-halign="center">Evaluador</th>
+						<th data-halign="center">Asignaciones</th>
 						<th data-halign="center">Avance (%)</th>
 					</tr>
 				</thead>
@@ -94,9 +90,7 @@
 		</div>
 	</div>
 	<script type="text/javascript">
-		$.bootstrapSortable(true);
-		$(function() {
-			$('#tbl').bootstrapTable();
-			$('#filterbar').bootstrapTableFilter();
-		});
+		$(document).ready(function() {
+			$('#tbl').DataTable({responsive: true});
+		} );
 	</script>

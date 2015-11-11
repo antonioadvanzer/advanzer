@@ -20,8 +20,8 @@
     <?php endif; ?>
   </div>
   <div>
-    <span style="cursor:pointer" class="glyphicon glyphicon-plus" 
-        onclick="location.href='<?= base_url('area/nueva/');?>'">Nueva Área</span>
+    <label style="cursor:pointer" onclick="location.href='<?= base_url('area/nueva/');?>'">
+      <span class="glyphicon glyphicon-plus"></span>Nueva Área</label>
   </div>
   <div class="row">
     <div class="col-md-12">
@@ -34,10 +34,7 @@
   </div>
   <div class="row" align="center">
     <div class="col-md-12">
-      <div id="filterbar"> </div>
-      <table id="tbl" class="sortable table-hover" align="center" data-toggle="table" 
-        data-toolbar="#filterbar" data-pagination="true" data-show-columns="true" data-show-filter="true" 
-        data-hover="true" data-striped="true" data-show-toggle="true" data-show-export="true">
+      <table id="tbl" class="display" align="center" data-toggle="table" data-hover="true" data-striped="true">
         <thead>
           <tr>
             <th class="col-md-2" data-halign="center" data-field="area">Área</th>
@@ -60,13 +57,17 @@
     </div>
   </div>
 
-  <script type="text/javascript">
-    $.bootstrapSortable(true);
+  <script>
+    $(document).ready(function() {
+      $('#tbl').DataTable({responsive: true});
+    } );
+    
+    /*$.bootstrapSortable(true);
 
     $(function() {
       $('#tbl').bootstrapTable();
 
       $('#filterbar').bootstrapTableFilter();
 
-    });
+    });*/
   </script>

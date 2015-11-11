@@ -114,10 +114,8 @@
 	<div class="row">
 		<div class="col-md-12">
 			<?php if(count($colaborador->evaluadores) > 0): ?>
-				<h3><b>Evaluaciones:</b></h3>
-				<table id="tbl" align="center" class="sortable table-hover table-striped table-condensed" data-toggle="table" data-toolbar="#filterbar" 
-					data-pagination="true" data-show-columns="true" data-show-filter="true" data-hover="true" 
-					data-striped="true" data-show-toggle="true" data-show-export="true">
+				<h3><b>Evaluación:</b></h3>
+				<table id="tbl" align="center" class="table">
 					<thead>
 						<tr>
 							<th data-halign="center" data-field="foto"></th>
@@ -146,9 +144,7 @@
 			<?php endif;
 			if(isset($colaborador->evaluadores360) && count($colaborador->evaluadores360) > 0): ?>
 				<h3><b>Evaluaciones 360:</b></h3>
-				<table id="tbl" align="center" class="sortable table-hover table-striped table-condensed" data-toggle="table" data-toolbar="#filterbar" 
-					data-pagination="true" data-show-columns="true" data-show-filter="true" data-hover="true" 
-					data-striped="true" data-show-toggle="true" data-show-export="true">
+				<table id="tbl" align="center" class="table">
 					<thead>
 						<tr>
 							<th data-halign="center" data-field="foto"></th>
@@ -172,9 +168,7 @@
 			<?php endif;
 			if(isset($colaborador->evaluadoresProyecto) && count($colaborador->evaluadoresProyecto) > 0): ?>
 				<h3><b>Evaluaciones por Proyecto:</b></h3>
-				<table id="tbl" align="center" class="sortable table-hover table-striped table-condensed" data-toggle="table" data-toolbar="#filterbar" 
-					data-pagination="true" data-show-columns="true" data-show-filter="true" data-hover="true" 
-					data-striped="true" data-show-toggle="true" data-show-export="true">
+				<table id="tbl" align="center" class="table">
 					<thead>
 						<tr>
 							<th data-halign="center" data-field="foto"></th>

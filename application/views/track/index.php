@@ -29,13 +29,13 @@
   <div class="row">
     <div class="col-md-1"></div>
     <div class="col-md-4">
-      <span style="cursor:pointer" class="glyphicon glyphicon-plus" 
-        onclick="location.href='<?= base_url('posicion/nuevo/');?>'">Nueva Posicion</span>
+      <label style="cursor:pointer" onclick="location.href='<?= base_url('posicion/nuevo/');?>'">
+        <span class="glyphicon glyphicon-plus"></span>Nueva Posicion</label>
     </div>
     <div class="col-md-2"></div>
     <div class="col-md-4">
-      <span style="cursor:pointer" class="glyphicon glyphicon-plus" 
-        onclick="location.href='<?= base_url('track/nuevo/');?>'">Nuevo Track</span>
+      <label style="cursor:pointer" onclick="location.href='<?= base_url('track/nuevo/');?>'">
+      <span class="glyphicon glyphicon-plus"></span>Nuevo Track</label>
     </div>
   </div>
   <div class="row">
@@ -50,7 +50,7 @@
           <?php endforeach; ?>
         </select>
       </div>
-      <table width="90%" align="center" class="table">
+      <table id="tbl" width="90%" align="center" class="table">
         <thead>
           <tr>
             <th class="col-md-3">Posicion</th>
@@ -62,7 +62,7 @@
     <div class="col-md-1"></div>
     <div class="col-md-5">
       <h3 style="cursor:default"><b>Tracks:</b></h3>
-      <table width="90%" align="center" class="table">
+      <table id="tbl2" width="90%" align="center" class="table">
         <thead>
           <tr>
             <th>Track</th>

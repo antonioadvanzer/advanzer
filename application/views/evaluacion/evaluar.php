@@ -22,18 +22,16 @@
       <?php if(count($colaboradores) == 0): ?>
         <h3><b>No tienes asignadas evaluaciones por responder aún...</b></h3>
       <?php else: ?>
-        <div id="filterbar"> </div>
-        <table id="tbl" align="center"class="sortable table-hover table-striped table-condensed" data-toggle="table" data-toolbar="#filterbar" 
-          data-pagination="true" data-show-columns="true" data-show-filter="true" data-hover="true" data-show-toggle="true">
+        <table id="tbl" align="center"class="display">
           <thead>
             <tr>
-              <th class="col-md-1" data-halign="center" data-align="center" data-defaultsort="disabled"></th>
-              <th class="col-md-3" data-halign="center" data-field="nombre">Nombre</th>
-              <th class="col-md-2" data-halign="center" data-field="area">Area</th>
-              <th class="col-md-1" data-halign="center" data-field="posicion">Posición</th>
-              <th class="col-md-2" data-halign="center" data-field="evaluacion">Evaluación</th>
-              <th class="col-md-1" data-halign="center" data-field="periodo">Período</th>
-              <th class="col-md-1" data-halign="center" data-field="estatus">Estatus</th>
+              <th data-halign="center" data-align="center"></th>
+              <th data-halign="center">Nombre</th>
+              <th data-halign="center">Area</th>
+              <th data-halign="center">Posición</th>
+              <th data-halign="center">Evaluación</th>
+              <th data-halign="center">Período</th>
+              <th data-halign="center">Estatus</th>
             </tr>
           </thead>
           <tbody data-link="row">
@@ -58,12 +56,7 @@
   </div>
 
   <script>
-    $.bootstrapSortable(true);
-
-    $(function() {
-      $('#tbl').bootstrapTable();
-
-      $('#filterbar').bootstrapTableFilter();
-
-    });
+    $(document).ready(function() {
+      $('#tbl').DataTable({responsive: true});
+    } );
   </script>

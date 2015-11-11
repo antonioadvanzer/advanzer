@@ -16,25 +16,23 @@
 		<div class="col-md-12">
 			<h3><b>Colaboradores:</b></h3>
 			<div id="filterbar"> </div>
-			<table id="tbl" align="center" class="sortable table-hover table-striped table-condensed" data-toggle="table" data-toolbar="#filterbar" 
-				data-pagination="true" data-show-columns="true" data-show-filter="true" data-hover="true" 
-				data-striped="true" data-show-toggle="true">
+			<table id="tbl" align="center" class="display">
 				<thead>
 					<tr>
-						<th class="col-sm-1" data-halign="center" data-align="center" data-field="foto" data-defaultsort="disabled"></th>
-						<th class="col-md-2" data-halign="center" data-field="nombre">Nombre</th>
-						<th data-halign="center" data-field="autoevaluacion">Auto</th>
-						<th data-defaultsort="asc" data-halign="center" data-field="rating">Rating</th>
-						<th data-halign="center" data-field="total">Total</th>
-						<th class="col-md-5" data-halign="center" data-field="evaluadores">Evaluaciones</th>
-						<th class="col-md-1" data-halign="center" data-field="feedback">Feedback</th>
+						<th data-halign="center" data-align="center"></th>
+						<th data-halign="center">Nombre</th>
+						<th data-halign="center">Auto</th>
+						<th data-defaultsort="asc" data-halign="center">Rating</th>
+						<th data-halign="center">Total</th>
+						<th data-halign="center">Evaluaciones</th>
+						<th data-halign="center">Feedback</th>
 					</tr>
 				</thead>
 				<tbody data-link="row">
 					<?php foreach ($colaboradores as $colab):?>
 						<tr>
 							<td><small><a href="<?= base_url("evaluacion/revisar/$colab->id");?>">
-								<img height="25px" src="<?= base_url('assets/images/fotos')."/".$colab->foto;?>"></a></small></td>
+								<img height="40px" class="img-circle avatar avatar-original" src="<?= base_url('assets/images/fotos')."/".$colab->foto;?>"></a></small></td>
 							<td><small><?= "$colab->nombre ($colab->posicion - $colab->track)";?></small></td>
 							<td><small><?= number_format($colab->autoevaluacion,2);?></small></td>
 							<td><small><?= $colab->rating;?></small></td>
@@ -100,10 +98,8 @@
 			</table>
 		</div>
 	</div>
-	<script type="text/javascript">
-		$.bootstrapSortable(true);
-		$(function() {
-			$('#tbl').bootstrapTable();
-			$('#filterbar').bootstrapTableFilter();
-		});
+	<script>
+		$(document).ready(function() {
+			$('#tbl').DataTable({responsive: true});
+		} );
 	</script>

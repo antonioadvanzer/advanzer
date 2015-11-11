@@ -44,22 +44,22 @@ class Dominio extends CI_Controller {
               <td data-sortable="false" class="rowlink-skip"><small>
                 <table class="table table-bordered table-striped table-condensed">
                   <thead>
-                    <th class="col-sm-1">Analista</th>
-                    <th class="col-sm-1">Consultor</th>
-                    <th class="col-sm-1">Consultor Sr</th>
-                    <th class="col-sm-1">Gerente / Master</th>
-                    <th class="col-sm-1">Gerente Sr / Experto</th>
-                    <th class="col-sm-1">Director</th>
+                    <th>Analista</th>
+                    <th>Consultor</th>
+                    <th>Consultor Sr</th>
+                    <th>Gerente / Master</th>
+                    <th>Gerente Sr / Experto</th>
+                    <th>Director</th>
                   </thead>
                   <tbody>
                     <tr>
                       <?php $porcentaje = $this->porcentaje_objetivo_model->getByObjetivoArea($obj->id,$area); ?>
-                      <td><small><?= !empty($porcentaje->analista) ? $porcentaje->analista->valor : 0;?></small></td>
-                      <td><small><?= !empty($porcentaje->consultor) ? $porcentaje->consultor->valor : 0;?></small></td>
-                      <td><small><?= !empty($porcentaje->sr) ? $porcentaje->sr->valor : 0;?></small></td>
-                      <td><small><?= !empty($porcentaje->gerente) ? $porcentaje->gerente->valor : 0;?></small></td>
-                      <td><small><?= !empty($porcentaje->experto) ? $porcentaje->experto->valor : 0;?></small></td>
-                      <td><small><?= !empty($porcentaje->director) ? $porcentaje->director->valor : 0;?></small></td>
+                      <td><?= !empty($porcentaje->analista) ? $porcentaje->analista->valor : 0;?></td>
+                      <td><?= !empty($porcentaje->consultor) ? $porcentaje->consultor->valor : 0;?></td>
+                      <td><?= !empty($porcentaje->sr) ? $porcentaje->sr->valor : 0;?></td>
+                      <td><?= !empty($porcentaje->gerente) ? $porcentaje->gerente->valor : 0;?></td>
+                      <td><?= !empty($porcentaje->experto) ? $porcentaje->experto->valor : 0;?></td>
+                      <td><?= !empty($porcentaje->director) ? $porcentaje->director->valor : 0;?></td>
                     </tr>
                   </tbody>
                 </table></small>

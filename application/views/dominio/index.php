@@ -12,12 +12,12 @@
 <div class="container">
   <div class="row">
     <div class="col-md-6">
-      <span style="cursor:pointer" class="glyphicon glyphicon-plus" 
-        onclick="location.href='<?= base_url('objetivo/nuevo/');?>'">Nueva Responsabilidad</span>
+      <label style="cursor:pointer" onclick="location.href='<?= base_url('objetivo/nuevo/');?>'">
+        <span class="glyphicon glyphicon-plus"></span>Nueva Responsabilidad</label>
     </div>
     <div class="col-md-6">
-      <span style="cursor:pointer" class="glyphicon glyphicon-plus" 
-        onclick="location.href='<?= base_url('dominio/nuevo/');?>'">Nuevo Dominio</span>
+      <label style="cursor:pointer" onclick="location.href='<?= base_url('dominio/nuevo/');?>'">
+        <span class="glyphicon glyphicon-plus"></span>Nuevo Dominio</label>
     </div>
   </div>
   <div class="row">
@@ -47,24 +47,24 @@
       </div>
       <div align="center"><div id="cargando" style="display:none; color: green;">
         <img src="<?= base_url('assets/images/loading.gif');?>"></div></div>
-      <table id="resultados" class="table sortable table-hover table-striped" align="center">
+      <table id="resultados" class="display" align="center">
         <thead>
           <tr>
-            <th data-field="dominio" class="col-md-1">Dominio</th>
-            <th data-field="nombre" class="col-md-1">Nombre</th>
-            <th data-field="metrica" class="col-md-3">Métrica</th>
-            <th data-field="tipo" class="col-md-1">Tipo</th>
-            <th data-field="areas" class="col-md-5" data-sortable="false">Áreas y Posiciones</th>
-            <th data-field="estatus"></th>
+            <th>Dominio</th>
+            <th>Nombre</th>
+            <th>Métrica</th>
+            <th>Tipo</th>
+            <th>Áreas y Posiciones</th>
+            <th>Estatus</th>
           </tr>
         </thead>
-        <tbody data-link="row" class="rowlink searchable" id="result"></tbody>
+        <tbody data-link="row" class="rowlink" id="result"></tbody>
       </table>
     </div>
   </div>
 
   <script type="text/javascript">
-    $.bootstrapSortable(true);
+    /*$.bootstrapSortable(true);
 
     (function ($) {
           $('#filter').keyup(function () {
@@ -74,9 +74,10 @@
                   return rex.test($(this).text());
               }).show();
           })
-      }(jQuery));
+      }(jQuery));*/
 
     $(document).ready(function() {
+      $('#resultados').DataTable({responsive: true});
       $("#area").change(function() {
         $("#dominio option:selected").each(function() {
           dominio = $('#dominio').val();
@@ -94,12 +95,13 @@
           beforeSend: function (xhr) {
             $('#resultados').hide('slow');
             $('#cargando').show('slow');
+            $('#resultados').dataTable().fnDestroy();
           },
           success: function(data) {
             $('#cargando').hide('slow');
             $('#resultados').show('slow');
             $("#result").show('slow').html(data);
-            $.bootstrapSortable(true);
+            $('#resultados').DataTable({responsive: true});
           }
         });
       });
@@ -122,12 +124,13 @@
             beforeSend: function (xhr) {
               $('#resultados').hide('slow');
               $('#cargando').show('slow');
+              $('#resultados').dataTable().fnDestroy();
             },
             success: function(data) {
               $('#cargando').hide('slow');
               $('#resultados').show('slow');
               $("#result").show('slow').html(data);
-              $.bootstrapSortable(true);
+              $('#resultados').DataTable({responsive: true});
             }
           });
       });
@@ -150,12 +153,13 @@
             beforeSend: function (xhr) {
               $('#resultados').hide('slow');
               $('#cargando').show('slow');
+              $('#resultados').dataTable().fnDestroy();
             },
             success: function(data) {
               $('#cargando').hide('slow');
               $('#resultados').show('slow');
               $("#result").show('slow').html(data);
-              $.bootstrapSortable(true);
+              $('#resultados').DataTable({responsive: true});
             }
           });
       });

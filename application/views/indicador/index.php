@@ -12,12 +12,12 @@
 <div class="container">
   <div class="row">
     <div class="col-md-6">
-      <span style="cursor:pointer" class="glyphicon glyphicon-plus" 
-        onclick="location.href='<?= base_url('competencia/nuevo/');?>'">Nueva Competencia</span>
+      <label style="cursor:pointer" onclick="location.href='<?= base_url('competencia/nuevo/');?>'">
+        <span class="glyphicon glyphicon-plus"></span>Nueva Competencia</label>
     </div>
     <div class="col-md-6">
-      <span style="cursor:pointer" class="glyphicon glyphicon-plus" 
-        onclick="location.href='<?= base_url('indicador/nuevo/');?>'">Nuevo Indicador</span>
+      <label style="cursor:pointer" onclick="location.href='<?= base_url('indicador/nuevo/');?>'">
+        <span class="glyphicon glyphicon-plus"></span>Nuevo Indicador</label>
     </div>
   </div>
   <div class="row">
@@ -46,8 +46,7 @@
     </div>
   </div>
 
-  <script type="text/javascript">
-    $.bootstrapSortable(true);
+  <script>
     $(document).ready(function() {
       $("#indicador").change(function() {
         $("#indicador option:selected").each(function() {
@@ -65,7 +64,6 @@
             $('#cargando').hide();
             $('#resultados').show();
             $("#result").show().html(data);
-            $.bootstrapSortable(true);
           }
         });
       });
