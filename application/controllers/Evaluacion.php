@@ -15,9 +15,8 @@ class Evaluacion extends CI_Controller {
     }
 
     //basicas
-    public function index($flag=true) {
+    public function index() {
         $this->valida_acceso();
-        $data['flag']=$flag;
         $data['colaboradores'] = $this->evaluacion_model->getEvaluados();
         $this->layout->title('Advanzer - Evaluaciones');
         $this->layout->view('evaluacion/index',$data);
@@ -689,9 +688,8 @@ class Evaluacion extends CI_Controller {
     }
 
     //estructuras
-    public function revisar($colaborador,$flag=false) {
+    public function revisar($colaborador) {
         $this->valida_acceso();
-        $data['flag']=$flag;
         $data['colaborador'] = $this->evaluacion_model->getResultadosByColaborador($this->user_model->searchById($colaborador));
         $this->layout->title('Advanzer - Revisión');
         $this->layout->view('evaluacion/revisar',$data);

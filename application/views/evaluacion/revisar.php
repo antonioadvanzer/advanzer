@@ -12,7 +12,7 @@
 			<label id="msg"></label>
 		</div>
 	</div>
-	<div align="center"><a href="<?= base_url("evaluacion/index/$flag");?>">&laquo;Regresar</a></div>
+	<div align="center"><a href="<?= base_url("evaluacion");?>">&laquo;Regresar</a></div>
 	<div class="row" align="center">
 		<div class="col-md-12"><div id="cargando" style="display:none; color: green;">
 			<img src="<?= base_url('assets/images/loading.gif');?>"></div></div>
@@ -131,12 +131,8 @@
 					<tbody data-link="row">
 						<?php foreach ($colaborador->evaluadores as $evaluador):?>
 							<tr>
-								<td><?php if($flag == "false"): ?>
-									<a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion");?>">
-									<img height="25px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></a>
-									<?php else: ?>
-										<img height="25px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>">
-									<?php endif; ?></td>
+								<td><a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion");?>">
+									<img height="25px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></a></td>
 								<td><?= $evaluador->nombre;?></td>
 								<td><?php if($evaluador->responsabilidad) echo number_format($evaluador->responsabilidad,2);?></td>
 								<td><?php if($evaluador->competencia) echo number_format($evaluador->competencia,2);?></td>
@@ -155,10 +151,8 @@
 					data-striped="true" data-show-toggle="true" data-show-export="true">
 					<thead>
 						<tr>
-							<?php if($flag == true): ?>
-								<th data-halign="center" data-field="foto"></th>
-								<th class="col-md-4" data-halign="center" data-field="evaluador">Evaluador 360</th>
-							<?php endif; ?>
+							<th data-halign="center" data-field="foto"></th>
+							<th class="col-md-4" data-halign="center" data-field="evaluador">Evaluador 360</th>
 							<th class "col-md-2" data-halign="center" data-field="responsabilidades">Resultado</th>
 							<th class="col-md-4" data-halign="center" data-field="comentarios">Comentarios</th>
 						</tr>
@@ -166,12 +160,8 @@
 					<tbody data-link="row">
 						<?php foreach ($colaborador->evaluadores360 as $evaluador):?>
 							<tr>
-								<td><?php if($flag == true): ?>
-									<a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion");?>">
-									<img height="25px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></a>
-									<?php else: ?>
-										<img height="25px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>">
-									<?php endif; ?></td>
+								<td><a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion");?>">
+									<img height="25px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></a></td>
 								<td><?= $evaluador->nombre;?></td>
 								<td><?php if($evaluador->competencia) echo number_format($evaluador->competencia,2);?></td>
 								<td><?= $evaluador->comentarios;?></td>
@@ -187,10 +177,8 @@
 					data-striped="true" data-show-toggle="true" data-show-export="true">
 					<thead>
 						<tr>
-							<?php if($flag == true): ?>
-								<th data-halign="center" data-field="foto"></th>
-								<th class="col-md-4" data-halign="center" data-field="evaluador">Líder de Proyecto</th>
-							<?php endif; ?>
+							<th data-halign="center" data-field="foto"></th>
+							<th class="col-md-4" data-halign="center" data-field="evaluador">Líder de Proyecto</th>
 							<th class "col-md-3" data-halign="center" data-field="responsabilidades">Proyecto</th>
 							<th class "col-md-1" data-halign="center" data-field="competencias">Resultado</th>
 							<th class "col-md-2" data-halign="center" data-field="comentarios">Comentarios</th>
@@ -199,12 +187,8 @@
 					<tbody data-link="row">
 						<?php foreach ($colaborador->evaluadoresProyecto as $evaluador):?>
 							<tr>
-								<td><?php if($flag == true): ?>
-									<a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion/1");?>">
-									<img height="25px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></a>
-								<?php else: ?>
-									<img height="25px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>">
-								<?php endif; ?></td>
+								<a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion/1");?>">
+								<img height="25px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></a></td>
 								<td><?= $evaluador->nombre;?></td>
 								<td><?php if($evaluador->evaluacion) echo $evaluador->evaluacion;?></td>
 								<td><?php if($evaluador->responsabilidad) echo number_format($evaluador->responsabilidad,2);?></td>
@@ -267,7 +251,7 @@
 					console.log(data);
 					var returnData = JSON.parse(data);
 					if(returnData['msg'] == "ok")
-						window.document.location = '<?= base_url("evaluacion/index/$flag");?>';
+						window.document.location = '<?= base_url("evaluacion");?>';
 					else{
 						$('#cargando').hide('slow');
 						$('#save').show('slow');

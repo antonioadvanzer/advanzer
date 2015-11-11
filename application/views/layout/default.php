@@ -112,7 +112,7 @@
 												<?php endif; ?>
 											<?php endif; if(in_array($this->session->userdata('tipo'), array(3,4,5,6))): ?>
 													<li><a href="<?= base_url('evaluacion');?>">Evaluaciones</a></li>
-													<li><a href="<?= base_url('evaluacion/index/false');?>">Evaluaciones Confidencial</a></li>
+													<!--<li><a href="<?= base_url('evaluacion/index/false');?>">Evaluaciones Confidencial</a></li>-->
 													<li><a href="<?= base_url('evaluacion/por_evaluador');?>">Evaluaciones por Evaluador</a></li>
 												<li><a href="<?= base_url('ver_requisiciones');?>">Requisiciones</a></li>
 											<?php endif;?>
