@@ -11,7 +11,7 @@
 	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/style.css');?>">
 	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/datepicker/css/bootstrap-datepicker.min.css');?>">
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/jquery.dataTables.min');?>">
+	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/jquery.dataTables.min.css');?>">
 	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/bootstrap-select.css');?>">
 	<script src="<?= base_url('assets/js/jquery.min.js');?>"></script>
 	<script src="<?= base_url('assets/js/bootstrap.min.js');?>"></script>
@@ -22,7 +22,7 @@
 	<script src="<?= base_url('assets/js/moment.min.js');?>"></script>
 	<script src="<?= base_url('assets/js/tableExport.js');?>"></script>
 	<script src="<?= base_url('assets/js/bootstrap-table-export.js');?>"></script>
-	<script src="<?= base_url('assets/js/jquery.dataTables');?>"></script>
+	<script src="<?= base_url('assets/js/jquery.dataTables.js');?>"></script>
 	<script src="<?= base_url('assets/js/jasny-bootstrap.js');?>"></script>
 	<script src="<?= base_url('assets/js/bootstrap-select.js');?>"></script>
 	<title><?=$title_for_layout?></title>
