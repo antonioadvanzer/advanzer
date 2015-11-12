@@ -108,7 +108,7 @@ class Evaluacion_model extends CI_Model{
 		$this->db->select('Us.id,Us.foto,Us.nombre')->from('Users Us');
 		$this->db->join('Evaluadores Ev','Us.id = Ev.evaluador');
 		$this->db->join('Evaluaciones E','E.id = Ev.evaluacion');
-		$this->db->where(array('E.inicio <='=>date('Y-m-d'),'E.fin >='=>date('Y-m-d')));
+		$this->db->where(array('Us.estatus'=>1,'E.inicio <='=>date('Y-m-d'),'E.fin >='=>date('Y-m-d')));
 		$this->db->where('Ev.evaluado != Ev.evaluador');
 		$this->db->order_by('Us.nombre');
 		$result = $this->db->get()->result();
@@ -480,7 +480,7 @@ class Evaluacion_model extends CI_Model{
 			->join('Areas A','A.id = U.area')
 			->join('Posicion_Track PT','PT.id = U.posicion_track')
 			->join('Posiciones P','P.id = PT.posicion')
-			->where(array('U.fecha_ingreso <='=>(date('Y')-1).'-09-30','U.estatus'=>1))
+			->where(array('U.fecha_ingreso <='=>(date('Y')-1).'-09-30','U.estatus'=>1,'P.nivel <='=>8))
 			->group_by('U.id')
 			->order_by('U.nombre');
 		$result = $this->db->get('Users U')->result();
