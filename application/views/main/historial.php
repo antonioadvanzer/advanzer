@@ -16,29 +16,7 @@
 		<div class="col-md-12">
 			<div class="panel panel-default">
 				<div class="panel-body">
-					<div class="row"><div class="col-md-12 lead">Historial de Desempeño <?php if($this->session->userdata('tipo')!=0)
-					switch ($this->session->userdata('tipo')) {
-						case 1:
-						case 2:
-							echo " (Capturista de Compromisos Internos)";
-							break;
-						case 3:
-							echo " (Requisiciones)";
-							break;
-						case 4:
-							echo " (Administrador)";
-							break;
-						case 5:
-							echo " (Administrador y Requisiciones)";
-							break;
-						case 6:
-							echo " (Soporte Técnico)";
-							break;
-						default:
-							# code...
-							break;
-					}
-					?><hr></div></div>
+					<div class="row"><div class="col-md-12 lead">Historial de Desempeño<hr></div></div>
 					<div class="row">
 						<div class="col-md-4 text-center">
 							<img height="150px" class="img-circle avatar avatar-original" style="-webkit-user-select:none; 
@@ -48,18 +26,23 @@
 							<div class="row"><div class="col-md-12"><h2 class="only-bottom-margin"><?= $colaborador->nombre;?></h2></div></div>
 							<hr>
 							<div class="row">
-								<?php if(!empty($info)):
-									foreach($info as $evaluacion): ?>
-										<div class="col-md-6">
-											<span class="text-muted">Año de Evaluación: </span><?= $evaluacion->anio;?><br>
-											<span class="text-muted">Rating Obtenido: </span><?= $evaluacion->rating;?><br>
-										</div>
-									<?php endforeach;
-								else: ?>
+								<?php if(!empty($info)): ?>
+									<div class="col-md-6">
+										<select class="form-control" style="max-width:160px;" id="anio">
+											<option selected disabled>- Selecciona año -</option>
+											<?php foreach($info as $evaluacion): ?>
+												<option><?= $evaluacion->anio;?></option>
+											<?php endforeach; ?>
+										</select>
+									</div>
+								<?php else: ?>
 									<div class="col-md-12">
 										<label>No has generado historial en la empresa</label>
 									</div>
 								<?php endif; ?>
+								<div align="center"><div id="cargando" style="display:none; color: green;">
+									<img src="<?= base_url('assets/images/loading.gif');?>"></div></div>
+								<div class="col-md-6" style="display:none" id="result"></div>
 							</div>
 						</div>
 					</div>
@@ -67,3 +50,25 @@
 			</div>
 		</div>
 	</div>
+	<script>
+		$(document).ready(function() {
+			$("#anio").change(function() {
+				$("#anio option:selected").each(function() {
+					anio = $('#anio').val();
+				});
+				$.ajax({
+					type: 'post',
+					url: "<?= base_url('main/load_historial');?>",
+					data: {anio : anio},
+					beforeSend: function (xhr) {
+						$('#result').hide();
+						$('#cargando').show();
+					},
+					success: function(data) {
+						$('#cargando').hide();
+						$("#result").show().html(data);
+					}
+				});
+			});
+		});
+	</script>

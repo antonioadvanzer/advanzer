@@ -137,6 +137,15 @@ class Main extends CI_Controller {
     	$this->layout->view('main/historial',$data);
     }
 
+    public function load_historial() {
+    	$email=$this->session->userdata('email');
+    	$anio=$this->input->post('anio');
+    	$info=$this->user_model->getHistorialByEmailAnio($email,$anio);
+    	?>
+    		<span class="text-muted">Rating Obtenido: </span><?php echo $info->rating; if($info->comentarios) echo " - $info->comentarios";?>
+    	<?php
+    }
+
     // Unset session and logout
 	public function logout($err=null) {
 		unset($_SESSION['access_token']);

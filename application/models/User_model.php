@@ -180,6 +180,10 @@ class User_model extends CI_Model{
 		return $this->db->where('email',$email)->get('Historial')->result();
 	}
 
+	function getHistorialByEmailAnio($email,$anio) {
+		return $this->db->where(array('email'=>$email,'anio'=>$anio))->get('Historial')->first_row();
+	}
+
 	function logout($id,$email) {
 		$descripcion = "cerró sesión: $email";
 		$this->db->insert('Bitacora',array('accion'=>5,'descripcion'=>$descripcion,'valor'=>$id));
