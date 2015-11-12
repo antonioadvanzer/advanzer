@@ -37,24 +37,27 @@
 							<td><small><?= number_format($colab->autoevaluacion,2);?></small></td>
 							<td><small><?= $colab->rating;?></small></td>
 							<td><small><?= number_format(floor($colab->total * 100) / 100,2);?></small></td>
-							<td data-sortable="false" class="rowlink-skip"><hr><?php if(count($colab->evaluadores) > 0): ?>
-								<div class="row" align="center">
-									<div class="col-sm-2"><small><b>Resultado</b></small></div>
-									<div class="col-sm-3"><small><b>Responsabilidades</b></small></div>
-									<div class="col-sm-2"><small><b>Competencias</b></small></div>
-									<div class="col-sm-5"><small><b>Evaluador</b></small></div>
-								</div>
-								<?php foreach ($colab->evaluadores as $evaluador) : ?>
-									<div class="row" align="center">
-										<div class="col-sm-2"><small><?= number_format($evaluador->total,2);?></small></div>
-										<div class="col-sm-3"><small><?= number_format($evaluador->responsabilidad,2);?></small></div>
-										<div class="col-sm-2"><small><?= number_format($evaluador->competencia,2);?></small></div>
-										<div class="col-sm-5" title="Comentarios: <?= $evaluador->comentarios;?>">
-											<img style="float:left" height="30px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"> 
-											<small><?= $evaluador->nombre;?></small></div>
-									</div>
-								<?php endforeach; ?>
-								<hr>
+							<td data-sortable="false" class="rowlink-skip"><?php if(count($colab->evaluadores) > 0): ?>
+								<table id="tbl2" align="center" class="display">
+									<thead>
+										<tr>
+											<th><small>Resultado</small></th>
+											<th><small>Responsabilidades</small></th>
+											<th><small>Competencias</small></th>
+											<th><small>Evaluador</small></th>
+										</tr>
+									</thead>
+									<tbody>
+										<?php foreach ($colab->evaluadores as $evaluador) : ?>
+											<tr>
+												<td><small><?= number_format($evaluador->total,2);?></small></td>
+												<td><small><?= number_format($evaluador->responsabilidad,2);?></small></td>
+												<td><small><?= number_format($evaluador->competencia,2);?></small></td>
+												<td><small><img style="float:left" height="30px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"> 
+												<small><?= $evaluador->nombre;?></small></td>
+											</tr>
+										<?php endforeach; ?>
+									</tbody>
 							<?php endif;
 							if(isset($colab->evaluadores360) && count($colab->evaluadores360) > 0): ?>
 								<div class="row" align="center">
@@ -69,7 +72,6 @@
 											<?= $evaluador->nombre;?></small></div>
 									</div>
 								<?php endforeach; ?>
-								<hr>
 							<?php endif;
 							if(isset($colab->evaluadoresProyecto) && count($colab->evaluadoresProyecto) > 0): ?>
 								<div class="row" align="center">
@@ -86,8 +88,7 @@
 											<small><?= $evaluador->nombre;?></small></div>
 									</div>
 								<?php endforeach; ?>
-								<hr>
-							<?php endif; ?></td>
+							<?php endif; ?></table></td>
 							<td><small><?php if($colab->feedback){ echo$colab->feedback->nombre." <i>("; 
 								if(isset($colab->feedback->estatus))
 									if($colab->feedback->estatus == 0) echo"Pendiente"; 
@@ -101,5 +102,6 @@
 	<script>
 		$(document).ready(function() {
 			$('#tbl').DataTable({responsive: true});
+			$('id^=tbl2').DataTable({responsive: true});
 		} );
 	</script>
