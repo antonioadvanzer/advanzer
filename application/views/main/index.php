@@ -88,6 +88,8 @@
 								<span class="btn label label-default pull-left" onclick="alert('La sección está en construcción.');">
 									<i class="glyphicon glyphicon-tag"></i> Mi plan de Capacitación</span>
 							<?php endif; ?>
+							<span class="btn label label-default pull-left" onclick="location.href='';">
+								<i class="glyphicon glyphicon-globe"></i> Portal de Capital Humano</span>
 						</h3></div>
 					</div>
 				</div>

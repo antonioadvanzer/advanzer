@@ -2,7 +2,7 @@
 	<div class="jumbotron">
 		<div class="container">
 			<div class="col-md-3 logo" align="center"><img vspace="8%" width="280px" src="<?= base_url('assets/images/1.png');?>"></div>
-			<div class="col-md-6" align="center"><h2>Bienvenido(a) a tu Portal Personal de Capital Humano</h2></div>
+			<div class="col-md-6" align="center"><h2>Bienvenido(a) a tu Portal Personal</h2></div>
 			<div class="col-md-3 logo" align="center"><img vspace="8%" width="280px" src="<?= base_url('assets/images/2.png');?>"></div>
 		</div>
 	</div>
