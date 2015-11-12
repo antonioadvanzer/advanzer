@@ -37,8 +37,8 @@
       <table id="tbl" class="display" align="center" data-toggle="table" data-hover="true" data-striped="true">
         <thead>
           <tr>
-            <th class="col-md-2" data-halign="center" data-field="area">Área</th>
             <th class="col-md-2" data-halign="center" data-field="direccion">Dirección</th>
+            <th class="col-md-2" data-halign="center" data-field="area">Área</th>
             <th class="col-md-1" data-halign="center" data-field="estatus">Estatus</th>
           </tr>
         </thead>
@@ -46,8 +46,8 @@
           <?php foreach ($areas as $area): ?>
           <tr>
             <td><small><a style="text-decoration:none" href='<?= base_url("area/ver/$area->id");?>'>
-              <?= $area->nombre;?></a></small></td>
-            <td><small><?= $area->direccion;?></small></td>
+              <?= $area->direccion;?></a></small></td>
+            <td><small><?= $area->nombre;?></small></td>
             <td data-value="<?= $area->estatus;?>">
               <small><?php if($area->estatus ==1 ) echo "Habilitada"; else echo "Deshabilitada"; ?></small></td>
           </tr>

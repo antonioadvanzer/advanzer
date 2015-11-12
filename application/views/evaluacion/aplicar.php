@@ -218,7 +218,7 @@
 										<input type="hidden" value="" id="tipo">
 										<label><?= $comportamiento->descripcion;?><span style="min-width:70px;float:right">
 											<i>Respuesta</i>: 
-											<select onchange="this.form.justificacion.display='';if(this.options[this.selectedIndex].value == 3){
+											<select onchange="this.form.justificacion.display='true';if(this.options[this.selectedIndex].value == 3){
 												this.form.justificacion.value='';verify(this.form);this.form.boton.display='';
 												this.form.justificacion.removeAttribute('required');}else{
 												this.form.justificacion.setAttribute('required','required');}" class="form-control" id="respuesta" 

@@ -54,7 +54,7 @@ class User_model extends CI_Model{
 		return $this->db->count_all_results('Users U');
 	}
 
-	function getPagination() {
+	function getPagination($flag) {
 		$this->db->select('U.id,U.nomina,U.categoria,U.plaza,U.nombre,U.email,U.foto,U.empresa,U.estatus,A.nombre area,
 			T.nombre track,P.nombre posicion');
 		$this->db->join('Areas A','U.area = A.id','LEFT OUTER');
@@ -62,6 +62,10 @@ class User_model extends CI_Model{
 		$this->db->join('Tracks T','PT.track = T.id','LEFT OUTER');
 		$this->db->join('Posiciones P','P.id = PT.posicion','LEFT OUTER');
 		$this->db->order_by('nombre');
+		if($flag)
+			$this->db->where('U.estatus',0);
+		else
+			$this->db->where('U.estatus',1);
 		return $this->db->get('Users U')->result();
 	}
 

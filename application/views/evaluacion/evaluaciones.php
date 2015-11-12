@@ -31,13 +31,12 @@
   <div class="row">
     <div class="col-md-12">
       <div id="filterbar"> </div>
-      <table id="tbl" class="sortable table-hover" align="center" data-toggle="table" data-toolbar="#filterbar" 
-        data-pagination="true" data-show-columns="true" data-show-filter="true" data-hover="true" 
-        data-striped="true" data-show-toggle="true" data-show-export="true">
+      <table id="tbl" class="display" align="center">
         <thead>
           <tr>
             <th data-halign="center" data-align="center" data-field="foto" data-defaultsort="disabled"></th>
             <th data-halign="center" data-field="nombre">Nombre</th>
+            <th data-halign="center" data-field="posicion">Posición</th>
             <th data-halign="center" data-field="area">Área</th>
             <th data-halign="center" data-field="evaluados">Evaluadores</th>
           </tr>
@@ -45,11 +44,12 @@
         <tbody data-link="row">
           <?php foreach ($colaboradores as $colab): ?>
           <tr>
-            <td><small><a href='<?= base_url("evaluacion/asignar_evaluador/").'/'.$colab->id;?>'><img height="25px" 
-              src="<?= base_url('assets/images/fotos')."/".$colab->foto;?>"></a></small></td>
+            <td align="center"><small><a href='<?= base_url("evaluacion/asignar_evaluador/").'/'.$colab->id;?>'><img height="25px" 
+              src="<?= base_url('assets/images/fotos')."/".$colab->foto;?>" class="img-circle avatar avatar-original"></a></small></td>
             <td><small><?= $colab->nombre;?></small></td>
+            <td><small><?= $colab->posicion;?></small></td>
             <td><small><?= $colab->area;?></small></td>
-            <td><small><?= $colab->total_evaluadores;?></small></td>
+            <td align="center"><small><?= $colab->total_evaluadores;?></small></td>
           </tr>
           <?php endforeach; ?>
         </tbody>
@@ -58,12 +58,7 @@
   </div>
 
   <script type="text/javascript">
-    $.bootstrapSortable(true);
-
-    $(function() {
-      $('#tbl').bootstrapTable();
-
-      $('#filterbar').bootstrapTableFilter();
-
-    });
+    $(document).ready(function() {
+      $('#tbl').DataTable({responsive: true});
+    } );
   </script>

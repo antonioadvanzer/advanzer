@@ -476,9 +476,11 @@ class Evaluacion_model extends CI_Model{
 	}
 
 	function getPagination() {
-		$this->db->select('U.id,U.foto,U.nombre,A.nombre area')
+		$this->db->select('U.id,U.foto,U.nombre,A.nombre area,P.nombre posicion')
 			->join('Areas A','A.id = U.area')
-			->where('U.fecha_ingreso <=',(date('Y')-1).'-09-30')
+			->join('Posicion_Track PT','PT.id = U.posicion_track')
+			->join('Posiciones P','P.id = PT.posicion')
+			->where(array('U.fecha_ingreso <='=>(date('Y')-1).'-09-30','U.estatus'=>1))
 			->group_by('U.id')
 			->order_by('U.nombre');
 		$result = $this->db->get('Users U')->result();
@@ -906,7 +908,7 @@ class Evaluacion_model extends CI_Model{
 	function getActiveEvaluation() {
 		$result = $this->db->where(array('inicio <='=>date('Y-m-d'),'fin >='=>date('Y-m-d'),'estatus'=>1))->get('Evaluaciones');
 		if($result->num_rows() > 0)
-			return true;
+			return $result->first_row();
 		return false;
 	}
 

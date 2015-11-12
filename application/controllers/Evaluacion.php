@@ -25,8 +25,6 @@ class Evaluacion extends CI_Controller {
     public function proyecto() {
         $this->valida_acceso();
         $data['evaluaciones'] = $this->evaluacion_model->getEvaluacionesSinAplicar();
-        if(count($data['evaluaciones']) == 0)
-            redirect('evaluacion/nueva');
         $this->layout->title('Advanzer - Gestión de Proyectos');
         $this->layout->view('evaluacion/proyecto',$data);
     }

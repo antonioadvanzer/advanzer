@@ -29,11 +29,12 @@
 		</div>
 		<div class="col-md-1"></div>
 		<div class="col-md-6">
-			<h2>En éste espacio puedes encontrar:</h2>
+			<h4>En este espacio puedes encontrar:</h4><br>
+			<h4>
 			<li>Información relacionada a tu perfil como colaborador</li>
 			<li>Historial de Desempeño</li>
 			<li>Competencias y Responsabilidades</li>
-			<li>Diferentes servicios</li>
+			<li>Diferentes servicios</li></h4>
 		</div>
 	</div>
 	<?php if(isset($err_msg)){ ?>

@@ -45,7 +45,7 @@
 								display:block; margin:auto;" src="<?= base_url("assets/images/fotos/$colaborador->foto");?>">
 						</div>
 						<div class="col-md-8">
-							<div class="row"><div class="col-md-12"><h1 class="only-bottom-margin"><?= $colaborador->nombre;?></h1></div></div>
+							<div class="row"><div class="col-md-12"><h2 class="only-bottom-margin"><?= $colaborador->nombre;?></h2></div></div>
 							<hr>
 							<div class="row">
 								<?php if(!empty($info)):

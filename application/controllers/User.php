@@ -14,12 +14,9 @@ class User extends CI_Controller {
         $this->load->model('posicion_model');
     }
 
-    public function index($msg=null){
+    public function index($flag=null){
         $this->valida_acceso();
-        $data['users'] = $this->user_model->getPagination();
-
-        if($msg!=null && $msg!='(:num)')
-        	$data['msg']=$msg;
+        $data['users'] = $this->user_model->getPagination($flag);
         $this->layout->title('Advanzer - Perfiles');
         $this->layout->view('user/index',$data);
     }

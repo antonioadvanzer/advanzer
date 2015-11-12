@@ -44,7 +44,7 @@
 								display:block; margin:auto;" src="<?= base_url("assets/images/fotos/$colaborador->foto");?>">
 						</div>
 						<div class="col-md-8">
-							<div class="row"><div class="col-md-12"><h1 class="only-bottom-margin"><?= $colaborador->nombre;?></h1></div></div>
+							<div class="row"><div class="col-md-12"><h2 class="only-bottom-margin"><?= $colaborador->nombre;?></h2></div></div>
 							<hr>
 							<div class="row">
 								<div class="col-md-6">
@@ -80,7 +80,7 @@
 									<span class="btn label label-default pull-left" onclick="location.href='<?= base_url("historial");?>';">
 										<i class="glyphicon glyphicon-list-alt"></i> Historial de Desempeño</span>
 								<?php endif; ?>
-								<span class="btn label label-default pull-left" onclick="">
+								<span class="btn label label-default pull-left" onclick="alert('La sección está en construcción.');">
 									<i class="glyphicon glyphicon-tag"></i> Mi plan de Capacitación</span>
 							<?php endif; ?>
 						</h3></div>

@@ -20,8 +20,8 @@
 	<script src="<?= base_url('assets/datepicker/js/bootstrap-datepicker.min.js');?>"></script>
 	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 	<script src="<?= base_url('assets/js/moment.min.js');?>"></script>
-	<script src="<?= base_url('assets/js/tableExport.js');?>"></script>
-	<script src="<?= base_url('assets/js/bootstrap-table-export.js');?>"></script>
+	<!--<script src="<?= base_url('assets/js/tableExport.js');?>"></script>
+	<script src="<?= base_url('assets/js/bootstrap-table-export.js');?>"></script>-->
 	<script src="<?= base_url('assets/js/jquery.dataTables.js');?>"></script>
 	<script src="<?= base_url('assets/js/jasny-bootstrap.js');?>"></script>
 	<script src="<?= base_url('assets/js/bootstrap-select.js');?>"></script>
@@ -124,14 +124,15 @@
 											<ul class="dropdown-menu">
 												<li><a href="<?= base_url('area');?>">Areas de Especialidad</a></li>
 												<li><a href="<?= base_url('track');?>">Tracks y Posiciones</a></li>
-												<li><a href="<?= base_url('administrar_usuarios'); ?>">Colaboradores</a></li>
+												<li><a href="<?= base_url('administrar_usuarios'); ?>">Colaboradores Activos</a></li>
+												<li><a href="<?= base_url('administrar_usuarios/1'); ?>">Colaboradores Inactivos</a></li>
 												<li><a href="<?= base_url('administrar_dominios');?>">Responsabilidades Funcionales</a></li>
 												<li><a href="<?= base_url('administrar_indicadores');?>">Competencias Laborales</a></li>
 												<?php if($this->session->userdata('periodo_edicion') == 1): ?>
 													<li><a href="<?= base_url('indicador/asignar_comportamientos');?>">Comportamientos por Posición</a></li>
 												<?php endif; ?>
-												<li><a href="<?= base_url('evaluaciones');?>">Evaluación de Desempeño</a></li>
 												<li><a href="<?= base_url('evaluacion/proyecto');?>">Gestionar Tiempos de Evaluación (Proyecto-Anual)</a></li>
+												<li><a href="<?= base_url('evaluaciones');?>">Evaluación de Desempeño</a></li>
 											</ul>
 										</li>
 									<?php endif; ?>
@@ -149,6 +150,7 @@
 								<?php if(in_array($this->session->userdata('tipo'), array(1,2,5,6))): ?>
 									<li><a href="<?= base_url('evaluacion/ci');?>">Compromisos Internos</a></li>
 								<?php endif; ?>
+								<li><a href="">Vacaciones <small>(PROXIMAMENTE)</small></a></li>
 							</ul>
 						</li>
 						<!--

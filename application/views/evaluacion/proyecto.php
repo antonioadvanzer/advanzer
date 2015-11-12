@@ -25,17 +25,18 @@
         <img src="<?= base_url('assets/images/loading.gif');?>"></div></div>
   </div>
   <div>
-    <span title="crear evaluación" style="cursor:pointer" class="glyphicon glyphicon-plus" 
-        onclick="location.href='<?= base_url('evaluacion/nueva');?>'">Nueva Evaluación</span>
+  	<label style="cursor:pointer" onclick="location.href='<?= base_url('evaluacion/nueva/');?>'">
+    	<span class="glyphicon glyphicon-plus"></span>Nueva Evaluación</label>
   </div>
   <div>&nbsp;</div>
+  <?php if(count($evaluaciones) > 0): ?>
 	<form id="update" action="javascript:" role="form" class="form-signin">
 	  <div class="row" align="center">
 	  	<div class="col-md-12">
 		  <div class="form-group">
 			<label for="evaluacion">Evaluación</label>
 			<select class="form-control" style="max-width:300px;text-align:center;" id="evaluacion" name="evaluacion">
-			  <option value="" disabled selected>-- Selecciona una encuesta --</option>
+			  <option value="" disabled selected>-- Selecciona una evaluación --</option>
 			  <?php foreach ($evaluaciones as $evaluacion) :
 			  	if($evaluacion->tipo==0)
 			  		$extra="Proyecto - ";
@@ -50,6 +51,7 @@
 	  </div>
 	  <div class="row" align="center" id="datos"></div>
 	</form>
+  <?php endif; ?>
 	<script>
 		$(document).ready(function() {
 			$("#evaluacion").change(function() {
