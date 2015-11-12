@@ -53,8 +53,13 @@
 									<span class="text-muted">Plaza: </span><?= $colaborador->plaza;?><br>
 									<!--<span class="text-muted">Categoría: </span><?= $colaborador->categoria;?><br>-->
 									<span class="text-muted"># Empleado: </span><?= $colaborador->nomina;?><br>
-									<span class="text-muted">Fecha de ingreso: </span><?php $fecha=date_create($colaborador->fecha_ingreso);
-										echo date_format($fecha,'l, F j\t\h, Y')?>
+									<span class="text-muted">Fecha de ingreso: </span><?php $lenguage = 'es_ES.UTF-8';
+										putenv("LANG=$lenguage");
+										setlocale(LC_ALL, $lenguage);
+										$fecha=strtotime($colaborador->fecha_ingreso);
+										echo strftime("%A %d de %B del %Y",$fecha);
+										//$fecha=date_create($colaborador->fecha_ingreso);
+										//echo date_format($fecha,'l, F j\t\h, Y')?>
 								</div>
 								<div class="col-md-6">
 									<span class="text-muted">Jefe: </span><?= $colaborador->nombre_jefe;?><br>
