@@ -56,7 +56,16 @@
             <th class="col-md-3">Posicion</th>
           </tr>
         </thead>
-        <tbody id="result"></tbody>
+        <tbody id="result">
+          <?php foreach($posiciones as $posicion): ?>
+            <tr>
+              <td><small><span class="glyphicon glyphicon-eye-open" style="cursor:pointer" onclick="
+                location.href='<?= base_url('posicion/ver');?>/'+<?= $posicion->id;?>"></span>
+                <span style="cursor:pointer" onclick="location.href='<?= base_url('posicion/ver');?>/'+
+                  <?= $posicion->id;?>"><?= $posicion->nombre;?></span></small></td>
+            </tr>
+          <?php endforeach; ?>
+        </tbody>
       </table>
     </div>
     <div class="col-md-1"></div>

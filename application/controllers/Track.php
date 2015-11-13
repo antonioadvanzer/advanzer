@@ -18,6 +18,7 @@ class Track extends CI_Controller {
     	if (!empty($msg))
     		$data['msg'] = $msg;
     	$data['tracks'] = $this->track_model->getAll();
+        $data['posiciones'] = $this->posicion_model->getAll();
     	$this->layout->title('Advanzer - Tracks y Posiciones');
     	$this->layout->view('track/index',$data);
     }

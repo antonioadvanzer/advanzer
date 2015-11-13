@@ -8,6 +8,10 @@ class Posicion_model extends CI_Model{
 		parent::__construct();
 	}
 
+	function getAll() {
+		return $this->db->get('Posiciones')->result();
+	}
+
 	function getByTrack($track) {
 		$this->db->select('P.id,P.nombre');
 		$this->db->join('Posicion_Track PT','PT.posicion = P.id');
