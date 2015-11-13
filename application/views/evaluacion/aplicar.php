@@ -9,7 +9,7 @@
 	  text-align: center;
 	}
 	.accordion h1, h2, h3, h4 {
-	  cursor: pointer;
+	  cursor: default;
 	  -webkit-margin-before: 0em;
 	  -webkit-margin-after: 0em;
 	}
@@ -106,8 +106,8 @@
 			<div class="item active" align="center" style="min-height:550px;">
 				<img height="100%" style="opacity:0.1;position:absolute" src="<?= base_url('assets/images/evaluacion.jpg');?>">
 				<div style="display:block;width:60%;position:absolute;top:20%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
-					<h2><b>Analiza cada rubro conforme a lo que crees que califica de manera correcta</b></h2><hr>
-					<h3><li>Si tu respuesta es diferente a "3" deberás forzosamente justificar tu respuesta con un mínimo de 3 palabras y así, 
+					<h2 style="cursor:default;"><b>Analiza cada rubro conforme a lo que crees que califica de manera correcta</b></h2><hr>
+					<h3 style="cursor:default;"><li>Si tu respuesta es diferente a "3" deberás forzosamente justificar tu respuesta con un mínimo de 3 palabras y así, 
 						permitirte enviar tu respuesta</li>
 						<li>Tu avance se guarda automáticamente para que retomes la evaluación cuando desees</li>
 						<li>Al final se te solicitará que envíes comentarios generales de la evaluación para enviar y cerrar la evaluación</li></h3>
@@ -121,7 +121,7 @@
 				<div class="item" align="center" style="min-height:550px;">
 					<img width="100%" style="opacity:0.3;position:absolute" src="<?= base_url('assets/images/responsabilidades.jpg');?>">
 					<div style="width:60%;position:absolute;top:40%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
-						<h2>Selecciona la metrica que consideres correcta para cada responsabilidad...</h2>
+						<h2 style="cursor:default;">Selecciona la metrica que consideres correcta para cada responsabilidad...</h2>
 					</div>
 					<div class="carousel-caption"><h3 style="cursor:default;">Responsabilidades</h3></div>
 				</div>
@@ -139,10 +139,12 @@
 										<div class="form-group" align="center">
 											<h2><?= $resp->nombre;?><span style="min-width:100px;float:right;">
 													<i>Respuesta</i>: 
-													<select onchange="this.form.justificacion.display='';if(this.options[this.selectedIndex].value == 3){
-														this.form.justificacion.value='';verify(this.form);this.form.boton.display='';
-														this.form.justificacion.removeAttribute('required');}else{
-														this.form.justificacion.setAttribute('required','required');}" class="form-control" 
+													<select onchange="this.form.boton.style.display='';if(this.options[this.selectedIndex].value == 3){
+															this.form.justificacion.value='';verify(this.form);
+															this.form.justificacion.removeAttribute('required');}
+														else{
+															this.form.justificacion.setAttribute('required','required');
+															this.form.justificacion.focus();}" class="form-control" 
 														id="respuesta" style="height:15px;padding: 0px 10px;font-size:10px;max-width:60px;display:inline">
 														<option disabled selected value="">-- Selecciona tu respuesta --</option>
 														<?php for ($i=5; $i >= 1; $i--) : ?>
@@ -163,17 +165,17 @@
 									</div>
 									<div class="col-md-8">
 										<div class="form-group" align="center">
-											<textarea id="justificacion" class="form-control" rows="2" style="max-width:300px;text-align:center;
-												<?php if($resp->respuesta=="")echo'display:none;';?>" 
-												onkeyup="if(this.value.trim().split(' ').length >= 4){ this.form.boton.style.display='';
-													}else{ this.form.boton.style.display='none';}" placeholder="Justifique su respuesta"
+											<textarea id="justificacion" class="form-control" rows="2" style="max-width:300px;text-align:center;" 
+												onkeyup="if(this.value.trim().split(' ').length >= 4){ this.form.boton.removeAttribute('disabled');
+													}else{ this.form.boton.setAttribute('disabled','disabled');}" placeholder="Justifique su respuesta"
 												required><?= $resp->justificacion;?></textarea>
 										</div>
 									</div>
 									<div class="col-md-4">
 										<div class="form-group" align="center">
-											<input id="boton" class="btn btn-lg btn-primary btn-block" style="display:none;max-width:200px;
-												text-align:center;" type="submit" value="Guardar">
+											<input id="boton" class="btn btn-lg btn-primary btn-block" style="max-width:200px;
+											<?php if(!$resp->respuesta) echo "display:none;"?>
+												text-align:center;" type="submit" value="Guardar" disabled>
 										</div>
 									</div>
 								</form>
@@ -218,10 +220,12 @@
 										<input type="hidden" value="" id="tipo">
 										<label><?= $comportamiento->descripcion;?><span style="min-width:70px;float:right">
 											<i>Respuesta</i>: 
-											<select onchange="this.form.justificacion.display='true';if(this.options[this.selectedIndex].value == 3){
-												this.form.justificacion.value='';verify(this.form);this.form.boton.display='';
-												this.form.justificacion.removeAttribute('required');}else{
-												this.form.justificacion.setAttribute('required','required');}" class="form-control" id="respuesta" 
+											<select onchange="this.form.boton.style.display='';if(this.options[this.selectedIndex].value == 3){
+													this.form.justificacion.value='';verify(this.form);
+													this.form.justificacion.removeAttribute('required');}
+												else{
+													this.form.justificacion.setAttribute('required','required');
+													this.form.justificacion.focus();}" class="form-control" id="respuesta" 
 												style="height:15px;padding: 0px 10px;font-size:10px;max-width:60px;display:inline">
 												<option disabled selected value="">-- Selecciona tu respuesta --</option>
 												<?php for ($i=5; $i >= 1; $i--) : ?>
@@ -231,17 +235,17 @@
 										</span></label>
 										<div class="col-md-6">
 											<div class="form-group" align="center">
-												<textarea id="justificacion" class="form-control" rows="2" style="max-width:300px;text-align:center;
-													<?php if($comportamiento->respuesta=="")echo'display:none;';?>" 
-													onkeyup="if(this.value.trim().split(' ').length >= 4){ this.form.boton.style.display='';
-														}else{ this.form.boton.style.display='none';}" placeholder="Justifique su respuesta"
+												<textarea id="justificacion" class="form-control" rows="2" style="max-width:300px;text-align:center;" 
+													onkeyup="if(this.value.trim().split(' ').length >= 4){ this.form.boton.removeAttribute('disabled');
+														}else{ this.form.boton.setAttribute('disabled','disabled');}" placeholder="Justifique su respuesta"
 													required><?= $comportamiento->justificacion;?></textarea>
 											</div>
 										</div>
 										<div class="col-md-6">
 											<div class="form-group" align="center">
-												<input id="boton" class="btn btn-lg btn-primary btn-block" style="display:none;max-width:200px;
-													text-align:center;" type="submit" value="Guardar">
+												<input id="boton" class="btn btn-lg btn-primary btn-block" style="max-width:200px;
+													<?php if(!$comportamiento->respuesta) echo "display:none;"?>
+													text-align:center;" type="submit" value="Guardar" disabled>
 											</div>
 										</div>
 									</form>
@@ -308,6 +312,7 @@
 			var justificacion = form.justificacion.value;
 			var respuesta = form.respuesta.options[form.respuesta.selectedIndex].value;
 			console.log(asignacion,elemento,tipo,respuesta,justificacion);
+			form.boton.setAttribute('disabled','disabled');
 			$.ajax({
 				url: '<?= base_url("evaluacion/guardar_avance");?>',
 				type: 'post',
@@ -320,7 +325,6 @@
 					var returnedData = JSON.parse(data);
 					revisar();
 					console.log(returnedData);
-					form.boton.style.display='none';
 					$('#cargando').hide('slow');
 					//$('#carousel').show('slow');
 				},
@@ -351,6 +355,10 @@
 						if(returnData['redirecciona'] == "si"){
 							alert(returnData['msg'])
 							location.href="<?= base_url('evaluar');?>";
+						}else{
+							alert(returnData['msg']);
+							$('#carousel').show('slow');
+							return false;
 						}
 					},
 					error: function(data){

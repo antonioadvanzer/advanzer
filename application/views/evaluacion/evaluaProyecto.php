@@ -30,7 +30,7 @@
 			<li data-target="#carousel" data-slide-to="<?= count($evaluacion->dominios)+2;?>"></li>
 		</ol>
 		<div class="carousel-inner" style="background-color:#dedede;" role="listbox">
-			<div class="item active" align="center" style="min-height:350px;">
+			<div class="item active" align="center" style="min-height:550px;">
 				<img height="100%" style="opacity:0.1;position:absolute" src="<?= base_url('assets/images/evaluacion.jpg');?>">
 				<div style="display:block;width:60%;position:absolute;top:20%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
 					<h2><b>Analiza cada rubro conforme a lo que crees que califica de manera correcta</b></h2><hr>
@@ -60,8 +60,15 @@
 							<div class="col-md-12">
 								<div class="form-group" align="center">
 									<label><?= $dominio->descripcion;?></label>
+									<i>Respuesta</i>:
 									<select id="respuesta" name="estatus" class="form-control" style="max-width:60px;text-align:center"
-										onchange="verify(this.form);" required>
+										onchange="this.form.boton.style.display='';
+											if(this.options[this.selectedIndex].value == 3){
+												this.form.justificacion.value='';verify(this.form);
+												this.form.justificacion.removeAttribute('required');}
+											else{
+												this.form.justificacion.setAttribute('required','required');
+												this.form.justificacion.focus();}" required>
 										<option value="" selected disabled>--</option>
 										<?php for ($i=5; $i > 0; $i--) : ?>
 											<option value="<?= $i;?>" <?php if($dominio->respuesta==$i)echo"selected";?>><?= $i;?></option>
@@ -71,15 +78,15 @@
 							</div>
 							<div class="col-md-12">
 								<div class="form-group" align="center">
-									<textarea id="justificacion" class="form-control" rows="2" style="max-width:300px;text-align:center;
-										<?php if($dominio->respuesta == 3 || $dominio->respuesta == 0)echo'display:none;';?>" 
-										onkeyup="if(this.value.trim().split(' ').length >= 4){ this.form.boton.style.display='';
-											}else{ this.form.boton.style.display='none';}" placeholder="Justifique su respuesta"
+									<textarea id="justificacion" class="form-control" rows="2" style="max-width:300px;text-align:center;" 
+										onkeyup="if(this.value.trim().split(' ').length >= 4){ this.form.boton.removeAttribute('disabled');
+											}else{ this.form.boton.setAttribute('disabled','disabled');}" placeholder="Justifique su respuesta"
 										required><?= $dominio->justificacion;?></textarea>
 								</div>
 								<div class="form-group" align="center">
-									<input id="boton" class="btn btn-lg btn-primary btn-block" style="display:none;max-width:200px;
-										text-align:center;" type="submit" value="Guardar">
+									<input id="boton" class="btn btn-lg btn-primary btn-block" style="max-width:200px;
+										<?php if(!$dominio->respuesta) echo "display:none;"?>
+										text-align:center;" type="submit" value="Guardar" disabled="">
 								</div>
 							</div>
 						</form>
@@ -137,35 +144,33 @@
 
 		function verify(form) {
 			var respuesta = form.respuesta.options[form.respuesta.selectedIndex].value;
-			if (respuesta != 3 && form.justificacion.value.trim().split(' ').length < 4)
-				form.justificacion.style.display='';
-			else{
-				if(respuesta==3){
-					form.justificacion.value="";
-					form.justificacion.style.display='none';
+			var asignacion = form.asignacion.value;
+			var dominio = form.dominio.value;
+			var justificacion = form.justificacion.value;
+			console.log(asignacion,dominio,respuesta,justificacion);
+			form.boton.setAttribute('disabled','disabled');
+			$.ajax({
+				url: '<?= base_url("evaluacion/guardar_avanceProyecto");?>',
+				type: 'post',
+				data: {'asignacion':asignacion,'dominio':dominio,'respuesta':respuesta,'justificacion':justificacion},
+				beforeSend: function (xhr) {
+					//$('#carousel').hide('slow');
+					$('#cargando').show('slow');
+				},
+				success: function(data){
+					var returnedData = JSON.parse(data);
+					revisar();
+					console.log(returnedData);
+					$('#cargando').hide('slow');
+					//$('#carousel').show('slow');
+				},
+				error: function(data){
+					$('#cargando').hide('slow');
+					$('#carousel').show('slow');
+					form.respuesta.selectedIndex=0;
+					console.log(data.status,data.responseText);
 				}
-				var asignacion = form.asignacion.value;
-				var dominio = form.dominio.value;
-				var justificacion = form.justificacion.value;
-				console.log(asignacion,dominio,respuesta,justificacion);
-				$.ajax({
-					url: '<?= base_url("evaluacion/guardar_avanceProyecto");?>',
-					type: 'post',
-					data: {'asignacion':asignacion,'dominio':dominio,'respuesta':respuesta,'justificacion':justificacion},
-					beforeSend: function (xhr) {
-						$('#carousel').hide('slow');
-						$('#cargando').show('slow');
-					},
-					success: function(data){
-						var returnedData = JSON.parse(data);
-						revisar();
-						console.log(returnedData);
-						form.boton.style.display='none';
-						$('#cargando').hide('slow');
-						$('#carousel').show('slow');
-					}
-				});
-			}
+			});
 			return false;
 		}
 
@@ -187,6 +192,11 @@
 						if(returnData['redirecciona'] == "si"){
 							alert(returnData['msg'])
 							location.href="<?= base_url('evaluar');?>";
+						}else{
+							$('#cargando').hide('slow');
+							$('#carousel').show('slow');
+							alert(returnData['msg']);
+							return false;
 						}
 					},
 					error: function(data){

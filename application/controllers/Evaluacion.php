@@ -625,20 +625,94 @@ class Evaluacion extends CI_Controller {
 
     public function finalizar_evaluacion() {
         $asignacion = $this->input->post('asignacion');
-        $tipo = $this->input->post('tipo');
-        $comentarios = $this->input->post('comentarios');
-        $this->db->trans_begin();
-        $this->evaluacion_model->finalizar_evaluacion($asignacion,$tipo,$comentarios);
-        if($this->db->trans_status() === FALSE){
-            $this->db->trans_rollback();
-            $data['msg'] = "Error al finalizar la evaluación. Verifica tus respuestas e intenta de nuevo";
-            $data['redirecciona']="no";
-        }
-        else{
-            $this->db->trans_commit();
-            $data['msg'] = "Evaluación Finalizada.";
-            $data['redirecciona']="si";
-        }
+        $evaluacion=$this->evaluacion_model->getEvaluacionByAsignacion($asignacion);
+        $flag=false;
+        if(isset($evaluacion->dominios)):
+            foreach ($evaluacion->dominios as $dominio) :
+                if($evaluacion->tipo==0){
+                    if(!isset($dominio->respuesta)):
+                        $data['msg'] = "Error al finalizar la evaluación. No se ha recibido respuesta correspondiente a:\nDominio: $dominio->nombre";
+                        $data['redirecciona']="no";
+                        $flag=true;
+                    endif;
+                    if($flag)
+                        break;
+                }else{
+                    foreach ($dominio->responsabilidades as $responsabilidad) :
+                        if(!$responsabilidad->respuesta || ($responsabilidad->respuesta!=3 && $responsabilidad->justificacion=="")):
+                            $data['msg'] = "Error al finalizar la evaluación. No se ha recibido respuesta correspondiente a:\nDominio: $dominio->nombre\nResponsabilidad: $responsabilidad->nombre";
+                            $data['redirecciona']="no";
+                            $flag=true;
+                        endif;
+                        if($flag)
+                            break;
+                    endforeach;
+                }
+                if($flag)
+                    break;
+            endforeach;
+        endif;
+        if(!$flag)
+            if($evaluacion->tipo == 1):
+                foreach ($evaluacion->indicadores as $indicador) :
+                    foreach ($indicador->competencias as $competencia) :
+                        if($evaluacion->anual == 1 || $evaluacion->evaluador == $evaluacion->evaluado):
+                            foreach ($competencia->comportamientos as $comportamiento) :
+                                if(!isset($comportamiento->respuesta)):
+                                    $data['msg'] = "Error al finalizar la evaluación. No se ha recibido respuesta correspondiente a:\nIndicador: $indicador->nombre\nCompetencia: $competencia->nombre\nComportamiento: $comportamiento->descripcion";
+                                    $data['redirecciona']="no";
+                                    $flag=true;
+                                endif;
+                            endforeach;
+                        else:
+                            if(!$competencia->respuesta || ($competencia->respuesta!=3 && $competencia->justificacion=="")):
+                                $data['msg'] = "Error al finalizar la evaluación. No se ha recibido respuesta correspondiente a:\nIndicador: $indicador->nombre\nCompetencia: $competencia->nombre";
+                                $data['redirecciona']="no";
+                                $flag=true;
+                            endif;
+                        endif;
+                        if($flag)
+                            break;
+                    endforeach;
+                    if($flag)
+                        break;
+                endforeach;
+            else:
+                foreach ($evaluacion->indicadores as $indicador) :
+                    foreach ($indicador->competencias as $competencia) :
+                        foreach ($competencia->comportamiento as $comportamiento) :
+                            if(!$comportamiento->respuesta || ($comportamiento->respuesta!=3 && $comportamiento->justificacion=="")):
+                                $data['msg'] = "Error al finalizar la evaluación. No se ha recibido respuesta correspondiente a:\n\Indicador: $indicador->nombre\n
+                                    Competencia: $competencia->descripcion";
+                                $data['redirecciona']="no";
+                                $flag=true;
+                            endif;
+                            if($flag)
+                                break;
+                        endforeach;
+                        if($flag)
+                            break;
+                    endforeach;
+                    if($flag)
+                        break;
+                endforeach;
+            endif;
+
+        if(!$flag):
+            $tipo = $this->input->post('tipo');
+            $comentarios = $this->input->post('comentarios');
+            $this->db->trans_begin();
+            $this->evaluacion_model->finalizar_evaluacion($asignacion,$tipo,$comentarios);
+            if($this->db->trans_status() === FALSE):
+                $this->db->trans_rollback();
+                $data['msg'] = "Error al finalizar la evaluación. Verifica tus respuestas e intenta de nuevo";
+                $data['redirecciona']="no";
+            else:
+                $this->db->trans_commit();
+                $data['msg'] = "Evaluación Finalizada.";
+                $data['redirecciona']="si";
+            endif;
+        endif;
         echo json_encode($data);
     }
 
@@ -707,7 +781,7 @@ class Evaluacion extends CI_Controller {
         $data['evaluacion']=$this->evaluacion_model->getEvaluacionByAsignacion($asignacion);
         $data['colaborador']=$this->user_model->searchById($data['evaluacion']->evaluado);
         $this->layout->title('Advanzer - Aplicar Evaluación');
-        if($data['evaluacion']->tipo == 1 && $data['evaluacion']->anual == 0) //si es evaluacion 360 muestra otra vista
+        if($data['evaluacion']->tipo == 1 && $data['evaluacion']->anual == 0 && ($data['evaluacion']->evaluador != $data['evaluacion']->evaluado)) //si es evaluacion 360 muestra otra vista
             $this->layout->view('evaluacion/aplicar360',$data);
         else
             $this->layout->view('evaluacion/aplicar',$data);

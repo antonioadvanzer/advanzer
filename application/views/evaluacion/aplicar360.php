@@ -9,7 +9,7 @@
 	  text-align: center;
 	}
 	.accordion h1, h2, h3, h4 {
-	  cursor: pointer;
+	  cursor: default;
 	  -webkit-margin-before: 0em;
 	  -webkit-margin-after: 0em;
 	}
@@ -144,15 +144,17 @@
 									<input type="hidden" value="<?= $comp->id;?>" id="elemento">
 									<input type="hidden" value="<?= $evaluacion->id;?>" id="asignacion">
 									<input type="hidden" value="360" id="tipo">
-									<h2><?= $comp->nombre;?><label><?= $comp->descripcion;?></label></h2>
+									<h2><?= $comp->nombre;?><label><?= $comp->resumen;?></label></h2>
 									<div align="left">
 										<ul type="square"><label>
 											<label><span style="min-width:70px;float:right">
 												<i>Respuesta</i>: 
-												<select onchange="this.form.justificacion.display='';if(this.options[this.selectedIndex].value == 3){
-													this.form.justificacion.value='';verify(this.form);this.form.boton.display='';
-													this.form.justificacion.removeAttribute('required');}else{
-													this.form.justificacion.setAttribute('required','required');}" class="form-control" id="respuesta" 
+												<select onchange="this.form.boton.style.display='';if(this.options[this.selectedIndex].value == 3){
+														this.form.justificacion.value='';verify(this.form);
+														this.form.justificacion.removeAttribute('required');}
+													else{
+														this.form.justificacion.setAttribute('required','required');
+														this.form.justificacion.focus();}" class="form-control" id="respuesta" 
 													style="height:15px;padding: 0px 10px;font-size:10px;max-width:60px;display:inline">
 													<option disabled selected value="">-- Selecciona tu respuesta --</option>
 													<?php for ($i=5; $i >= 1; $i--) : ?>
@@ -162,17 +164,17 @@
 											</span></label>
 											<div class="col-md-6">
 												<div class="form-group" align="center">
-													<textarea id="justificacion" class="form-control" rows="2" style="max-width:300px;text-align:center;
-														<?php if($comp->respuesta=="")echo'display:none;';?>" 
-														onkeyup="if(this.value.trim().split(' ').length >= 4){ this.form.boton.style.display='';
-															}else{ this.form.boton.style.display='none';}" placeholder="Justifique su respuesta"
+													<textarea id="justificacion" class="form-control" rows="2" style="max-width:300px;text-align:center;" 
+														onkeyup="if(this.value.trim().split(' ').length >= 4){ this.form.boton.removeAttribute('disabled');
+															}else{ this.form.boton.setAttribute('disabled','disabled');}" placeholder="Justifique su respuesta"
 														required><?= $comp->justificacion;?></textarea>
 												</div>
 											</div>
 											<div class="col-md-6">
 												<div class="form-group" align="center">
-													<input id="boton" class="btn btn-lg btn-primary btn-block" style="display:none;max-width:200px;
-														text-align:center;" type="submit" value="Guardar">
+													<input id="boton" class="btn btn-lg btn-primary btn-block" style="max-width:200px;
+														<?php if(!$comp->respuesta) echo "display:none;"?>
+														text-align:center;" type="submit" value="Guardar" disabled>
 												</div>
 											</div>
 										</label></ul>
@@ -239,6 +241,7 @@
 			var tipo = form.tipo.value;
 			var justificacion = form.justificacion.value;
 			console.log(asignacion,elemento,tipo,respuesta,justificacion);
+			form.boton.setAttribute('disabled','disabled');
 			$.ajax({
 				url: '<?= base_url("evaluacion/guardar_avance");?>',
 				type: 'post',
@@ -251,12 +254,12 @@
 					var returnedData = JSON.parse(data);
 					revisar();
 					console.log(returnedData);
-					form.boton.style.display='none';
 					$('#cargando').hide('slow');
 					//$('#carousel').show('slow');
 				},
 				error: function(data){
 					$('#cargando').hide('slow');
+					$('#carousel').show('slow');
 					form.respuesta.selectedIndex=0;
 					console.log(data.status,data.responseText);
 				}
@@ -282,6 +285,9 @@
 						if(returnData['redirecciona'] == "si"){
 							alert(returnData['msg'])
 							location.href="<?= base_url('evaluar');?>";
+						}else{
+							alert(returnData['msg']);
+							return false;
 						}
 					},
 					error: function(data){
