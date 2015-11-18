@@ -227,22 +227,25 @@ class Evaluacion_model extends CI_Model{
 	}
 
 	function getEvaluacionesByEvaluador($evaluador) {
-		$evaluacion=$result = $this->db->select('MAX(id) id, estatus')->where('tipo',1)->get('Evaluaciones');
-		if($evaluacion->num_rows() == 1 && $evaluacion->first_row()->estatus == 2){
-			$evaluacion = $evaluacion->first_row()->id;
-			redirect("evaluacion/defineFeedback/$evaluacion");
-		}
-		$this->db->select('U.id,U.foto,U.nombre,U.nomina,A.nombre area,P.nombre posicion,Ev.nombre evaluacion,E.estatus,E.id asignacion,
-			Ev.inicio,Ev.fin,Ev.tipo,Ev.estatus estatus_ev,T.nombre track')->from('Users U')
-			->join('Areas A','A.id = U.area','LEFT OUTER')
-			->join('Posicion_Track PT','PT.id = U.posicion_track','LEFT OUTER')
-			->join('Posiciones P','P.id = PT.posicion','LEFT OUTER')
-			->join('Tracks T','T.id = PT.track','LEFT OUTER')
-			->join('Evaluadores E','E.evaluado = U.id','LEFT OUTER')
-			->join('Evaluaciones Ev','Ev.id = E.evaluacion','LEFT OUTER')
-			->where(array('E.evaluador'=>$evaluador,'U.estatus'=>1,'Ev.estatus'=>1))
-			->order_by('E.estatus,Ev.nombre,U.nombre');
-		return $this->db->get()->result();
+		if($evaluacion=$this->getEvaluacionById($this->getEvaluacionAnualVigente()->id)):
+			if($evaluacion->estatus == 2){
+				$evaluacion = $evaluacion->first_row()->id;
+				redirect("evaluacion/defineFeedback/$evaluacion");
+			}
+			$this->db->select('U.id,U.foto,U.nombre,U.nomina,A.nombre area,P.nombre posicion,Ev.nombre evaluacion,E.estatus,E.id asignacion,
+				Ev.inicio,Ev.fin,Ev.tipo,Ev.estatus estatus_ev,T.nombre track,E.anual')->from('Users U')
+				->join('Areas A','A.id = U.area','LEFT OUTER')
+				->join('Posicion_Track PT','PT.id = U.posicion_track','LEFT OUTER')
+				->join('Posiciones P','P.id = PT.posicion','LEFT OUTER')
+				->join('Tracks T','T.id = PT.track','LEFT OUTER')
+				->join('Evaluadores E','E.evaluado = U.id','LEFT OUTER')
+				->join('Evaluaciones Ev','Ev.id = E.evaluacion','LEFT OUTER')
+				->where(array('E.evaluador'=>$evaluador,'U.estatus'=>1,'Ev.estatus'=>1))
+				->order_by('E.estatus,Ev.nombre,U.nombre');
+			return $this->db->get()->result();
+		else:
+			return null;
+		endif;
 	}
 
 	function getEvaluados() {
@@ -251,7 +254,7 @@ class Evaluacion_model extends CI_Model{
 		$this->db->join('Posicion_Track PT','PT.id = U.posicion_track','LEFT OUTER');
 		$this->db->join('Posiciones P','P.id = PT.posicion','LEFT OUTER');
 		$this->db->join('Tracks T','T.id = PT.track','LEFT OUTER');
-		$this->db->where(array('U.estatus'=>1,'U.fecha_ingreso <='=>(date('Y')-1).'-09-30'));
+		$this->db->where(array('U.estatus'=>1,'U.fecha_ingreso <='=>date('Y').'-09-30'));
 		$this->db->order_by('U.nombre');
 		$result = $this->db->get()->result();
 		foreach ($result as $colaborador) : // getEvaluadores
@@ -299,7 +302,7 @@ class Evaluacion_model extends CI_Model{
 	}
 
 	function getResultadosByColaborador($colaborador) {
-		$evaluacion=$this->getEvaluacionAnual();
+		$evaluacion=$this->getEvaluacionAnualVigente()->id;
 		$res=$this->db->from('Resultados_Evaluacion')->where(array('colaborador'=>$colaborador->id,'evaluacion'=>$evaluacion))->get();
 		if($res->num_rows() == 1){
 			$colaborador->rating = $res->first_row()->rating;
@@ -475,12 +478,12 @@ class Evaluacion_model extends CI_Model{
 			$this->db->insert('Feedbacks',array('resultado'=>$id_r,'feedbacker'=>$jefe));
 	}
 
-	function getPagination() {
+	function getPagination($anio) {
 		$this->db->select('U.id,U.foto,U.nombre,A.nombre area,P.nombre posicion')
 			->join('Areas A','A.id = U.area')
 			->join('Posicion_Track PT','PT.id = U.posicion_track')
 			->join('Posiciones P','P.id = PT.posicion')
-			->where(array('U.fecha_ingreso <='=>(date('Y')-1).'-09-30','U.estatus'=>1,'P.nivel <='=>8))
+			->where(array('U.fecha_ingreso <='=>$anio.'-09-30','U.estatus'=>1,'P.nivel <='=>8,'P.nivel >'=>3))
 			->group_by('U.id')
 			->order_by('U.nombre');
 		$result = $this->db->get('Users U')->result();
@@ -799,10 +802,10 @@ class Evaluacion_model extends CI_Model{
 		return false;
 	}
 
-	function autogenera($colaboradores,$evaluacion) {
+	function autogenera($colaboradores,$evaluacion,$anio) {
 		foreach ($colaboradores as $colaborador) :
 			if($colaborador->nivel_posicion <= 8 && $colaborador->nivel_posicion > 3):
-				$diferencia=date_diff(date_create($colaborador->fecha_ingreso),date_create((date('Y')-1).'-09-30'));
+				$diferencia=date_diff(date_create($colaborador->fecha_ingreso),date_create($anio.'-09-30'));
 				if($diferencia->format('%R') == '+'):
 					$jefe=$this->db->select('jefe')->from('Users')->where('id',$colaborador->id)->get()->first_row()->jefe;
 					if($colaborador->id != $jefe):
@@ -824,14 +827,15 @@ class Evaluacion_model extends CI_Model{
 	}
 
 	function getEvaluacionAnualVigente() {
-		$result = $this->db->select('MAX(id) id')->where_in('estatus',array(0,1))->where('tipo',1)->get('Evaluaciones');
+		$result = $this->db->select('MAX(id) id,anio')->where_in('estatus',array(0,1))
+			->where(array('tipo'=>1,'inicio <='=>date('Y-m-d'),'fin >='=>date('Y-m-d')))->get('Evaluaciones');
 		if($result->num_rows() != 0)
-			return $result->first_row()->id;
+			return $result->first_row();
 		return false;
 	}
 	
 	function getEvaluacionAnual() {
-		$result = $this->db->select('MAX(id) id')->where_in('estatus',array(1,2))->where(array('tipo'=>1,'anio'=>date('Y')-1))->get('Evaluaciones');
+		$result = $this->db->select('MAX(id) id')->where_in('estatus',array(1,2))->where('tipo',1)->get('Evaluaciones');
 		if($result->num_rows() != 0)
 			return $result->first_row()->id;
 		return false;

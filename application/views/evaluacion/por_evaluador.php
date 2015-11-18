@@ -28,60 +28,68 @@
 						<tr>
 							<td align="center"><img height="25px" src="<?= base_url('assets/images/fotos')."/".$colab->foto;?>"></td>
 							<td><small><?= $colab->nombre;?></small></td>
-							<td data-sortable="false">
-								<hr>
+							<td data-sortable="false" class="rowlink-skip"> <table id="tbl2" align="center" class="display">
 								<?php if(count($colab->asignaciones) > 0): ?>
-									<div class="row">
-										<div class="col-sm-1"><small><b>Total</b></small></div>
-										<div class="col-sm-3"><small><b>Responsabilidades</b></small></div>
-										<div class="col-sm-2"><small><b>Competencias</b></small></div>
-										<div class="col-sm-6"><small><b>Colaborador</b></small></div>
-									</div>
+									<thead>
+										<tr>
+											<th><small>Total</small></th>
+											<th><small>Responsabilidades</small></th>
+											<th><small>Competencias</small></th>
+											<th><small>Colaborador</small></th>
+										</tr>
+									</thead>
+									<tbody>
 									<?php foreach ($colab->asignaciones as $colaborador) : ?>
-										<div class="row">
-											<div class="col-sm-1"><small><?php if($colaborador->total){
-												echo number_format($colaborador->total,2);$count++;}else echo "--";?></small></div>
-											<div class="col-sm-3"><small><?php if($colaborador->total) 
-												echo number_format($colaborador->responsabilidad,2);else echo "--";?></small></div>
-											<div class="col-sm-2"><small><?php if($colaborador->total) 
-												echo number_format($colaborador->competencia,2);else echo "--";;?></small></div>
-											<div class="col-sm-6"><img height="30px" src="<?= base_url('assets/images/fotos')."/"
-												.$colaborador->foto;?>"> <small><?= $colaborador->nombre;?></small></div>
-										</div>
+										<tr>
+											<td><small><?php if($colaborador->total){
+												echo number_format($colaborador->total,2);$count++;}else echo "--";?></small></td>
+											<td><small><?php if($colaborador->total) 
+												echo number_format($colaborador->responsabilidad,2);else echo "--";?></small></td>
+											<td><small><?php if($colaborador->total) 
+												echo number_format($colaborador->competencia,2);else echo "--";;?></small></td>
+											<td><small><img height="30px" src="<?= base_url('assets/images/fotos')."/"
+												.$colaborador->foto;?>"><?= $colaborador->nombre;?></small></td>
+										</tr>
 									<?php endforeach; ?>
-									<hr>
+									</tbody>
 								<?php endif;
 								if(count($colab->asignaciones360) > 0): ?>
-									<div class="row">
-										<div class="col-sm-3"><small><b>Resultado</b></small></div>
-										<div class="col-sm-9"><small><b>Colaborador 360</b></small></div>
-									</div>
-									<?php foreach ($colab->asignaciones360 as $colaborador) : ?>
-										<div class="row">
-											<div class="col-sm-3"><small><?php if($colaborador->total){
-												echo number_format($colaborador->total,2);$count++;}else echo "--";?></small></div>
-											<div class="col-sm-9"><img height="30px" src="<?= base_url('assets/images/fotos')."/"
-												.$colaborador->foto;?>"> <small><?= $colaborador->nombre;?></small></div>
-										</div>
-									<?php endforeach; ?>
-									<hr>
+									<thead>
+										<tr>
+											<th><small>Resultado</small></th>
+											<th><small>Colaborador 360</small></th>
+										</tr>
+									</thead>
+									<tbody>
+										<?php foreach ($colab->asignaciones360 as $colaborador) : ?>
+											<tr>
+												<td><small><?php if($colaborador->total){
+													echo number_format($colaborador->total,2);$count++;}else echo "--";?></small></td>
+												<td colspan="3"><small><img height="30px" src="<?= base_url('assets/images/fotos')."/"
+													.$colaborador->foto;?>"><?= $colaborador->nombre;?></small></td>
+											</tr>
+										<?php endforeach; ?>
+									</tbody>
 								<?php endif;
 								if(count($colab->asignacionesProyecto) > 0): ?>
-									<div class="row">
-										<div class="col-sm-3"><small><b>Resultado</b></small></div>
-										<div class="col-sm-9"><small><b>Colaborador de Proyecto</b></small></div>
-									</div>
-									<?php foreach ($colab->asignacionesProyecto as $colaborador) : ?>
-										<div class="row">
-											<div class="col-sm-3"><small><?php if($colaborador->total){
-												echo number_format($colaborador->total,2);$count++;}else echo "--";?></small></div>
-											<div class="col-sm-9"><img height="30px" src="<?= base_url('assets/images/fotos')."/"
-												.$colaborador->foto;?>"> <small><?= $colaborador->nombre;?></small></div>
-										</div>
-									<?php endforeach; ?>
-									<hr>
+									<thead>
+										<tr>
+											<th><small>Resultado</small></th>
+											<th><small>Colaborador de Proyecto</small></th>
+										</tr>
+									</thead>
+									<tbody>
+										<?php foreach ($colab->asignacionesProyecto as $colaborador) : ?>
+											<tr>
+												<td><small><?php if($colaborador->total){
+													echo number_format($colaborador->total,2);$count++;}else echo "--";?></small></td>
+												<td colspan="3"><small><img height="30px" src="<?= base_url('assets/images/fotos')."/"
+													.$colaborador->foto;?>"><?= $colaborador->nombre;?></small></td>
+											</tr>
+										<?php endforeach; ?>
+									</tbody>
 								<?php endif; ?>
-							</td>
+							</table></td>
 							<td class="text-center"><?= number_format($count/(count($colab->asignaciones)+count($colab->asignaciones360)+count($colab->asignacionesProyecto))*100,0);?></td>
 						</tr>
 					<?php endforeach; ?>

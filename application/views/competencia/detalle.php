@@ -27,14 +27,14 @@
   <form id="update" role="form" method="post" action="javascript:" class="form-signin">
   	<input type="hidden" id="id" value="<?= $competencia->id;?>">
   	<div class="row" align="center">
-	  <div class="col-md-4">
+	  <div class="col-md-3">
 		<div class="form-group">
 		  <label for="nombre">Nombre:</label>
 		  <input name="nombre" type="text" class="form-control" style="max-width:300px; text-align:center;" 
 			id="nombre" required value="<?= $competencia->nombre; ?>">
 		</div>
 	  </div>
-	  <div class="col-md-4">
+	  <div class="col-md-3">
 		<div class="form-group">
 		  <label for="indicador">Indicador:</label>
 		  <select id="indicador" class="form-control" style="max-width:300px; text-align:center">
@@ -45,11 +45,18 @@
 		  </select>
 		</div>
 	  </div>
-	  <div class="col-md-4">
+	  <div class="col-md-3">
 		<div class="form-group">
 		  <label for="descripcion">Descripción:</label>
 		  <textarea id="descripcion" class="form-control" style="max-width:300px;text-align:center" rows="3" 
 		  	required><?= $competencia->descripcion;?></textarea>
+		</div>
+	  </div>
+	  <div class="col-md-3">
+		<div class="form-group">
+		  <label for="resumen">Resumen:</label>
+		  <textarea id="resumen" class="form-control" style="max-width:300px;text-align:center" rows="3" 
+		  	required><?= $competencia->resumen;?></textarea>
 		</div>
 	  </div>
 	</div>
@@ -218,10 +225,11 @@
 					indicador = $('#indicador').val();
 				});
 				descripcion = $('#descripcion').val();
+				resumen = $('#resumen').val();
 				$.ajax({
 					url: '<?= base_url("competencia/update");?>',
 					type: 'post',
-					data: {'id':id,'nombre':nombre,'descripcion':descripcion,'indicador':indicador},
+					data: {'id':id,'nombre':nombre,'descripcion':descripcion,'indicador':indicador,'resumen':resumen},
 					success: function(data){
 						var returnData = JSON.parse(data);
 						console.log(returnData['msg']);

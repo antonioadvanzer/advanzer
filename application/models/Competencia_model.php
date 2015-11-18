@@ -8,8 +8,8 @@ class Competencia_model extends CI_Model{
 		parent::__construct();
 	}
 
-	function create($nombre,$indicador,$descripcion) {
-		$this->db->insert('Competencias',array('nombre'=>$nombre,'indicador'=>$indicador,'descripcion'=>$descripcion));
+	function create($datos) {
+		$this->db->insert('Competencias',$datos);
 		if($this->db->affected_rows() == 1)
 			return $this->db->insert_id();
 		else

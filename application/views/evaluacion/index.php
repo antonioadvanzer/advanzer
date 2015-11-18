@@ -37,58 +37,66 @@
 							<td><small><?= number_format($colab->autoevaluacion,2);?></small></td>
 							<td><small><?= $colab->rating;?></small></td>
 							<td><small><?= number_format(floor($colab->total * 100) / 100,2);?></small></td>
-							<td data-sortable="false" class="rowlink-skip"><?php if(count($colab->evaluadores) > 0): ?>
-								<table id="tbl2" align="center" class="display">
+							<td data-sortable="false" class="rowlink-skip"><table id="tbl2" align="center" class="display">
+								<?php if(count($colab->evaluadores) > 0): ?>
+										<thead>
+											<tr>
+												<th><small>Resultado</small></th>
+												<th><small>Responsabilidades</small></th>
+												<th><small>Competencias</small></th>
+												<th><small>Evaluador</small></th>
+											</tr>
+										</thead>
+										<tbody>
+											<?php foreach ($colab->evaluadores as $evaluador) : ?>
+												<tr>
+													<td><small><?= number_format($evaluador->total,2);?></small></td>
+													<td><small><?= number_format($evaluador->responsabilidad,2);?></small></td>
+													<td><small><?= number_format($evaluador->competencia,2);?></small></td>
+													<td><small><img style="float:left" height="30px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"> 
+													<small><?= $evaluador->nombre;?></small></td>
+												</tr>
+											<?php endforeach; ?>
+										</tbody>
+								<?php endif;
+								if(isset($colab->evaluadores360) && count($colab->evaluadores360) > 0): ?>
 									<thead>
 										<tr>
 											<th><small>Resultado</small></th>
-											<th><small>Responsabilidades</small></th>
-											<th><small>Competencias</small></th>
-											<th><small>Evaluador</small></th>
+											<th colspan="3"><small>Evaluador 360</small></th>
 										</tr>
 									</thead>
 									<tbody>
-										<?php foreach ($colab->evaluadores as $evaluador) : ?>
+										<?php foreach ($colab->evaluadores360 as $evaluador) : ?>
 											<tr>
-												<td><small><?= number_format($evaluador->total,2);?></small></td>
-												<td><small><?= number_format($evaluador->responsabilidad,2);?></small></td>
 												<td><small><?= number_format($evaluador->competencia,2);?></small></td>
-												<td><small><img style="float:left" height="30px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"> 
-												<small><?= $evaluador->nombre;?></small></td>
+												<td colspan="3"><small><img style="float:left" height="30px" 
+													src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"> 
+													<?= $evaluador->nombre;?></small></td>
 											</tr>
 										<?php endforeach; ?>
 									</tbody>
-							<?php endif;
-							if(isset($colab->evaluadores360) && count($colab->evaluadores360) > 0): ?>
-								<div class="row" align="center">
-									<div class="col-sm-3"><small><b>Resultado</b></small></div>
-									<div class="col-sm-9"><small><b>Evaluador 360</b></small></div>
-								</div>
-								<?php foreach ($colab->evaluadores360 as $evaluador) : ?>
-									<div class="row" align="center">
-										<div class="col-sm-3"><small><?= number_format($evaluador->competencia,2);?></small></div>
-										<div class="col-sm-9" title="Comentarios: <?= $evaluador->comentarios;?>">
-											<small><img style="float:left" height="30px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"> 
-											<?= $evaluador->nombre;?></small></div>
-									</div>
-								<?php endforeach; ?>
-							<?php endif;
-							if(isset($colab->evaluadoresProyecto) && count($colab->evaluadoresProyecto) > 0): ?>
-								<div class="row" align="center">
-									<div class="col-sm-2"><small><b>Resultado</b></small></div>
-									<div class="col-sm-4"><small><b>Proyecto</b></small></div>
-									<div class="col-sm-6"><small><b>Evaluador</b></small></div>
-								</div>
-								<?php foreach ($colab->evaluadoresProyecto as $evaluador) : ?>
-									<div class="row" align="center">
-										<div class="col-sm-2"><small><?= number_format($evaluador->responsabilidad,2);?></small></div>
-										<div class="col-sm-4"><small><?= $evaluador->evaluacion;?></small></div>
-										<div class="col-sm-6" title="Comentarios: <?= $evaluador->comentarios;?>">
-											<img style="float:left" height="30px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"> 
-											<small><?= $evaluador->nombre;?></small></div>
-									</div>
-								<?php endforeach; ?>
-							<?php endif; ?></table></td>
+								<?php endif;
+								if(isset($colab->evaluadoresProyecto) && count($colab->evaluadoresProyecto) > 0): ?>
+									<thead>
+										<tr>
+											<th><small>Resultado</small></th>
+											<th><small>Proyecto</small></th>
+											<th colspan="2"><small>Evaluador</small></th>
+										</tr>
+									</thead>
+									<tbody>
+										<?php foreach ($colab->evaluadoresProyecto as $evaluador) : ?>
+											<tr>
+												<td><small><?= number_format($evaluador->responsabilidad,2);?></small></td>
+												<td><small><img style="float:left" height="30px" 
+													src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"> 
+													<?= $evaluador->nombre;?></small></td>
+											</tr>
+										<?php endforeach; ?>
+									</tbody>
+								<?php endif; ?>
+							</table></td>
 							<td><small><?php if($colab->feedback){ echo$colab->feedback->nombre." <i>("; 
 								if(isset($colab->feedback->estatus))
 									if($colab->feedback->estatus == 0) echo"Pendiente"; 

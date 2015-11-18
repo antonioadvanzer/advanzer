@@ -25,12 +25,15 @@ class Competencia extends CI_Controller {
 	}
 
 	function create() {
-		$nombre=$this->input->post('nombre');
-		$indicador=$this->input->post('indicador');
-		$descripcion=$this->input->post('descripcion');
-		$competencia=$this->competencia_model->create($nombre,$indicador,$descripcion);
+		$datos=array(
+			'nombre'=>$this->input->post('nombre'),
+			'indicador'=>$this->input->post('indicador'),
+			'descripcion'=>$this->input->post('descripcion'),
+			'resumen'=>$this->input->post('resumen')
+		);
+		$competencia=$this->competencia_model->create($datos);
 		if($competencia)
-			$this->ver($competencia);
+			redirect("competencia/ver/$competencia");
 		else
 			$this->nuevo(null,"Error al agregar nueva competencia. Intenta de nuevo");
 	}
@@ -257,7 +260,8 @@ class Competencia extends CI_Controller {
 		$datos = array(
 			'nombre'=>$this->input->post('nombre'),
 			'descripcion'=>$this->input->post('descripcion'),
-			'indicador'=>$this->input->post('indicador')
+			'indicador'=>$this->input->post('indicador'),
+			'resumen'=>$this->input->post('resumen')
 		);
 		if($this->competencia_model->update($id,$datos))
 			$response['msg'] = "ok";

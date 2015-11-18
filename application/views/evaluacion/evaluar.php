@@ -40,7 +40,10 @@
               <td><small><a <?php if($colab->estatus != 2):?> href='<?php if($colab->tipo==0) echo base_url("evaluacion/evaluaProyecto/$colab->asignacion");
                 else echo base_url("evaluacion/aplicar/$colab->asignacion");?>' <?php endif;?>>
                 <img height="25px" src="<?= base_url('assets/images/fotos')."/".$colab->foto;?>"></a></small></td>
-              <td><small><?php if($colab->id == $this->session->userdata('id')) echo"AUTOEVALUACIÓN";else echo"$colab->nombre";?></small></td>
+              <td><small><?php if($colab->id == $this->session->userdata('id')) 
+                  echo"AUTOEVALUACIÓN";
+                else echo"$colab->nombre";
+                if(($colab->tipo==1 && $colab->anual==0) && $this->session->userdata('id') != $colab->id) echo" (EVALUACIÓN 360)";?></small></td>
               <td><small><?= $colab->area;?></small></td>
               <td><small><?= $colab->posicion;?></small></td>
               <td><small><?= $colab->evaluacion;?></small></td>

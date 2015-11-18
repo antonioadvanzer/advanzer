@@ -108,7 +108,7 @@ class Evaluacion extends CI_Controller {
             endforeach;
             $jefe=$lider;
         }else
-            $this->evaluacion_model->autogenera($this->user_model->getAll(),$evaluacion);
+            $this->evaluacion_model->autogenera($this->user_model->getAll(),$evaluacion,$this->input->post('anio'));
         if($this->db->trans_status() === FALSE){
             $this->db->trans_rollback();
             $response['msg'] = "Ha habido un error. Intenta de nuevo";
@@ -123,17 +123,17 @@ class Evaluacion extends CI_Controller {
         $this->valida_acceso('ci');
         $data['colaboradores'] = $this->evaluacion_model->getEvaluados();
         $data['info_archivos'] = $this->evaluacion_model->getInfoCaptura();
-        $data['evaluacion'] = $this->evaluacion_model->getEvaluacionById($this->evaluacion_model->getEvaluacionAnual());
+        $data['evaluacion'] = $this->evaluacion_model->getEvaluacionById($this->evaluacion_model->getEvaluacionAnualVigente()->id);
         $this->layout->title('Advanzer - Compromisos Internos');
         $this->layout->view('evaluacion/ci',$data);
     }
 
     //validaciones
     private function genera_autoevaluacion($colaborador) {
-        $evaluacion = $this->evaluacion_model->getEvaluacionAnual();
+        $evaluacion = $this->evaluacion_model->getEvaluacionAnualVigente();
         $info = $this->user_model->searchById($colaborador);
-        if($info->fecha_ingreso <= (date('Y')-1)."-09-30")
-            $this->evaluacion_model->genera_autoevaluacion($evaluacion,$colaborador);
+        if($info->fecha_ingreso <= $evaluacion->anio."-09-30")
+            $this->evaluacion_model->genera_autoevaluacion($evaluacion->id,$colaborador);
     }
 
     private function valida_sesion() {
@@ -221,7 +221,7 @@ class Evaluacion extends CI_Controller {
         $colaborador = $this->input->post('colaborador');
         $feedback = $this->input->post('feedback');
         $rating = $this->input->post('rating');
-        $evaluacion = $this->evaluacion_model->getEvaluacionAnual();
+        $evaluacion = $this->evaluacion_model->getEvaluacionAnualVigente()->id;
         $where = array('evaluacion'=>$evaluacion,'colaborador'=>$colaborador);
         if($this->evaluacion_model->updateRating($where,array('rating'=>$rating))){
             $this->evaluacion_model->updateFeedbacker($where,array('feedbacker'=>$feedback));
@@ -733,7 +733,7 @@ class Evaluacion extends CI_Controller {
         $colaborador=$this->input->post('colaborador');
         $anual=$this->input->post('anual');
         $agregar=$this->input->post('agregar');
-        $this->input->post('evaluacion') ? $evaluacion=$this->input->post('evaluacion') : $evaluacion=$this->evaluacion_model->getEvaluacionAnual();
+        $this->input->post('evaluacion') ? $evaluacion=$this->input->post('evaluacion') : $evaluacion=$this->evaluacion_model->getEvaluacionAnualVigente()->id;
         $this->db->trans_begin();
         if(!empty($agregar))
             foreach ($agregar as $evaluador) :
@@ -769,7 +769,7 @@ class Evaluacion extends CI_Controller {
 
     public function evaluar() {
         $evaluador=$this->session->userdata('id');
-        if($this->evaluacion_model->getEvaluacionAnual())
+        if($this->evaluacion_model->getEvaluacionAnualVigente()->id)
             $this->genera_autoevaluacion($evaluador);
         $data['colaboradores']=$this->evaluacion_model->getEvaluacionesByEvaluador($evaluador);
         $data['yo'] = $evaluador;
@@ -796,12 +796,13 @@ class Evaluacion extends CI_Controller {
 
     public function evaluaciones($msg=null) {
         $this->valida_acceso();
-        $data['evaluacion'] = $this->evaluacion_model->getEvaluacionAnualVigente();
-        $data['colaboradores'] = $this->evaluacion_model->getPagination();
+        $data['evaluacion'] = $this->evaluacion_model->getEvaluacionAnualVigente()->id;
+        $info=$this->evaluacion_model->getEvaluacionById($data['evaluacion']);
+        $data['colaboradores'] = $this->evaluacion_model->getPagination($info->anio);
     	
         $this->layout->title('Advanzer - Evaluaciones');
         if(!$data['evaluacion'])
-            redirect('evaluacion/nueva');
+            redirect('evaluacion/proyecto');
         else
     	   $this->layout->view('evaluacion/evaluaciones',$data);
     }
