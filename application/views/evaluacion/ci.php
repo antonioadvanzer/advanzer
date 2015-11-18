@@ -43,7 +43,8 @@
 							<tbody>
 								<?php foreach ($colaboradores as $colab):?>
 									<tr>
-										<td><img height="25px" src="<?= base_url('assets/images/fotos')."/".$colab->foto;?>"></td>
+										<td align="center"><img class="img-circle avatar avatar-original" height="40px" 
+											src="<?= base_url('assets/images/fotos')."/".$colab->foto;?>"></td>
 										<td><small><?= "$colab->nombre ($colab->posicion - $colab->track)";?></small></td>
 										<?php if($this->session->userdata('tipo') == 1): ?>
 											<td style="vertical-align:middle;text-align:center;"><input type="checkbox" 

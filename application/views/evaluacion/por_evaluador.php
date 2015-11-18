@@ -26,7 +26,8 @@
 				<tbody>
 					<?php foreach ($evaluadores as $colab): $count=0;?>
 						<tr>
-							<td align="center"><img height="25px" src="<?= base_url('assets/images/fotos')."/".$colab->foto;?>"></td>
+							<td align="center"><img class="img-circle avatar avatar-original" height="40px" 
+								src="<?= base_url('assets/images/fotos')."/".$colab->foto;?>"></td>
 							<td><small><?= $colab->nombre;?></small></td>
 							<td data-sortable="false" class="rowlink-skip"> <table id="tbl2" align="center" class="display">
 								<?php if(count($colab->asignaciones) > 0): ?>
@@ -47,7 +48,8 @@
 												echo number_format($colaborador->responsabilidad,2);else echo "--";?></small></td>
 											<td><small><?php if($colaborador->total) 
 												echo number_format($colaborador->competencia,2);else echo "--";;?></small></td>
-											<td><small><img height="30px" src="<?= base_url('assets/images/fotos')."/"
+											<td><small><img class="img-circle avatar avatar-original" height="40px" 
+												src="<?= base_url('assets/images/fotos')."/"
 												.$colaborador->foto;?>"><?= $colaborador->nombre;?></small></td>
 										</tr>
 									<?php endforeach; ?>
@@ -57,7 +59,7 @@
 									<thead>
 										<tr>
 											<th><small>Resultado</small></th>
-											<th><small>Colaborador 360</small></th>
+											<th colspan="3"><small>Colaborador 360</small></th>
 										</tr>
 									</thead>
 									<tbody>
@@ -65,7 +67,8 @@
 											<tr>
 												<td><small><?php if($colaborador->total){
 													echo number_format($colaborador->total,2);$count++;}else echo "--";?></small></td>
-												<td colspan="3"><small><img height="30px" src="<?= base_url('assets/images/fotos')."/"
+												<td><small><img class="img-circle avatar avatar-original" height="40px" 
+													src="<?= base_url('assets/images/fotos')."/"
 													.$colaborador->foto;?>"><?= $colaborador->nombre;?></small></td>
 											</tr>
 										<?php endforeach; ?>
@@ -75,7 +78,7 @@
 									<thead>
 										<tr>
 											<th><small>Resultado</small></th>
-											<th><small>Colaborador de Proyecto</small></th>
+											<th colspan="3"><small>Colaborador de Proyecto</small></th>
 										</tr>
 									</thead>
 									<tbody>
@@ -83,7 +86,8 @@
 											<tr>
 												<td><small><?php if($colaborador->total){
 													echo number_format($colaborador->total,2);$count++;}else echo "--";?></small></td>
-												<td colspan="3"><small><img height="30px" src="<?= base_url('assets/images/fotos')."/"
+												<td><small><img class="img-circle avatar avatar-original" height="40px" 
+													src="<?= base_url('assets/images/fotos')."/"
 													.$colaborador->foto;?>"><?= $colaborador->nombre;?></small></td>
 											</tr>
 										<?php endforeach; ?>

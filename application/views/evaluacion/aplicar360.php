@@ -147,21 +147,23 @@
 									<h2><?= $comp->nombre;?><label><?= $comp->resumen;?></label></h2>
 									<div align="left">
 										<ul type="square"><label>
-											<label><span style="min-width:70px;float:right">
-												<i>Respuesta</i>: 
-												<select onchange="this.form.boton.style.display='';if(this.options[this.selectedIndex].value == 3){
-														this.form.justificacion.value='';verify(this.form);
-														this.form.justificacion.removeAttribute('required');}
-													else{
-														this.form.justificacion.setAttribute('required','required');
-														this.form.justificacion.focus();}" class="form-control" id="respuesta" 
-													style="height:15px;padding: 0px 10px;font-size:10px;max-width:60px;display:inline">
-													<option disabled selected value="">-- Selecciona tu respuesta --</option>
-													<?php for ($i=5; $i >= 1; $i--) : ?>
-														<option <?php if(isset($comp->respuesta) && $comp->respuesta == $i) echo "selected";?>><?= $i;?></option>
-													<?php endfor; ?>
-												</select>
-											</span></label>
+											<div class="col-md-2">
+												<div class="form-group" align="center">
+													<i>Respuesta</i>: 
+													<select onchange="this.form.boton.style.display='';if(this.options[this.selectedIndex].value == 3){
+															this.form.justificacion.value='';verify(this.form);
+															this.form.justificacion.removeAttribute('required');}
+														else{
+															this.form.justificacion.setAttribute('required','required');
+															this.form.justificacion.focus();}" class="form-control" id="respuesta" 
+														style="height:15px;padding: 0px 10px;font-size:10px;max-width:60px;display:inline">
+														<option disabled selected value="">-- Selecciona tu respuesta --</option>
+														<?php for ($i=5; $i >= 1; $i--) : ?>
+															<option <?php if(isset($comp->respuesta) && $comp->respuesta == $i) echo "selected";?>><?= $i;?></option>
+														<?php endfor; ?>
+													</select>
+												</div>
+											</div>
 											<div class="col-md-6">
 												<div class="form-group" align="center">
 													<textarea id="justificacion" class="form-control" rows="2" style="max-width:300px;text-align:center;" 
@@ -170,7 +172,7 @@
 														required><?= $comp->justificacion;?></textarea>
 												</div>
 											</div>
-											<div class="col-md-6">
+											<div class="col-md-4">
 												<div class="form-group" align="center">
 													<input id="boton" class="btn btn-lg btn-primary btn-block" style="max-width:200px;
 														<?php if(!$comp->respuesta) echo "display:none;"?>
