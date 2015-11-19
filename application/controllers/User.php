@@ -170,6 +170,38 @@ class User extends CI_Controller {
         echo json_encode($response);
     }
 
+    public function load_historial($user) {
+        $email=$this->user_model->searchById($user)->email;
+        $anio=$this->input->post('anio');
+        $info=$this->user_model->getHistorialByEmailAnio($email,$anio);
+        ?>
+            <label for="baja">Rating:</label>
+            <select id="rating_historial" class="form-control" style="max-width:160px;" required>
+                <option value="" disabled selected>-- Selecciona un valor --</option>
+                <option value="A" <?php if($info->rating == "A") echo"selected";?>>A</option>
+                <option value="B" <?php if($info->rating == "B") echo"selected";?>>B</option>
+                <option value="C" <?php if($info->rating == "C") echo"selected";?>>C</option>
+                <option value="D" <?php if($info->rating == "D") echo"selected";?>>D</option>
+                <option value="E" <?php if($info->rating == "E") echo"selected";?>>E</option>
+            </select>
+        <?php
+    }
+
+    public function change_historial() {
+        $where=array(
+            'email'=>$this->user_model->searchById($this->input->post('id'))->email,
+            'anio'=>$this->input->post('anio')
+        );
+        $datos=array(
+            'rating'=>$this->input->post('rating')
+        );
+        if($this->user_model->change_historial($where,$datos))
+            $response['msg']="ok";
+        else
+            $response['msg']="Error al actualizar rating de <b>$anio</b>";
+        echo json_encode($response);
+    }
+
     private function valida_sesion() {
         if($this->session->userdata('id') == "")
             redirect('login');
