@@ -143,17 +143,52 @@
 	  <div class="col-md-12">
 		  <button type="submit" class="btn btn-lg btn-primary btn-block" 
 		  	style="max-width:200px; text-align:center;">Actualizar</button>
-		  <span style="float:right;">
-		  	<?php if($user->estatus == 1): ?>
+		  <?php if($user->estatus == 1): ?>
+		  	<span style="float:right;">
 		  		<label onclick="$('#update_foto').hide('slow');$('#update').hide('slow');$('#recision').
 		  			show('slow');" style="cursor:pointer;">Dar de baja al colaborador</label>
-		  	<?php elseif($user->estatus == 0): ?>
+		  	</span>
+		  	<span style="float:left;">
+		  		<label onclick="$('#update_foto').hide('slow');$('#update').hide('slow');$('#historial').
+		  			show('slow');" style="cursor:pointer;">Cambiar historial de desempeño</label>
+		  	</span>
+		  <?php elseif($user->estatus == 0): ?>
+		  	<span style="float:right;">
 		  		<label onclick="$('#update_foto').hide('slow');$('#update').hide('slow');$('#rehab').
 		  			show('slow');" style="cursor:pointer;">Rehabilitar al colaborador</label>
+		  	</span>
 		  	<?php endif; ?>
 		  </span>
 	  </div>
 	</div>
+  </form>
+  <form id="historial" style="display:none" role="form" method="post" action="javascript:" class="form-signin">
+	  <div class="row" align="center">
+	  	<div class="col-md-4">
+	  		<div class="form-group">
+			  <label for="baja">Selecciona un año:</label>
+			  <select class="form-control" style="max-width:160px;" id="anio_historial" name="anio_historial">
+				<option selected disabled>- Selecciona año -</option>
+				<?php foreach($user->historial as $evaluacion): ?>
+					<option><?= $evaluacion->anio;?></option>
+				<?php endforeach; ?>
+			  </select>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group" id="result_historial">
+			</div>
+		</div>
+		<div class="col-md-4">
+			<button type="submit" class="btn btn-lg btn-primary btn-block" style="max-width:200px;text-align:center;display:none" id="modificar">
+				Modificar</button>
+		</div>
+		<div class="col-md-12">
+			<span style="float:right;"><label 
+			  	onclick="$('#historial').hide('slow');$('#update_foto').show('slow');$('#update').show('slow');" style="cursor:pointer;">
+			  	Cancelar</label></span>
+		</div>
+	  </div>
   </form>
   <form id="recision" style="display:none" role="form" method="post" action="javascript:" class="form-signin">
 	  <div class="row" align="center">
@@ -368,6 +403,75 @@
 			});
 
 			event.preventDefault();
+		});
+
+		$('#historial').submit(function(event){
+			id = $('#id').val();
+			$("#anio_historial option:selected").each(function() {
+				anio = $('#anio_historial').val();
+			});
+			$("#rating_historial option:selected").each(function() {
+				rating = $('#rating_historial').val();
+			});
+			$.ajax({
+				url: '<?= base_url("user/change_historial");?>',
+				type: 'post',
+				data: {'id':id,'rating':rating,'anio':anio},
+				beforeSend: function() {
+					$('#historial').hide('slow');
+					$('#cargando').show('slow');
+				},
+				success: function(data){
+					var returnedData = JSON.parse(data);
+					console.log(returnedData['msg']);
+					if(returnedData['msg']=="ok")
+						window.document.location='<?= base_url("administrar_usuarios");?>';
+					else{
+						$('#cargando').hide('slow');
+						$('#historial').show('slow');
+						$('#alert').prop('display',true).show('slow');
+						$('#msg').html(returnedData['msg']);
+						setTimeout(function() {
+							$("#alert").fadeOut(1500);
+						},3000);
+					}
+				},
+				error: function(xhr) {
+					console.log(xhr.responseText);
+					$('#cargando').hide('slow');
+					$('#historial').show('slow');
+					$('#alert').prop('display',true).show('slow');
+					$('#msg').html('Error, intenta de nuevo o contacta al Administrador de la Aplicación');
+					setTimeout(function() {
+						$("#alert").fadeOut(1500);
+					},3000);
+				}
+			});
+
+			event.preventDefault();
+		});
+
+		$("#anio_historial").change(function() {
+			$("#anio_historial option:selected").each(function() {
+				anio = $('#anio_historial').val();
+			});
+			$.ajax({
+				type: 'post',
+				url: "<?= base_url('user/load_historial');?>"+"/"+"<?= $user->id;?>",
+				data: {anio : anio},
+				beforeSend: function (xhr) {
+					$('#result_historial').hide('slow');
+					$('#cargando').show();
+				},
+				success: function(data) {
+					$('#cargando').hide();
+					$("#result_historial").show('slow').html(data);
+					$("#modificar").show('slow');
+				},
+				error: function(data) {
+					console.log(data.responseText);
+				}
+			});
 		});
 
 		$("#track").change(function() {

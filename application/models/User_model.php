@@ -113,6 +113,13 @@ class User_model extends CI_Model{
 			return FALSE;
 	}
 
+	function change_historial($where,$datos) {
+		$this->db->where($where)->update('Historial',$datos);
+		if($this->db->affected_rows() == 1)
+			return true;
+		return false;
+	}
+
 	function create($datos) {
 		$this->db->insert('Users',$datos);
 		if($this->db->affected_rows() == 1)
