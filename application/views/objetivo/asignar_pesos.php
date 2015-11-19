@@ -16,7 +16,7 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         <a style="text-decoration:none" href="#<?= $area->id;?>" data-toggle="collapse" aria-expanded="false" 
-          aria-controls="collapseExample"><h3 class="panel-title"><?= $area->nombre;?></h3></a>
+          aria-controls="collapseExample"><h3 class="panel-title"><?= $area->nombre;?> <small><?= "($area->nombre_direccion)"; ?></small></h3></a>
       </div>
       <div class="panel-body collapse" id="<?= $area->id;?>">
         <table id="tabla<?= $area->id;?>" class="table table-striped well table-bordered">

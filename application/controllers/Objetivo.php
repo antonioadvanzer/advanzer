@@ -138,6 +138,8 @@ class Objetivo extends CI_Controller {
     function asignar_pesos() {
         $data=array();
         $direccion = $this->session->userdata('direccion');
+        if($this->session->userdata('tipo') >= 4)
+            $direccion=null;
         $data['areas'] = $this->porcentaje_objetivo_model->getPorcentajes($direccion);;
         $this->layout->title('Capital Humano - Pesos Específicos');
         $this->layout->view('objetivo/asignar_pesos',$data);

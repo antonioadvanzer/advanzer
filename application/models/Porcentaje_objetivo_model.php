@@ -9,8 +9,11 @@ class Porcentaje_objetivo_model extends CI_Model{
 	}
 
 	function getPorcentajes($direccion) {
-		$result = $this->db->where(array('direccion'=>$direccion,'estatus'=>1))->order_by('nombre')
-			->get('Areas')->result();
+		if($direccion != null)
+			$this->db->where('A.direccion',$direccion);
+		$result = $this->db->select('A.nombre,A.id,A.estatus,D.id direccion,D.nombre nombre_direccion')
+			->join('Direcciones D','D.id = A.direccion')->where('A.estatus',1)->order_by('D.nombre,A.nombre')
+			->get('Areas A')->result();
 		foreach ($result as $area) :
 			$area->objetivos = $this->db->select('O.id,O.nombre,O.tipo,D.nombre dominio')->from('Objetivos O')
 				->join('Objetivos_Areas OA','OA.objetivo = O.id')
