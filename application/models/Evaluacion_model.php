@@ -926,8 +926,7 @@ class Evaluacion_model extends CI_Model{
 	}
 
 	function getEvaluadoresPendientesByEvaluacion($evaluacion) {
-		$result = $this->db->select('U.id,U.nombre,U.email,Ev.evaluacion')->join('Evaluadores Ev','Ev.evaluador = U.id')
-			->where(array('Ev.evaluacion'=>$evaluacion,'Ev.estatus'=>1))->get('Users U')->result();
-		return $result;
+		return $this->db->select('U.id,U.nombre,U.email,Ev.evaluacion')->join('Evaluadores Ev','Ev.evaluador = U.id')
+			->where('Ev.evaluacion',$evaluacion)->where_in('Ev.estatus',array(0,1))->get('Users U')->result();
 	}
 }

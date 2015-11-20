@@ -74,7 +74,7 @@
 </script>
 <div class="jumbotron">
 	<div class="container">
-		<h2 style="cursor:default;">Seguimiento de Evaluación - <?= $evaluacion->nombre;?></h2>
+		<h2 style="cursor:default;"><?= $evaluacion->nombre;?></h2>
 		<p><small>Evaluando a: <i><?= $colaborador->nombre;?></i></small></p>
 	</div>
 </div>
@@ -106,22 +106,28 @@
 			<div class="item active" align="center" style="min-height:550px;">
 				<img height="100%" style="opacity:0.1;position:absolute" src="<?= base_url('assets/images/evaluacion.jpg');?>">
 				<div style="display:block;width:60%;position:absolute;top:20%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
-					<h2 style="cursor:default;"><b>Analiza cada rubro conforme a lo que crees que califica de manera correcta</b></h2><hr>
-					<h3 style="cursor:default;"><li>Si tu respuesta es diferente a "3" deberás forzosamente justificar tu respuesta con un mínimo de 3 palabras y así, 
-						permitirte enviar tu respuesta</li>
-						<li>Tu avance se guarda automáticamente para que retomes la evaluación cuando desees</li>
-						<li>Al final se te solicitará que envíes comentarios generales de la evaluación para enviar y cerrar la evaluación</li></h3>
+					<h2><b>Lee detenidamente todas las indicaciones</b></h2><hr>
+					<h4><li>Recuerda evaluar objetivamente tomando en cuenta el desempeño de todo el año, no solo el de los últimos meses</li>
+						<li>Si tu respuesta es diferente a "<i>3</i>" es indispensable justificar tu respuesta y darle clic a "<i>guardar</i>".</li>
+						<li>Son indispensables al menos 3 palabras para que se active la opción de "<i>guardar</i>"</li>
+						<li>Si deseas suspender la evaluación y continuar más tarde, asegúrate de darle “guardar” a todas tus respuestas 
+							diferentes a "<i>3</i>" para conservar tu avance.</li>
+						<li>Al retomar la evaluación, se resaltarán los reactivos pendientes de respuesta</li>
+						<li>Antes de terminar y para poder enviar y cerrar cada evaluación se te solicitarán comentarios generales. Esto es, 
+							un resumen breve de lo más relevante del desempeño del evaluado</li>
+					</h4>
 				</div>
-				<div class="carousel-caption">
+				<!--<div class="carousel-caption">
 					<h3 style="cursor:default;"><?php switch($evaluacion->estatus){ case 0:echo"Comenzar Evaluación";break;
 						case 1:echo"Continuar Evaluación...";break;}?></h3>
-				</div>
+				</div>-->
 			</div>
 			<?php if(isset($evaluacion->dominios)): ?>
 				<div class="item" align="center" style="min-height:550px;">
 					<img width="100%" style="opacity:0.3;position:absolute" src="<?= base_url('assets/images/responsabilidades.jpg');?>">
 					<div style="width:60%;position:absolute;top:40%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
-						<h2 style="cursor:default;">Selecciona la metrica que consideres correcta para cada responsabilidad...</h2>
+						<h3>En el recuadro "<i>Respuesta</i>", selecciona la métrica que consideres correcta de acuerdo a su descripción y 
+							justifica todas las respuestas diferentes a 3, dando clic a "<i>guardar</i>" para poder continuar y no perder tu avance.</h3>
 					</div>
 					<div class="carousel-caption"><h3 style="cursor:default;">Responsabilidades</h3></div>
 				</div>
@@ -187,18 +193,18 @@
 			endif; ?>
 			<div class="item" align="center" style="min-height:550px;">
 				<img width="100%" style="opacity:0.3;position:absolute" src="<?= base_url('assets/images/competencias.jpg');?>">
-				<div style="width:60%;position:absolute;top:40%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
-					<h2>
-						Selecciona el valor que consideres correcto para cada comportamiento donde...</h2>
-					<p>
-						<ol type="1" reversed style="float:left">
-							<li>Es un modelo a seguir para toda la organización</li>
-							<li>Excede las expectativas</li>
-							<li>Cumple las expectativas al 100%</li>
-							<li>Cumple parcialmente las expectativas</li>
-							<li>No cumple las expectativas</li>
-						</ol>
-					</p>
+				<div style="width:60%;position:absolute;top:25%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
+					<h2>Cada competencia se compone de varios comportamientos.<br>
+						Selecciona la métrica para cada comportamiento de acuerdo a lo siguiente:</h2><br>
+					<h4>
+						5. Es un modelo a seguir para toda la organización<br>
+						4. Excede las expectativas<br>
+						3. Cumple las expectativas al 100%<br>
+						2. Cumple parcialmente las expectativas<br>
+						1. No cumple las expectativas<br>
+					</h4>
+					<h4>Recuerda que debes justificar cada respuesta diferente a <i>3</i> y darle ciic a "<i>guardar</i>" 
+						para no perder tu avance.</h4>
 				</div>
 				<div class="carousel-caption"><h3 style="cursor:default;">Competencias</h3></div>
 			</div>
@@ -257,7 +263,16 @@
 				</div>
 			<?php endforeach; ?>
 			<div class="item" align="center" style="min-height:480px;">
-				<img width="100%" style="opacity:0.3;position:absolute" src="<?= base_url('assets/images/gracias.jpg');?>">
+				<img id="finalizar" width="100%" style="opacity:0.3;position:absolute" src="<?= base_url('assets/images/gracias.jpg');?>">
+				<div style="width:60%;position:absolute;top:15%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;"
+					id="mensaje">
+					<div class="col-md-12">
+						<div class="form-group" align="center">
+							<h2><b>Tienes reactivos pendientes por responder.</b></h2><hr>
+							<h3>Revisa detenidamente las Responsabilidades Funcionales y Competencias para que puedas finalizar esta evaluación</h3>
+						</div>
+					</div>
+				</div>
 				<form onsubmit="return finalizar(<?= $evaluacion->id;?>,<?= $evaluacion->tipo;?>);" class="form-signin" 
 					action="javascript:" id="finalizar">
 					<div style="width:60%;position:absolute;top:15%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
@@ -299,10 +314,14 @@
 					flag = false;
 				}
 			});
-			if(flag)
+			if(flag){
+				$('#mensaje').hide();
 				$('[id^=finalizar]').show();
-			else
+			}
+			else{
+				$('#mensaje').show();
 				$('[id^=finalizar]').hide();
+			}
 		}
 
 		function verify(form) {
