@@ -150,7 +150,7 @@
 		  	</span>
 		  	<span style="float:left;">
 		  		<label onclick="$('#update_foto').hide('slow');$('#update').hide('slow');$('#historial').
-		  			show('slow');" style="cursor:pointer;">Cambiar historial de desempeño</label>
+		  			show('slow');" style="cursor:pointer;">Historial de desempeño</label>
 		  	</span>
 		  <?php elseif($user->estatus == 0): ?>
 		  	<span style="float:right;">
