@@ -119,8 +119,9 @@
 						</div>
 					</div>
 				</div>
-				<form onsubmit="return finalizar(<?= $evaluacion->id;?>,<?= $evaluacion->tipo;?>);" class="form-signin" 
-					action="javascript:" id="finalizar">
+				<form class="form-signin" action="javascript:" id="finalizar">
+					<input id="finalizar_asignacion" type="hidden" value="<?= $evaluacion->id;?>">
+					<input id="finalizar_tipo" type="hidden" value="<?= $evaluacion->tipo;?>">
 					<div style="width:60%;position:absolute;top:10%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
 						<div class="col-md-12">
 							<div class="form-group" align="center" id="finalizar">
@@ -151,6 +152,41 @@
 		$(document).ready(function() {
 			$('[id^=finalizar]').hide();
 			revisar();
+
+			$('[id^=finalizar]').submit(function(event){
+				asignacion=$('#finalizar_asignacion').val();
+				tipo=$('#finalizar_tipo').val();
+				console.log(asignacion,tipo);
+				if(confirm('Una vez que haya enviado ésta evaluación no será posible editarla. ¿Seguro(a) que desea enviarla?'))
+					$.ajax({
+						url: '<?= base_url("evaluacion/finalizar_evaluacion");?>',
+						type: 'post',
+						data: {'asignacion':asignacion,'tipo':tipo,'comentarios':$('#comentarios').val()},
+						beforeSend: function (xhr) {
+							$('#carousel').hide('slow');
+							$('#cargando').show('slow');
+						},
+						success: function(data){
+							console.log(data);
+							var returnData = JSON.parse(data);
+							$('#cargando').hide('slow');
+							if(returnData['redirecciona'] == "si"){
+								alert(returnData['msg'])
+								location.href="<?= base_url('evaluar');?>";
+							}else{
+								alert(returnData['msg']);
+								$('#carousel').show('slow');
+								return false;
+							}
+						},
+						error: function(data){
+							console.log(data.responseText);
+							$('#carousel').show('slow');
+							$('#cargando').hide('slow');
+							alert('Error al finalizar la evaluación. Intenta de nuevo');
+						}
+					});
+			});
 		});
 		function revisar() {
 			flag=true;
@@ -198,40 +234,6 @@
 					console.log(data.status,data.responseText);
 				}
 			});
-			return false;
-		}
-
-		function finalizar(asignacion,tipo) {
-			console.log(asignacion,tipo);
-			if(confirm('Una vez que haya enviado ésta evaluación no será posible editarla. ¿Seguro(a) que desea enviarla?'))
-				$.ajax({
-					url: '<?= base_url("evaluacion/finalizar_evaluacion");?>',
-					type: 'post',
-					data: {'asignacion':asignacion,'tipo':tipo,'comentarios':$('#comentarios').val()},
-					beforeSend: function (xhr) {
-						$('#carousel').hide('slow');
-						$('#cargando').show('slow');
-					},
-					success: function(data){
-						console.log(data);
-						var returnData = JSON.parse(data);
-						$('#cargando').hide('slow');
-						if(returnData['redirecciona'] == "si"){
-							alert(returnData['msg'])
-							location.href="<?= base_url('evaluar');?>";
-						}else{
-							$('#cargando').hide('slow');
-							$('#carousel').show('slow');
-							alert(returnData['msg']);
-							return false;
-						}
-					},
-					error: function(data){
-						$('#cargando').hide('slow');
-						$('#carousel').show('slow');
-						console.log(data.status,data.responseText);
-					}
-				});
 			return false;
 		}
 	</script>

@@ -431,26 +431,27 @@ class Evaluacion_model extends CI_Model{
 			else
 				(double)$competencia += ($res->first_row()->total)*0.15;
 		//evaluaciones de proyectos
-		$proyectos=$this->getEvaluacionesProyecto();
-		$ids = array();
-		foreach ($proyectos as $row)
-			array_push($ids, $row->id);
-		$this->db->select('RR.total,E.fin_periodo,E.inicio_periodo')->from('Resultados_ev_Responsabilidad RR')
-			->join('Evaluadores Ev','Ev.id = RR.asignacion')
-			->join('Evaluaciones E','E.id = Ev.evaluacion')
-			->where('Ev.evaluado',$asignacion->evaluado)->where_in('Ev.evaluacion',$ids);
-		$res=$this->db->get();
-		if($res->num_rows() > 0):
-			$r_proyectos=0;
-			$dias_total=0;
-			foreach ($res->result() as $info) :
-				$diferencia=date_diff(date_create($info->inicio_periodo),date_create($info->fin_periodo));
-				$dias=(int)$diferencia->format("%a");
-				$dias_total+=$dias;
-			endforeach;
-			foreach ($res->result() as $info) :
-				$r_proyectos += $info->total*($dias/$dias_total);
-			endforeach;
+		if($proyectos=$this->getEvaluacionesProyecto()):
+			$ids = array();
+			foreach ($proyectos as $row)
+				array_push($ids, $row->id);
+			$this->db->select('RR.total,E.fin_periodo,E.inicio_periodo')->from('Resultados_ev_Responsabilidad RR')
+				->join('Evaluadores Ev','Ev.id = RR.asignacion')
+				->join('Evaluaciones E','E.id = Ev.evaluacion')
+				->where('Ev.evaluado',$asignacion->evaluado)->where_in('Ev.evaluacion',$ids);
+			$res=$this->db->get();
+			if($res->num_rows() > 0):
+				$r_proyectos=0;
+				$dias_total=0;
+				foreach ($res->result() as $info) :
+					$diferencia=date_diff(date_create($info->inicio_periodo),date_create($info->fin_periodo));
+					$dias=(int)$diferencia->format("%a");
+					$dias_total+=$dias;
+				endforeach;
+				foreach ($res->result() as $info) :
+					$r_proyectos += $info->total*($dias/$dias_total);
+				endforeach;
+			endif;
 		endif;
 		//evaluacion jefe
 		$this->db->select('AVG(RR.total) total')->from('Resultados_ev_Responsabilidad RR');
