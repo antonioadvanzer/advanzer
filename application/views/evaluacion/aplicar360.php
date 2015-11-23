@@ -107,7 +107,7 @@
 				<img height="100%" style="opacity:0.1;position:absolute" src="<?= base_url('assets/images/evaluacion.jpg');?>">
 				<div style="display:block;width:60%;position:absolute;top:20%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
 					<h2><b>Lee detenidamente todas las indicaciones</b></h2><hr>
-					<h4><li>Recuerda evaluar objetivamente tomando en cuenta el desempeño de todo el año, no solo el de los últimos meses</li>
+					<h4 align="left"><li>Recuerda evaluar objetivamente tomando en cuenta el desempeño de todo el año, no solo el de los últimos meses</li>
 						<li>Si tu respuesta es diferente a "<i>3</i>"" es indispensable justificar tu respuesta y darle clic a "<i>guardar</i>".</li>
 						<li>Son indispensables al menos 3 palabras para que se active la opción de "<i>guardar</i>"</li>
 						<li>Si deseas suspender la evaluación y continuar más tarde, asegúrate de darle “guardar” a todas tus respuestas 
@@ -126,14 +126,14 @@
 				<img width="100%" style="opacity:0.3;position:absolute" src="<?= base_url('assets/images/competencias.jpg');?>">
 				<div style="width:60%;position:absolute;top:40%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
 					<h2>Selecciona la métrica para cada competencia de acuerdo a lo siguiente:</h2><br>
-					<h4>
+					<h4 align="left">
 						5. Es un modelo a seguir para toda la organización<br>
 						4. Excede las expectativas<br>
 						3. Cumple las expectativas al 100%<br>
 						2. Cumple parcialmente las expectativas<br>
 						1. No cumple las expectativas<br>
 					</h4>
-					<h4>Recuerda que debes justificar cada respuesta diferente a <i>3</i> y darle ciic a "<i>guardar</i>" 
+					<h4 align="left">Recuerda que debes justificar cada respuesta diferente a <i>3</i> y darle ciic a "<i>guardar</i>" 
 						para no perder tu avance.</h4>
 				</div>
 				<div class="carousel-caption"><h3 style="cursor:default;">Competencias</h3></div>
@@ -148,12 +148,12 @@
 									<input type="hidden" value="<?= $comp->id;?>" id="elemento">
 									<input type="hidden" value="<?= $evaluacion->id;?>" id="asignacion">
 									<input type="hidden" value="360" id="tipo">
-									<h2><?= $comp->nombre;?><label><?= $comp->resumen;?></label></h2>
+									<h2 <?php if($evaluacion->estatus==1 && !$comp->respuesta)echo'style="color:red;"';?>><?= $comp->nombre;?><label><?= $comp->resumen;?></label></h2>
 									<div align="left">
 										<ul type="square"><label>
 											<div class="col-md-2">
 												<div class="form-group" align="center">
-													<i>Respuesta</i>: 
+													<i <?php if($evaluacion->estatus==1 && !$comp->respuesta)echo'style="color:red;"';?>>Respuesta</i>: 
 													<select onchange="this.form.boton.style.display='';if(this.options[this.selectedIndex].value == 3){
 															this.form.justificacion.value='';verify(this.form);
 															this.form.justificacion.removeAttribute('required');}

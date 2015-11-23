@@ -34,7 +34,7 @@
 				<img height="100%" style="opacity:0.1;position:absolute" src="<?= base_url('assets/images/evaluacion.jpg');?>">
 				<div style="display:block;width:60%;position:absolute;top:20%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
 					<h2><b>Lee detenidamente todas las indicaciones</b></h2><hr>
-					<h4><li>Recuerda evaluar objetivamente tomando en cuenta el desempeño de todo el año, no solo el de los últimos meses</li>
+					<h4 align="left"><li>Recuerda evaluar objetivamente tomando en cuenta el desempeño durante la duración del proyecto</li>
 						<li>Si tu respuesta es diferente a "<i>3</i>"" es indispensable justificar tu respuesta y darle clic a "<i>guardar</i>".</li>
 						<li>Son indispensables al menos 3 palabras para que se active la opción de "<i>guardar</i>"</li>
 						<li>Si deseas suspender la evaluación y continuar más tarde, asegúrate de darle “guardar” a todas tus respuestas 
@@ -53,7 +53,7 @@
 				<img width="100%" style="opacity:0.3;position:absolute" src="<?= base_url('assets/images/responsabilidades.jpg');?>">
 				<div style="width:60%;position:absolute;top:40%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
 					<h2>Selecciona la métrica para cada dominio de acuerdo a lo siguiente:</h2><br>
-					<h4>
+					<h4 align="left">
 						5. Es un modelo a seguir para toda la organización<br>
 						4. Excede las expectativas<br>
 						3. Cumple las expectativas al 100%<br>
@@ -74,7 +74,7 @@
 							<div class="col-md-12">
 								<div class="form-group" align="center">
 									<label><?= $dominio->descripcion;?></label>
-									<i>Respuesta</i>:
+									<i <?php if($evaluacion->estatus==1 && !$dominio->respuesta)echo'style="color:red;"';?>>Respuesta</i>:
 									<select id="respuesta" name="estatus" class="form-control" style="max-width:60px;text-align:center"
 										onchange="this.form.boton.style.display='';
 											if(this.options[this.selectedIndex].value == 3){

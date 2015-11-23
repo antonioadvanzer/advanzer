@@ -20,7 +20,7 @@
 	<hr>
 	<form id="save" class="form-signin" role="form" method="post" action="javascript:">
 		<div class="row" align="center">
-			<div class="col-md-4"><h4>&nbsp;</h4><img style="max-height:220px;max-width:100%" src="<?= base_url("assets/images/fotos/$colaborador->foto");?>"></div>
+			<div class="col-md-4"><img class="img-circle avatar avatar-original" style="max-height:200px;max-width:100%" src="<?= base_url("assets/images/fotos/$colaborador->foto");?>"></div>
 			<div class="col-md-4">
 				<h4>Compromisos Internos</h4>
 				<div class="form-group" align="center">
@@ -102,11 +102,19 @@
 					</select>
 				</div>
 			</div>
-			<div class="col-md-12" style="height:100%;vertical-align:middle">
+		</div>
+		<div class="row">
+			<div class="col-md-8">
+				<div class="form-group" align="center">
+					<label>Comentarios Generales</label>
+					<textarea id="comentarios" class="form-control" rows="2" style="max-width:600px;"></textarea>
+				</div>
+			</div>
+			<div class="col-md-4">
 				<div class="form-group" align="center">
 					<label>&nbsp;</label>
 					<label>&nbsp;</label>
-					<button id="submit" class="btn btn-lg btn-primary btn-block" style="max-width:250px" type="submit">Guardar Datos</button>
+					<button id="submit" class="btn btn-lg btn-primary btn-block" style="max-width:250px" type="submit">Guardar Resultado</button>
 				</div>
 			</div>
 		</div>
@@ -232,11 +240,12 @@
 				feedback = $(select).val();
 			});
 			colaborador = '<?= $colaborador->id;?>';
+			comentarios = $('#comentarios').val();
 			console.log(colaborador,feedback,rating);
 			$.ajax({
 				url: '<?= base_url("evaluacion/asigna_rating");?>',
 				type: 'POST',
-				data: {'colaborador':colaborador,'rating':rating,'feedback':feedback},
+				data: {'colaborador':colaborador,'rating':rating,'feedback':feedback,'comentarios':comentarios},
 				beforeSend: function() {
 					$('#save').hide('slow');
 					$('#cargando').show('slow');

@@ -270,6 +270,19 @@ class Evaluacion_model extends CI_Model{
 		return false;
 	}
 
+	function guardaHistorial($email,$anio,$comentarios,$rating) {
+		$datos=array(
+			'anio'=>$anio,
+			'rating'=>$rating,
+			'email'=>$email,
+			'comentarios'=>$comentarios
+		);
+		$this->db->insert('Historial',$datos);
+		if($this->db->affected_rows() == 1)
+			return true;
+		return false;
+	}
+
 	function updateFeedbacker($where,$datos) {
 		$res = $this->db->where($where)->get('Resultados_Evaluacion')->first_row();
 		$this->db->where('resultado',$res->id)->update('Feedbacks',$datos);

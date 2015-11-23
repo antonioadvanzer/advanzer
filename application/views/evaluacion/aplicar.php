@@ -106,8 +106,8 @@
 			<div class="item active" align="center" style="min-height:550px;">
 				<img height="100%" style="opacity:0.1;position:absolute" src="<?= base_url('assets/images/evaluacion.jpg');?>">
 				<div style="display:block;width:60%;position:absolute;top:20%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
-					<h2><b>Lee detenidamente todas las indicaciones</b></h2><hr>
-					<h4><li>Recuerda evaluar objetivamente tomando en cuenta el desempeño de todo el año, no solo el de los últimos meses</li>
+					<h2><b>Indicaciones</b></h2><hr>
+					<h4 align="left"><li>Recuerda evaluar objetivamente tomando en cuenta el desempeño de todo el año, no solo el de los últimos meses</li>
 						<li>Si tu respuesta es diferente a "<i>3</i>" es indispensable justificar tu respuesta y darle clic a "<i>guardar</i>".</li>
 						<li>Son indispensables al menos 3 palabras para que se active la opción de "<i>guardar</i>"</li>
 						<li>Si deseas suspender la evaluación y continuar más tarde, asegúrate de darle “guardar” a todas tus respuestas 
@@ -143,7 +143,7 @@
 									<input type="hidden" id="tipo" value="responsabilidad">
 									<div class="col-md-12">
 										<div class="form-group" align="center">
-											<h2><?= $resp->nombre;?><span style="min-width:100px;float:right;">
+											<h2 <?php if($evaluacion->estatus==1 && !$resp->respuesta)echo'style="color:red;"';?>><?= $resp->nombre;?><span style="min-width:100px;float:right;">
 													<i>Respuesta</i>: 
 													<select onchange="this.form.boton.style.display='';if(this.options[this.selectedIndex].value == 3){
 															this.form.justificacion.value='';verify(this.form);
@@ -196,14 +196,14 @@
 				<div style="width:60%;position:absolute;top:25%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
 					<h2>Cada competencia se compone de varios comportamientos.<br>
 						Selecciona la métrica para cada comportamiento de acuerdo a lo siguiente:</h2><br>
-					<h4>
+					<h4 align="left">
 						5. Es un modelo a seguir para toda la organización<br>
 						4. Excede las expectativas<br>
 						3. Cumple las expectativas al 100%<br>
 						2. Cumple parcialmente las expectativas<br>
 						1. No cumple las expectativas<br>
 					</h4>
-					<h4>Recuerda que debes justificar cada respuesta diferente a <i>3</i> y darle ciic a "<i>guardar</i>" 
+					<h4 align="left">Recuerda que debes justificar cada respuesta diferente a <i>3</i> y darle ciic a "<i>guardar</i>" 
 						para no perder tu avance.</h4>
 				</div>
 				<div class="carousel-caption"><h3 style="cursor:default;">Competencias</h3></div>
@@ -214,7 +214,7 @@
 						<h1><?= $indicador->nombre;?></h1>
 						<div class="col-md-12">
 						<?php foreach ($indicador->competencias as $comp) : ?>
-							<h2><?= $comp->nombre;?>
+							<h2 <?php if($evaluacion->estatus==1 && !$comp->respuesta)echo'style="color:red;"';?>><?= $comp->nombre;?>
 								<label><?= $comp->descripcion;?></label>
 							</h2>
 							<div align="left">
@@ -225,7 +225,7 @@
 										<input type="hidden" value="<?= $evaluacion->id;?>" id="asignacion">
 										<input type="hidden" value="" id="tipo">
 										<label><?= $comportamiento->descripcion;?><span style="min-width:70px;float:right">
-											<i>Respuesta</i>: 
+											<i <?php if($evaluacion->estatus==1 && !$comp->respuesta)echo'style="color:red;"';?>>Respuesta</i>: 
 											<select onchange="this.form.boton.style.display='';if(this.options[this.selectedIndex].value == 3){
 													this.form.justificacion.value='';verify(this.form);
 													this.form.justificacion.removeAttribute('required');}
