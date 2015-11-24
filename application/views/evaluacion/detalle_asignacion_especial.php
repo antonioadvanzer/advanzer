@@ -89,7 +89,7 @@
 	</div>
 	<div id="carousel" class="carousel slide" data-wrap="false" data-ride="carousel" data-interval="false">
 		<!-- Indicators -->
-		<ol class="carousel-indicators">
+		<!--<ol class="carousel-indicators">
 			<li data-target="#carousel" data-slide-to="0" class="active"></li>
 			<?php $k=1; if(isset($evaluacion->dominios)): ?>
 				<li data-target="#carousel" data-slide-to="<?= $k++;?>"></li>
@@ -104,7 +104,7 @@
 				<?php endfor;
 			endif; ?>
 			<li data-target="#carousel" data-slide-to="<?= $k?>"></li>
-		</ol>
+		</ol>-->
 		<div class="carousel-inner" style="background-color:#dedede;" role="listbox">
 			<div class="item active" align="center" style="min-height:300px;">
 				<img height="100%" style="opacity:0.3;position:absolute" src="<?= base_url('assets/images/evaluacion.jpg');?>">
@@ -115,7 +115,7 @@
 			<?php if(isset($evaluacion->dominios)): ?>
 				<div class="item" align="center" style="min-height:300px;">
 					<img width="100%" style="opacity:0.3;position:absolute" src="<?= base_url('assets/images/responsabilidades.jpg');?>">
-					<div class="carousel-caption"><h3 style="cursor:default;">Responsabilidades</h3></div>
+					<div class="carousel-caption"><h3 style="cursor:default;">Responsabilidades Funcionales</h3></div>
 				</div>
 				<?php foreach ($evaluacion->dominios as $dominio) : ?>
 					<div class="item" align="center" style="min-height:300px;">
@@ -146,7 +146,7 @@
 					</div>
 				<?php endforeach;
 			endif;
-			if(isset($evaluacion->indicadores)): ?>
+			if($evaluacion->tipo == 1 && isset($evaluacion->indicadores)): ?>
 				<div class="item" align="center" style="min-height:550px;">
 					<img width="100%" style="opacity:0.3;position:absolute" src="<?= base_url('assets/images/responsabilidades.jpg');?>">
 					<div class="carousel-caption"><h3 style="cursor:default;">Competencias</h3></div>

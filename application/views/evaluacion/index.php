@@ -37,7 +37,7 @@
 							<td><small><?= number_format($colab->autoevaluacion,2);?></small></td>
 							<td><small><?= $colab->rating;?></small></td>
 							<td><small><?= number_format(floor($colab->total * 100) / 100,2);?></small></td>
-							<td data-sortable="false" class="rowlink-skip"><table id="tbl2" align="center" class="display">
+							<td class="rowlink-skip"><table id="tbl2" align="center" class="display">
 								<?php if(count($colab->evaluadores) > 0): ?>
 										<thead>
 											<tr>
@@ -47,13 +47,15 @@
 												<th><small>Evaluador</small></th>
 											</tr>
 										</thead>
-										<tbody>
+										<tbody data-link="row">
 											<?php foreach ($colab->evaluadores as $evaluador) : ?>
 												<tr>
-													<td><small><?= number_format($evaluador->total,2);?></small></td>
+													<td><small><a href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion");?>"
+														style="text-decoration:none"><?= number_format($evaluador->total,2);?></a></small></td>
 													<td><small><?= number_format($evaluador->responsabilidad,2);?></small></td>
 													<td><small><?= number_format($evaluador->competencia,2);?></small></td>
-													<td><small><img style="float:left" height="30px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"> 
+													<td><small><img style="float:left" height="30px" class="img-circle avatar avatar-original"
+														src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"> 
 													<small><?= $evaluador->nombre;?></small></td>
 												</tr>
 											<?php endforeach; ?>
@@ -66,11 +68,12 @@
 											<th colspan="3"><small>Evaluador 360</small></th>
 										</tr>
 									</thead>
-									<tbody>
+									<tbody data-link="row">
 										<?php foreach ($colab->evaluadores360 as $evaluador) : ?>
 											<tr>
-												<td><small><?= number_format($evaluador->competencia,2);?></small></td>
-												<td colspan="3"><small><img style="float:left" height="30px" 
+												<td><small><a href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion");?>"
+													style="text-decoration:none"><?= number_format($evaluador->competencia,2);?></a></small></td>
+												<td colspan="3"><small><img style="float:left" height="30px" class="img-circle avatar avatar-original"
 													src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"> 
 													<?= $evaluador->nombre;?></small></td>
 											</tr>
@@ -85,11 +88,13 @@
 											<th colspan="2"><small>Evaluador</small></th>
 										</tr>
 									</thead>
-									<tbody>
+									<tbody data-link="row">
 										<?php foreach ($colab->evaluadoresProyecto as $evaluador) : ?>
 											<tr>
-												<td><small><?= number_format($evaluador->responsabilidad,2);?></small></td>
-												<td><small><img style="float:left" height="30px" 
+												<td><small><a href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion");?>"
+													style="text-decoration:none"><?= number_format($evaluador->responsabilidad,2);?></a></small></td>
+												<td><small><?= $evaluador->evaluacion;?></small></td>
+												<td colspan="2"><small><img style="float:left" height="30px" class="img-circle avatar avatar-original"
 													src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"> 
 													<?= $evaluador->nombre;?></small></td>
 											</tr>

@@ -38,7 +38,9 @@
             <?php foreach ($colaboradores as $colab):?>
             <tr>
               <td><small><a <?php if($colab->estatus != 2):?> href='<?php if($colab->tipo==0) echo base_url("evaluacion/evaluaProyecto/$colab->asignacion");
-                else echo base_url("evaluacion/aplicar/$colab->asignacion");?>' <?php endif;?>>
+                  else echo base_url("evaluacion/aplicar/$colab->asignacion");?>' <?php 
+                else: ?> href='<?= base_url("evaluacion/detalle_asignacion/$colab->asignacion");?>'
+                <?php endif;?>>
                 <img height="25px" src="<?= base_url('assets/images/fotos')."/".$colab->foto;?>"></a></small></td>
               <td><small><?php if($colab->id == $this->session->userdata('id')) 
                   echo"AUTOEVALUACIÓN";

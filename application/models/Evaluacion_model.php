@@ -455,7 +455,7 @@ class Evaluacion_model extends CI_Model{
 			$res=$this->db->get();
 			if($res->num_rows() > 0):
 				$r_proyectos=0;
-				$dias_total=0;
+				$dias_total=1;
 				foreach ($res->result() as $info) :
 					$diferencia=date_diff(date_create($info->inicio_periodo),date_create($info->fin_periodo));
 					$dias=(int)$diferencia->format("%a");
@@ -618,22 +618,25 @@ class Evaluacion_model extends CI_Model{
 	function getEvaluacionByAsignacion($asignacion) {
 		$result = $this->searchAsignacionById($asignacion);
 		$posicion=$this->getPosicionByColaborador($result->evaluado);
-		$result->indicadores = $this->getIndicadoresByPosicion($posicion);
-		$result->total_competencias=count($result->indicadores);
+		$result->indicadores = 0;
 		$result->total_responsabilidades=0;
-		foreach ($result->indicadores as $indicador) :
-			foreach ($indicador->competencias = $this->getCompetenciasByIndicador($indicador->id,$posicion) as $competencia ) :
-				$res=$this->db->where(array('asignacion'=>$asignacion,'competencia'=>$competencia->id))->get('Detalle_ev_360');
-				if($res->num_rows() == 1): 
-					$competencia->respuesta=$res->first_row()->respuesta;
-					$competencia->justificacion=$res->first_row()->justificacion;
-				else:
-					$competencia->respuesta=null;
-					$competencia->justificacion=null;
-				endif;
-				$competencia->comportamientos = $this->getComportamientoByCompetencia($competencia->id,$posicion,$asignacion);
+		if($result->tipo == 1){
+			$result->indicadores = $this->getIndicadoresByPosicion($posicion);
+			$result->total_competencias=count($result->indicadores);
+			foreach ($result->indicadores as $indicador) :
+				foreach ($indicador->competencias = $this->getCompetenciasByIndicador($indicador->id,$posicion) as $competencia ) :
+					$res=$this->db->where(array('asignacion'=>$asignacion,'competencia'=>$competencia->id))->get('Detalle_ev_360');
+					if($res->num_rows() == 1): 
+						$competencia->respuesta=$res->first_row()->respuesta;
+						$competencia->justificacion=$res->first_row()->justificacion;
+					else:
+						$competencia->respuesta=null;
+						$competencia->justificacion=null;
+					endif;
+					$competencia->comportamientos = $this->getComportamientoByCompetencia($competencia->id,$posicion,$asignacion);
+				endforeach;
 			endforeach;
-		endforeach;
+		}
 		if($result->anual == 1 || $result->tipo==0){
 			$area = $this->getAreaByColaborador($result->evaluado);
 			$result->dominios=$this->getResponsabilidadByArea($area,$posicion);
@@ -651,7 +654,7 @@ class Evaluacion_model extends CI_Model{
 					$responsabilidad = $this->getRespuestaByAsignacionResponsabilidad($asignacion,$responsabilidad);
 					$responsabilidad->metricas = $this->getMetricaByObjetivo($responsabilidad->id);
 				endforeach;
-				$result->total_responsabilidades += count($indicador->competencias);
+				$result->total_responsabilidades += count($result->indicadores);
 			endforeach;
 		}
 		return $result;

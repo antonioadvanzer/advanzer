@@ -680,21 +680,13 @@ class Evaluacion extends CI_Controller {
                         break;
                 endforeach;
             else:
-                foreach ($evaluacion->indicadores as $indicador) :
-                    foreach ($indicador->competencias as $competencia) :
-                        foreach ($competencia->comportamiento as $comportamiento) :
-                            if(!$comportamiento->respuesta || ($comportamiento->respuesta!=3 && $comportamiento->justificacion=="")):
-                                $data['msg'] = "Error al finalizar la evaluación. No se ha recibido respuesta correspondiente a:\n\Indicador: $indicador->nombre\n
-                                    Competencia: $competencia->descripcion";
-                                $data['redirecciona']="no";
-                                $flag=true;
-                            endif;
-                            if($flag)
-                                break;
-                        endforeach;
-                        if($flag)
-                            break;
-                    endforeach;
+                foreach ($evaluacion->dominios as $dominio) :
+                    if(!$dominio->respuesta || ($dominio->respuesta!=3 && $dominio->justificacion=="")):
+                        $data['msg'] = "Error al finalizar la evaluación. No se ha recibido respuesta correspondiente a:\n\Indicador: $indicador->nombre\n
+                            Competencia: $competencia->descripcion";
+                        $data['redirecciona']="no";
+                        $flag=true;
+                    endif;
                     if($flag)
                         break;
                 endforeach;

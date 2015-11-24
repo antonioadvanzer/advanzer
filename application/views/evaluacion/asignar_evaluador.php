@@ -83,6 +83,12 @@
 						$('#quitar').append($('<option>',{value:$(select).val()}).text($(select).text()));
 						if(flag <= 5)
 							$('#anual').append($('<option>',{value:$(select).val()}).text($(select).text()));
+						else{
+							$('#quitar').each(function(i,select) {
+								$('#agregar').append($('<option>',{value:$(select).val()}).text($(select).text()));
+							});
+							$('#quitar').empty().append($('<option>',{value:$(select).val()}).text($(select).text()));
+						}
 					});
 				}
 			});

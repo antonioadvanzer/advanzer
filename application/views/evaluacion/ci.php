@@ -24,9 +24,7 @@
 				<div class="row">
 					<div class="col-md-12">
 						<h3><b>Colaboradores:</b></h3>
-						<div id="filterbar"> </div>
-						<table id="tbl" align="center" class="sortable table-hover table-striped table-condensed" data-toggle="table" 
-							data-toolbar="#filterbar" data-pagination="true" data-hover="true" data-striped="true" data-show-toggle="true">
+						<table id="tbl" align="center" class="sortable table-hover table-striped table-condensed">
 							<thead>
 								<tr>
 									<th class="col-md-1" data-halign="center" data-align="center" data-field="foto" data-defaultsort="disabled"></th>
@@ -111,10 +109,8 @@
 		</div>
 	<?php endif; ?>
 	<script type="text/javascript">
-		$.bootstrapSortable(true);
 		$(function() {
-			$('#tbl').bootstrapTable();
-			$('#filterbar').bootstrapTableFilter();
+			$('#tbl').DataTable({responsive: true});
 		});
 		function change(valor,colaborador,tipo) {
 			console.log(valor,colaborador,tipo);

@@ -106,7 +106,7 @@
 			<div class="item active" align="center" style="min-height:550px;">
 				<img height="100%" style="opacity:0.1;position:absolute" src="<?= base_url('assets/images/evaluacion.jpg');?>">
 				<div style="display:block;width:60%;position:absolute;top:20%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
-					<h2><b>Lee detenidamente todas las indicaciones</b></h2><hr>
+					<h2><b>Indicaciones</b></h2><hr>
 					<h4 align="left"><li>Recuerda evaluar objetivamente tomando en cuenta el desempeño de todo el año, no solo el de los últimos meses</li>
 						<li>Si tu respuesta es diferente a "<i>3</i>"" es indispensable justificar tu respuesta y darle clic a "<i>guardar</i>".</li>
 						<li>Son indispensables al menos 3 palabras para que se active la opción de "<i>guardar</i>"</li>
@@ -171,7 +171,7 @@
 											<div class="col-md-6">
 												<div class="form-group" align="center">
 													<textarea id="justificacion" class="form-control" rows="2" style="max-width:300px;text-align:center;" 
-														onkeyup="if(this.value.trim().split(' ').length >= 4){ this.form.boton.removeAttribute('disabled');
+														onkeyup="if(this.value.trim().split(' ').length >= 3){ this.form.boton.removeAttribute('disabled');
 															}else{ this.form.boton.setAttribute('disabled','disabled');}" placeholder="Justifique su respuesta"
 														required><?= $comp->justificacion;?></textarea>
 												</div>
@@ -204,7 +204,7 @@
 				</div>
 				<form class="form-signin" action="javascript:" id="finalizar">
 					<input id="finalizar_asignacion" type="hidden" value="<?= $evaluacion->id;?>">
-					<input id="finalizar_tipo" type="hidden" value="<?= $evaluacion->tipo;?>">
+					<input id="finalizar_tipo" type="hidden" value="360">
 					<div style="width:60%;position:absolute;top:15%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
 						<div class="col-md-12">
 							<div class="form-group" align="center">

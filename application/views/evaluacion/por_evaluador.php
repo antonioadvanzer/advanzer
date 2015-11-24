@@ -67,7 +67,7 @@
 											<tr>
 												<td><small><?php if($colaborador->total){
 													echo number_format($colaborador->total,2);$count++;}else echo "--";?></small></td>
-												<td><small><img class="img-circle avatar avatar-original" height="40px" 
+												<td colspan="3"><small><img class="img-circle avatar avatar-original" height="40px" 
 													src="<?= base_url('assets/images/fotos')."/"
 													.$colaborador->foto;?>"><?= $colaborador->nombre;?></small></td>
 											</tr>
@@ -86,7 +86,7 @@
 											<tr>
 												<td><small><?php if($colaborador->total){
 													echo number_format($colaborador->total,2);$count++;}else echo "--";?></small></td>
-												<td><small><img class="img-circle avatar avatar-original" height="40px" 
+												<td colspan="3"><small><img class="img-circle avatar avatar-original" height="40px" 
 													src="<?= base_url('assets/images/fotos')."/"
 													.$colaborador->foto;?>"><?= $colaborador->nombre;?></small></td>
 											</tr>

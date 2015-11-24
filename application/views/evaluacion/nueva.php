@@ -70,7 +70,7 @@
 		<div class="col-md-4">
 			<div class="form-group" align="center">
 				<label for="lider">Líder de Proyecto</label>
-				<select id="lider" name="lider" class="form-control" style="max-width:300px">
+				<select id="lider" name="lider" class="form-control" style="max-width:300px" required>
 					<option value="" disabled selected>-- Selecciona un líder --</option>
 				</select>
 			</div>
@@ -94,7 +94,7 @@
 			<div class="form-group" align="center">
 				<label for="participantes">Participantes</label>
 				<select id="agregar" name="agregar" multiple class="form-control" style="overflow-y:auto;
-					overflow-x:auto;min-height:200px;max-height:700px"></select>
+					overflow-x:auto;min-height:200px;max-height:700px" required></select>
 			</div>
 		</div>
 		<div class="col-md-2"><div class="form-group">&nbsp;</div>
