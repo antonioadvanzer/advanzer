@@ -208,8 +208,12 @@ class Main extends CI_Controller {
 		$this->email->clear(TRUE);
 
 		$this->email->from('notificaciones.ch@advanzer.com','Portal de Evaluación Advanzer-Entuizer');
-		$this->email->to("micaela.llano@advanzer.com");
+		/*$this->email->to("micaela.llano@advanzer.com");
 		$this->email->bcc(array('jesus.salas@advanzer.com', 'enrique.bernal@advanzer.com'));
+		$this->email->subject('Captura de Compromisos Internos');
+		$this->email->message('<h2>Se ha adjuntado el archivo de soporte de la captura de Compromisos Internos</h2><hr>');
+		$this->email->attach(base_url("assets/docs/$file"));
+		*/$this->email->to("jesus.salas@advanzer.com");
 		$this->email->subject('Captura de Compromisos Internos');
 		$this->email->message('<h2>Se ha adjuntado el archivo de soporte de la captura de Compromisos Internos</h2><hr>');
 		$this->email->attach(base_url("assets/docs/$file"));
@@ -282,7 +286,7 @@ class Main extends CI_Controller {
 				$total_competencias = $evaluador->competencia;
 			endforeach;
 			if(isset($colaborador->evaluadoresProyecto)):
-				$dias_total=0;
+				$dias_total=1;
 				foreach ($colaborador->evaluadoresProyecto as $evaluador) :
 					$evaluadores .= $evaluador->nombre." / ";
 					$comentarios .= $evaluador->comentarios." / ";
@@ -461,7 +465,7 @@ class Main extends CI_Controller {
 			$chart->setBottomRightPosition('K25');
 			$objSheet->addChart($chart);
 
-		$file_name = "Reporte_Anual_".(date('Y')-1).".xlsx";
+		$file_name = "Reporte_Anual.xlsx";
 
 		$objWriter->setPreCalculateFormulas(true);
 		$objWriter->setIncludeCharts(true);
@@ -494,8 +498,12 @@ class Main extends CI_Controller {
 		$this->email->clear(TRUE);
 
 		$this->email->from('notificaciones.ch@advanzer.com','Portal de Evaluación Advanzer-Entuizer');
-		$this->email->to("micaela.llano@advanzer.com");
+		/*$this->email->to("micaela.llano@advanzer.com");
 		$this->email->bcc(array('jesus.salas@advanzer.com', 'enrique.bernal@advanzer.com'));
+		$this->email->subject('Captura de Compromisos Internos');
+		$this->email->message('<h2>Se ha adjuntado el archivo de soporte de la captura de Compromisos Internos</h2><hr>');
+		$this->email->attach(base_url("assets/docs/$file"));
+		*/$this->email->to("jesus.salas@advanzer.com");
 		$this->email->subject('Reporte de Evaluación para Junta Anual');
 		$this->email->message('<h2>Se ha generado el archivo de Reporte de Evaluación para la Junta Anual</h2><hr>');
 		$this->email->attach(base_url("assets/docs/$file_name"));
@@ -514,9 +522,9 @@ class Main extends CI_Controller {
 				if($proyecto->inicio <= date('Y-m-d') && $proyecto->fin >= date('Y-m-d')):
 					$msg2 = "Evaluation: '".$proyecto->nombre."' with id: ".$evaluacion->id."\n";
 					$info = $this->evaluacion_model->getEvaluadoresPendientesByEvaluacion($proyecto->id);
-					$mensaje="<h2>Estimado Colaborador,</h2><hr>Se le recuerda que cuenta con evaluaciones pendientes de enviar correspondientes a: ";
-					$mensaje.="<i><b>$evaluacion->nombre</b></i><br>Favor de ingresar al <a style='text-decoration:none;' href='http://intranet.advanzer.com:3000/evaluar'>Portal de Evaluación</a>";
-					$mensaje.=" para terminar el proceso de la evaluación.<br>";
+					$mensaje="<h2>Estimado Colaborador,</h2><hr>Tienes evaluaciones por realizar, correspondientes a: ";
+					$mensaje.="<i><b>$evaluacion->nombre</b></i><br>Ingresa al<a style='text-decoration:none;' href='http://intranet.advanzer.com:3000/evaluar'>Portal de Evaluación</a>";
+					$mensaje.=" para continuar con el proceso.<br>";
 					if($response = $this->enviaRecordatorio($info->email,$mensaje))
 						$msg .= date("Y-m-d H:i:s")." - Succesfully executed with errors:\n $msg2\t$response";
 					else
@@ -532,19 +540,26 @@ class Main extends CI_Controller {
 
 	public function recordatorioEvAnual() {
 		$msg="";
-		$evaluacion = $this->evaluacion_model->getEvaluacionById($this->evaluacion_model->getEvaluacionAnual());
-		if($evaluacion)
-			if($evaluacion->inicio <= date('Y-m-d') && $evaluacion->fin >= date('Y-m-d')):
+		$evaluacion = $this->evaluacion_model->getEvaluacionById($this->evaluacion_model->getEvaluacionAnualVigente()->id);
+		if($evaluacion):
+			$inicio=date_create($evaluacion->inicio);
+			$fin=date_create($evaluacion->fin);
+			if(date_diff($inicio,date_create(date('Y-m-d')))->format("%R")=="+" && date_diff(date_create(date('Y-m-d')),$fin)->format("%R")=="+"):
 				$msg2 = "Evaluation: '".$evaluacion->nombre."' with id: ".$evaluacion->id."\n";
 				$info = $this->evaluacion_model->getEvaluadoresPendientesByEvaluacion($evaluacion->id);
-				$mensaje="<h2>Estimado Colaborador,</h2><hr>Se le recuerda que cuenta con evaluaciones pendientes de enviar correspondientes a: ";
-				$mensaje.="<i><b>$evaluacion->nombre</b></i><br>Favor de ingresar al <a style='text-decoration:none;' href='http://intranet.advanzer.com:3000/evaluar'>Portal de Evaluación</a>";
-				$mensaje.=" para terminar el proceso de la evaluación.<br>";
-				if($response = $this->enviaRecordatorio($info->email,$mensaje))
+				$response=false;
+				foreach ($info as $evaluador) :
+					$mensaje="<h2>Estimado Colaborador,</h2><hr>Tienes evaluaciones por realizar, correspondientes a: ";
+					$mensaje.="<i><b>$evaluacion->nombre</b></i><br>Ingresa al <a style='text-decoration:none;' href='http://intranet.advanzer.com:3000/evaluar'>Portal de Evaluación</a>";
+					$mensaje.=" para continuar con el proceso.<br>";
+					$response .= $this->enviaRecordatorio($info->email,$mensaje);
+				endforeach;
+				if($response)
 					$msg = date("Y-m-d H:i:s")." - Succesfully executed with errors:\n $msg2\t$response";
 				else
 					$msg = date("Y-m-d H:i:s")." - Succesfully executed with activity:\n$msg2";
 			endif;
+		endif;
 		if($msg == "")
 			$msg = date("Y-m-d H:i:s")." - Succesfully executed with no activity.";
 
@@ -554,29 +569,31 @@ class Main extends CI_Controller {
 	public function recordatorioDiario() {
 		$msg="";
 		$proyectos = $this->evaluacion_model->getEvaluacionesProyecto();
-		$evaluacion = $this->evaluacion_model->getEvaluacionById($this->evaluacion_model->getEvaluacionAnual());
-		foreach ($proyectos as $proyecto):
-			if($proyecto->inicio == date('Y-m-d')):
-				$msg2 = "\n\nEvaluation: '".$proyecto->nombre."' with id: ".$evaluacion->id."\n";
-				$info = $this->evaluacion_model->getEvaluadoresPendientesByEvaluacion($proyecto->id);
-				$mensaje="<h2>Estimado Colaborador,</h2><hr>Se le informa que cuenta con evaluaciones correspondientes a: ";
-				$mensaje.="<i><b>$evaluacion->nombre</b></i><br>Favor de ingresar al <a style='text-decoration:none;' href='http://intranet.advanzer.com:3000/evaluar'>Portal de Evaluación</a>";
-				$mensaje.=" para iniciar el proceso de la evaluación.<br>";
-				if($response = $this->enviaRecordatorio($info->email,$mensaje))
-					$msg .= date("Y-m-d H:i:s")." - Succesfully executed with errors:\n $msg2\t$response";
-				else
-					$msg .= date("Y-m-d H:i:s")." - Succesfully executed with activity:\n$msg2\tMail sent to project leader";
-			endif;
-		endforeach;
+		$evaluacion = $this->evaluacion_model->getEvaluacionById($this->evaluacion_model->getEvaluacionAnualVigente()->id);
+		if($proyectos):
+			foreach ($proyectos as $proyecto):
+				if($proyecto->inicio == date('Y-m-d')):
+					$msg2 = "\n\nEvaluation: '".$proyecto->nombre."' with id: ".$proyecto->id."\n";
+					$info = $this->evaluacion_model->getEvaluadoresPendientesByEvaluacion($proyecto->id);
+					$mensaje="<h2>Estimado Colaborador,</h2><hr>Tienes evaluaciones por realizar, correspondientes a: ";
+					$mensaje.="<i><b>$proyecto->nombre</b></i><br>Ingresa al <a style='text-decoration:none;' href='http://intranet.advanzer.com:3000/evaluar'>Portal de Evaluación</a>";
+					$mensaje.=" para iniciar con el proceso.<br>";
+					if($response = $this->enviaRecordatorio($info->email,$mensaje))
+						$msg .= date("Y-m-d H:i:s")." - Succesfully executed with errors:\n $msg2\t$response";
+					else
+						$msg .= date("Y-m-d H:i:s")." - Succesfully executed with activity:\n$msg2\tMail sent to project leader";
+				endif;
+			endforeach;
+		endif;
 		if($evaluacion)
 			if($evaluacion->inicio == date('Y-m-d') || $evaluacion->fin == date('Y-m-d')):
 				$response="";
 				$msg2 = "\n\nEvaluation: '".$evaluacion->nombre."' with id: ".$evaluacion->id."\n";
 				$evaluadores = $this->evaluacion_model->getEvaluadoresPendientesByEvaluacion($evaluacion->id);
 				foreach ($evaluadores as $info) :
-					$mensaje="<h2>Estimado Colaborador,</h2><hr> Se le informa que cuenta con evaluaciones correspondientes a: ";
-					$mensaje.="<i><b>$evaluacion->nombre</b></i><br>Favor de ingresar al <a style='text-decoration:none;' href='http://intranet.advanzer.com:3000/evaluar'>Portal de Evaluación</a>";
-					$mensaje.=" para iniciar el proceso de la evaluación.<br>";
+					$mensaje="<h2>Estimado Colaborador,</h2><hr>Tienes evaluaciones por realizar, correspondientes a: ";
+					$mensaje.="<i><b>$evaluacion->nombre</b></i><br>Ingresa al <a style='text-decoration:none;' href='http://intranet.advanzer.com:3000/evaluar'>Portal de Evaluación</a>";
+					$mensaje.=" para iniciar con el proceso.<br>";
 					$response .= $this->enviaRecordatorio($info->email,$mensaje);
 				endforeach;
 				if($response != "")
@@ -608,8 +625,7 @@ class Main extends CI_Controller {
 		$this->email->clear(TRUE);
 
 		$this->email->from('notificaciones.ch@advanzer.com','Portal de Evaluación Advanzer-Entuizer');
-		$this->email->to("micaela.llano@advanzer.com");
-		$this->email->bcc(array('jesus.salas@advanzer.com', 'enrique.bernal@advanzer.com')); //$this->email->to($destinatario);
+		$this->email->to("jesus.salas@advanzer.com"); //$this->email->to($destinatario);
 		$this->email->subject('Recordatorio de Evaluación');
 		$this->email->message($mensaje);
 
