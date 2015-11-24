@@ -115,6 +115,5 @@
 	<script>
 		$(document).ready(function() {
 			$('#tbl').DataTable({responsive: true});
-			$('id^=tbl2').DataTable({responsive: true});
 		} );
 	</script>

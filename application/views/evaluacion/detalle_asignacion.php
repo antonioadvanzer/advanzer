@@ -122,7 +122,7 @@
 						<div class="item" style="min-height:470px;">
 							<aside class="accordion" style="max-width:70%;">
 								<h1><?= $dominio->nombre;?></h1>
-								<?php foreach ($dominio->responsabilidades as $resp) : ?>
+								<?php foreach ($dominio->responsabilidades as $resp) :?>
 									<label>
 										<div class="col-md-12">
 											<div class="form-group" align="center">

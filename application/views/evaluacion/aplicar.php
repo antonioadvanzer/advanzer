@@ -214,7 +214,7 @@
 						<h1><?= $indicador->nombre;?></h1>
 						<div class="col-md-12">
 						<?php foreach ($indicador->competencias as $comp) : ?>
-							<h2 <?php if($evaluacion->estatus==1 && !$comp->respuesta)echo'style="color:red;"';?>><?= $comp->nombre;?>
+							<h2><?= $comp->nombre;?>
 								<label><?= $comp->descripcion;?></label>
 							</h2>
 							<div align="left">
@@ -225,7 +225,7 @@
 										<input type="hidden" value="<?= $evaluacion->id;?>" id="asignacion">
 										<input type="hidden" value="" id="tipo">
 										<label><?= $comportamiento->descripcion;?><span style="min-width:70px;float:right">
-											<i <?php if($evaluacion->estatus==1 && !$comp->respuesta)echo'style="color:red;"';?>>Respuesta</i>: 
+											<i <?php if($evaluacion->estatus==1 && !$comportamiento->respuesta)echo'style="color:red;"';?>>Respuesta</i>: 
 											<select onchange="this.form.boton.style.display='';if(this.options[this.selectedIndex].value == 3){
 													this.form.justificacion.value='';verify(this.form);
 													this.form.justificacion.removeAttribute('required');}

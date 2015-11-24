@@ -167,7 +167,7 @@ class Evaluacion extends CI_Controller {
         $data['evaluador'] = $this->user_model->searchById($data['evaluacion']->evaluador);
         $data['evaluado'] = $this->user_model->searchById($data['evaluacion']->evaluado);
         $this->layout->title('Advanzer - Detalle de Evaluación');
-        if($data['evaluacion']->tipo == 0 || $data['evaluacion']->anual == 0)
+        if($data['evaluacion']->tipo == 0 || $data['evaluacion']->anual == 0 && $data['evaluacion']->evaluador != $data['evaluacion']->evaluado)
             $this->layout->view('evaluacion/detalle_asignacion_especial',$data);
         else
             $this->layout->view('evaluacion/detalle_asignacion',$data);
