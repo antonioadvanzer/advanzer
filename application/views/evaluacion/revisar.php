@@ -189,7 +189,7 @@
 					<tbody data-link="row">
 						<?php foreach ($colaborador->evaluadoresProyecto as $evaluador):?>
 							<tr>
-								<a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion/1");?>">
+								<td><a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion/1");?>">
 								<img height="25px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></a></td>
 								<td><?= $evaluador->nombre;?></td>
 								<td><?php if($evaluador->evaluacion) echo $evaluador->evaluacion;?></td>

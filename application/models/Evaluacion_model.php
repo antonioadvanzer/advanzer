@@ -406,43 +406,56 @@ class Evaluacion_model extends CI_Model{
 	}
 
 	function calculaResultado($asignacion) {
-		$evaluacion=$this->getEvaluacionAnual();
-		$posicion=$this->getPosicionByColaborador($asignacion->evaluado);
-		$jefe=$this->db->select('evaluador')->where(array('evaluado'=>$asignacion->evaluado,'anual'=>1,'evaluacion'=>$evaluacion))
-			->get('Evaluadores');
-		($jefe->num_rows() > 0) ? $jefe=$jefe->first_row()->evaluador : $jefe=1;
-		$competencia=0;
-		$responsabilidad=0;
-		//si es de gerente a director se evalúa 360
-		if($posicion <= 5){
-			$this->db->select('AVG(RC.total) total360')->from('Resultados_ev_Competencia RC')
+		$evaluacion=$this->getEvaluacionAnualVigente()->id;
+		$r_anual=0;
+		if($evaluacion):
+			$posicion=$this->getPosicionByColaborador($asignacion->evaluado);
+			$jefe=$this->db->select('evaluador')->where(array('evaluado'=>$asignacion->evaluado,'anual'=>1,'evaluacion'=>$evaluacion))
+				->get('Evaluadores');
+			($jefe->num_rows() > 0) ? $jefe=$jefe->first_row()->evaluador : $jefe=1;
+			$competencia=0;
+			$responsabilidad=0;
+			//si es de gerente a director se evalúa 360
+			if($posicion <= 5):
+				$this->db->select('AVG(RC.total) total360')->from('Resultados_ev_Competencia RC')
+					->join('Evaluadores Ev','Ev.id = RC.asignacion')
+					->where(array('Ev.evaluado'=>$asignacion->evaluado,'Ev.evaluacion'=>$evaluacion,'Ev.evaluador !='=>$jefe,
+					'Ev.evaluador !='=>$asignacion->evaluado,'Ev.anual'=>0));
+				$res = $this->db->get();
+				if($res->num_rows() == 1)
+					(double)$competencia += (double)($res->first_row()->total360)*0.1;
+			endif;
+			//evaluacion del jefe directo / líderes de proyecto (encargado de evaluar anualmente)
+			$this->db->select('RC.total')->from('Resultados_ev_Competencia RC')
 				->join('Evaluadores Ev','Ev.id = RC.asignacion')
-				->where(array('Ev.evaluado'=>$asignacion->evaluado,'Ev.evaluacion'=>$evaluacion,'Ev.evaluador !='=>$jefe,
-				'Ev.evaluador !='=>$asignacion->evaluado,'Ev.anual'=>0));
-			$res = $this->db->get();
+				->where(array('Ev.evaluado'=>$asignacion->evaluado,'Ev.evaluacion'=>$evaluacion,'Ev.anual'=>1));
+			$res=$this->db->get();
+			if($res->num_rows() == 1):
+				if($posicion <= 5)
+					(double)$competencia += (double)($res->first_row()->total)*0.1;
+				else
+					(double)$competencia += (double)($res->first_row()->total)*0.15;
+			endif;
+			//autoevaluación
+			$this->db->select('RC.total')->from('Resultados_ev_Competencia RC')
+				->join('Evaluadores Ev','Ev.id = RC.asignacion')
+				->where(array('Ev.evaluado'=>$asignacion->evaluado,'Ev.evaluacion'=>$evaluacion,'Ev.evaluador'=>$asignacion->evaluado));
+			$res=$this->db->get();
+			if($res->num_rows() == 1):
+				if($posicion >= 3 && $posicion <= 5)
+					(double)$competencia += ($res->first_row()->total)*0.1;
+				else
+					(double)$competencia += ($res->first_row()->total)*0.15;
+			endif;
+			//evaluacion jefe
+			$this->db->select('AVG(RR.total) total')->from('Resultados_ev_Responsabilidad RR');
+			$this->db->join('Evaluadores Ev','Ev.id = RR.asignacion');
+			$this->db->join('Evaluaciones E','E.id = Ev.evaluacion');
+			$this->db->where(array('Ev.evaluado'=>$asignacion->evaluado,'E.id'=>$evaluacion));
+			$res=$this->db->get();
 			if($res->num_rows() == 1)
-				(double)$competencia += (double)($res->first_row()->total360)*0.1;
-		}
-		//evaluacion del jefe directo / líderes de proyecto (encargado de evaluar anualmente)
-		$this->db->select('RC.total')->from('Resultados_ev_Competencia RC')
-			->join('Evaluadores Ev','Ev.id = RC.asignacion')
-			->where(array('Ev.evaluado'=>$asignacion->evaluado,'Ev.evaluacion'=>$evaluacion,'Ev.anual'=>1));
-		$res=$this->db->get();
-		if($res->num_rows() == 1)
-			if($posicion <= 5)
-				(double)$competencia += (double)($res->first_row()->total)*0.1;
-			else
-				(double)$competencia += (double)($res->first_row()->total)*0.15;
-		//autoevaluación
-		$this->db->select('RC.total')->from('Resultados_ev_Competencia RC')
-			->join('Evaluadores Ev','Ev.id = RC.asignacion')
-			->where(array('Ev.evaluado'=>$asignacion->evaluado,'Ev.evaluacion'=>$evaluacion,'Ev.evaluador'=>$asignacion->evaluado));
-		$res=$this->db->get();
-		if($res->num_rows() == 1)
-			if($posicion >= 3 && $posicion <= 5)
-				(double)$competencia += ($res->first_row()->total)*0.1;
-			else
-				(double)$competencia += ($res->first_row()->total)*0.15;
+				(double)$r_anual = ($res->first_row()->total);
+		endif;
 		//evaluaciones de proyectos
 		if($proyectos=$this->getEvaluacionesProyecto()):
 			$ids = array();
@@ -466,30 +479,25 @@ class Evaluacion_model extends CI_Model{
 				endforeach;
 			endif;
 		endif;
-		//evaluacion jefe
-		$this->db->select('AVG(RR.total) total')->from('Resultados_ev_Responsabilidad RR');
-		$this->db->join('Evaluadores Ev','Ev.id = RR.asignacion');
-		$this->db->join('Evaluaciones E','E.id = Ev.evaluacion');
-		$this->db->where(array('Ev.evaluado'=>$asignacion->evaluado,'E.id'=>$evaluacion));
-		$res=$this->db->get();
-		if($res->num_rows() == 1)
-			(double)$r_anual = ($res->first_row()->total);
+
 		(isset($r_proyectos)) ? (double)$responsabilidad = (($r_anual + $r_proyectos)/2)*.7 : (double)$responsabilidad = $r_anual*.7;
 
 		(double)$total = $responsabilidad+$competencia;
-		$res = $this->db->where(array('evaluacion'=>$asignacion->evaluacion,'colaborador'=>$asignacion->evaluado))->get('Resultados_Evaluacion');
-		if($res->num_rows() == 1){
-			$id_r = $res->first_row()->id;
-			$this->db->where('id',$id_r)->update('Resultados_Evaluacion',array('total'=>$total));
-		}
-		else{
-			$this->db->insert('Resultados_Evaluacion',array('evaluacion'=>$evaluacion,'colaborador'=>$asignacion->evaluado,'total'=>$total));
-			$id_r = $this->db->insert_id();
-		}
-		// verificar que haya registrado un feedbacker
-		$res = $this->db->where('resultado',$id_r)->get('Feedbacks');
-		if($res->num_rows() == 0)
-			$this->db->insert('Feedbacks',array('resultado'=>$id_r,'feedbacker'=>$jefe));
+		if(isset($evaluacion)):
+			$res = $this->db->where(array('evaluacion'=>$evaluacion,'colaborador'=>$asignacion->evaluado))->get('Resultados_Evaluacion');
+			if($res->num_rows() == 1){
+				$id_r = $res->first_row()->id;
+				$this->db->where('id',$id_r)->update('Resultados_Evaluacion',array('total'=>$total));
+			}
+			else{
+				$this->db->insert('Resultados_Evaluacion',array('evaluacion'=>$evaluacion,'colaborador'=>$asignacion->evaluado,'total'=>$total));
+				$id_r = $this->db->insert_id();
+			}
+			// verificar que haya registrado un feedbacker
+			$res = $this->db->where('resultado',$id_r)->get('Feedbacks');
+			if($res->num_rows() == 0)
+				$this->db->insert('Feedbacks',array('resultado'=>$id_r,'feedbacker'=>$jefe));
+		endif;
 	}
 
 	function getPagination($anio) {
@@ -811,7 +819,7 @@ class Evaluacion_model extends CI_Model{
 				$this->db->insert('Resultados_ev_Competencia',array('asignacion'=>$asignacion,'total'=>$total));
 				break;
 		}
-		if($this->getEvaluacionAnual())
+		if($this->getActiveEvaluation())
 			$this->calculaResultado($info);
 		$this->db->where('id',$info->id)->update('Evaluadores',array('comentarios'=>$comentarios));
 		if($this->ch_estatus($asignacion,2))
