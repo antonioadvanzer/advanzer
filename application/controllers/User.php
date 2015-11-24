@@ -171,9 +171,8 @@ class User extends CI_Controller {
     }
 
     public function load_historial($user) {
-        $email=$this->user_model->searchById($user)->email;
         $anio=$this->input->post('anio');
-        $info=$this->user_model->getHistorialByEmailAnio($email,$anio);
+        $info=$this->user_model->getHistorialByIdAnio($user,$anio);
         ?>
             <label for="baja">Rating:</label>
             <select id="rating_historial" class="form-control" style="max-width:160px;" required>
@@ -189,7 +188,7 @@ class User extends CI_Controller {
 
     public function change_historial() {
         $where=array(
-            'email'=>$this->user_model->searchById($this->input->post('id'))->email,
+            'colaborador'=>$this->input->post('id'),
             'anio'=>$this->input->post('anio')
         );
         $datos=array(

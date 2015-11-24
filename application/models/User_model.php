@@ -183,12 +183,12 @@ class User_model extends CI_Model{
 		return $this->db->where('U.estatus',1)->order_by('nombre','asc')->get('Users U')->result();
 	}
 
-	function getHistorialById($email) {
-		return $this->db->where('email',$email)->get('Historial')->result();
+	function getHistorialById($id) {
+		return $this->db->where('colaborador',$id)->get('Historial')->result();
 	}
 
-	function getHistorialByEmailAnio($email,$anio) {
-		return $this->db->where(array('email'=>$email,'anio'=>$anio))->get('Historial')->first_row();
+	function getHistorialByIdAnio($id,$anio) {
+		return $this->db->where(array('colaborador'=>$id,'anio'=>$anio))->get('Historial')->first_row();
 	}
 
 	function logout($id,$email) {

@@ -249,7 +249,7 @@ class Evaluacion_model extends CI_Model{
 	}
 
 	function getEvaluados() {
-		$this->db->select('U.id,U.foto,U.nombre,U.nomina,P.nombre posicion,T.nombre track,U.fecha_ingreso,P.nivel nivel_posicion');
+		$this->db->select('U.id,U.email,U.foto,U.nombre,U.nomina,P.nombre posicion,T.nombre track,U.fecha_ingreso,P.nivel nivel_posicion');
 		$this->db->from('Users U');
 		$this->db->join('Posicion_Track PT','PT.id = U.posicion_track','LEFT OUTER');
 		$this->db->join('Posiciones P','P.id = PT.posicion','LEFT OUTER');
@@ -894,7 +894,9 @@ class Evaluacion_model extends CI_Model{
 	}
 
 	function check_for_evaluations() {
-		$result = $this->db->from('Evaluaciones')->where(array('estatus !='=>2,'fin <'=>date('Y-m-d')))->get();
+		$new=strtotime('-1 day',strtotime(date('Y-m-d')));
+		$fin=date('Y-m-d',$new);
+		$result = $this->db->from('Evaluaciones')->where(array('estatus !='=>2,'fin'=>$fin))->get();
 		if($result->num_rows() != 0)
 			return $result->result();
 		return false;

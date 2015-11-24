@@ -130,17 +130,17 @@ class Main extends CI_Controller {
     }
 
     public function historial() {
-    	$email=$this->session->userdata('email');
+    	$id=$this->session->userdata('id');
     	$data['colaborador'] = $this->user_model->searchById($this->session->userdata('id'));
-    	$data['info'] = $this->user_model->getHistorialById($email);
+    	$data['info'] = $this->user_model->getHistorialById($id);
     	$this->layout->title('Advanzer - Mi Historial de Desempeño');
     	$this->layout->view('main/historial',$data);
     }
 
     public function load_historial() {
-    	$email=$this->session->userdata('email');
+    	$id=$this->session->userdata('id');
     	$anio=$this->input->post('anio');
-    	$info=$this->user_model->getHistorialByEmailAnio($email,$anio);
+    	$info=$this->user_model->getHistorialByIdAnio($id,$anio);
     	?>
     		<span class="text-muted">Rating Obtenido: </span><?php echo $info->rating; if($info->comentarios) echo " - $info->comentarios";?>
     	<?php
@@ -274,9 +274,9 @@ class Main extends CI_Controller {
 			$total_proyectos=null;
 			$total_360=null;
 			$colaborador->total_360=null;
-			$colaborador->rating_2012=null;
-			$colaborador->rating_2013=null;
-			$colaborador->rating_2014=null;
+			($res=$this->user_model->getHistorialByIdAnio($colaborador->id,'2012')) ? $colaborador->rating_2012=$res->rating : $colaborador->rating_2012=null;;
+			($res=$this->user_model->getHistorialByIdAnio($colaborador->id,'2013')) ? $colaborador->rating_2013=$res->rating : $colaborador->rating_2013=null;;
+			($res=$this->user_model->getHistorialByIdAnio($colaborador->id,'2014')) ? $colaborador->rating_2014=$res->rating : $colaborador->rating_2014=null;;
 			$evaluadores="";
 			$comentarios="";
 			foreach ($colaborador->evaluadores as $evaluador) :
