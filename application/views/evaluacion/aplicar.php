@@ -242,7 +242,7 @@
 										<div class="col-md-6">
 											<div class="form-group" align="center">
 												<textarea id="justificacion" class="form-control" rows="2" style="max-width:300px;text-align:center;" 
-													onkeyup="if(this.value.trim().split(' ').length >= 4){ this.form.boton.removeAttribute('disabled');
+													onkeyup="if(this.value.trim().split(' ').length >= 3){ this.form.boton.removeAttribute('disabled');
 														}else{ this.form.boton.setAttribute('disabled','disabled');}" placeholder="Justifique su respuesta"
 													required><?= $comportamiento->justificacion;?></textarea>
 											</div>
