@@ -53,7 +53,6 @@
 						<tr>
 							<th class="col-md-1" data-halign="center" data-align="center" data-defaultsort="disabled"></th>
 							<th class="col-md-5" data-halign="center" data-field="nombre">Nombre</th>
-							<th class="col-md-4" data-halign="center" data-field="comentario">Comentarios</th>
 							<th class="col-md-1" data-halign="center" data-field="estatus">Estatus</th>
 						</tr>
 					</thead>
@@ -65,7 +64,6 @@
 									<?php endif; ?>
 									<img height="25px" src="<?= base_url('assets/images/fotos')."/".$colab->foto;?>"></a></td>
 								<td><small><?= $colab->nombre;?></small></td>
-								<td><small><?php if($colab->estatus_f!=0) echo substr($colab->fortalezas,0,50)."...";?></small></td>
 								<td><small><?php if($colab->estatus_f==0 || $colab->estatus_f==1)echo"Pendiente";else echo"Leído";?></small></td>
 							</tr>
 						<?php endforeach; ?>

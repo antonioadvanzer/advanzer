@@ -221,7 +221,7 @@
 			$('#feedback').prop('disabled',true);
 			$('#submit').css('display','none');
 		}
-		verificaRating();
+		/*verificaRating();
 
 		$('#gastos').change(function() {
 			verificaRating();
@@ -231,7 +231,7 @@
 		});
 		$('#cv').change(function() {
 			verificaRating();
-		});
+		});*/
 		$('#save').submit(function(event) {
 			$('#rating :selected').each(function(i,select) {
 				rating = $(select).val();

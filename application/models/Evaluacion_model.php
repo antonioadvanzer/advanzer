@@ -104,16 +104,17 @@ class Evaluacion_model extends CI_Model{
 	}
 
 	function getEvaluadores() {
+		$evaluacion = $this->getEvaluacionAnual();
+		$anio=$this->getEvaluacionById($evaluacion)->anio;
 		$this->db->distinct();
 		$this->db->select('Us.id,Us.foto,Us.nombre')->from('Users Us');
-		$this->db->join('Evaluadores Ev','Us.id = Ev.evaluador');
+		$this->db->join('Evaluadores Ev','Us.id = Ev.evaluador','LEFT OUTER');
 		$this->db->join('Evaluaciones E','E.id = Ev.evaluacion');
-		$this->db->where(array('Us.estatus'=>1,'E.inicio <='=>date('Y-m-d'),'E.fin >='=>date('Y-m-d')));
+		$this->db->where(array('Us.estatus'=>1,'E.id'=>$evaluacion));
 		$this->db->where('Ev.evaluado != Ev.evaluador');
 		$this->db->order_by('Us.nombre');
 		$result = $this->db->get()->result();
 		foreach ($result as $evaluador) :
-			$evaluacion = $this->getEvaluacionAnual();
 			$evaluador->asignaciones = null;
 			$evaluador->asignaciones360 = null;
 			$evaluador->asignacionesProyecto = null;
@@ -148,17 +149,24 @@ class Evaluacion_model extends CI_Model{
 			$evaluador->asignaciones360 = $asignaciones;
 
 			//evaluaciones de proyecto
-			$this->db->select('Ev.id,Ev.evaluado,Us.nombre,Us.foto')->from('Evaluadores Ev');
-			$this->db->join('Evaluaciones E','E.id = Ev.evaluacion');
-			$this->db->join('Users Us','Us.id = Ev.evaluado');
-			$this->db->where(array('E.inicio <='=>date('Y-m-d'),'E.fin >='=>date('Y-m-d'),'Ev.evaluado !='=>$evaluador->id,
-				'Ev.evaluador'=>$evaluador->id,'E.tipo'=>0));
-			$this->db->where("(Us.jefe=$evaluador->id OR E.lider=$evaluador->id)");
-			$asignaciones = $this->db->get()->result();
-			foreach ($asignaciones as $asignacion) :
-				$res = $this->db->select('total')->where('asignacion',$asignacion->id)->get('Resultados_ev_Responsabilidad');
-				($res->num_rows() == 1) ? $asignacion->total = $res->first_row()->total : $asignacion->total=null;
-			endforeach;
+			if($proyectos=$this->getEvaluacionesProyecto($anio)):
+				$ids = array();
+				foreach ($proyectos as $row)
+					array_push($ids, $row->id);
+				$this->db->select('Ev.id,Ev.evaluado,Us.nombre,Us.foto')->from('Evaluadores Ev');
+				$this->db->join('Evaluaciones E','E.id = Ev.evaluacion');
+				$this->db->join('Users Us','Us.id = Ev.evaluado');
+				$this->db->where(array('Ev.evaluado !='=>$evaluador->id,
+					'Ev.evaluador'=>$evaluador->id,'E.tipo'=>0));
+				$this->db->where("(Us.jefe=$evaluador->id OR E.lider=$evaluador->id)");
+				$this->db->where_in('E.id',$ids);
+				$asignaciones = $this->db->get()->result();
+				foreach ($asignaciones as $asignacion) :
+					$res=$this->db->select('total')->from('Resultados_ev_Responsabilidad')->where('asignacion',$asignacion->id)->get();
+					($res->num_rows() == 1) ? $asignacion->total = $res->first_row()->total : $asignacion->total = null;
+					//$asignacion = $evaluador->asignacion;
+				endforeach;
+			endif;
 			$evaluador->asignacionesProyecto = $asignaciones;
 		endforeach;
 		return $result;
@@ -227,9 +235,9 @@ class Evaluacion_model extends CI_Model{
 	}
 
 	function getEvaluacionesByEvaluador($evaluador) {
-		if($evaluacion=$this->getEvaluacionById($this->getEvaluacionAnualVigente()->id)):
+		if($evaluacion=$this->getEvaluacionById($this->getEvaluacionAnual())):
 			if($evaluacion->estatus == 2){
-				$evaluacion = $evaluacion->first_row()->id;
+				$evaluacion = $evaluacion->id;
 				redirect("evaluacion/defineFeedback/$evaluacion");
 			}
 			$this->db->select('U.id,U.foto,U.nombre,U.nomina,A.nombre area,P.nombre posicion,Ev.nombre evaluacion,E.estatus,E.id asignacion,
