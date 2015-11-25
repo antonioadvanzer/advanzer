@@ -257,12 +257,13 @@ class Evaluacion_model extends CI_Model{
 	}
 
 	function getEvaluados() {
+		$anio=$this->getEvaluacionById($this->getEvaluacionAnual())->anio;
 		$this->db->select('U.id,U.email,U.foto,U.nombre,U.nomina,P.nombre posicion,T.nombre track,U.fecha_ingreso,P.nivel nivel_posicion');
 		$this->db->from('Users U');
 		$this->db->join('Posicion_Track PT','PT.id = U.posicion_track','LEFT OUTER');
 		$this->db->join('Posiciones P','P.id = PT.posicion','LEFT OUTER');
 		$this->db->join('Tracks T','T.id = PT.track','LEFT OUTER');
-		$this->db->where(array('U.estatus'=>1,'U.fecha_ingreso <='=>date('Y').'-09-30'));
+		$this->db->where(array('U.estatus'=>1,'U.fecha_ingreso <='=>$anio.'-09-30'));
 		$this->db->order_by('U.nombre');
 		$result = $this->db->get()->result();
 		foreach ($result as $colaborador) : // getEvaluadores
