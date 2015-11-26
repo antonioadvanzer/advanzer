@@ -45,7 +45,6 @@
 					<?php else: ?>
 						<label><span class="glyphicon glyphicon glyphicon-remove"></span></label>
 					<?php endif; ?></div>
-					<label>Autoevaluación: <?= number_format($colaborador->autoevaluacion,2);?></label>
 				</div>
 			</div>
 			<div class="col-md-4">
@@ -107,7 +106,7 @@
 			<div class="col-md-8">
 				<div class="form-group" align="center">
 					<label>Comentarios Generales</label>
-					<textarea id="comentarios" class="form-control" rows="2" style="max-width:600px;"></textarea>
+					<textarea id="comentarios" class="form-control" rows="4" style="max-width:600px;"></textarea>
 				</div>
 			</div>
 			<div class="col-md-4">
@@ -121,85 +120,63 @@
 	</form>
 	<div class="row">
 		<div class="col-md-12">
-			<?php if(count($colaborador->evaluadores) > 0): ?>
-				<h3><b>Evaluación:</b></h3>
-				<table id="tbl" align="center" class="table">
-					<thead>
-						<tr>
-							<th data-halign="center" data-field="foto"></th>
-							<th class="col-md-4" data-halign="center" data-field="evaluador">Evaluador</th>
-							<th class "col-md-1" data-halign="center" data-field="responsabilidades">Responsabilidades</th>
-							<th class "col-md-1" data-halign="center" data-field="competencias">Competencias</th>
-							<th class "col-md-2" data-halign="center" data-field="resultado">Resultado</th>
-							<th class "col-md-2" data-halign="center" data-field="comentarios">Comentarios</th>
-						</tr>
-					</thead>
-					<tbody data-link="row">
+			<h3><b>Evaluación:</b></h3>
+			<table id="tbl" align="center" class="table">
+				<thead>
+					<tr>
+						<th data-halign="center"></th>
+						<th data-halign="center">Evaluador</th>
+						<th data-halign="center">Responsabilidades</th>
+						<th data-halign="center">Competencias</th>
+						<!--<th data-halign="center">Resultado</th>-->
+						<th data-halign="center">Evaluación</th>
+						<th data-halign="center">Comentarios</th>
+					</tr>
+				</thead>
+				<tbody data-link="row">
+					<?php if(count($colaborador->evaluadores) > 0): ?>
 						<?php foreach ($colaborador->evaluadores as $evaluador):?>
 							<tr>
-								<td><a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion");?>">
+								<td align="center"><a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion");?>">
 									<img height="25px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></a></td>
 								<td><?= $evaluador->nombre;?></td>
-								<td><?php if($evaluador->responsabilidad) echo number_format($evaluador->responsabilidad,2);?></td>
-								<td><?php if($evaluador->competencia) echo number_format($evaluador->competencia,2);?></td>
-								<td><?php if($evaluador->competencia) echo number_format(($evaluador->competencia*0.3+
-									$evaluador->responsabilidad*0.7),2);?></td>
+								<td align="center"><?php if($evaluador->responsabilidad) echo number_format($evaluador->responsabilidad,2);?></td>
+								<td align="center"><?php if($evaluador->competencia) echo number_format($evaluador->competencia,2);?></td>
+								<!--<td><?php if($evaluador->competencia) echo number_format(($evaluador->competencia*0.3+
+									$evaluador->responsabilidad*0.7),2);?></td>-->
+								<td><?php if($evaluador->comentarios) echo $evaluador->evaluacion;?></td>
 								<td><?php if($evaluador->comentarios) echo $evaluador->comentarios;?></td>
 							</tr>
-						<?php endforeach; ?>
-					</tbody>
-				</table>
-			<?php endif;
-			if(isset($colaborador->evaluadores360) && count($colaborador->evaluadores360) > 0): ?>
-				<h3><b>Evaluaciones 360:</b></h3>
-				<table id="tbl" align="center" class="table">
-					<thead>
-						<tr>
-							<th data-halign="center" data-field="foto"></th>
-							<th class="col-md-4" data-halign="center" data-field="evaluador">Evaluador 360</th>
-							<th class "col-md-2" data-halign="center" data-field="responsabilidades">Resultado</th>
-							<th class="col-md-4" data-halign="center" data-field="comentarios">Comentarios</th>
-						</tr>
-					</thead>
-					<tbody data-link="row">
+						<?php endforeach;
+					endif;
+					if(isset($colaborador->evaluadores360) && count($colaborador->evaluadores360) > 0): ?>
 						<?php foreach ($colaborador->evaluadores360 as $evaluador):?>
 							<tr>
 								<td><a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion");?>">
 									<img height="25px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></a></td>
 								<td><?= $evaluador->nombre;?></td>
+								<td>&nbsp;</td>
 								<td><?php if($evaluador->competencia) echo number_format($evaluador->competencia,2);?></td>
+								<td><?= $evaluador->evaluacion;?></td>
 								<td><?= $evaluador->comentarios;?></td>
 							</tr>
-						<?php endforeach; ?>
-					</tbody>
-				</table>
-			<?php endif;
-			if(isset($colaborador->evaluadoresProyecto) && count($colaborador->evaluadoresProyecto) > 0): ?>
-				<h3><b>Evaluaciones por Proyecto:</b></h3>
-				<table id="tbl" align="center" class="table">
-					<thead>
-						<tr>
-							<th data-halign="center" data-field="foto"></th>
-							<th class="col-md-4" data-halign="center" data-field="evaluador">Líder de Proyecto</th>
-							<th class "col-md-3" data-halign="center" data-field="responsabilidades">Proyecto</th>
-							<th class "col-md-1" data-halign="center" data-field="competencias">Resultado</th>
-							<th class "col-md-2" data-halign="center" data-field="comentarios">Comentarios</th>
-						</tr>
-					</thead>
-					<tbody data-link="row">
+						<?php endforeach;
+					endif;
+					if(isset($colaborador->evaluadoresProyecto) && count($colaborador->evaluadoresProyecto) > 0): ?>
 						<?php foreach ($colaborador->evaluadoresProyecto as $evaluador):?>
 							<tr>
 								<td><a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion/1");?>">
 								<img height="25px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></a></td>
 								<td><?= $evaluador->nombre;?></td>
-								<td><?php if($evaluador->evaluacion) echo $evaluador->evaluacion;?></td>
 								<td><?php if($evaluador->responsabilidad) echo number_format($evaluador->responsabilidad,2);?></td>
+								<td>&nbsp;</td>
+								<td><?php if($evaluador->evaluacion) echo $evaluador->evaluacion;?></td>
 								<td><?php if($evaluador->comentarios) echo $evaluador->comentarios;?></td>
 							</tr>
-						<?php endforeach; ?>
-					</tbody>
-				</table>
-			<?php endif;?>
+						<?php endforeach;
+					endif;?>
+				</tbody>
+			</table>
 		</div>
 	</div>
 	<script>
@@ -219,6 +196,7 @@
 		if(estatus != 0){
 			$('#rating').prop('disabled',true);
 			$('#feedback').prop('disabled',true);
+			$('#comentarios').prop('disabled',true);
 			$('#submit').css('display','none');
 		}
 		/*verificaRating();

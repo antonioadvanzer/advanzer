@@ -173,21 +173,16 @@ class Evaluacion extends CI_Controller {
             $this->layout->view('evaluacion/detalle_asignacion',$data);
     }
 
-    public function update_feedback($feedback,$flag=false) {
-        if($flag==true)
-            $this->evaluacion_model->updateFeedback($feedback,array('estatus'=>2));
-        $data['feedback'] = $this->evaluacion_model->getInfoFeedback($feedback,$flag);
-        if($flag==false){
-            $colaborador = $this->user_model->searchById($data['feedback']->colaborador);
-            $data['evaluaciones'] = $this->evaluacion_model->getResultadosByColaborador($colaborador);
-        }
+    public function update_feedback($feedback) {
+        $data['feedback'] = $this->evaluacion_model->getInfoFeedback($feedback);
+        $colaborador = $this->user_model->searchById($data['feedback']->colaborador);
+        $data['evaluaciones'] = $this->evaluacion_model->getResultadosByColaborador($colaborador);
         $this->layout->title('Advanzer - Feedback');
         $this->layout->view('evaluacion/detalle_feedback',$data);
     }
 
     public function updateFeedback() {
         $id=$this->input->post('id');
-        $datos['compromisos']=trim($this->input->post('compromisos'));
         $datos['fortalezas']=trim($this->input->post('fortalezas'));
         $datos['oportunidad']=trim($this->input->post('oportunidad'));
         if($this->evaluacion_model->updateFeedback($id,$datos))
@@ -200,11 +195,18 @@ class Evaluacion extends CI_Controller {
     public function updateEstatusFeedback() {
         $id=$this->input->post('id');
         $datos['estatus']=$this->input->post('estatus');
+        $datos['compromisos']=$this->input->post('compromisos');
         if($this->evaluacion_model->updateFeedback($id,$datos))
             $response['msg'] = "ok";
         else
             $response['msg'] = "Error al enviar feedback. Intenta de nuevo.";
         echo json_encode($response);
+    }
+
+    public function revision_final($feedback) {
+        $data['feedback'] = $this->evaluacion_model->getInfoFeedback($feedback);
+        $this->layout->title('Advanzer - Feedback');
+        $this->layout->view('evaluacion/revision_feedback',$data);
     }
 
     public function asigna_ci() {
@@ -224,9 +226,9 @@ class Evaluacion extends CI_Controller {
         $comentarios = $this->input->post('comentarios');
         $evaluacion = $this->evaluacion_model->getEvaluacionAnual();
         $where = array('evaluacion'=>$evaluacion,'colaborador'=>$colaborador);
-        if($this->evaluacion_model->updateRating($where,array('rating'=>$rating))){
+        if($this->evaluacion_model->updateRating($where,array('rating'=>$rating,'comentarios'=>$comentarios))){
             if($this->evaluacion_model->updateFeedbacker($where,array('feedbacker'=>$feedback)))
-                if($this->evaluacion_model->guardaHistorial($this->user_model->searchById($colaborador)->email,$this->evaluacion_model->getEvaluacionById($evaluacion)->anio,$comentarios,$rating))
+                if($this->evaluacion_model->guardaHistorial($this->user_model->searchById($colaborador)->email,$this->evaluacion_model->getEvaluacionById($evaluacion)->anio,$rating))
                     $response['msg']="ok";
         }
         echo json_encode($response);

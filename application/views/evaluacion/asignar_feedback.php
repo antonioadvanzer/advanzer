@@ -16,15 +16,15 @@
 		<div class="row">
 			<div class="col-md-12">
 				<h3><b>Asignaciones:</b></h3>
-				<table id="tbl" align="center"class="sortable table-hover table-striped table-condensed"data-hover="true">
+				<table id="tbl" align="center"class="table table-hover table-condensed" data-hover="true">
 					<thead>
 						<tr>
-							<th class="col-md-1" data-halign="center" data-align="center" data-defaultsort="disabled"></th>
-							<th class="col-md-5" data-halign="center" data-field="nombre">Nombre</th>
-							<th class="col-md-2" data-halign="center" data-field="area">Area</th>
-							<th class="col-md-2" data-halign="center" data-field="posicion">Posición</th>
-							<th class="col-md-1" data-halign="center" data-field="evaluacion">Resultado</th>
-							<th class="col-md-1" data-halign="center" data-field="estatus">Estatus</th>
+							<th data-halign="center" data-align="center" ></th>
+							<th data-halign="center">Nombre</th>
+							<th data-halign="center">Area</th>
+							<th data-halign="center">Posición</th>
+							<th data-halign="center">Resultado</th>
+							<th data-halign="center">Estatus</th>
 						</tr>
 					</thead>
 					<tbody data-link="row">
@@ -57,14 +57,16 @@
 						</tr>
 					</thead>
 					<tbody data-link="row">
-						<?php foreach ($propias as $colab):?>
+						<?php foreach ($propias as $colab): ?>
 							<tr>
 								<td><?php if($colab->estatus_f!=0): ?>
-										<a href="<?= base_url("evaluacion/update_feedback/$colab->feedback/true");?>">
-									<?php endif; ?>
-									<img height="25px" src="<?= base_url('assets/images/fotos')."/".$colab->foto;?>"></a></td>
+									<a href="<?= base_url("evaluacion/revision_final/$colab->feedback");?>">
+									<img class="img-circle avatar avatar-original" height="40px" src="<?= base_url('assets/images/fotos')."/".$colab->foto;?>"></a>
+								<?php else: ?>
+									<img class="img-circle avatar avatar-original" height="40px" src="<?= base_url('assets/images/fotos')."/".$colab->foto;?>">
+								<?php endif; ?></td>
 								<td><small><?= $colab->nombre;?></small></td>
-								<td><small><?php if($colab->estatus_f==0 || $colab->estatus_f==1)echo"Pendiente";else echo"Leído";?></small></td>
+								<td><small><?php if($colab->estatus_f==0) echo "Pendiente"; if($colab->estatus_f==1)echo"Enviado";else echo"Enterado";?></small></td>
 							</tr>
 						<?php endforeach; ?>
 					</tbody>
@@ -77,7 +79,6 @@
     $.bootstrapSortable(true);
 
     $(function() {
-      $('[id^=tbl]').bootstrapTable();
-
+      $('[id^=tbl]').DataTable({responsive: true});
     });
   </script>

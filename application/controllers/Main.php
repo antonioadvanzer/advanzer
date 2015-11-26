@@ -142,7 +142,7 @@ class Main extends CI_Controller {
     	$anio=$this->input->post('anio');
     	$info=$this->user_model->getHistorialByIdAnio($id,$anio);
     	?>
-    		<span class="text-muted">Rating Obtenido: </span><?php echo $info->rating; if($info->comentarios) echo " - $info->comentarios";?>
+    		<span class="text-muted">Rating Obtenido: </span><?= $info->rating;?>
     	<?php
     }
 
@@ -240,10 +240,10 @@ class Main extends CI_Controller {
 
 		$objSheet = $objPHPExcel->getActiveSheet(0);
 		$objSheet->setTitle('Junta_Anual');
-		$objSheet->getStyle('A1:R1')->getFont()->setBold(true)->setName('Verdana')->setSize(11)->getColor()->setRGB('FFFFFF');
-		$objSheet->getStyle('A1:R1')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-		$objSheet->getStyle('A1:R1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-		$objSheet->getStyle('A1:R1')->getFill('')->applyFromArray(array('type'=>PHPExcel_Style_Fill::FILL_SOLID, 'startcolor'=>array('rgb'=>'000A75')));
+		$objSheet->getStyle('A1:Q1')->getFont()->setBold(true)->setName('Verdana')->setSize(11)->getColor()->setRGB('FFFFFF');
+		$objSheet->getStyle('A1:Q1')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+		$objSheet->getStyle('A1:Q1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$objSheet->getStyle('A1:Q1')->getFill('')->applyFromArray(array('type'=>PHPExcel_Style_Fill::FILL_SOLID, 'startcolor'=>array('rgb'=>'000A75')));
 		$objSheet->getRowDimension(1)->setRowHeight(50);
 
 		// write header
@@ -255,25 +255,31 @@ class Main extends CI_Controller {
 			$objSheet->getCell('F1')->setValue('Evaluadores');
 			$objSheet->getCell('G1')->setValue('Competencias');
 			$objSheet->getCell('H1')->setValue('Responsabilidades');
-			$objSheet->getCell('I1')->setValue('360°');
-			$objSheet->getCell('J1')->setValue('Promedio');
-			$objSheet->getCell('K1')->setValue('Rating 2012');
-			$objSheet->getCell('L1')->setValue('Rating 2013');
-			$objSheet->getCell('M1')->setValue('Rating 2014');
-			$objSheet->getCell('N1')->setValue('Rating 2015');
-			$objSheet->getCell('O1')->setValue('Encargado de Feedback');
-			$objSheet->getCell('P1')->setValue('Comentarios de Desempeño');
-			$objSheet->getCell('Q1')->setValue('Observaciones de la Junta');
-			$objSheet->getCell('R1')->setValue('Acciones a Tomar');
+			$objSheet->getCell('I1')->setValue('Promedio');
+			$objSheet->getCell('J1')->setValue('Rating 2012');
+			$objSheet->getCell('K1')->setValue('Rating 2013');
+			$objSheet->getCell('L1')->setValue('Rating 2014');
+			$objSheet->getCell('M1')->setValue('Rating 2015');
+			$objSheet->getCell('N1')->setValue('Encargado de Feedback');
+			$objSheet->getCell('O1')->setValue('Comentarios de Desempeño');
+			$objSheet->getCell('P1')->setValue('Observaciones de la Junta');
+			$objSheet->getCell('Q1')->setValue('Acciones a Tomar');
 
 		$column=1;
 		foreach ($colaboradores as $colaborador) :
 			$column++;
-			$total_competencias=null;
-			$total_responsabilidades=null;
-			$total_proyectos=null;
-			$total_360=null;
-			$colaborador->total_360=null;
+
+			$total_c=0;
+			$total_r=0;
+			if($colaborador->nivel_posicion<=5)
+				$total_c= ($colaborador->autoevaluacion*.1) + ($colaborador->tres60*.1) + ($colaborador->competencias*.1);
+			else
+				$total_c= ($colaborador->autoevaluacion*.15) + ($colaborador->competencias*.15);
+			if(isset($colaborador->proyectos))
+				$total_r=(($colaborador->responsabilidades+$colaborador->proyectos)/2)*.7;
+			else
+				$total_r=$colaborador->responsabilidades*.7;
+
 			($res=$this->user_model->getHistorialByIdAnio($colaborador->id,'2012')) ? $colaborador->rating_2012=$res->rating : $colaborador->rating_2012=null;;
 			($res=$this->user_model->getHistorialByIdAnio($colaborador->id,'2013')) ? $colaborador->rating_2013=$res->rating : $colaborador->rating_2013=null;;
 			($res=$this->user_model->getHistorialByIdAnio($colaborador->id,'2014')) ? $colaborador->rating_2014=$res->rating : $colaborador->rating_2014=null;;
@@ -282,20 +288,11 @@ class Main extends CI_Controller {
 			foreach ($colaborador->evaluadores as $evaluador) :
 				$evaluadores .= $evaluador->nombre." / ";
 				$comentarios .= $evaluador->comentarios." / ";
-				$total_responsabilidades = $evaluador->responsabilidad;
-				$total_competencias = $evaluador->competencia;
 			endforeach;
 			if(isset($colaborador->evaluadoresProyecto)):
-				$dias_total=1;
 				foreach ($colaborador->evaluadoresProyecto as $evaluador) :
 					$evaluadores .= $evaluador->nombre." / ";
 					$comentarios .= $evaluador->comentarios." / ";
-					$diferencia=date_diff(date_create($evaluador->inicio_periodo),date_create($evaluador->fin_periodo));
-					$dias=(int)$diferencia->format("%a");
-					$dias_total+=$dias;
-				endforeach;
-				foreach ($colaborador->evaluadoresProyecto as $evaluador) :
-					$total_proyectos += $evaluador->responsabilidad*($dias/$dias_total);
 				endforeach;
 			endif;
 			if($colaborador->nivel_posicion <= 5):
@@ -304,17 +301,10 @@ class Main extends CI_Controller {
 					foreach ($colaborador->evaluadores360 as $evaluador) :
 						$evaluadores .= $evaluador->nombre." / ";
 						$comentarios .= $evaluador->comentarios." / ";
-						$total_360 += $evaluador->competencia;
 						$cont++;
 					endforeach;
 				endif;
-				($total_360) ? $total_360 = $total_360/$cont : $total_360 = 0;
-				(double)$total_competencias = ($total_competencias + $total_360 + $colaborador->autoevaluacion)/3;
-			else:
-				(double)$total_competencias = ($total_competencias + $colaborador->autoevaluacion)/2;
 			endif;
-			(isset($total_proyectos)) ? (double)$total_responsabilidades = (($total_responsabilidades + $total_proyectos)/2) : 
-				(double)$total_responsabilidades = $total_responsabilidades;
 			
 			$objSheet->getCell('A'.$column)->setValue($colaborador->nomina);
 			$objSheet->getCell('B'.$column)->setValue($colaborador->nombre);
@@ -322,38 +312,33 @@ class Main extends CI_Controller {
 			$objSheet->getCell('D'.$column)->setValue($colaborador->track);
 			$objSheet->getCell('E'.$column)->setValue($colaborador->posicion);
 			$objSheet->getCell('F'.$column)->setValue($evaluadores);
-			if($total_competencias)
-				$objSheet->getCell('G'.$column)->setValue(number_format($total_competencias,2));
-			if($total_responsabilidades)
-				$objSheet->getCell('H'.$column)->setValue(number_format($total_responsabilidades,2));
-			if($total_360)
-				$objSheet->getCell('I'.$column)->setValue(number_format($total_360,2));
-			if($colaborador->total)
-				$objSheet->getCell('J'.$column)->setValue(number_format($colaborador->total,2));
-			$objSheet->getCell('K'.$column)->setValue($colaborador->rating_2012);
-			$objSheet->getCell('L'.$column)->setValue($colaborador->rating_2013);
-			$objSheet->getCell('M'.$column)->setValue($colaborador->rating_2014);
-			$objSheet->getCell('P'.$column)->setValue($comentarios);
-			$objSheet->getStyle('A'.$column.':'.'R'.$column)->getAlignment()->setWrapText(true);
+			$objSheet->getCell('G'.$column)->setValue(number_format(floor($total_c*100)/100,2));
+			$objSheet->getCell('H'.$column)->setValue(number_format(floor($total_r*100)/100,2));
+			$objSheet->getCell('I'.$column)->setValue(number_format(floor($colaborador->total*100)/100,2));
+			$objSheet->getCell('J'.$column)->setValue($colaborador->rating_2012);
+			$objSheet->getCell('K'.$column)->setValue($colaborador->rating_2013);
+			$objSheet->getCell('L'.$column)->setValue($colaborador->rating_2014);
+			$objSheet->getCell('O'.$column)->setValue($comentarios);
+			$objSheet->getStyle('A'.$column.':'.'Q'.$column)->getAlignment()->setWrapText(true);
 			$objSheet->getRowDimension($column)->setRowHeight(-1);
 		endforeach;
 
 		$objSheet->getStyle('C2:C'.$column)->getNumberFormat()->setFormatCode('yyyy-mm-dd');
-		$objSheet->getStyle('A2:R'.$column)->getFont()->setSize(12);
-		$objSheet->getStyle('G2:I'.$column)->getFont()->setSize(16);
-		$objSheet->getStyle('J2:J'.$column)->getFont()->setSize(18);
-		$objSheet->getStyle('M2:M'.$column)->getFont()->setSize(24);
-		$objSheet->getStyle('A2:R'.$column)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+		$objSheet->getStyle('A2:Q'.$column)->getFont()->setSize(12);
+		$objSheet->getStyle('G2:H'.$column)->getFont()->setSize(16);
+		$objSheet->getStyle('I2:I'.$column)->getFont()->setSize(18);
+		$objSheet->getStyle('L2:L'.$column)->getFont()->setSize(24);
+		$objSheet->getStyle('A2:Q'.$column)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
 		// create some borders
 			// first, create the whole grid around the table
-			$objSheet->getStyle('A1:R'.$column)->getBorders()->
+			$objSheet->getStyle('A1:Q'.$column)->getBorders()->
 			getAllBorders()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 			// create medium border around the table
-			$objSheet->getStyle('A1:R'.$column)->getBorders()->
+			$objSheet->getStyle('A1:Q'.$column)->getBorders()->
 			getOutline()->setBorderStyle(PHPExcel_Style_Border::BORDER_MEDIUM);
 			// create a medium border on the header line
-			$objSheet->getStyle('A1:R1')->getBorders()->
+			$objSheet->getStyle('A1:Q1')->getBorders()->
 			getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_MEDIUM);
 
 		// autosize the columns
@@ -370,11 +355,10 @@ class Main extends CI_Controller {
 			$objSheet->getColumnDimension('K')->setAutoSize(true);
 			$objSheet->getColumnDimension('L')->setAutoSize(true);
 			$objSheet->getColumnDimension('M')->setAutoSize(true);
-			$objSheet->getColumnDimension('N')->setAutoSize(true);
-			$objSheet->getColumnDimension('O')->setWidth(20);
+			$objSheet->getColumnDimension('N')->setWidth(20);
+			$objSheet->getColumnDimension('O')->setWidth(40);
 			$objSheet->getColumnDimension('P')->setWidth(40);
 			$objSheet->getColumnDimension('Q')->setWidth(40);
-			$objSheet->getColumnDimension('R')->setWidth(40);
 
 
 		//tabla de resumen en hoja principal
@@ -403,7 +387,7 @@ class Main extends CI_Controller {
 			$letras=array('A','B','C','D','E','.05','.15','.65','.10','.05');
 			for ($i=1; $i <= 5; $i++) :
 				$objSheet->getCell('G'.($column+$i))->setValue($letras[$i-1]);
-				$objSheet->getCell('H'.($column+$i))->setValue('=COUNTIF($N$2:$N$'.($column-5).',"'.$letras[$i-1].'")');
+				$objSheet->getCell('H'.($column+$i))->setValue('=COUNTIF($M$2:$M$'.($column-5).',"'.$letras[$i-1].'")');
 				$objSheet->getCell('I'.($column+$i))->setValue('=H'.($column+$i).'/$H$'.($column+6));
 				$objSheet->getCell('J'.($column+$i))->setValue($letras[$i+4]);
 			endfor;
@@ -500,9 +484,6 @@ class Main extends CI_Controller {
 		$this->email->from('notificaciones.ch@advanzer.com','Portal de Evaluación Advanzer-Entuizer');
 		/*$this->email->to("micaela.llano@advanzer.com");
 		$this->email->bcc(array('jesus.salas@advanzer.com', 'enrique.bernal@advanzer.com'));
-		$this->email->subject('Captura de Compromisos Internos');
-		$this->email->message('<h2>Se ha adjuntado el archivo de soporte de la captura de Compromisos Internos</h2><hr>');
-		$this->email->attach(base_url("assets/docs/$file"));
 		*/$this->email->to("jesus.salas@advanzer.com");
 		$this->email->subject('Reporte de Evaluación para Junta Anual');
 		$this->email->message('<h2>Se ha generado el archivo de Reporte de Evaluación para la Junta Anual</h2><hr>');
