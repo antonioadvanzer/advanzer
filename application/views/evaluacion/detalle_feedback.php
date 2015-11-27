@@ -147,8 +147,10 @@
 						<tr>
 							<td align="center"><?php if($evaluaciones->auto):?>
 								<a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/".$evaluaciones->auto->asignacion);?>">
-									<img height="25px" src="<?= base_url('assets/images/fotos')."/".$evaluaciones->foto;?>"></a>
-								<?php else: ?><img height="25px" src="<?= base_url('assets/images/fotos')."/".$evaluaciones->foto;?>">
+									<img class="img-circle avatar avatar-original" height="40px" 
+										src="<?= base_url('assets/images/fotos')."/".$evaluaciones->foto;?>"></a>
+								<?php else: ?><img class="img-circle avatar avatar-original" height="40px" 
+									src="<?= base_url('assets/images/fotos')."/".$evaluaciones->foto;?>">
 								<?php endif;?>
 							</td>
 							<td><?= $evaluaciones->nombre;?></td>
