@@ -1,19 +1,13 @@
 <style type="text/css">
-	#carousel {
-		-moz-box-shadow: 0px 0px 20px #000; 
-		-webkit-box-shadow: 0px 0px 20px #000; 
-		box-shadow: 0px 0px 20px #000;
-	}
 	.accordion {
-	  margin: 40px auto;
 	  text-align: center;
 	}
 	.accordion h1, h2, h3, h4 {
-	  cursor: pointer;
 	  -webkit-margin-before: 0em;
 	  -webkit-margin-after: 0em;
 	}
 	.accordion h1 {
+	  margin: 10px auto;
 	  padding: 15px 20px;
 	  background-color: #444;
 	  font-size: 2rem;
@@ -26,7 +20,7 @@
 	  color: #999;
 	}
 	.accordion h2 {
-	  padding: 5px 25px;
+	  padding: 5px 100px;
 	  background: -webkit-gradient(linear, left bottom, left top, from(#B0B914), to(#FFF));
 	  font-size: 1.2rem;
 	  color: #666666;
@@ -38,29 +32,28 @@
 	}
 	.accordion label {
 	  width: 100%;
-	  padding: 5px 30px;
+	  padding: 5px 70px;
 	  font-size: 1.4rem;
 	  color: #000;
+	  margin-bottom: 0px;
 	}
-	.accordion h3:hover {
-	  background-color: #000;
-	  color: #FFF;
-	}
-	.accordion h4 {
-	  padding: 5px 35px;
-	  background-color: #ffc25a;
-	  font-size: .9rem;
-	  color: #af720a; 
-	}
-	.accordion h4:hover {
-	  background-color: #e0b040;
+	.accordion h3 {
+	  padding: 5px;
+	  font-size: 1.1rem;
+	  color: #af720a;
+	  background-color: #E3E3E3;
+	  border-radius: 10px 10px 10px 10px;
 	}
 	.accordion p {
-	  padding: 0px 35px;
-	  background-color: #ddd;
-	  font-size: .8rem;
+	  text-transform: uppercase;
+	  padding: 0px 100px 0px 60px;
 	  color: #333;
-	  line-height: 1.3rem;
+	}
+	.accordion hr {
+		margin-top: 0px;
+		margin-bottom: 0px;
+		border: 0;
+		border-top: 1px solid #eee;
 	}
 </style>
 <script>
@@ -87,170 +80,99 @@
 			<label id="msg"></label>
 		</div>
 	</div>
-	<div id="carousel" class="carousel slide" data-wrap="false" data-ride="carousel" data-interval="false">
-		<!-- Indicators -->
-		<ol class="carousel-indicators">
-			<li data-target="#carousel" data-slide-to="0" class="active"></li>
-			<?php $k=1; if(isset($evaluacion->dominios)): ?>
-				<li data-target="#carousel" data-slide-to="<?= $k++;?>"></li>
-				<?php for ($i=1; $i <= count($evaluacion->dominios); $i++) : ?>
-					<li data-target="#carousel" data-slide-to="<?= $k++;?>"></li>
-				<?php endfor;
-			endif;
-			if(isset($evaluacion->indicadores)): ?>
-				<li data-target="#carousel" data-slide-to="<?= $k++;?>"></li>
-				<?php for ($i=1; $i <= count($evaluacion->indicadores); $i++) : ?>
-					<li data-target="#carousel" data-slide-to="<?= $k++;?>"></li>
-				<?php endfor;
-			endif; ?>
-			<li data-target="#carousel" data-slide-to="<?= $k?>"></li>
-		</ol>
-		<div class="carousel-inner" style="background-color:#dedede;" role="listbox">
-			<div class="item active" align="center" style="min-height:550px;">
-				<img height="100%" style="opacity:0.3;position:absolute" src="<?= base_url('assets/images/evaluacion.jpg');?>">
-				<div class="carousel-caption">
-					<h3 style="cursor:default;">Detalle de Evaluación</h3>
-				</div>
-			</div>
-			<?php if(isset($evaluacion)) if($evaluacion->tipo == 1):
-				if(isset($evaluacion->dominios)): ?>
-					<div class="item" align="center" style="min-height:550px;">
-						<img width="100%" style="opacity:0.3;position:absolute" src="<?= base_url('assets/images/responsabilidades.jpg');?>">
-						<div class="carousel-caption"><h3 style="cursor:default;">Responsabilidades</h3></div>
-					</div>
+	<?php if(isset($evaluacion)):
+		$total=0;
+		if($evaluacion->tipo == 1 && ($evaluacion->anual==1 || $evaluacion->evaluador == $evaluacion->evaluado)):
+			if(isset($evaluacion->dominios)): 
+				$total = $resultado->competencias*.3 + $resultado->responsabilidades*.7 ?>
+				<div class="row" align="center"><div class="col-md-12"><h1>Responsabilidades Funcionales</h1></div></div>
+				<div class="row">
 					<?php foreach ($evaluacion->dominios as $dominio) : if(count($dominio->responsabilidades) > 0): ?>
-						<div class="item" style="min-height:470px;">
-							<aside class="accordion" style="max-width:70%;">
+						<div class="col-md-12">
+							<aside class="accordion">
 								<h1><?= $dominio->nombre;?></h1>
 								<?php foreach ($dominio->responsabilidades as $resp) :?>
-									<label>
-										<div class="col-md-12">
-											<div class="form-group" align="center">
-												<h2><?= $resp->nombre;?><span style="min-width:100px;float:right;">
-														<i>Respuesta</i>: 
-														<select class="form-control" id="respuesta" disabled 
-															style="height:15px;padding: 0px 10px;font-size:10px;max-width:50px;display:inline">
-															<?php for ($i=5; $i >= 1; $i--) : ?>
-																<option <?php if($resp->respuesta == $i) echo "selected";?>><?= $i;?></option>
-															<?php endfor; ?>
-														</select>
-													</span>
-													<label><?= $resp->descripcion;?></label>
-												</h2>
-												<div align="left">
-													<p><ol reversed>
-													<?php foreach ($resp->metricas as $metrica) : ?>
-														<li><?= $metrica->descripcion;?></li>
-													<?php endforeach; ?>
-													</ol></p>
-												</div>
-											</div>
-										</div>
-										<div class="col-md-12">
-											<div class="form-group" align="center">
-												<textarea id="justificacion" class="form-control" rows="5" style="max-width:300px;text-align:center;
-													<?php if($resp->respuesta=="" || $resp->respuesta == 3)echo'display:none;';?>" 
-													disabled><?= $resp->justificacion;?></textarea>
-											</div>
-										</div>
+									<label style="padding: 5px 0px;">
+										<h2><?= $resp->nombre;?><span style="min-width:100px;float:right;">
+												<i>Respuesta</i>: <?= $resp->respuesta;?>
+											</span>
+											<?php if($resp->justificacion):?>Justificación: <label><?= $resp->justificacion;?></label><?php endif;?>
+										</h2>
 									</label>
 								<?php endforeach; ?>
 							</aside>
 						</div>
-					<?php endif; endforeach; 
-				endif;
-				if(isset($evaluacion->indicadores)): ?>
-					<div class="item" align="center" style="min-height:550px;">
-						<img width="100%" style="opacity:0.3;position:absolute" src="<?= base_url('assets/images/competencias.jpg');?>">
-						<div class="carousel-caption"><h3 style="cursor:default;">Competencias</h3></div>
-					</div>
+					<?php endif; endforeach; ?>
+				</div>
+			<?php else:
+				$total=$resultado->autoevaluacion;
+			endif;
+			if(isset($evaluacion->indicadores)): ?>
+				<div class="row" align="center"><div class="col-md-12"><h1>Competencias Laborales</h1></div></div>
+				<div class="row">
 					<?php foreach ($evaluacion->indicadores as $indicador) : ?>
-						<div class="item" style="min-height:470px;">
-							<aside class="accordion" style="max-width:70%;">
+						<div class="col-md-12">
+							<aside class="accordion">
 								<h1><?= $indicador->nombre;?></h1>
-								<div class="col-md-12">
 								<?php foreach ($indicador->competencias as $comp) : ?>
-									<h2><?= $comp->nombre;?>
-										<label><?= $comp->descripcion;?></label>
-									</h2>
-									<div align="left">
-										<ul type="square"><label>
+									<h2><?= $comp->nombre;?></h2>
+									<h3 align="left"><hr>
 										<?php foreach ($comp->comportamientos as $comportamiento) : ?>
-											<label><?= $comportamiento->descripcion;?><span style="min-width:70px;float:right">
-												<i>Respuesta</i>: 
-												<select onchange="this.form.justificacion.html='';
-													verify(this.form);" class="form-control" id="respuesta" disabled 
-													style="height:15px;padding: 0px 10px;font-size:10px;max-width:50px;display:inline">
-													<option disabled selected value="">-- Selecciona tu respuesta --</option>
-													<?php for ($i=5; $i >= 1; $i--) : ?>
-														<option <?php if(isset($comportamiento->respuesta) && $comportamiento->respuesta == $i)
-															echo "selected";?>><?= $i;?></option>
-													<?php endfor; ?>
-												</select>
-											</span></label>
-											<div class="col-md-6">
-												<div class="form-group" align="center">
-													<textarea id="justificacion" class="form-control" rows="2" style="max-width:300px;text-align:center;
-														<?php if($comportamiento->respuesta=="" || $comportamiento->respuesta == 3)echo'display:none;';?>" 
-														onkeyup="if(this.value.trim().split(' ').length >= 4){ this.form.boton.style.display='';
-															}else{ this.form.boton.style.display='none';}" placeholder="Justifique su respuesta"
-														required disabled><?= $comportamiento->justificacion;?></textarea>
-												</div>
-											</div>
-										<?php endforeach; ?></label></ul>
-									</div>
+											<p><?= $comportamiento->descripcion;?><span style="min-width:100px;float:right;display:block;">
+												<i>Respuesta</i>: <?= $comportamiento->respuesta;?></span>
+												<?php if($comportamiento->justificacion):?>
+													<label><?= $comportamiento->justificacion;?></label>
+												<?php endif;?>
+											</p><hr>
+										<?php endforeach; ?>
+									</h3>
 								<?php endforeach; ?>
-								</div>
 							</aside>
 						</div>
-					<?php endforeach;
-				endif;
-			else :
-				foreach ($evaluacion->dominios as $dominio) : ?>
-					<div class="item" align="center" style="min-height:300px;">
-						<div style="width:60%;position:absolute;top:5%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
-							<div class="col-md-12">
-								<div class="form-group" align="center">
-									<label><?= $dominio->descripcion;?></label>
-									<select id="respuesta" name="estatus" class="form-control" style="max-width:60px;text-align:center"
-										onchange="verify(this.form);" required disabled>
-										<option value="" selected disabled>--</option>
-										<?php for ($i=5; $i > 0; $i--) : ?>
-											<option value="<?= $i;?>" <?php if($dominio->respuesta==$i)echo"selected";?>><?= $i;?></option>
-										<?php endfor; ?>
-									</select>
-								</div>
-							</div>
-							<div class="col-md-12">
-								<div class="form-group" align="center">
-									<textarea id="justificacion" class="form-control" rows="5" style="max-width:300px;text-align:center;
-										<?php if($dominio->respuesta == 3 || $dominio->respuesta == 0)echo'display:none;';?>" 
-										onkeyup="if(this.value.split(' ').length >= 4){ this.form.boton.style.display='';
-											}else{ this.form.boton.style.display='none';}" placeholder="Justifique su respuesta"
-										required disabled><?= $dominio->justificacion;?></textarea>
-								</div>
-							</div>
-						</div>
-						<div class="carousel-caption"><h3 style="cursor:default;"><?= $dominio->nombre;?></h3></div>
-					</div>
-				<?php endforeach;
-			endif; ?>
-			<div class="item" align="center" style="min-height:300px;">
-				<img width="100%" style="opacity:0.3;position:absolute" src="<?= base_url('assets/images/gracias.jpg');?>">
-				<div style="width:60%;position:absolute;top:15%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
-					<div class="col-md-12">
-						<div class="form-group" align="center" id="finalizar">
-							<label>Comentarios generales de la evaluación</label>
-							<textarea id="comentarios" class="form-control" rows="5" style="max-width:300px;text-align:center" 
-								disabled><?= $evaluacion->comentarios;?></textarea>
-						</div>
-					</div>
+					<?php endforeach; ?>
 				</div>
+			<?php endif;
+		elseif($evaluacion->tipo == 0) :
+			$total=$resultado->proyectos; ?>
+			<div class="row" align="center"><div class="col-md-12"><h1>Responsabilidades Funcionales</h1></div></div>
+			<div class="row">
+				<?php foreach ($evaluacion->dominios as $dominio) : ?>
+					<div class="col-md-12">
+						<aside class="accordion">
+							<h1><?= $dominio->nombre;?></h1>
+							<label><h2><i>Respuesta: </i><?=$dominio->respuesta;?>
+								<?php if($dominio->justificacion): ?><label><?= $dominio->justificacion;?></label><?php endif; ?>
+							</h2></label>
+						</aside>
+					</div>
+				<?php endforeach; ?>
 			</div>
+		<?php else:
+			$total=$resultado->tres60; ?>
+			<div class="row" align="center"><div class="col-md-12"><h1>Competencias Laborales</h1></div></div>
+			<div class="row">
+				<?php foreach ($evaluacion->indicadores as $indicador) : ?>
+					<div class="col-md-12">
+						<aside class="accordion">
+							<h1><?= $indicador->nombre;?></h1>
+							<?php foreach ($indicador->competencias as $competencia) : ?>
+								<h2><?= $competencia->nombre; ?><span style="min-width:100px;float:right;display:block;">
+									<i>Respuesta: </i><?=$competencia->respuesta;?></span>
+									<?php if($competencia->justificacion): ?><label><?= $competencia->justificacion;?></label><?php endif; ?>
+								</h2>
+							<?php endforeach; ?>
+						</aside>
+					</div>
+				<?php endforeach; ?>
+			</div>
+		<?php endif;
+	endif; ?>
+	<div class="row" align="center"><div class="col-md-12"><h1>Comentarios Generales</h1></div></div>
+	<div class="row" align="center">
+		<div style="col-md-12">
+			<aside class="accordion">
+				<label><?= $evaluacion->comentarios;?></label>
+			</aside>
 		</div>
-		<!-- Controls -->
-		<a class="left carousel-control" href="#carousel" role="button" data-slide="prev">
-			<span class="glyphicon glyphicon-chevron-left"></span></a>
-		<a class="right carousel-control" href="#carousel" role="button" data-slide="next">
-			<span class="glyphicon glyphicon-chevron-right"></span></a>
+		<div class="col-md-12"><h1>Calificación:</h1><label><big><?= number_format(floor($total*100)/100,2);?></big></label></div>
 	</div>

@@ -210,9 +210,6 @@ class Main extends CI_Controller {
 		$this->email->from('notificaciones.ch@advanzer.com','Portal de Evaluación Advanzer-Entuizer');
 		/*$this->email->to("micaela.llano@advanzer.com");
 		$this->email->bcc(array('jesus.salas@advanzer.com', 'enrique.bernal@advanzer.com'));
-		$this->email->subject('Captura de Compromisos Internos');
-		$this->email->message('<h2>Se ha adjuntado el archivo de soporte de la captura de Compromisos Internos</h2><hr>');
-		$this->email->attach(base_url("assets/docs/$file"));
 		*/$this->email->to("jesus.salas@advanzer.com");
 		$this->email->subject('Captura de Compromisos Internos');
 		$this->email->message('<h2>Se ha adjuntado el archivo de soporte de la captura de Compromisos Internos</h2><hr>');
@@ -272,13 +269,13 @@ class Main extends CI_Controller {
 			$total_c=0;
 			$total_r=0;
 			if($colaborador->nivel_posicion<=5)
-				$total_c= ($colaborador->autoevaluacion*.1) + ($colaborador->tres60*.1) + ($colaborador->competencias*.1);
+				$total_c= ($colaborador->autoevaluacion + $colaborador->tres60 + $colaborador->competencias)/3;
 			else
-				$total_c= ($colaborador->autoevaluacion*.15) + ($colaborador->competencias*.15);
+				$total_c= ($colaborador->autoevaluacion + $colaborador->competencias)/2;
 			if(isset($colaborador->proyectos))
-				$total_r=(($colaborador->responsabilidades+$colaborador->proyectos)/2)*.7;
+				$total_r=($colaborador->responsabilidades+$colaborador->proyectos)/2;
 			else
-				$total_r=$colaborador->responsabilidades*.7;
+				$total_r=$colaborador->responsabilidades;
 
 			($res=$this->user_model->getHistorialByIdAnio($colaborador->id,'2012')) ? $colaborador->rating_2012=$res->rating : $colaborador->rating_2012=null;;
 			($res=$this->user_model->getHistorialByIdAnio($colaborador->id,'2013')) ? $colaborador->rating_2013=$res->rating : $colaborador->rating_2013=null;;
@@ -606,7 +603,9 @@ class Main extends CI_Controller {
 		$this->email->clear(TRUE);
 
 		$this->email->from('notificaciones.ch@advanzer.com','Portal de Evaluación Advanzer-Entuizer');
-		$this->email->to("jesus.salas@advanzer.com"); //$this->email->to($destinatario);
+		/*$this->email->to("micaela.llano@advanzer.com");
+		$this->email->bcc(array('enrique.bernal@advanzer.com','jesus.salas@advanzer.com'))
+		*/$this->email->to("jesus.salas@advanzer.com"); //$this->email->to($destinatario);
 		$this->email->subject('Recordatorio de Evaluación');
 		$this->email->message($mensaje);
 

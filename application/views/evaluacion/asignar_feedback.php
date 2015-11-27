@@ -23,7 +23,7 @@
 							<th data-halign="center">Nombre</th>
 							<th data-halign="center">Area</th>
 							<th data-halign="center">Posición</th>
-							<th data-halign="center">Resultado</th>
+							<th data-halign="center">Rating</th>
 							<th data-halign="center">Estatus</th>
 						</tr>
 					</thead>

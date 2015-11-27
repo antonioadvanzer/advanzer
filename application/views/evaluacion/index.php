@@ -30,29 +30,16 @@
 				</thead>
 				<tbody data-link="row">
 					<?php foreach ($colaboradores as $colab):
-						$auto=0;
-						$anual=0;
 						$total_c=0;
 						$total_r=0;
-						if($colab->nivel_posicion<=5):
-							$auto=$colab->autoevaluacion*.1;
-							$tres60=$colab->tres60*.1;
-							$competencias=$colab->competencias*.1;
-							$total_c= $auto + $tres60 + $competencias;
-						else:
-							unset($tres60);
-							$auto=$colab->autoevaluacion*.15;
-							$competencias=$colab->competencias*.15;
-							$total_c= $auto + $competencias;
-						endif;
-						if(isset($colab->proyectos)):
-							$total_r=(($colab->responsabilidades+$colab->proyectos)/2)*.7;
-							$proyectos=$colab->proyectos*.35;
-							$responsabilidades=$colab->responsabilidades*.35;
-						else:
-							$total_r=$colab->responsabilidades*.7;
-							$responsabilidades=$colab->responsabilidades*.7;
-						endif;
+						if($colab->nivel_posicion<=5)
+							$total_c= ($colab->autoevaluacion + $colab->tres60 + $colab->competencias)/3;
+						else
+							$total_c= ($colab->autoevaluacion + $colab->competencias)/2;
+						if(isset($colab->proyectos))
+							$total_r=($colab->responsabilidades+$colab->proyectos)/2;
+						else
+							$total_r=$colab->responsabilidades;
 						?>
 						<tr>
 							<td align="center"><small><a href="<?= base_url("evaluacion/revisar/$colab->id");?>">
@@ -72,9 +59,9 @@
 								<tbody data-link="row">
 									<tr>
 										<td><small><?= number_format(floor($total_c*100)/100,2);?></small></td>
-										<td><small><?= number_format(floor($auto*100)/100,2);?></small></td>
-										<td><small><?= number_format(floor($competencias*100)/100,2);?></small></td>
-										<td><small><?php if(isset($tres60)) echo number_format(floor($tres60*100)/100,2);?></small></td>
+										<td><small><?= number_format(floor($colab->autoevaluacion*100)/100,2);?></small></td>
+										<td><small><?= number_format(floor($colab->competencias*100)/100,2);?></small></td>
+										<td><small><?php if(isset($colab->tres60)) echo number_format(floor($colab->tres60*100)/100,2);?></small></td>
 									</tr>
 								</tbody>
 							</table></td>
@@ -89,8 +76,8 @@
 								<tbody data-link="row">
 									<tr>
 										<td><small><?= number_format(floor($total_r*100)/100,2);?></small></td>
-										<td><small><?= number_format(floor($responsabilidades*100)/100,2);?></small></td>
-										<td><small><?php if(isset($colab->proyectos)) echo number_format(floor($proyectos*100)/100,2);?></small></td>
+										<td><small><?= number_format(floor($colab->responsabilidades*100)/100,2);?></small></td>
+										<td><small><?php if(isset($colab->proyectos)) echo number_format(floor($colab->proyectos*100)/100,2);?></small></td>
 									</tr>
 								</tbody>
 							</table></td>

@@ -37,10 +37,10 @@
 		<input type="hidden" id="id" value="<?= $feedback->id;?>">
 		<div class="row" align="center">
 			<div class="col-md-12">
-				<label>Rating Obtenido:</label><span><big>-<?= $feedback->rating;?></big></span>
+				<label>Rating Obtenido: </label><span><big><?= $feedback->rating;?></big></span>
 			</div>
 			<div class="col-md-12">
-				<label>Comentarios de la Junta:</label><span>-<?= $feedback->comentarios;?></span>
+				<label>Comentarios de la Junta: </label><span><?= $feedback->comentarios;?></span>
 			</div>
 			<div class="col-md-2">
 				<img class="img-circle avatar avatar-original" src="<?= base_url("assets/images/fotos/$feedback->foto");?>" height="120px">
@@ -49,15 +49,23 @@
 			<div class="col-md-5">
 				<div class="form-group">
 					<label for="fortalezas">Fortalezas/Logros:</label>
-					<textarea onkeyup="$('#guardar').show('slow');$('#enviar').hide('slow');" class="form-control" style="text-align:center;" 
-					rows="6" id="fortalezas" required <?php if($feedback->estatus !=0)echo"disabled";?>><?= $feedback->fortalezas;?></textarea>
+					<?php if($feedback->estatus ==0):?>
+						<textarea onkeyup="$('#guardar').show('slow');$('#enviar').hide('slow');" class="form-control" 
+							style="text-align:center;" rows="6" id="fortalezas" required><?= $feedback->fortalezas;?></textarea>
+					<?php else: ?>
+						<p style="text-align:center;"><?= $feedback->fortalezas;?></p>
+					<?php endif;?>
 				</div>
 			</div>
 			<div class="col-md-5">
 				<div class="form-group">
 					<label for="oportunidad">Área(s) de Oportunidad:</label>
-					<textarea onkeyup="$('#guardar').show('slow');$('#enviar').hide('slow');" class="form-control" style="text-align:center;" 
-					rows="6" id="oportunidad" required <?php if($feedback->estatus !=0)echo"disabled";?>><?= $feedback->oportunidad;?></textarea>
+					<?php if($feedback->estatus ==0):?>
+						<textarea onkeyup="$('#guardar').show('slow');$('#enviar').hide('slow');" class="form-control" 
+							style="text-align:center;" rows="6" id="oportunidad" required><?= $feedback->oportunidad;?></textarea>
+					<?php else: ?>
+						<p style="text-align:center;"><?= $feedback->oportunidad;?></p>
+					<?php endif;?>
 				</div>
 			</div>
 		</div>
@@ -90,46 +98,64 @@
 		<div class="col-md-12">
 			<?php if(isset($evaluaciones->evaluadores) && count($evaluaciones->evaluadores) > 0): ?>
 				<h3><b>Evaluaciones:</b></h3>
-				<table id="tbl" align="center" class="table-hover table-condensed table-striped" data-toggle="table" 
-					 data-show-columns="true" data-hover="true" data-striped="true" data-show-toggle="true">
+				<table id="tbl" align="center" class="table table-hover table-condensed table-striped">
 					<thead>
 						<tr>
 							<th data-halign="center"></th>
 							<th data-halign="center">Evaluador</th>
+							<th data-halign="center">Calificación</th>
 							<th data-halign="center">Evaluación</th>
 							<th data-halign="center">Comentarios</th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody data-link="row">
 						<?php foreach ($evaluaciones->evaluadores as $evaluador):?>
 							<tr>
-								<td><img class="img-circle avatar avatar-original" height="40px" 
-									src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></td>
+								<td><a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion");?>">
+									<img class="img-circle avatar avatar-original" height="40px" 
+										src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></a></td>
 								<td><?= $evaluador->nombre;?></td>
-								<td><?= $evaluador->evaluacion;?></td>
+								<td><?= number_format(($evaluador->competencia*.3)+($evaluador->responsabilidad*.7),2);?></td>
+								<td>Anual</td>
 								<td><?php if($evaluador->comentarios) echo $evaluador->comentarios;?></td>
 							</tr>
 						<?php endforeach;
 						if(isset($evaluaciones->evaluadores360) && count($evaluaciones->evaluadores360) > 0)
 							foreach ($evaluaciones->evaluadores360 as $evaluador):?>
 								<tr>
-									<td><img class="img-circle avatar avatar-original" height="40px" 
-										src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></td>
+									<td><a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion");?>">
+										<img class="img-circle avatar avatar-original" height="40px" 
+											src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></a></td>
 									<td><?= $evaluador->nombre;?></td>
-									<td><?= $evaluador->evaluacion;?></td>
+									<td><?= $evaluador->competencia;?></td>
+									<td>360</td>
 									<td><?= $evaluador->comentarios;?></td>
 								</tr>
 							<?php endforeach;
 						if(isset($evaluaciones->evaluadoresProyecto) && count($evaluaciones->evaluadoresProyecto) > 0)
 							foreach ($evaluaciones->evaluadoresProyecto as $evaluador):?>
 								<tr>
-									<td><img class="img-circle avatar avatar-original" height="40px" 
-										src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></td>
+									<td><a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion/1");?>">
+										<img class="img-circle avatar avatar-original" height="40px" 
+											src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></a></td>
 									<td><?= $evaluador->nombre;?></td>
-									<td><?= $evaluador->evaluacion;?></td>
+									<td><?= number_format($evaluador->responsabilidad,2);?></td>
+									<td>Proyecto - <?= $evaluador->evaluacion;?></td>
 									<td><?php if($evaluador->comentarios) echo $evaluador->comentarios;?></td>
 								</tr>
 							<?php endforeach; ?>
+						<tr>
+							<td align="center"><?php if($evaluaciones->auto):?>
+								<a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/".$evaluaciones->auto->asignacion);?>">
+									<img height="25px" src="<?= base_url('assets/images/fotos')."/".$evaluaciones->foto;?>"></a>
+								<?php else: ?><img height="25px" src="<?= base_url('assets/images/fotos')."/".$evaluaciones->foto;?>">
+								<?php endif;?>
+							</td>
+							<td><?= $evaluaciones->nombre;?></td>
+							<td align="center"><?php if($evaluaciones->auto) echo number_format($evaluaciones->autoevaluacion,2);?></td>
+							<td>AUTOEVALUACIÓN</td>
+							<td><?php if($evaluaciones->auto) echo $evaluaciones->auto->comentarios;?></td>
+						</tr>
 					</tbody>
 				</table>
 			<?php endif; ?>
