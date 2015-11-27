@@ -524,11 +524,11 @@ class Evaluacion extends CI_Controller {
                         <label><?= $comp->descripcion;?></label>
                         </h2>
                         <div align="left">
-                            <label><?php
+                            <p><?php
                                 foreach ($this->evaluacion_model->getComportamientoByCompetencia($comp->id,$posicion) as $comportamiento) : ?>
                                         <span class="glyphicon glyphicon-ok"><?= $comportamiento->descripcion;?></span>
                                 <?php endforeach; ?>
-                            </label>
+                            </p>
                         </div> <?php
                     endforeach; ?>
                 </div> <?php
