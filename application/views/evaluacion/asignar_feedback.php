@@ -66,7 +66,7 @@
 									<img class="img-circle avatar avatar-original" height="40px" src="<?= base_url('assets/images/fotos')."/".$colab->foto;?>">
 								<?php endif; ?></td>
 								<td><small><?= $colab->nombre;?></small></td>
-								<td><small><?php if($colab->estatus_f==0) echo "Pendiente"; if($colab->estatus_f==1)echo"Enviado";else echo"Enterado";?></small></td>
+								<td><small><?php if($colab->estatus_f==0) echo "Pendiente"; elseif($colab->estatus_f==1)echo"Enviado";else echo"Enterado";?></small></td>
 							</tr>
 						<?php endforeach; ?>
 					</tbody>
