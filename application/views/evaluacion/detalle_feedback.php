@@ -111,7 +111,7 @@
 					<tbody data-link="row">
 						<?php foreach ($evaluaciones->evaluadores as $evaluador):?>
 							<tr>
-								<td><a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion");?>">
+								<td align="center"><a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion");?>">
 									<img class="img-circle avatar avatar-original" height="40px" 
 										src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></a></td>
 								<td><?= $evaluador->nombre;?></td>
@@ -123,7 +123,7 @@
 						if(isset($evaluaciones->evaluadores360) && count($evaluaciones->evaluadores360) > 0)
 							foreach ($evaluaciones->evaluadores360 as $evaluador):?>
 								<tr>
-									<td><a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion");?>">
+									<td align="center"><a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion");?>">
 										<img class="img-circle avatar avatar-original" height="40px" 
 											src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></a></td>
 									<td><?= $evaluador->nombre;?></td>
@@ -135,7 +135,7 @@
 						if(isset($evaluaciones->evaluadoresProyecto) && count($evaluaciones->evaluadoresProyecto) > 0)
 							foreach ($evaluaciones->evaluadoresProyecto as $evaluador):?>
 								<tr>
-									<td><a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion/1");?>">
+									<td align="center"><a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion/1");?>">
 										<img class="img-circle avatar avatar-original" height="40px" 
 											src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></a></td>
 									<td><?= $evaluador->nombre;?></td>
@@ -152,7 +152,7 @@
 								<?php endif;?>
 							</td>
 							<td><?= $evaluaciones->nombre;?></td>
-							<td align="center"><?php if($evaluaciones->auto) echo number_format($evaluaciones->autoevaluacion,2);?></td>
+							<td><?php if($evaluaciones->auto) echo number_format($evaluaciones->autoevaluacion,2);?></td>
 							<td>AUTOEVALUACIÓN</td>
 							<td><?php if($evaluaciones->auto) echo $evaluaciones->auto->comentarios;?></td>
 						</tr>
