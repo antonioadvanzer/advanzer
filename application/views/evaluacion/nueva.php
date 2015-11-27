@@ -129,10 +129,15 @@
 	<script type="text/javascript">
 		$(document).ready(function() {
 			$('#tipo').change(function() {
-				if($('#tipo').val() == 1)
+				if($('#tipo').val() == 1){
 					$('#proyecto').hide('slow');
-				else
+					$('#lider').removeAttr('required');
+					$('#agregar').removeAttr('required');
+				}else{
 					$('#proyecto').show('slow');
+					$('#lider').attr('required','required');
+					$('#agregar').attr('required','required');
+				}
 			});
 			$('#btnAgregar').click(function() {
 				if($('#quitar :selected').length > 0){
@@ -178,6 +183,10 @@
 					type: 'POST',
 					data: {'anio':anio,'tipo':tipo,'nombre':nombre,'fin':fin,'inicio':inicio,'lider':lider,'agregar':agregar,'fin_p':fin_p,
 						'inicio_p':inicio_p},
+					beforeSend: function (xhr) {
+						$('#create').hide('slow');
+						$('#cargando').show('slow');
+					},
 					success: function(data) {
 						console.log(data);
 						var returnData = JSON.parse(data);
