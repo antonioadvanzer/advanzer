@@ -21,7 +21,6 @@
 	}
 	.accordion h2 {
 	  padding: 5px 100px;
-	  background: -webkit-gradient(linear, left bottom, left top, from(#B0B914), to(#FFF));
 	  font-size: 1.2rem;
 	  color: #666666;
 	  text-transform: uppercase;
@@ -60,7 +59,10 @@
 	document.write('\
 		<style>\
 		.accordion h2 {\
-				background: -webkit-gradient(linear, left top, left bottom, from(#fff), to('+color+'));\
+				background: -webkit-linear-gradient(#fff,'+color+'); /* For Safari 5.1 to 6.0 */\
+				background: -o-linear-gradient(#fff,'+color+'); /* For Opera 11.1 to 12.0 */\
+				background: -moz-linear-gradient(#fff,'+color+'); /* For Firefox 3.6 to 15 */\
+				background: linear-gradient(#fff,'+color+'); /* Standard syntax (must be last) */\
 			}\
 		</style>\
 	');
