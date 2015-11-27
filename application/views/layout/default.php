@@ -186,7 +186,7 @@
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<?php $idU=$this->session->userdata('id'); if($idU): ?>
-						<li><a href="#" style="cursor:default"><?= $this->session->userdata('nombre');?></a></li>
+						<li><a href="#" style="cursor:default"><small><?= $this->session->userdata('nombre');?></small></a></li>
 						<li><a href="<?= base_url('logout'); ?>">LogOut</a></li>
 					<?php endif; ?>
 				</ul>

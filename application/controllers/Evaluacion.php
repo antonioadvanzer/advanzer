@@ -567,7 +567,7 @@ class Evaluacion extends CI_Controller {
         $posicion = $this->session->userdata('posicion');
         if($posicion < 3)
             $posicion=3;
-        if(!empty($area) && !empty($posicion)){
+        if(!empty($area)):
             //get perfil de evaluación de responsabilidades
             $data['dominios'] = $this->evaluacion_model->getResponsabilidadByArea($area,$posicion);
             foreach ($data['dominios'] as $dominio) :
@@ -576,6 +576,8 @@ class Evaluacion extends CI_Controller {
                     $responsabilidad->metricas = $this->evaluacion_model->getMetricaByObjetivo($responsabilidad->id);
                 endforeach;
             endforeach;
+        endif;
+        if(!empty($posicion)):
             //get perfil de evaluacion de competencias
             $data['indicadores'] = $this->evaluacion_model->getIndicadoresByPosicion($posicion);
             foreach ($data['indicadores'] as $indicador) :
@@ -584,7 +586,7 @@ class Evaluacion extends CI_Controller {
                     $competencia->comportamientos = $this->evaluacion_model->getComportamientoByCompetencia($competencia->id,$posicion);
                 endforeach;
             endforeach;
-        }
+        endif;
         $data['areas']=$this->area_model->getAll(1);
         $data['area_usuario'] = $area;
         $this->layout->title('Advanzer - Perfil de Evaluación');

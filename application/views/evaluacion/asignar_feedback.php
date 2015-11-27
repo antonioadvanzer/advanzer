@@ -31,7 +31,7 @@
 						<?php foreach ($asignaciones as $colab):?>
 							<tr>
 								<td><a href="<?= base_url("evaluacion/update_feedback/$colab->feedback");?>">
-									<img height="25px" src="<?= base_url('assets/images/fotos')."/".$colab->foto;?>"></a></td>
+									<img class="img-circle avatar avatar-original" height="40px" src="<?= base_url('assets/images/fotos')."/".$colab->foto;?>"></a></td>
 								<td><small><?= $colab->nombre;?></small></td>
 								<td><small><?= $colab->area;?></small></td>
 								<td><small><?= $colab->posicion;?></small></td>

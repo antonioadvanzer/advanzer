@@ -1,6 +1,7 @@
 <style type="text/css">
 	.accordion {
-	  margin: auto auto;
+	  margin: 40px auto;
+	  text-align: center;
 	}
 	.accordion h1, h2, h3, h4 {
 	  cursor: pointer;
@@ -10,7 +11,6 @@
 	.accordion h1 {
 	  padding: 15px 20px;
 	  background-color: #444;
-	  /*font-family: Lobster;*/
 	  font-size: 2rem;
 	  font-weight: normal;
 	  color: #FFF;
@@ -31,7 +31,6 @@
 	.accordion h2 {
 	  padding: 5px 25px;
 	  background: -webkit-gradient(linear, left bottom, left top, from(#B0B914), to(#FFF));
-	  /*background-color: #B0B914;*/
 	  font-size: 1.4rem;
 	  color: #666666;
 	  text-transform: uppercase;
@@ -59,13 +58,18 @@
 	  background-color: #e0b040;
 	}
 	.accordion p {
-	  padding: 15px 35px;
+	  padding: 15px 20px;
 	  background-color: #ddd;
 	  font-size: 1.2rem;
 	  color: #333;
+	  line-height: 1.3rem;
 	}
-	.accordion span {
-		display: block;
+	.accordion ol {
+	  padding: 30px 20px;
+	  color: #333;
+	  background-color: #ddd;
+	  margin-top: 0px;
+	  margin-bottom: 0px;
 	}
 </style>
 <script>
@@ -94,6 +98,7 @@
   	<div class="input-group">
 	  <span class="input-group-addon">Área</span>
 	  <select name="area" id="area" class="form-control">
+		<option value="" selected disabled>-- Selecciona un área --</option>
 		<?php foreach ($areas as $area) : ?>
 		  <option value="<?= $area->id;?>" <?php if($area->id == $area_usuario) echo "selected";?>><?= $area->nombre;?></option>
 		<?php endforeach; ?>

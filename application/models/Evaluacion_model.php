@@ -52,7 +52,6 @@ class Evaluacion_model extends CI_Model{
 		$this->db->join('Comportamientos Co','Co.competencia = C.id');
 		$this->db->join('Comportamiento_Posicion CP','Co.id = CP.comportamiento');
 		$this->db->where(array('I.estatus'=>1,'C.estatus'=>1,'CP.nivel_posicion'=>$posicion));
-		$this->db->order_by('I.nombre','asc');
 		return $this->db->get()->result();
 	}
 

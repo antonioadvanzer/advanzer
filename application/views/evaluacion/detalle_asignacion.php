@@ -46,7 +46,7 @@
 	}
 	.accordion p {
 	  text-transform: uppercase;
-	  padding: 0px 100px 0px 60px;
+	  padding: 5px 100px 0px 60px;
 	  color: #333;
 	}
 	.accordion hr {
