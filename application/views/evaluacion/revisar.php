@@ -119,7 +119,7 @@
 	<div class="row">
 		<div class="col-md-12">
 			<h3><b>Evaluación:</b></h3>
-			<table id="tbl" align="center" class="display">
+			<table id="tbl" align="center" class="table display">
 				<thead>
 					<tr>
 						<th data-halign="center"></th>
