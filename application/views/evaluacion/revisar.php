@@ -135,7 +135,8 @@
 						<?php foreach ($colaborador->evaluadores as $evaluador):?>
 							<tr>
 								<td align="center"><a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion");?>">
-									<img height="25px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></a></td>
+									<img height="40px" class="img-circle avatar avatar-original" 
+										src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></a></td>
 								<td><?= $evaluador->nombre;?></td>
 								<td align="center"><?php if($evaluador->responsabilidad) echo number_format(floor($evaluador->responsabilidad*100)/100,2);?></td>
 								<td align="center"><?php if($evaluador->competencia) echo number_format(floor($evaluador->competencia*100)/100,2);?></td>
@@ -148,7 +149,8 @@
 						<?php foreach ($colaborador->evaluadores360 as $evaluador):?>
 							<tr>
 								<td align="center"><a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion");?>">
-									<img height="25px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></a></td>
+									<img height="40px" class="img-circle avatar avatar-original" 
+										src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></a></td>
 								<td><?= $evaluador->nombre;?></td>
 								<td>&nbsp;</td>
 								<td align="center"><?php if($evaluador->competencia) echo number_format(floor($evaluador->competencia*100)/100,2);?></td>
@@ -161,7 +163,8 @@
 						<?php foreach ($colaborador->evaluadoresProyecto as $evaluador):?>
 							<tr>
 								<td align="center"><a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion/1");?>">
-									<img height="25px" src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></a></td>
+									<img height="40px" class="img-circle avatar avatar-original" 
+										src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></a></td>
 								<td><?= $evaluador->nombre;?></td>
 								<td align="center"><?php if($evaluador->responsabilidad) echo number_format(floor($evaluador->responsabilidad*100)/100,2);?></td>
 								<td>&nbsp;</td>
@@ -173,9 +176,11 @@
 					<tr>
 						<td align="center"><?php if($colaborador->autoevaluacion): ?>
 							<a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/".$colaborador->auto->asignacion);?>">
-								<img height="25px" src="<?= base_url('assets/images/fotos')."/".$colaborador->foto;?>"></a>
+								<img height="40px" class="img-circle avatar avatar-original" 
+									src="<?= base_url('assets/images/fotos')."/".$colaborador->foto;?>"></a>
 							<?php else: ?>
-								<img height="25px" src="<?= base_url('assets/images/fotos')."/".$colaborador->foto;?>">
+								<img height="40px" class="img-circle avatar avatar-original" 
+									src="<?= base_url('assets/images/fotos')."/".$colaborador->foto;?>">
 							<?php endif; ?>
 						</td>
 						<td><?= $colaborador->nombre;?></td>
