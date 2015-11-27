@@ -71,26 +71,23 @@
 						</div>
 					</div>
 					<hr>
-					<div class="row">
-						<div class="col-md-12"><h3>
-							<?php if($evaluacion): ?>
-								<span class="btn label label-default pull-left" onclick="location.href='<?= base_url("evaluar");?>';">
-									<i class="glyphicon glyphicon-pencil"></i> <?= "Evaluación";?></span>
-							<?php endif;
-							if($this->session->userdata('posicion') <= 8 && !in_array($this->session->userdata('id'), array(1,2,51))): ?>
-								<span class="btn label label-default pull-left" onclick="location.href='<?= base_url("evaluacion/perfil");?>';">
-									<i class="glyphicon glyphicon-info-sign"></i> ¿Qué me evalúan?</span>
-								<?php if(!empty($colaborador->historial)):?>
-									<span class="btn label label-default pull-left" onclick="location.href='<?= base_url("historial");?>';">
-										<i class="glyphicon glyphicon-list-alt"></i> Historial de Desempeño</span>
+					<nav class="navbar">
+						<div id="navbar" class="navbar-collapse collapse" aria-expanded="false">
+							<ul class="nav navbar-nav">
+								<?php if($evaluacion): ?>
+									<li><a href="<?= base_url("evaluar");?>"><i class="glyphicon glyphicon-pencil"></i>Evaluación</a></li>
+								<?php endif;
+								if($this->session->userdata('posicion') <= 8 && !in_array($this->session->userdata('id'), array(1,2,51))): ?>
+									<li><a href="<?= base_url("evaluacion/perfil");?>"><i class="glyphicon glyphicon-info-sign"></i>¿Qué me evalúan?</a></li>
+									<?php if(!empty($colaborador->historial)):?>
+										<li><a href="<?= base_url("historial");?>"><i class="glyphicon glyphicon-list-alt"></i>Historial de Desempeño</a></li>
+									<?php endif; ?>
+									<li onclick="alert('La sección está en construcción.');"><a href="#"><i class="glyphicon glyphicon-tag"></i>Mi plan de Capacitación</a></li>
 								<?php endif; ?>
-								<span class="btn label label-default pull-left" onclick="alert('La sección está en construcción.');">
-									<i class="glyphicon glyphicon-tag"></i> Mi plan de Capacitación</span>
-							<?php endif; ?>
-							<span class="btn label label-default pull-left" onclick="location.href='http://capitalhumano.advanzer.com';">
-								<i class="glyphicon glyphicon-globe"></i> Portal de Capital Humano</span>
-						</h3></div>
-					</div>
+								<li><a href="http://capitalhumano.advanzer.com"><i class="glyphicon glyphicon-globe"></i>Portal de Capital Humano</a></li>
+							</ul>
+						</div>
+					</nav>
 				</div>
 			</div>
 		</div>
