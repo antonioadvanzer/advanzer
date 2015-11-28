@@ -121,16 +121,19 @@ class Evaluacion_model extends CI_Model{
 			$this->db->select('Ev.id,Ev.evaluado,Us.nombre,Us.foto')->from('Evaluadores Ev');
 			$this->db->join('Evaluaciones E','E.id = Ev.evaluacion');
 			$this->db->join('Users Us','Us.id = Ev.evaluado');
-			$this->db->where(array('E.id'=>$evaluacion,'Ev.evaluado !='=>$evaluador->id,'Ev.evaluador'=>$evaluador->id,'Ev.anual'=>1));
-			$asignaciones = $this->db->get()->result();
-			foreach ($asignaciones as $asignacion) :
-				$res = $this->db->select('total')->where('asignacion',$asignacion->id)->get('Resultados_ev_Competencia');
-				($res->num_rows() == 1) ? $asignacion->competencia = $res->first_row()->total : $asignacion->competencia=null;
-				$res = $this->db->select('total')->where('asignacion',$asignacion->id)->get('Resultados_ev_Responsabilidad');
-				($res->num_rows() == 1) ? $asignacion->responsabilidad = $res->first_row()->total : $asignacion->responsabilidad=null;
-				$asignacion->total = ($asignacion->competencia*0.3)+($asignacion->responsabilidad*0.7);
-			endforeach;
-			$evaluador->asignaciones = $asignaciones;
+			$this->db->where(array('E.id'=>$evaluacion,'Ev.evaluado !='=>$evaluador->id,'Ev.evaluador'=>$evaluador->id,'Ev.anual'=>1,'E.tipo'=>1));
+			$asignaciones = $this->db->get();
+			if($asignaciones->num_rows() > 0):
+				$asignaciones=$asignaciones->result();
+				foreach ($asignaciones as $asignacion) :
+					$res = $this->db->select('total')->where('asignacion',$asignacion->id)->get('Resultados_ev_Competencia');
+					($res->num_rows() == 1) ? $asignacion->competencia = $res->first_row()->total : $asignacion->competencia=null;
+					$res = $this->db->select('total')->where('asignacion',$asignacion->id)->get('Resultados_ev_Responsabilidad');
+					($res->num_rows() == 1) ? $asignacion->responsabilidad = $res->first_row()->total : $asignacion->responsabilidad=null;
+					$asignacion->total = ($asignacion->competencia*0.3)+($asignacion->responsabilidad*0.7);
+				endforeach;
+				$evaluador->asignaciones = $asignaciones;
+			endif;
 
 			//evaluaciones 360
 			$this->db->select('Ev.id,Ev.evaluado,Us.nombre,Us.foto')->from('Evaluadores Ev');
@@ -139,7 +142,7 @@ class Evaluacion_model extends CI_Model{
 			$this->db->join('Posicion_Track PT','PT.id = Us.posicion_track');
 			$this->db->join('Posiciones P','P.id = PT.posicion');
 			$this->db->where(array('E.id'=>$evaluacion,'Ev.evaluado !='=>$evaluador->id));
-			$this->db->where(array('Ev.anual'=>0,'P.nivel >='=>3,'P.nivel <='=>5,'Ev.evaluador'=>$evaluador->id));
+			$this->db->where(array('Ev.anual'=>0,'Ev.evaluador'=>$evaluador->id,'E.tipo'=>1,'Ev.evaluado !='=>$evaluador->id));
 			$asignaciones = $this->db->get()->result();
 			foreach ($asignaciones as $asignacion) :
 				$res = $this->db->select('total')->where('asignacion',$asignacion->id)->get('Resultados_ev_Competencia');
@@ -155,9 +158,7 @@ class Evaluacion_model extends CI_Model{
 				$this->db->select('Ev.id,Ev.evaluado,Us.nombre,Us.foto')->from('Evaluadores Ev');
 				$this->db->join('Evaluaciones E','E.id = Ev.evaluacion');
 				$this->db->join('Users Us','Us.id = Ev.evaluado');
-				$this->db->where(array('Ev.evaluado !='=>$evaluador->id,
-					'Ev.evaluador'=>$evaluador->id,'E.tipo'=>0));
-				$this->db->where("(Us.jefe=$evaluador->id OR E.lider=$evaluador->id)");
+				$this->db->where('Ev.evaluador',$evaluador->id);
 				$this->db->where_in('E.id',$ids);
 				$asignaciones = $this->db->get()->result();
 				foreach ($asignaciones as $asignacion) :
@@ -165,8 +166,8 @@ class Evaluacion_model extends CI_Model{
 					($res->num_rows() == 1) ? $asignacion->total = $res->first_row()->total : $asignacion->total = null;
 					//$asignacion = $evaluador->asignacion;
 				endforeach;
+				$evaluador->asignacionesProyecto = $asignaciones;
 			endif;
-			$evaluador->asignacionesProyecto = $asignaciones;
 		endforeach;
 		return $result;
 	}
@@ -664,7 +665,7 @@ class Evaluacion_model extends CI_Model{
 			$objetivo->respuesta = $this->db->from('Metricas')->where('id',$id_m)->get()->first_row()->valor;
 			$objetivo->justificacion = $result->first_row()->justificacion;
 		}else{
-			$objetivo->respuesta = 0;
+			$objetivo->respuesta = null;
 			$objetivo->justificacion="";
 		}
 		return $objetivo;

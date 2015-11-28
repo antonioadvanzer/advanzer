@@ -42,13 +42,18 @@
                 else: ?> href='<?= base_url("evaluacion/detalle_asignacion/$colab->asignacion");?>'
                 <?php endif;?>>
                 <img height="25px" src="<?= base_url('assets/images/fotos')."/".$colab->foto;?>"></a></small></td>
-              <td><small><?php if($colab->id == $this->session->userdata('id')) 
-                  echo"AUTOEVALUACIÓN";
-                else echo"$colab->nombre";
-                if(($colab->tipo==1 && $colab->anual==0) && $this->session->userdata('id') != $colab->id) echo" (EVALUACIÓN 360)";?></small></td>
+              <td><small><?= $colab->nombre;?></small></td>
               <td><small><?= $colab->area;?></small></td>
               <td><small><?= $colab->posicion;?></small></td>
-              <td><small><?= $colab->evaluacion;?></small></td>
+              <td><small><?php echo "$colab->evaluacion - ";
+               if($colab->anual==1) 
+                  echo "Anual";
+                elseif($colab->tipo==1 && $colab->id != $this->session->userdata('id')) 
+                  echo "360";
+                elseif($colab->tipo==0)
+                  echo "Proyecto";
+                else
+                  echo "Autoevaluación"?></small></td>
               <td><small><?php $inicio=strtotime($colab->inicio);$fin=strtotime($colab->fin);
                 echo strftime('%d %b',$inicio)." - ".strftime('%d %b',$fin);?></small></td>
               <td><small><?php if($colab->estatus == 0) echo"Pendiente"; elseif($colab->estatus == 1) echo"En proceso";else echo"Finalizada";?></small></td>

@@ -49,7 +49,7 @@
 						case 1:echo"Continuar Evaluación...";break;}?></h3>
 				</div>-->
 			</div>
-			<div class="item" align="center" style="min-height:350px">
+			<div class="item" align="center" style="min-height:400px">
 				<img width="100%" style="opacity:0.3;position:absolute" src="<?= base_url('assets/images/responsabilidades.jpg');?>">
 				<div style="width:60%;position:absolute;top:3%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
 					<h2>Selecciona la métrica para cada dominio de acuerdo a lo siguiente:</h2><br>
@@ -65,15 +65,19 @@
 				</div>
 			</div>
 			<?php foreach ($evaluacion->dominios as $dominio) : ?>
-				<div class="item" align="center" style="min-height:350px;">
+				<div class="item" align="center" style="min-height:400px;">
 					<div style="width:60%;position:absolute;top:5%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
-						<form onsubmit="return verify(this);" action="javascript:" class="form-signin" role="form">
+						<form id="mark" onsubmit="return verify(this);" action="javascript:" class="form-signin" role="form">
 							<input type="hidden" value="<?= $dominio->id;?>" id="dominio">
 							<input type="hidden" value="<?= $evaluacion->id;?>" id="asignacion">
 							<div class="col-md-12">
 								<div class="form-group" align="center">
 									<label><?= $dominio->descripcion;?></label>
-									<i <?php if($evaluacion->estatus==1 && !$dominio->respuesta)echo'style="color:red;"';?>>Respuesta</i>:
+								</div>
+							</div>
+							<div class="col-md-12">
+								<div class="form-group" align="center">
+									<i>Respuesta</i>:
 									<select id="respuesta" name="estatus" class="form-control" style="max-width:70px;text-align:center"
 										onchange="this.form.boton.style.display='';
 											if(this.options[this.selectedIndex].value == 3){
@@ -81,16 +85,15 @@
 												this.form.justificacion.removeAttribute('required');}
 											else{
 												this.form.justificacion.setAttribute('required','required');
-												this.form.justificacion.focus();}" required>
+												this.form.justificacion.focus();
+												if(this.form.justificacion.value.trim().split(' ').length >= 3)
+													this.form.boton.removeAttribute('disabled');
+											}" required>
 										<option value="" selected disabled>--</option>
 										<?php for ($i=5; $i > 0; $i--) : ?>
 											<option value="<?= $i;?>" <?php if($dominio->respuesta==$i)echo"selected";?>><?= $i;?></option>
 										<?php endfor; ?>
 									</select>
-								</div>
-							</div>
-							<div class="col-md-12">
-								<div class="form-group" align="center">
 									<textarea id="justificacion" class="form-control" rows="2" style="max-width:300px;text-align:center;" 
 										onkeyup="if(this.value.trim().split(' ').length >= 3){ this.form.boton.removeAttribute('disabled');
 											}else{ this.form.boton.setAttribute('disabled','disabled');}" placeholder="Justifique su respuesta"
@@ -107,7 +110,7 @@
 					<div class="carousel-caption"><h3 style="cursor:default;"><?= $dominio->nombre;?></h3></div>
 				</div>
 			<?php endforeach; ?>
-			<div class="item" align="center" style="min-height:350px;">
+			<div class="item" align="center" style="min-height:400px;">
 				<img width="100%" style="opacity:0.3;position:absolute" src="<?= base_url('assets/images/gracias.jpg');?>">
 				<div style="width:60%;position:absolute;top:15%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;"
 					id="mensaje">
@@ -125,13 +128,13 @@
 						<div class="col-md-12">
 							<div class="form-group" align="center" id="finalizar">
 								<label>Escribe un comentario adicional respecto al desempeño del colaborador en el Proyecto</label>
-								<textarea id="comentarios" class="form-control" rows="2" style="max-width:300px;text-align:center" 
-									required><?= $evaluacion->comentarios;?></textarea>
+								<textarea id="comentarios" class="form-control" rows="5" style="text-align:center" required
+									onkeyup="this.form.enviar.removeAttribute('disabled');"><?= $evaluacion->comentarios;?></textarea>
 							</div>
 						</div>
 					</div>
 					<div class="carousel-caption" align="center">
-						<button class="btn btn-lg btn-primary" style="max-width:200px; text-align:center;">Enviar Evaluación</button>
+						<button id="enviar" class="btn btn-lg btn-primary" style="max-width:200px; text-align:center;" disabled>Enviar Evaluación</button>
 						<h3 style="cursor:default;">Gracias por tu tiempo...!</h3>
 					</div>
 				</form>
@@ -149,6 +152,9 @@
 	</div>
 	<script type="text/javascript">
 		$(document).ready(function() {
+			estatus = <?= $evaluacion->estatus;?>;
+			if(estatus==1)
+				mark();
 			$('[id^=finalizar]').hide();
 			revisar();
 
@@ -175,6 +181,7 @@
 							}else{
 								alert(returnData['msg']);
 								$('#carousel').show('slow');
+								mark();
 								return false;
 							}
 						},
@@ -187,6 +194,20 @@
 					});
 			});
 		});
+		function mark() {
+			$('[id^=mark]').each(function(i,form) {
+				$(form).each(function() {
+					//console.log('respuesta: '+$(this[2]).val()+ 'justificación: '+$(this[3]).val());
+					if($(this[2]).val() != 3 && $(this[3]).val() == "") {
+						if($(this[4]).focus()){
+							$(form['children'][3]).css({'background-color':'#ff4e4e','border-radius':'10px 10px 10px 10px'});
+							console.log($(form['children']));
+						}
+					}
+				});
+			});
+		}
+
 		function revisar() {
 			flag=true;
 			$('[id^=respuesta] option:selected').each(function(i,select) {

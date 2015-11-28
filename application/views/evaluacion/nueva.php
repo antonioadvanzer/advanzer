@@ -94,7 +94,7 @@
 			<div class="form-group" align="center">
 				<label for="participantes">Participantes</label>
 				<select id="agregar" name="agregar" multiple class="form-control" style="overflow-y:auto;
-					overflow-x:auto;min-height:200px;max-height:700px" required></select>
+					overflow-x:auto;min-height:200px;max-height:700px"></select>
 			</div>
 		</div>
 		<div class="col-md-2"><div class="form-group">&nbsp;</div>
@@ -132,11 +132,9 @@
 				if($('#tipo').val() == 1){
 					$('#proyecto').hide('slow');
 					$('#lider').removeAttr('required');
-					$('#agregar').removeAttr('required');
 				}else{
 					$('#proyecto').show('slow');
 					$('#lider').attr('required','required');
-					$('#agregar').attr('required','required');
 				}
 			});
 			$('#btnAgregar').click(function() {

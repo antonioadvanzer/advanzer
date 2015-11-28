@@ -146,22 +146,25 @@
 						<h1><?= $indicador->nombre;?></h1>
 						<div class="col-md-12">
 							<?php foreach ($indicador->competencias as $comp) : if(count($comp->comportamientos) > 0): ?>
-								<form onsubmit="return verify(this);" action="javascript:" class="form-signin" role="form">
+								<form id="mark" onsubmit="return verify(this);" action="javascript:" class="form-signin" role="form">
 									<input type="hidden" value="<?= $comp->id;?>" id="elemento">
 									<input type="hidden" value="<?= $evaluacion->id;?>" id="asignacion">
 									<input type="hidden" value="360" id="tipo">
-									<h2 <?php if($evaluacion->estatus==1 && !$comp->respuesta)echo'style="color:red;"';?>><?= $comp->nombre;?><label><?= $comp->resumen;?></label></h2>
+									<h2><?= $comp->nombre;?><label><?= $comp->resumen;?></label></h2>
 									<div align="left">
 										<ul type="square"><label>
 											<div class="col-md-2">
 												<div class="form-group" align="center">
-													<i <?php if($evaluacion->estatus==1 && !$comp->respuesta)echo'style="color:red;"';?>>Respuesta</i>: 
+													<i>Respuesta</i>: 
 													<select onchange="this.form.boton.style.display='';if(this.options[this.selectedIndex].value == 3){
 															this.form.justificacion.value='';verify(this.form);
 															this.form.justificacion.removeAttribute('required');}
 														else{
 															this.form.justificacion.setAttribute('required','required');
-															this.form.justificacion.focus();}" class="form-control" id="respuesta" 
+															this.form.justificacion.focus();
+															if(this.form.justificacion.value.trim().split(' ').length >= 3)
+																this.form.boton.removeAttribute('disabled');
+															}" class="form-control" id="respuesta" 
 														style="height:15px;padding: 0px 10px;font-size:10px;max-width:60px;display:inline">
 														<option disabled selected value="">-- Selecciona tu respuesta --</option>
 														<?php for ($i=5; $i >= 1; $i--) : ?>
@@ -211,13 +214,13 @@
 						<div class="col-md-12">
 							<div class="form-group" align="center">
 								<label>Comentarios generales de la evaluación</label>
-								<textarea id="comentarios" class="form-control" rows="2" style="max-width:300px;text-align:center"
-									required><?= $evaluacion->comentarios;?></textarea>
+								<textarea id="comentarios" class="form-control" rows="5" style="text-align:center"required
+									onkeyup="this.form.enviar.removeAttribute('disabled');"><?= $evaluacion->comentarios;?></textarea>
 							</div>
 						</div>
 					</div>
 					<div class="carousel-caption" align="center">
-						<button type="submit" class="btn btn-lg btn-primary" style="max-width:200px; text-align:center;">
+						<button id="enviar" type="submit" class="btn btn-lg btn-primary" style="max-width:200px; text-align:center;" disabled>
 							Enviar Evaluación</button>
 						<h3 style="cursor:default;">Gracias por tu tiempo...!</h3>
 					</div>
@@ -234,11 +237,13 @@
 		<div class="col-md-12"><div id="cargando" style="display:none;">
 			<img src="<?= base_url('assets/images/loading.gif');?>"></div></div>
 	</div>
-	<script type="text/javascript">
+	<script>
 		$(document).ready(function() {
+			estatus = <?= $evaluacion->estatus;?>;
+			if(estatus==1)
+				mark();
 			$('[id^=finalizar]').hide();
 			revisar();
-
 			$('[id^=finalizar]').submit(function(event){
 				asignacion=$('#finalizar_asignacion').val();
 				tipo=$('#finalizar_tipo').val();
@@ -262,6 +267,7 @@
 							}else{
 								alert(returnData['msg']);
 								$('#carousel').show('slow');
+								mark();
 								return false;
 							}
 						},
@@ -274,6 +280,20 @@
 					});
 			});
 		});
+		function mark() {
+			$('[id^=mark]').each(function(i,form) {
+				$(form).each(function() {
+					//console.log('respuesta: '+$(this[3]).val()+ 'justificación: '+$(this[4]).val());
+					if($(this[3]).val() != 3 && $(this[4]).val() == "") {
+						if($(this[4]).focus()){
+							$(form['children'][4]).css({'background-color':'#ff4e4e','border-radius':'10px 10px 10px 10px'});
+							console.log($(form['children'][4]));
+						}
+					}
+				});
+			});
+		}
+
 		function revisar() {
 			flag=true;
 			$('[id^=respuesta] option:selected').each(function(i,select) {
