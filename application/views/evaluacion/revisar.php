@@ -104,7 +104,7 @@
 			<div class="col-md-8">
 				<div class="form-group" align="center">
 					<label>Comentarios Generales</label>
-					<textarea id="comentarios" class="form-control" rows="4" style="max-width:600px;"></textarea>
+					<textarea id="comentarios" class="form-control" rows="4" style="max-width:600px;" required><?= $colaborador->comentarios;?></textarea>
 				</div>
 			</div>
 			<div class="col-md-4">

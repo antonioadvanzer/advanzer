@@ -200,7 +200,7 @@
 					//console.log('respuesta: '+$(this[2]).val()+ 'justificación: '+$(this[3]).val());
 					if($(this[2]).val() != 3 && $(this[3]).val() == "") {
 						if($(this[4]).focus()){
-							$(form['children'][3]).css({'background-color':'#ff4e4e','border-radius':'10px 10px 10px 10px'});
+							$(form['children'][3]).css({'background-color':'#fc8111','border-radius':'10px 10px 10px 10px'});
 							console.log($(form['children']));
 						}
 					}

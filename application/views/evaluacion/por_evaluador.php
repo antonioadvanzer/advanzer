@@ -72,9 +72,9 @@
 										foreach ($colab->asignacionesProyecto as $colaborador) : ?>
 											<tr>
 												<td><a target="_blank" style="text-decoration:none" href="<?= base_url("evaluacion/detalle_asignacion/$colaborador->id");?>">
-													<small><?php if($colaborador->total){
+													<small><?php if(isset($colaborador->total)){
 													echo number_format(floor($colaborador->total*100)/100,2);$count++;}?></small></a></td>
-												<td><small><?php if($colaborador->total)
+												<td><small><?php if(isset($colaborador->total))
 													echo number_format(floor($colaborador->total*100)/100,2);?></small></td>
 												<td>&nbsp;</td>
 												<td colspan="3"><small><img class="img-circle avatar avatar-original" height="40px" 

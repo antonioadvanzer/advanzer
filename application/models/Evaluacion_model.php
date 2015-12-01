@@ -277,12 +277,7 @@ class Evaluacion_model extends CI_Model{
 		return false;
 	}
 
-	function guardaHistorial($email,$anio,$rating) {
-		$datos=array(
-			'anio'=>$anio,
-			'rating'=>$rating,
-			'email'=>$email
-		);
+	function guardaHistorial($datos) {
 		$this->db->insert('Historial',$datos);
 		if($this->db->affected_rows() == 1)
 			return true;
@@ -294,6 +289,9 @@ class Evaluacion_model extends CI_Model{
 		$this->db->where('resultado',$res->id)->update('Feedbacks',$datos);
 		if($this->db->affected_rows() == 0)
 			$this->db->insert('Feedbacks',array('resultado'=>$res->id,'feedbacker'=>$datos['feedbacker']));
+		if($this->db->affected_rows() == 1)
+			return true;
+		return false;
 	}
 
 	function updateFeedback($id,$datos) {
@@ -326,6 +324,7 @@ class Evaluacion_model extends CI_Model{
 		$res=$this->db->from('Resultados_Evaluacion')->where(array('colaborador'=>$colaborador->id,'evaluacion'=>$evaluacion))->get();
 		if($res->num_rows() == 1){
 			$colaborador->rating = $res->first_row()->rating;
+			$colaborador->comentarios = $res->first_row()->comentarios;
 			$colaborador->total = $res->first_row()->total;
 			$colaborador->cumple_gastos = $res->first_row()->cumple_gastos;
 			$colaborador->cumple_harvest = $res->first_row()->cumple_harvest;
@@ -590,7 +589,7 @@ class Evaluacion_model extends CI_Model{
 
 	function getEvaluadoresByColaborador($colaborador) {
 		$evaluacion=$this->getEvaluacionAnual();
-		$this->db->select('Ev.evaluador id,Us.nombre,P.nombre posicion,T.nombre track,Ev.estatus');
+		$this->db->select('Ev.evaluador id,Us.nombre,P.nombre posicion,T.nombre track,Ev.estatus,Ev.anual');
 		$this->db->where(array('evaluado'=>$colaborador,'evaluacion'=>$evaluacion,'evaluador !='=>$colaborador));
 		$this->db->from('Evaluadores Ev');
 		$this->db->join('Users Us','Ev.evaluador = Us.id');
@@ -849,6 +848,8 @@ class Evaluacion_model extends CI_Model{
 					->join('Porcentajes_Objetivos PO','PO.objetivo_area = OA.id')
 					->join('Metricas M','M.id = DE.metrica')
 					->where(array('DE.asignacion'=>$asignacion,'PO.nivel_posicion'=>$posicion,'OA.area'=>$area))->get()->first_row()->total;
+				if(!$total)
+					$total=0;
 				$this->db->insert('Resultados_ev_Responsabilidad',array('asignacion'=>$asignacion,'total'=>$total));
 				// total de competencias
 				$total = $this->db->select('AVG(DC.respuesta) total')->from('Detalle_ev_Competencia DC')
@@ -860,6 +861,8 @@ class Evaluacion_model extends CI_Model{
 			case 0: // por proyecto - responsabilidades
 				$total = $this->db->select('AVG(respuesta) total')->where('asignacion',$asignacion)->get('Detalle_ev_Proyecto')
 					->first_row()->total;
+					if(!$total)
+						$total=0;
 				$this->db->insert('Resultados_ev_Responsabilidad',array('asignacion'=>$asignacion,'total'=>$total));
 				break;
 			case 360: // por 360 - competencias

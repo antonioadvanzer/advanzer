@@ -14,16 +14,20 @@
   	<form id="update" role="form" method="post" action="javascript:" class="form-signin">
 	  <input type="hidden" id="colaborador" value="<?= $colaborador->id;?>">
 	  <input type="hidden" id="posicion" value="<?= $colaborador->nivel_posicion;?>">
-	  <?php if($colaborador->nivel_posicion <= 5) : ?>
+	  <?php $ocupado=FALSE; if($colaborador->nivel_posicion <= 5) :?>
 	  	<div class="row" align="center">
-	  		<div class="col-md-12">
+	  		<div class="col-md-6">
+	  			<p>Por su nivel de posición en la empresa debes elegir al colaborador que fungirá como <i>Evaluador Anual</i>, 
+	  				por default el resto de los evaluadores asignados serán <i>360</i></p>
+	  		</div>
+	  		<div class="col-md-6">
 	  			<div class="form-group">
 		  			<label for="anual">Evaluador anual</label>
 		  			<select class="form-control" style="max-width:300px;text-align:center" id="anual">
 		  				<option value="" selected disabled>-- Evaluador Anual --</option>
 		  				<?php foreach($evaluadores as $evaluador) : ?>
-							<option value="<?= $evaluador->id;?>" <?php if($evaluador->estatus != 0) echo "disabled"; 
-							if($evaluador->id == $colaborador->anual) echo"selected";?>>
+							<option value="<?= $evaluador->id;?>" <?php if($evaluador->estatus != 0){ echo "disabled";$ocupado=TRUE;} 
+							if($evaluador->anual == 1) echo" selected";?>>
 								<?= "$evaluador->nombre - $evaluador->posicion ($evaluador->track)";?></option>
 						<?php endforeach; ?>
 		  			</select>
@@ -75,6 +79,9 @@
 
 	<script type="text/javascript">
 		$(document).ready(function() {
+			var ocupado=<?= $ocupado;?>;
+			if(ocupado)
+				$('#anual').prop('disabled','disabled');
 			var flag = $('#posicion').val();
 			$('#btnAgregar').click(function() {
 				if($('#agregar :selected').length > 0){

@@ -193,7 +193,8 @@ class Evaluacion extends CI_Controller {
     public function updateEstatusFeedback() {
         $id=$this->input->post('id');
         $datos['estatus']=$this->input->post('estatus');
-        $datos['compromisos']=$this->input->post('compromisos');
+        if($this->input->post('compromisos'))
+            $datos['compromisos']=$this->input->post('compromisos');
         if($this->evaluacion_model->updateFeedback($id,$datos))
             $response['msg'] = "ok";
         else
@@ -226,7 +227,7 @@ class Evaluacion extends CI_Controller {
         $where = array('evaluacion'=>$evaluacion,'colaborador'=>$colaborador);
         if($this->evaluacion_model->updateRating($where,array('rating'=>$rating,'comentarios'=>$comentarios))){
             if($this->evaluacion_model->updateFeedbacker($where,array('feedbacker'=>$feedback)))
-                if($this->evaluacion_model->guardaHistorial($this->user_model->searchById($colaborador)->email,$this->evaluacion_model->getEvaluacionById($evaluacion)->anio,$rating))
+                if($this->evaluacion_model->guardaHistorial(array('colaborador'=>$colaborador,'anio'=>$this->evaluacion_model->getEvaluacionById($evaluacion)->anio,'rating'=>$rating)))
                     $response['msg']="ok";
         }
         echo json_encode($response);

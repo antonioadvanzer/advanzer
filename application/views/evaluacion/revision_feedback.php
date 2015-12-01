@@ -55,15 +55,26 @@
 				</div>
 			</div>
 		</div>
-		<div class="row" align="center">
-			<div class="col-md-12">
-				<div class="form-group">
-					<label for="compromisos">Compromisos:</label>
-					<textarea onkeyup="$('#guardar').show('slow');" class="form-control" style="text-align:center;" 
-					rows="6" id="compromisos" required <?php if($feedback->estatus !=0)echo"disabled";?>><?= $feedback->compromisos;?></textarea>
+		<?php if($feedback->estatus !=0):?>
+			<div class="row" align="center">
+				<div class="col-md-12">
+					<div class="form-group">
+						<label for="compromisos">Compromisos:</label>
+						<p style="text-align:center;"><?= $feedback->compromisos;?></p>
+					</div>
 				</div>
 			</div>
-		</div>
+		<?php else: ?>
+			<div class="row" align="center">
+				<div class="col-md-12">
+					<div class="form-group">
+						<label for="compromisos">Compromisos:</label>
+						<textarea onkeyup="$('#guardar').show('slow');" class="form-control" style="text-align:center;" 
+						rows="6" id="compromisos" required <?php if($feedback->estatus !=0)echo"disabled";?>><?= $feedback->compromisos;?></textarea>
+					</div>
+				</div>
+			</div>
+		<?php endif; ?>
 		<div class="row" align="center">
 			<div class="col-md-12">
 				<div class="form-group">

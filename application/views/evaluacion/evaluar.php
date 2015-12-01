@@ -37,11 +37,11 @@
           <tbody data-link="row">
             <?php foreach ($colaboradores as $colab):?>
             <tr>
-              <td><small><a <?php if($colab->estatus != 2):?> href='<?php if($colab->tipo==0) echo base_url("evaluacion/evaluaProyecto/$colab->asignacion");
+              <td align="center"><small><a <?php if($colab->estatus != 2):?> href='<?php if($colab->tipo==0) echo base_url("evaluacion/evaluaProyecto/$colab->asignacion");
                   else echo base_url("evaluacion/aplicar/$colab->asignacion");?>' <?php 
                 else: ?> href='<?= base_url("evaluacion/detalle_asignacion/$colab->asignacion");?>'
                 <?php endif;?>>
-                <img height="25px" src="<?= base_url('assets/images/fotos')."/".$colab->foto;?>"></a></small></td>
+                <img class="img-circle avatar avatar-original" height="40px" src="<?= base_url('assets/images/fotos')."/".$colab->foto;?>"></a></small></td>
               <td><small><?= $colab->nombre;?></small></td>
               <td><small><?= $colab->area;?></small></td>
               <td><small><?= $colab->posicion;?></small></td>

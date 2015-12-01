@@ -126,7 +126,7 @@
 			</div>
 			<div class="item" align="center" style="min-height:550px;">
 				<img width="100%" style="opacity:0.3;position:absolute" src="<?= base_url('assets/images/competencias.jpg');?>">
-				<div style="width:60%;position:absolute;top:40%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
+				<div style="width:60%;position:absolute;top:20%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
 					<h2>Selecciona la métrica para cada competencia de acuerdo a lo siguiente:</h2><br>
 					<h4 align="left">
 						5. Es un modelo a seguir para toda la organización<br>
@@ -165,7 +165,7 @@
 															if(this.form.justificacion.value.trim().split(' ').length >= 3)
 																this.form.boton.removeAttribute('disabled');
 															}" class="form-control" id="respuesta" 
-														style="height:15px;padding: 0px 10px;font-size:10px;max-width:60px;display:inline">
+														style="padding: 0px 10px;font-size:10px;max-width:60px;display:inline">
 														<option disabled selected value="">-- Selecciona tu respuesta --</option>
 														<?php for ($i=5; $i >= 1; $i--) : ?>
 															<option <?php if(isset($comp->respuesta) && $comp->respuesta == $i) echo "selected";?>><?= $i;?></option>
@@ -245,53 +245,61 @@
 			$('[id^=finalizar]').hide();
 			revisar();
 			$('[id^=finalizar]').submit(function(event){
-				asignacion=$('#finalizar_asignacion').val();
-				tipo=$('#finalizar_tipo').val();
-				console.log(asignacion,tipo);
-				if(confirm('Una vez que haya enviado ésta evaluación no será posible editarla. ¿Seguro(a) que desea enviarla?'))
-					$.ajax({
-						url: '<?= base_url("evaluacion/finalizar_evaluacion");?>',
-						type: 'post',
-						data: {'asignacion':asignacion,'tipo':tipo,'comentarios':$('#comentarios').val()},
-						beforeSend: function (xhr) {
-							$('#carousel').hide('slow');
-							$('#cargando').show('slow');
-						},
-						success: function(data){
-							console.log(data);
-							var returnData = JSON.parse(data);
-							$('#cargando').hide('slow');
-							if(returnData['redirecciona'] == "si"){
-								alert(returnData['msg'])
-								location.href="<?= base_url('evaluar');?>";
-							}else{
-								alert(returnData['msg']);
+				var flag= mark();
+				console.log(flag);
+				if(flag){
+					asignacion=$('#finalizar_asignacion').val();
+					tipo=$('#finalizar_tipo').val();
+					console.log(asignacion,tipo);
+					if(confirm('Una vez que haya enviado ésta evaluación no será posible editarla. ¿Seguro(a) que desea enviarla?'))
+						$.ajax({
+							url: '<?= base_url("evaluacion/finalizar_evaluacion");?>',
+							type: 'post',
+							data: {'asignacion':asignacion,'tipo':tipo,'comentarios':$('#comentarios').val()},
+							beforeSend: function (xhr) {
+								$('#carousel').hide('slow');
+								$('#cargando').show('slow');
+							},
+							success: function(data){
+								console.log(data);
+								var returnData = JSON.parse(data);
+								$('#cargando').hide('slow');
+								if(returnData['redirecciona'] == "si"){
+									alert(returnData['msg'])
+									location.href="<?= base_url('evaluar');?>";
+								}else{
+									alert(returnData['msg']);
+									$('#carousel').show('slow');
+									mark();
+									return false;
+								}
+							},
+							error: function(data){
+								console.log(data.responseText);
 								$('#carousel').show('slow');
-								mark();
-								return false;
+								$('#cargando').hide('slow');
+								alert('Error al finalizar la evaluación. Intenta de nuevo');
 							}
-						},
-						error: function(data){
-							console.log(data.responseText);
-							$('#carousel').show('slow');
-							$('#cargando').hide('slow');
-							alert('Error al finalizar la evaluación. Intenta de nuevo');
-						}
-					});
+						});
+				}else
+					alert('No se ha recibido respuesta de una o varias rúbricas. Las faltantes se han resaltado, regresa y asegurate de enviar todas tus respuestas');
 			});
 		});
 		function mark() {
+			val=1;
 			$('[id^=mark]').each(function(i,form) {
 				$(form).each(function() {
-					//console.log('respuesta: '+$(this[3]).val()+ 'justificación: '+$(this[4]).val());
+					console.log($(this[3]).val(),$(this[4]).val());
 					if($(this[3]).val() != 3 && $(this[4]).val() == "") {
 						if($(this[4]).focus()){
-							$(form['children'][4]).css({'background-color':'#ff4e4e','border-radius':'10px 10px 10px 10px'});
-							console.log($(form['children'][4]));
+							$(form['children'][4]).css({'background-color':'#fc8111','border-radius':'10px 10px 10px 10px'});
+							//console.log($(form['children'][4]));
+							val= 0;
 						}
 					}
 				});
 			});
+			return val;
 		}
 
 		function revisar() {

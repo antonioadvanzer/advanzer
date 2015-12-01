@@ -9,9 +9,8 @@
 		</div>
 	</div>
 </div>
-<div class="container" align="center">
-	<a href="<?= base_url();?>">&laquo;Regresar</a>
-	<hr>
+<div class="container">
+	<div class="row" align="center"><div class="col-md-12"><a href="<?= base_url();?>">&laquo;Regresar</a></div></div>
 	<div class="row">
 		<div class="col-md-12">
 			<div class="panel panel-default">

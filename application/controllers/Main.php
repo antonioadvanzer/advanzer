@@ -527,10 +527,11 @@ class Main extends CI_Controller {
 				$info = $this->evaluacion_model->getEvaluadoresPendientesByEvaluacion($evaluacion->id);
 				$response=false;
 				foreach ($info as $evaluador) :
-					$mensaje="<h2>Estimado Colaborador,</h2><hr>Tienes evaluaciones por realizar, correspondientes a: ";
+					$mensaje="<h2>Estimado Colaborador $evaluador->nombre,</h2><hr>Tienes evaluaciones por realizar, correspondientes a: ";
 					$mensaje.="<i><b>$evaluacion->nombre</b></i><br>Ingresa al <a style='text-decoration:none;' href='http://intranet.advanzer.com:3000/evaluar'>Portal de Evaluación</a>";
 					$mensaje.=" para continuar con el proceso.<br>";
-					$response .= $this->enviaRecordatorio($info->email,$mensaje);
+					if($evaluador->email)
+						$response .= $this->enviaRecordatorio($evaluador->email,$mensaje);
 				endforeach;
 				if($response)
 					$msg = date("Y-m-d H:i:s")." - Succesfully executed with errors:\n $msg2\t$response";

@@ -108,7 +108,7 @@
 			<?php if(isset($evaluacion->dominios)): ?>
 				<div class="item" align="center" style="min-height:550px;">
 					<img width="100%" style="opacity:0.3;position:absolute" src="<?= base_url('assets/images/responsabilidades.jpg');?>">
-					<div style="width:60%;position:absolute;top:40%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
+					<div style="width:60%;position:absolute;top:15%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
 						<h3>En el recuadro "<i>Respuesta</i>", selecciona la métrica que consideres correcta de acuerdo a su descripción y 
 							justifica todas las respuestas diferentes a 3, dando clic a "<i>guardar</i>" para poder continuar y no perder tu avance.</h3>
 					</div>
@@ -179,7 +179,7 @@
 			endif; ?>
 			<div class="item" align="center" style="min-height:550px;">
 				<img width="100%" style="opacity:0.3;position:absolute" src="<?= base_url('assets/images/competencias.jpg');?>">
-				<div style="width:60%;position:absolute;top:25%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
+				<div style="width:60%;position:absolute;top:15%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
 					<h2>Cada competencia se compone de varios comportamientos.<br>
 						Selecciona la métrica para cada comportamiento de acuerdo a lo siguiente:</h2><br>
 					<h4 align="left">
@@ -210,7 +210,7 @@
 										<input type="hidden" value="<?= $comportamiento->id;?>" id="elemento">
 										<input type="hidden" value="<?= $evaluacion->id;?>" id="asignacion">
 										<input type="hidden" value="" id="tipo">
-										<label><?= $comportamiento->descripcion;?><i>Respuesta</i>: 
+										<span><?= $comportamiento->descripcion;?><span style="float:right;display:inline"><i>Respuesta</i>: 
 											<select onchange="this.form.boton.style.display='';if(this.options[this.selectedIndex].value == 3){
 													this.form.justificacion.value='';verify(this.form);
 													this.form.justificacion.removeAttribute('required');}
@@ -225,7 +225,7 @@
 												<?php for ($i=5; $i >= 1; $i--) : ?>
 													<option <?php if(isset($comportamiento->respuesta) && $comportamiento->respuesta == $i) echo "selected";?>><?= $i;?></option>
 												<?php endfor; ?>
-											</select></label>
+											</select></span></span>
 										<div class="row">
 											<div class="col-md-6">
 												<div class="form-group" align="center">
@@ -341,7 +341,7 @@
 					//console.log('respuesta: '+$(this[3]).val()+ 'justificación: '+$(this[4]).val());
 					if($(this[3]).val() != 3 && $(this[4]).val() == "") {
 						if($(this[4]).focus()){
-							$(form['children'][4]).css({'background-color':'#ff4e4e','border-radius':'10px 10px 10px 10px'});
+							$(form['children'][4]).css({'background-color':'#fc8111','border-radius':'10px 10px 10px 10px'});
 							console.log($(form['children'][4]));
 						}
 					}
