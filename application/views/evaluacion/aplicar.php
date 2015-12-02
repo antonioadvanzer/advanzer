@@ -128,14 +128,14 @@
 										<h2><?= $resp->nombre;?><span style="min-width:100px;float:right;">
 												<i>Respuesta</i>: 
 												<select onchange="this.form.boton.style.display='';if(this.options[this.selectedIndex].value == 3){
-														this.form.justificacion.value='';verify(this.form);
+														this.form.justificacion.value='';
 														this.form.justificacion.removeAttribute('required');}
 													else{
 														this.form.justificacion.setAttribute('required','required');
-														this.form.justificacion.focus();
 														if(this.form.justificacion.value.trim().split(' ').length >= 3)
 														this.form.boton.removeAttribute('disabled');
-													}" class="form-control" 
+													}
+													verify(this.form);" class="form-control" 
 													id="respuesta" style="height:15px;padding: 0px 10px;font-size:10px;max-width:60px;display:inline">
 													<option disabled selected value="">-- Selecciona tu respuesta --</option>
 													<?php for ($i=5; $i >= 1; $i--) : ?>
@@ -153,7 +153,7 @@
 											</ol></p>
 										</div>
 									</div>
-									<div class="row" align="center">
+									<div class="row" align="center" id="naranja">
 										<div class="col-md-8">
 											<div class="form-group" align="center">
 												<textarea id="justificacion" class="form-control" rows="2" style="max-width:300px;text-align:center;" 
@@ -212,21 +212,22 @@
 										<input type="hidden" value="" id="tipo">
 										<span><?= $comportamiento->descripcion;?><span style="float:right;display:inline"><i>Respuesta</i>: 
 											<select onchange="this.form.boton.style.display='';if(this.options[this.selectedIndex].value == 3){
-													this.form.justificacion.value='';verify(this.form);
+													this.form.justificacion.value='';
 													this.form.justificacion.removeAttribute('required');}
 												else{
 													this.form.justificacion.setAttribute('required','required');
 													this.form.justificacion.focus();
 													if(this.form.justificacion.value.trim().split(' ').length >= 3)
 														this.form.boton.removeAttribute('disabled');
-												}" class="form-control" id="respuesta" 
+												}
+												verify(this.form);" class="form-control" id="respuesta" 
 												style="max-width:70px;text-align:center">
 												<option disabled selected value="">-- Selecciona tu respuesta --</option>
 												<?php for ($i=5; $i >= 1; $i--) : ?>
 													<option <?php if(isset($comportamiento->respuesta) && $comportamiento->respuesta == $i) echo "selected";?>><?= $i;?></option>
 												<?php endfor; ?>
 											</select></span></span>
-										<div class="row">
+										<div class="row" id="naranja">
 											<div class="col-md-6">
 												<div class="form-group" align="center">
 													<textarea id="justificacion" class="form-control" rows="2" style="max-width:300px;text-align:center;" 
@@ -335,18 +336,31 @@
 					});
 			});
 		});
-		function mark() {
-			$('[id^=mark]').each(function(i,form) {
-				$(form).each(function() {
+		function mark(formulario) {
+			if(formulario == undefined)
+				$('[id^=mark]').each(function(i,form) {
+					$(form).each(function() {
+						//console.log('respuesta: '+$(this[3]).val()+ 'justificación: '+$(this[4]).val());
+						if($(this[3]).val() != 3 && $(this[4]).val() == "") {
+							if($(this[4]).focus()){
+								$(form['children'][4]).css({'background-color':'#fc8111','border-radius':'10px 10px 10px 10px'});
+								//console.log($(form['children'][4]));
+							}
+						}else
+							$(form['children'][4]).css({'background-color':'','border-radius':''});
+					});
+				});
+			else
+				$(formulario).each(function() {
 					//console.log('respuesta: '+$(this[3]).val()+ 'justificación: '+$(this[4]).val());
 					if($(this[3]).val() != 3 && $(this[4]).val() == "") {
 						if($(this[4]).focus()){
-							$(form['children'][4]).css({'background-color':'#fc8111','border-radius':'10px 10px 10px 10px'});
-							console.log($(form['children'][4]));
+							$(formulario['children'][4]).css({'background-color':'#fc8111','border-radius':'10px 10px 10px 10px'});
+							//console.log($(form['children'][4]));
 						}
-					}
+					}else
+						$(formulario['children'][4]).css({'background-color':'','border-radius':''});
 				});
-			});
 		}
 
 		function revisar() {
@@ -387,6 +401,7 @@
 					revisar();
 					console.log(returnedData);
 					$('#cargando').hide('slow');
+					mark(form);
 					//$('#carousel').show('slow');
 				},
 				error: function(data){

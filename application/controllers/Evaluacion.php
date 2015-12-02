@@ -630,11 +630,12 @@ class Evaluacion extends CI_Controller {
 
     public function finalizar_evaluacion() {
         $asignacion = $this->input->post('asignacion');
+        $tipo = $this->input->post('tipo');
         $evaluacion=$this->evaluacion_model->getEvaluacionByAsignacion($asignacion);
         $flag=false;
         if(isset($evaluacion->dominios)):
             foreach ($evaluacion->dominios as $dominio) :
-                if($evaluacion->tipo==0){
+                if($tipo==0){
                     if(!isset($dominio->respuesta)):
                         $data['msg'] = "Error al finalizar la evaluación. No se ha recibido respuesta correspondiente a:\nDominio: $dominio->nombre";
                         $data['redirecciona']="no";
@@ -657,7 +658,7 @@ class Evaluacion extends CI_Controller {
                     break;
             endforeach;
         endif;
-        if(!$flag)
+        if(!$flag):
             if($evaluacion->tipo == 1):
                 foreach ($evaluacion->indicadores as $indicador) :
                     foreach ($indicador->competencias as $competencia) :
@@ -694,9 +695,7 @@ class Evaluacion extends CI_Controller {
                         break;
                 endforeach;
             endif;
-
-        if(!$flag):
-            $tipo = $this->input->post('tipo');
+            
             $comentarios = $this->input->post('comentarios');
             $this->db->trans_begin();
             $this->evaluacion_model->finalizar_evaluacion($asignacion,$tipo,$comentarios);

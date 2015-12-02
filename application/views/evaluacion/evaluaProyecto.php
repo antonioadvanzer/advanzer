@@ -75,20 +75,21 @@
 									<label><?= $dominio->descripcion;?></label>
 								</div>
 							</div>
-							<div class="col-md-12">
+							<div class="col-md-12" id="naranja">
 								<div class="form-group" align="center">
 									<i>Respuesta</i>:
 									<select id="respuesta" name="estatus" class="form-control" style="max-width:70px;text-align:center"
 										onchange="this.form.boton.style.display='';
 											if(this.options[this.selectedIndex].value == 3){
-												this.form.justificacion.value='';verify(this.form);
+												this.form.justificacion.value='';
 												this.form.justificacion.removeAttribute('required');}
 											else{
 												this.form.justificacion.setAttribute('required','required');
 												this.form.justificacion.focus();
 												if(this.form.justificacion.value.trim().split(' ').length >= 3)
 													this.form.boton.removeAttribute('disabled');
-											}" required>
+											}
+											verify(this.form);" required>
 										<option value="" selected disabled>--</option>
 										<?php for ($i=5; $i > 0; $i--) : ?>
 											<option value="<?= $i;?>" <?php if($dominio->respuesta==$i)echo"selected";?>><?= $i;?></option>
@@ -194,18 +195,30 @@
 					});
 			});
 		});
-		function mark() {
-			$('[id^=mark]').each(function(i,form) {
-				$(form).each(function() {
-					//console.log('respuesta: '+$(this[2]).val()+ 'justificación: '+$(this[3]).val());
+		function mark(formulario) {
+			if(formulario == undefined)
+				$('[id^=mark]').each(function(i,form) {
+					$(form).each(function() {
+						//console.log('respuesta: '+$(this[2]).val()+ 'justificación: '+$(this[3]).val());
+						if($(this[2]).val() != 3 && $(this[3]).val() == "") {
+							if($(this[4]).focus()){
+								$(form['children'][3]).css({'background-color':'#fc8111','border-radius':'10px 10px 10px 10px'});
+								console.log($(form['children']));
+							}
+						}
+					});
+				});
+			else
+				$(formulario).each(function() {
+					//console.log('respuesta: '+$(this[3]).val()+ 'justificación: '+$(this[4]).val());
 					if($(this[2]).val() != 3 && $(this[3]).val() == "") {
 						if($(this[4]).focus()){
-							$(form['children'][3]).css({'background-color':'#fc8111','border-radius':'10px 10px 10px 10px'});
-							console.log($(form['children']));
+							$(formulario['children'][3]).css({'background-color':'#fc8111','border-radius':'10px 10px 10px 10px'});
+							//console.log($(form['children'][4]));
 						}
-					}
+					}else
+						$(formulario['children'][3]).css({'background-color':'','border-radius':''});
 				});
-			});
 		}
 
 		function revisar() {
@@ -246,6 +259,7 @@
 					console.log(returnedData);
 					$('#cargando').hide('slow');
 					//$('#carousel').show('slow');
+					mark(form);
 				},
 				error: function(data){
 					$('#cargando').hide('slow');
