@@ -320,7 +320,7 @@ class Evaluacion_model extends CI_Model{
 
 	function getResultadosByColaborador($colaborador) {
 		$evaluacion=$this->getEvaluacionAnual();
-		$anio=$this->getEvaluacionById($evaluacion)->anio;
+		($evaluacion) ? $anio=$this->getEvaluacionById($evaluacion)->anio : $anio=date('Y');
 		$res=$this->db->from('Resultados_Evaluacion')->where(array('colaborador'=>$colaborador->id,'evaluacion'=>$evaluacion))->get();
 		if($res->num_rows() == 1){
 			$colaborador->rating = $res->first_row()->rating;
