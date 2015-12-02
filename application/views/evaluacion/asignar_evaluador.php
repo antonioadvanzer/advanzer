@@ -83,7 +83,7 @@
 			if(ocupado)
 				$('#anual').prop('disabled','disabled');
 			var flag = $('#posicion').val();
-			if(flag>5)
+			if(flag>5 && ocupado == 1)
 				$('#agregar').prop('disabled','disabled');
 			$('#btnAgregar').click(function() {
 				if($('#agregar :selected').length > 0){
