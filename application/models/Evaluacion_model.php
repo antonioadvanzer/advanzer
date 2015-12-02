@@ -255,7 +255,7 @@ class Evaluacion_model extends CI_Model{
 	}
 
 	function getEvaluados() {
-		$anio=$this->getEvaluacionById($this->getEvaluacionAnual())->anio;
+		($this->getEvaluacionAnual()) ? $anio=$this->getEvaluacionById($this->getEvaluacionAnual())->anio : $anio=date('Y');
 		$this->db->select('U.id,U.email,U.foto,U.nombre,U.nomina,P.nombre posicion,T.nombre track,U.fecha_ingreso,P.nivel nivel_posicion');
 		$this->db->from('Users U');
 		$this->db->join('Posicion_Track PT','PT.id = U.posicion_track','LEFT OUTER');
