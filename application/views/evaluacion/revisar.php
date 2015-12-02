@@ -105,7 +105,7 @@
 				<div class="form-group" align="center">
 					<label>Comentarios Generales</label>
 					<textarea id="comentarios" class="form-control" rows="4" style="max-width:600px;" required
-						><?php if($colaborador->comentarios) echo $colaborador->comentarios;?></textarea>
+						><?php if(isset($colaborador->comentarios)) echo $colaborador->comentarios;?></textarea>
 				</div>
 			</div>
 			<div class="col-md-4">
