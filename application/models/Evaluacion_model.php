@@ -104,7 +104,7 @@ class Evaluacion_model extends CI_Model{
 
 	function getEvaluadores() {
 		$evaluacion = $this->getEvaluacionAnual();
-		$anio=$this->getEvaluacionById($evaluacion)->anio;
+		($evaluacion) ? $anio=$this->getEvaluacionById($evaluacion)->anio : $anio=null;
 		$this->db->distinct();
 		$this->db->select('Us.id,Us.foto,Us.nombre')->from('Users Us');
 		$this->db->join('Evaluadores Ev','Us.id = Ev.evaluador','LEFT OUTER');
@@ -255,7 +255,7 @@ class Evaluacion_model extends CI_Model{
 	}
 
 	function getEvaluados() {
-		($this->getEvaluacionAnual()) ? $anio=$this->getEvaluacionById($this->getEvaluacionAnual())->anio : $anio=date('Y');
+		($this->getEvaluacionAnual()) ? $anio=$this->getEvaluacionById($this->getEvaluacionAnual())->anio : $anio=null;
 		$this->db->select('U.id,U.email,U.foto,U.nombre,U.nomina,P.nombre posicion,T.nombre track,U.fecha_ingreso,P.nivel nivel_posicion');
 		$this->db->from('Users U');
 		$this->db->join('Posicion_Track PT','PT.id = U.posicion_track','LEFT OUTER');
@@ -320,7 +320,7 @@ class Evaluacion_model extends CI_Model{
 
 	function getResultadosByColaborador($colaborador) {
 		$evaluacion=$this->getEvaluacionAnual();
-		($evaluacion) ? $anio=$this->getEvaluacionById($evaluacion)->anio : $anio=date('Y');
+		($evaluacion) ? $anio=$this->getEvaluacionById($evaluacion)->anio : $anio=null;
 		$res=$this->db->from('Resultados_Evaluacion')->where(array('colaborador'=>$colaborador->id,'evaluacion'=>$evaluacion))->get();
 		if($res->num_rows() == 1){
 			$colaborador->rating = $res->first_row()->rating;
