@@ -44,7 +44,7 @@
         <tbody data-link="row">
           <?php foreach ($colaboradores as $colab): ?>
           <tr>
-            <td align="center"><small><a href='<?= base_url("evaluacion/asignar_evaluador/").'/'.$colab->id;?>'><img height="25px" 
+            <td align="center"><small><a href='<?= base_url("evaluacion/asignar_evaluador/").'/'.$colab->id;?>'><img height="40px" 
               src="<?= base_url('assets/images/fotos')."/".$colab->foto;?>" class="img-circle avatar avatar-original"></a></small></td>
             <td><small><?= $colab->nombre;?></small></td>
             <td><small><?= $colab->posicion;?></small></td>
