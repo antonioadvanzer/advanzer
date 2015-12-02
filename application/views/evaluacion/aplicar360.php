@@ -286,6 +286,25 @@
 					alert('No se ha recibido respuesta de una o varias rúbricas. Las faltantes se han resaltado, regresa y asegurate de enviar todas tus respuestas');
 			});
 		});
+		var checkitem = function() {
+			var $this;
+			$this = $("#carousel");
+			if ($("#carousel .carousel-inner .item:first").hasClass("active")) {
+				$this.children(".left").hide();
+				$this.children(".right").show();
+			} else if ($("#carousel .carousel-inner .item:last").hasClass("active")) {
+				mark();
+				$this.children(".right").hide();
+				$this.children(".left").show();
+			} else {
+				$this.children(".carousel-control").show();
+			}
+		};
+
+		checkitem();
+
+		$("#carousel").on("slid.bs.carousel", "", checkitem);
+
 		function mark(formulario) {
 			if(formulario == undefined){
 				val=1;

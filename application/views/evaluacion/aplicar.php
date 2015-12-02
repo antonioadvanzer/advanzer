@@ -336,6 +336,25 @@
 					});
 			});
 		});
+		var checkitem = function() {
+			var $this;
+			$this = $("#carousel");
+			if ($("#carousel .carousel-inner .item:first").hasClass("active")) {
+				$this.children(".left").hide();
+				$this.children(".right").show();
+			} else if ($("#carousel .carousel-inner .item:last").hasClass("active")) {
+				mark();
+				$this.children(".right").hide();
+				$this.children(".left").show();
+			} else {
+				$this.children(".carousel-control").show();
+			}
+		};
+
+		checkitem();
+
+		$("#carousel").on("slid.bs.carousel", "", checkitem);
+		
 		function mark(formulario) {
 			if(formulario == undefined)
 				$('[id^=mark]').each(function(i,form) {
