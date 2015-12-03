@@ -15,7 +15,6 @@
 	<div class="row">
 		<div class="col-md-12">
 			<h3><b>Colaboradores:</b></h3>
-			<div id="filterbar"> </div>
 			<table id="tbl" align="center" class="display">
 				<thead>
 					<tr>

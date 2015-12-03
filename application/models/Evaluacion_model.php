@@ -172,6 +172,53 @@ class Evaluacion_model extends CI_Model{
 		return $result;
 	}
 
+	function getPendientes($estatus="",$tipo="") {
+		$evaluacion=$this->getEvaluacionAnualVigente()->id;
+		$this->db->distinct()->select('U.id,U.foto,U.nombre,U.email')->from('Evaluadores Ev')
+			->join('Users U','Ev.evaluador = U.id')
+			->where(array('Ev.evaluacion'=>$evaluacion,'U.estatus'=>1))->order_by('U.nombre');
+		$result = $this->db->get()->result();
+		foreach ($result as $evaluador) :
+			if($estatus == "" && $tipo == ""):
+				$this->db->select('count(id) total')->from('Evaluadores')
+					->where(array('evaluador'=>$evaluador->id,'evaluacion'=>$evaluacion,'estatus !='=>2,'anual'=>1));
+				$evaluador->anuales=$this->db->get()->first_row()->total;
+				$this->db->select('count(id) total')->from('Evaluadores')
+					->where(array('evaluador'=>$evaluador->id,'evaluado !='=>$evaluador->id,'evaluacion'=>$evaluacion,'estatus !='=>2,'anual'=>0));
+				$evaluador->tres60=$this->db->get()->first_row()->total;
+				$this->db->select('id')->from('Evaluadores')
+					->where(array('evaluador'=>$evaluador->id,'evaluado'=>$evaluador->id,'evaluacion'=>$evaluacion,'estatus !='=>2,));
+				$res=$this->db->get();
+				($res->num_rows() > 0) ? $evaluador->auto=$res->first_row()->id : $evaluador->auto=null;
+			else:
+				if($estatus != "")
+					$this->db->where_in('estatus',$estatus);
+				else
+					$this->db->where_in('estatus',array(0,1,2));
+				switch ($tipo) {
+					case '360':
+						$this->db->select('count(id) total')->from('Evaluadores')
+							->where(array('evaluador'=>$evaluador->id,'evaluado !='=>$evaluador->id,'evaluacion'=>$evaluacion,'anual'=>0));
+						break;
+					case 'anual':
+						$this->db->select('count(id) total')->from('Evaluadores')
+							->where(array('evaluador'=>$evaluador->id,'evaluacion'=>$evaluacion,'anual'=>1));
+						break;
+					case 'auto':
+						$this->db->select('count(id) total')->from('Evaluadores')
+							->where(array('evaluador'=>$evaluador->id,'evaluado'=>$evaluador->id,'evaluacion'=>$evaluacion));
+						break;
+					default:
+						$this->db->select('count(id) total')->from('Evaluadores')
+							->where(array('evaluador'=>$evaluador->id,'evaluacion'=>$evaluacion));
+						break;
+				}
+				$evaluador->resultado=$this->db->get()->first_row()->total;
+			endif;
+		endforeach;
+		return $result;
+	}
+
 	function getByText($valor,$tipo) {
 		$this->db->select('Us.foto,Ev.id id,Us.nombre nombre,count(Ev.evaluado) as cantidad');
 		$this->db->join('Users as Us','Us.id = Ev.evaluador');
@@ -880,9 +927,9 @@ class Evaluacion_model extends CI_Model{
 
 	function autogenera($colaboradores,$evaluacion,$anio) {
 		foreach ($colaboradores as $colaborador) :
-			if($colaborador->nivel_posicion <= 8 && $colaborador->nivel_posicion > 3):
-				$diferencia=date_diff(date_create($colaborador->fecha_ingreso),date_create($anio.'-09-30'));
-				if($diferencia->format('%R') == '+'):
+			if($colaborador->fecha_ingreso <= $anio.'-09-30'):
+				$this->genera_autoevaluacion($evaluacion,$colaborador->id);
+				if($colaborador->nivel_posicion <= 8 && $colaborador->nivel_posicion > 3):
 					$jefe=$this->db->select('jefe')->from('Users')->where('id',$colaborador->id)->get()->first_row()->jefe;
 					if($colaborador->id != $jefe):
 						$asignacion = $this->addEvaluadorToColaborador(array('evaluador'=>$jefe,

@@ -765,8 +765,8 @@ class Evaluacion extends CI_Controller {
 
     public function evaluar() {
         $evaluador=$this->session->userdata('id');
-        if($this->evaluacion_model->getEvaluacionAnualVigente()->id)
-            $this->genera_autoevaluacion($evaluador);
+        //if($this->evaluacion_model->getEvaluacionAnualVigente()->id)
+        //    $this->genera_autoevaluacion($evaluador);
         $data['colaboradores']=$this->evaluacion_model->getEvaluacionesByEvaluador($evaluador);
         $data['yo'] = $evaluador;
         $this->layout->title('Advanzer - Evaluaciones');
@@ -809,6 +809,39 @@ class Evaluacion extends CI_Controller {
         $data['evaluadores'] = $this->evaluacion_model->getEvaluadores();
         $this->layout->title('Advanzer - Evaluadores');
         $this->layout->view('evaluacion/por_evaluador',$data);
+    }
+
+    public function pendientes() {
+        $this->valida_acceso();
+        $data['evaluadores'] = $this->evaluacion_model->getPendientes();
+        $this->layout->title('Advanzer - Pendientes de Enviar');
+        $this->layout->view('evaluacion/pendientes',$data);
+    }
+
+    public function load_pendientes() {
+        $tipo=$this->input->post('tipo');
+        $estatus=$this->input->post('estatus');
+        $evaluadores = $this->evaluacion_model->getPendientes($estatus,$tipo); ?>
+        <thead>
+            <tr>
+                <th data-halign="center" align="center"></th>
+                <th data-halign="center" align="center">Evaluador</th>
+                <th data-halign="center" align="center">Pendientes</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($evaluadores as $evaluador) :
+                if($evaluador->resultado >0): ?>
+                    <tr>
+                        <td style="cursor:default;" align="center"><img height="40px" class="img-circle avatar avatar-original" 
+                            src="<?= base_url("assets/images/fotos/$evaluador->foto");?>"></td>
+                        <td class="col-md-10" style="cursor:default;"><?= $evaluador->nombre;?></td>
+                        <td style="cursor:default;" align="center"><?= $evaluador->resultado;?></td>
+                    </tr>
+                <?php endif;
+            endforeach; ?>
+            </tbody>
+        <?php
     }
 
     public function defineFeedback($evaluacion) {
