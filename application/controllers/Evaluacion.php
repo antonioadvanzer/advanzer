@@ -392,7 +392,7 @@ class Evaluacion extends CI_Controller {
                 <div class="input-group">
                     <span class="input-group-addon">Período de Evaluación</span>
                     <input data-provide="datepicker" data-date-format="yyyy-mm-dd" name="inicio" id="inicio" onchange="setFin(this);" 
-                        value="<?= $info->inicio; ?>" class="form-control" style="max-width:150px;text-align:center;"<?php if($info->inicio < date('Y-m-d'))echo"disabled"; ?>>
+                        value="<?= $info->inicio; ?>" class="form-control" style="max-width:150px;text-align:center;"<?php if($info->inicio <= date('Y-m-d'))echo"disabled"; ?>>
                     <input data-provide="datepicker" data-date-format="yyyy-mm-dd" name="fin" id="fin" value="<?= $info->fin;?>" 
                         class="form-control" style="max-width:150px;text-align:center;">
                 </div>
