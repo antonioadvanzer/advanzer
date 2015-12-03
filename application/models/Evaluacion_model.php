@@ -194,7 +194,7 @@ class Evaluacion_model extends CI_Model{
 				if($estatus != "")
 					$this->db->where_in('estatus',$estatus);
 				else
-					$this->db->where_in('estatus',array(0,1,2));
+					$this->db->where_in('estatus',array(0,1));
 				switch ($tipo) {
 					case '360':
 						$this->db->select('count(id) total')->from('Evaluadores')
