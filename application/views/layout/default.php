@@ -52,9 +52,18 @@
 		switch(empresa){
 			case 1:
 				color = "#B0B914";
+				font = "TitilliumTitle20.otf";
+				titleFont = "TitilliumTitle20";
 			break;
 			case 2:
 				color = "#488FCD";
+				font = "corbel.ttf";
+				titleFont = "Corbel";
+			break;
+			default:
+				color= "#";
+				font = "AvenirLTStd-Light.otf";
+				titleFont = "Avenir LT Std 35 Light";
 			break;
 		}
 		if(color != "")
@@ -65,6 +74,10 @@
 						background: -o-linear-gradient('+color+',#fff); /* For Opera 11.1 to 12.0 */\
 						background: -moz-linear-gradient('+color+',#fff); /* For Firefox 3.6 to 15 */\
 						background: linear-gradient('+color+',#fff); /* Standard syntax (must be last) */\
+					}\
+					html {\
+						font-family: "'+titleFont+'";\
+						src: url("../'+font+'");\
 					}\
 				</style>\
 			');

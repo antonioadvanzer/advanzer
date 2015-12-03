@@ -75,16 +75,16 @@
 						<div id="navbar" class="navbar-collapse collapse" aria-expanded="false">
 							<ul class="nav navbar-nav">
 								<?php if($evaluacion): ?>
-									<li><a href="<?= base_url("evaluar");?>"><i class="glyphicon glyphicon-pencil"></i>Evaluación</a></li>
+									<li><a href="<?= base_url("evaluar");?>">Evaluación</a></li>
 								<?php endif;
 								if($this->session->userdata('posicion') <= 8 && !in_array($this->session->userdata('id'), array(1,2,51))): ?>
-									<li><a href="<?= base_url("evaluacion/perfil");?>"><i class="glyphicon glyphicon-info-sign"></i>¿Qué me evalúan?</a></li>
+									<li><a href="<?= base_url("evaluacion/perfil");?>">¿Qué me evalúan?</a></li>
 									<?php if(!empty($colaborador->historial)):?>
-										<li><a href="<?= base_url("historial");?>"><i class="glyphicon glyphicon-list-alt"></i>Historial de Desempeño</a></li>
+										<li><a href="<?= base_url("historial");?>">Historial de Desempeño</a></li>
 									<?php endif; ?>
-									<li onclick="alert('La sección está en construcción.');"><a href="#"><i class="glyphicon glyphicon-tag"></i>Mi plan de Capacitación</a></li>
+									<li onclick="alert('La sección está en construcción.');"><a href="#">Mi plan de Capacitación</a></li>
 								<?php endif; ?>
-								<li><a href="http://capitalhumano.advanzer.com"><i class="glyphicon glyphicon-globe"></i>Portal de Capital Humano</a></li>
+								<li><a href="http://capitalhumano.advanzer.com">Portal de Capital Humano</a></li>
 							</ul>
 						</div>
 					</nav>
