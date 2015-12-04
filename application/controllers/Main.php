@@ -497,12 +497,11 @@ class Main extends CI_Controller {
 		$proyectos = $this->evaluacion_model->getEvaluacionesProyecto();
 		if($proyectos)
 			foreach ($proyectos as $proyecto) :
-				if($proyecto->inicio <= date('Y-m-d') && $proyecto->fin >= date('Y-m-d')):
-					$msg2 = "Evaluation: '".$proyecto->nombre."' with id: ".$evaluacion->id."\n";
+				if($proyecto->inicio < date('Y-m-d') && $proyecto->fin > date('Y-m-d')):
+					$msg2 = "Evaluation: '".$proyecto->nombre."' with id: ".$proyecto->id."\n";
 					$info = $this->evaluacion_model->getEvaluadoresPendientesByEvaluacion($proyecto->id);
-					$mensaje="<h2>Estimado Colaborador,</h2><hr>Tienes evaluaciones por realizar, correspondientes a: ";
-					$mensaje.="<i><b>$evaluacion->nombre</b></i><br>Ingresa al<a style='text-decoration:none;' href='http://intranet.advanzer.com:3000/evaluar'>Portal de Evaluación</a>";
-					$mensaje.=" para continuar con el proceso.<br>";
+					$mensaje="<a style='text-decoration:none;' href='http://intranet.advanzer.com:3000/evaluar'><img align='center' width='100%' 
+						src='http://drive.google.com/uc?export=view&id=0B7vcCZhlhZiOZFBzZTFvVnhPSk0'/></a>";
 					if($response = $this->enviaRecordatorio($info->email,$mensaje))
 						$msg .= date("Y-m-d H:i:s")." - Succesfully executed with errors:\n $msg2\t$response";
 					else
@@ -520,16 +519,13 @@ class Main extends CI_Controller {
 		$msg="";
 		$evaluacion = $this->evaluacion_model->getEvaluacionById($this->evaluacion_model->getEvaluacionAnualVigente()->id);
 		if($evaluacion):
-			$inicio=date_create($evaluacion->inicio);
-			$fin=date_create($evaluacion->fin);
-			if(date_diff($inicio,date_create(date('Y-m-d')))->format("%R")=="+" && date_diff(date_create(date('Y-m-d')),$fin)->format("%R")=="+"):
+			if($evaluacion->inicio < date('Y-m-d') && $evaluacion->fin > date('Y-m-d')):
 				$msg2 = "Evaluation: '".$evaluacion->nombre."' with id: ".$evaluacion->id."\n";
 				$info = $this->evaluacion_model->getEvaluadoresPendientesByEvaluacion($evaluacion->id);
 				$response=false;
 				foreach ($info as $evaluador) :
-					$mensaje="<h2>Estimado Colaborador $evaluador->nombre,</h2><hr>Tienes evaluaciones por realizar, correspondientes a: ";
-					$mensaje.="<i><b>$evaluacion->nombre</b></i><br>Ingresa al <a style='text-decoration:none;' href='http://intranet.advanzer.com:3000/evaluar'>Portal de Evaluación</a>";
-					$mensaje.=" para continuar con el proceso.<br>";
+					$mensaje="<a style='text-decoration:none;' href='http://intranet.advanzer.com:3000/evaluar'><img align='center' width='100%' 
+						src='http://drive.google.com/uc?export=view&id=0B7vcCZhlhZiOZFBzZTFvVnhPSk0'/></a>";
 					if($evaluador->email)
 						$response .= $this->enviaRecordatorio($evaluador->email,$mensaje);
 				endforeach;
@@ -551,10 +547,15 @@ class Main extends CI_Controller {
 		$evaluacion = $this->evaluacion_model->getEvaluacionById($this->evaluacion_model->getEvaluacionAnualVigente()->id);
 		if($proyectos):
 			foreach ($proyectos as $proyecto):
-				if($proyecto->inicio == date('Y-m-d')):
+				if($proyecto->inicio == date('Y-m-d') || $proyecto->fin == date('Y-m-d')):
+					if($evaluacion->fin == date('Y-m-d'))
+						$mensaje="<a style='text-decoration:none;' href='http://intranet.advanzer.com:3000/evaluar'><img align='center' width='100%' 
+						src='http://drive.google.com/uc?export=view&id=0B7vcCZhlhZiObmcwSl9jM2QzVDg'/></a>";
+					else
+						$mensaje="<a style='text-decoration:none;' href='http://intranet.advanzer.com:3000/evaluar'><img align='center' width='100%' 
+						src='http://drive.google.com/uc?export=view&id=0B7vcCZhlhZiOSGRscFU2Uy1zUEk'/></a>";
 					$msg2 = "\n\nEvaluation: '".$proyecto->nombre."' with id: ".$proyecto->id."\n";
 					$info = $this->evaluacion_model->getEvaluadoresPendientesByEvaluacion($proyecto->id);
-					$mensaje="<img align='center' height='350px' src='".base_url('assets/images/inicio.jpg')."'/>";
 					if($response = $this->enviaRecordatorio($info->email,$mensaje))
 						$msg .= date("Y-m-d H:i:s")." - Succesfully executed with errors:\n $msg2\t$response";
 					else
@@ -564,12 +565,16 @@ class Main extends CI_Controller {
 		endif;
 		if($evaluacion)
 			if($evaluacion->inicio == date('Y-m-d') || $evaluacion->fin == date('Y-m-d')):
+				if($evaluacion->fin == date('Y-m-d'))
+				$mensaje="<a style='text-decoration:none;' href='http://intranet.advanzer.com:3000/evaluar'><img align='center' width='100%' 
+						src='http://drive.google.com/uc?export=view&id=0B7vcCZhlhZiObmcwSl9jM2QzVDg'/></a>";
+				else
+					$mensaje="<a style='text-decoration:none;' href='http://intranet.advanzer.com:3000/evaluar'><img align='center' width='100%' 
+						src='http://drive.google.com/uc?export=view&id=0B7vcCZhlhZiOSGRscFU2Uy1zUEk'/></a>";
 				$response="";
 				$msg2 = "\n\nEvaluation: '".$evaluacion->nombre."' with id: ".$evaluacion->id."\n";
 				$evaluadores = $this->evaluacion_model->getEvaluadoresPendientesByEvaluacion($evaluacion->id);
 				foreach ($evaluadores as $info) :
-					$mensaje="<a href='http://intranet.advanzer.com:8080/evaluar'><img align='center' width='400px' 
-						src='http://drive.google.com/uc?export=view&id=0B7vcCZhlhZiOLWxxS2NrZEZRSk0'/></a>";
 					$response .= $this->enviaRecordatorio($info->email,$mensaje);
 				endforeach;
 				if($response != "")
@@ -602,7 +607,7 @@ class Main extends CI_Controller {
 
 		$this->email->from('notificaciones.ch@advanzer.com','Portal de Evaluación');
 		/*$this->email->to("micaela.llano@advanzer.com");
-		$this->email->bcc(array('enrique.bernal@advanzer.com','jesus.salas@advanzer.com'))
+		$this->email->bcc(array('enrique.bernal@advanzer.com','jesus.salas@advanzer.com'));
 		*/$this->email->to("jesus.salas@advanzer.com"); //$this->email->to($destinatario);
 		$this->email->subject('Aviso de Evaluación');
 		$this->email->message($mensaje);
