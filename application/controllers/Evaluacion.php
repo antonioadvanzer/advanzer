@@ -225,11 +225,8 @@ class Evaluacion extends CI_Controller {
         $comentarios = $this->input->post('comentarios');
         $evaluacion = $this->evaluacion_model->getEvaluacionAnual();
         $where = array('evaluacion'=>$evaluacion,'colaborador'=>$colaborador);
-        if($this->evaluacion_model->updateRating($where,array('rating'=>$rating,'comentarios'=>$comentarios))){
-            if($this->evaluacion_model->updateFeedbacker($where,array('feedbacker'=>$feedback)))
-                if($this->evaluacion_model->guardaHistorial(array('colaborador'=>$colaborador,'anio'=>$this->evaluacion_model->getEvaluacionById($evaluacion)->anio,'rating'=>$rating)))
-                    $response['msg']="ok";
-        }
+        if($this->evaluacion_model->updateRating($where,array('rating'=>$rating,'comentarios'=>$comentarios),array('feedbacker'=>$feedback)))
+            $response['msg']="ok";
         echo json_encode($response);
     }
 

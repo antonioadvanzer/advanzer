@@ -317,18 +317,28 @@ class Evaluacion_model extends CI_Model{
 		return $result;
 	}
 
-	function updateRating($where,$datos) {
+	function updateRating($where,$datos,$feedbacker) {
+		$this->db->trans_begin();
 		$this->db->where($where)->update('Resultados_Evaluacion',$datos);
-		if($this->db->affected_rows() == 1)
-			return true;
+		$res = $this->db->where($where)->get('Resultados_Evaluacion')->first_row();
+		$this->db->where('resultado',$res->id)->update('Feedbacks',$feedbacker);
+
+		$anio=$this->getEvaluacionById($where['evaluacion'])->anio;
+		$where_historial=array('anio'=>$anio,'colaborador'=>$where['colaborador']);
+		$res = $this->db->where($where_historial)->get('Historial');
+		if ($res->num_rows() == 1)
+			$this->db->where($where_historial)->update('Historial',array('rating'=>$datos['rating']));
 		else{
-			$datos['evaluacion']=$where['evaluacion'];
-			$datos['colaborador']=$where['colaborador'];
-			$this->db->insert('Resultados_Evaluacion',$datos);
-			if($this->db->affected_rows() == 1)
-				return true;
+			$where_historial['rating'] = $datos['rating'];
+			$this->db->insert('Historial',$where_historial);
 		}
-		return false;
+		if($this->db->trans_status() === FALSE):
+			$this->db->trans_rollback();
+			return false;
+		else:
+			$this->db->trans_commit();
+			return true;
+		endif;
 	}
 
 	function guardaHistorial($datos) {
