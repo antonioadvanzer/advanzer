@@ -49,7 +49,7 @@
 								<td class="col-md-7" style="cursor:default;"><?= $evaluador->nombre;?></td>
 								<td style="cursor:default;" align="center"><?= $evaluador->anuales;?></td>
 								<td style="cursor:default;" align="center"><?= $evaluador->tres60;?></td>
-								<td style="cursor:default;" align="center"><?php if($evaluador->auto) echo "No";else echo "Si";?></td>
+								<td style="cursor:default;" align="center"><?php if($evaluador->auto == 1) echo "No ha enviado";else echo "Enviada";?></td>
 							</tr>
 						<?php endforeach; ?>
 				</tbody>
