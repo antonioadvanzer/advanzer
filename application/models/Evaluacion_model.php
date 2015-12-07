@@ -321,6 +321,13 @@ class Evaluacion_model extends CI_Model{
 		$this->db->where($where)->update('Resultados_Evaluacion',$datos);
 		if($this->db->affected_rows() == 1)
 			return true;
+		else{
+			$datos['evaluacion']=$where['evaluacion'];
+			$datos['colaborador']=$where['colaborador'];
+			$this->db->insert('Resultados_Evaluacion',$datos);
+			if($this->db->affected_rows() == 1)
+				return true;
+		}
 		return false;
 	}
 

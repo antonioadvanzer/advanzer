@@ -195,36 +195,15 @@
 		</div>
 	</div>
 	<script>
-	function verificaRating() {
-		gastos = "<?= $colaborador->cumple_gastos;?>";
-		harvest = "<?= $colaborador->cumple_harvest;?>";
-		cv = "<?= $colaborador->cumple_cv;?>";
-		if(gastos=="NO" || harvest=="NO" || cv=="NO"){
-			$('#rating option[value="A"]').remove();
-			$('#rating option[value="B"]').remove();
-			$('#rating option[value="C"]').remove();
-			$('#rating option[value=""]').attr("selected","selected");
-		}
-	}
 	$(document).ready(function() {
-		estatus=<?= $colaborador->feedback->estatus;?>;
+		estatus=<?php if(isset($colaborador->feedback->estatus)) echo $colaborador->feedback->estatus;else echo "0";?>;
 		if(estatus != 0){
 			$('#rating').prop('disabled',true);
 			$('#feedback').prop('disabled',true);
 			$('#comentarios').prop('disabled',true);
 			$('#submit').css('display','none');
 		}
-		/*verificaRating();
-
-		$('#gastos').change(function() {
-			verificaRating();
-		});
-		$('#harvest').change(function() {
-			verificaRating();
-		});
-		$('#cv').change(function() {
-			verificaRating();
-		});*/
+		
 		$('#save').submit(function(event) {
 			$('#rating :selected').each(function(i,select) {
 				rating = $(select).val();
