@@ -40,7 +40,7 @@
 				<label>Rating Obtenido: </label><span><big><?= $feedback->rating;?></big></span>
 			</div>
 			<div class="col-md-12">
-				<label>Comentarios de la Junta: </label><span><?= $feedback->comentarios;?></span>
+				<label>Comentarios de la Junta:&nbsp;</label><span><?= $feedback->comentarios;?></span>
 			</div>
 			<div class="col-md-2">
 				<img class="img-circle avatar avatar-original" src="<?= base_url("assets/images/fotos/$feedback->foto");?>" height="120px">

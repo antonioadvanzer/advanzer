@@ -280,7 +280,7 @@ class Evaluacion_model extends CI_Model{
 	}
 
 	function getEvaluacionesByEvaluador($evaluador) {
-		if($evaluacion=$this->getEvaluacionById($this->getEvaluacionAnual())):
+		if($evaluacion=$this->getEvaluacionById($this->getEvaluacionAnualVigente()->id)):
 			if($evaluacion->estatus == 2){
 				$evaluacion = $evaluacion->id;
 				redirect("evaluacion/defineFeedback/$evaluacion");

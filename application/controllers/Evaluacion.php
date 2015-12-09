@@ -762,7 +762,8 @@ class Evaluacion extends CI_Controller {
 
     public function evaluar() {
         $evaluador=$this->session->userdata('id');
-        //if($this->evaluacion_model->getEvaluacionAnualVigente()->id)
+        if(!$this->evaluacion_model->getEvaluacionAnualVigente()->id)
+            redirect("evaluacion/defineFeedback");
         //    $this->genera_autoevaluacion($evaluador);
         $data['colaboradores']=$this->evaluacion_model->getEvaluacionesByEvaluador($evaluador);
         $data['yo'] = $evaluador;
@@ -841,7 +842,8 @@ class Evaluacion extends CI_Controller {
         <?php
     }
 
-    public function defineFeedback($evaluacion) {
+    public function defineFeedback() {
+        $evaluacion=$this->evaluacion_model->getEvaluacionAnual();
         $data['asignaciones'] = $this->evaluacion_model->getFeedbacksByEvaluador($evaluacion,$this->session->userdata('id'));
         $data['propias'] = $this->evaluacion_model->getFeedbacksByColaborador($evaluacion,$this->session->userdata('id'));
         $this->layout->title('Advanzer - Asignar Feedback');
