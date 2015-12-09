@@ -32,8 +32,8 @@
 			padding-bottom: 20px;
 		}
 		.jumbotron {
-			-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#488FCD, endColorstr=#ffffff)";
-			filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#488FCD', endColorstr='#ffffff');
+			-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#628DC8, endColorstr=#ffffff)";
+			filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#628DC8', endColorstr='#ffffff');
 		}
 		.navbar-inverse {
 			background-image: -webkit-linear-gradient(top, #3c3c3c 0%, #222 100%);
@@ -51,12 +51,12 @@
 		var color = "";
 		switch(empresa){
 			case 1:
-				color = "#B0B914";
+				color = "#C0D339";
 				font = "TitilliumTitle20.otf";
 				titleFont = "TitilliumTitle20";
 			break;
 			case 2:
-				color = "#488FCD";
+				color = "#628DC8";
 				font = "corbel.ttf";
 				titleFont = "Corbel";
 			break;
@@ -85,12 +85,12 @@
 			document.write('\
 				<style>\
 					.navbar-inverse {\
-						background-image: -moz-linear-gradient(left, #B0B914, #488FCD);\
-						background-image: -ms-linear-gradient(left, #B0B914, #488FCD);\
-						background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#B0B914), to(#488FCD));\
-						background-image: -webkit-linear-gradient(left, #B0B914, #488FCD);\
-						background-image: -o-linear-gradient(left, #B0B914, #488FCD);\
-						background-image: linear-gradient(left, #B0B914, #488FCD);\
+						background-image: -moz-linear-gradient(left, #C0D339, #628DC8);\
+						background-image: -ms-linear-gradient(left, #C0D339, #628DC8);\
+						background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#C0D339), to(#628DC8));\
+						background-image: -webkit-linear-gradient(left, #C0D339, #628DC8);\
+						background-image: -o-linear-gradient(left, #C0D339, #628DC8);\
+						background-image: linear-gradient(left, #C0D339, #628DC8);\
 						background-repeat: repeat-x;\
 						border-radius: 4px;\
 					}\
