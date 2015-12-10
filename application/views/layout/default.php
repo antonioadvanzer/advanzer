@@ -62,8 +62,8 @@
 			break;
 			default:
 				color= "#";
-				font = "AvenirLTStd-Light.otf";
-				titleFont = "Avenir LT Std 35 Light";
+				font = "AvenirLTStd-Medium.otf";
+				titleFont = "Avenir LT Std 65 Medium";
 			break;
 		}
 		if(color != "")
@@ -77,7 +77,7 @@
 					}\
 					html {\
 						font-family: "'+titleFont+'";\
-						src: url("../'+font+'");\
+						src: url("<?= base_url("assets/fonts");?>/'+font+'");\
 					}\
 				</style>\
 			');
