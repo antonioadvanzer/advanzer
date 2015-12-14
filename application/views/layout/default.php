@@ -52,8 +52,8 @@
 		switch(empresa){
 			case 1:
 				color = "#C0D339";
-				font = "TitilliumTitle20.otf";
-				titleFont = "TitilliumTitle20";
+				font = "TitilliumText22L-400wt.otf";
+				titleFont = "TitilliumText22L";
 			break;
 			case 2:
 				color = "#628DC8";
@@ -75,7 +75,7 @@
 						background: -moz-linear-gradient('+color+',#fff); /* For Firefox 3.6 to 15 */\
 						background: linear-gradient('+color+',#fff); /* Standard syntax (must be last) */\
 					}\
-					html {\
+					html,body {\
 						font-family: "'+titleFont+'";\
 						src: url("<?= base_url("assets/fonts");?>/'+font+'");\
 					}\
