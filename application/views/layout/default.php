@@ -93,6 +93,10 @@
 						background-image: linear-gradient(left, #C0D339, #628DC8);\
 						background-repeat: repeat-x;\
 					}\
+					html,body {\
+						font-family: "'+titleFont+'";\
+						src: url("<?= base_url("assets/fonts");?>/'+font+'");\
+					}\
 				</style>\
 			');
 	</script>
