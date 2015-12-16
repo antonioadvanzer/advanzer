@@ -43,7 +43,7 @@
 			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff3c3c3c', endColorstr='#ff222222', GradientType=0);
 			filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
 			background-repeat: repeat-x;
-			border-radius: 4px;
+			/*border-radius: 4px;*/
 		}
 	</style>
 	<script>
@@ -66,7 +66,7 @@
 				titleFont = "Avenir LT Std 65 Medium";
 			break;
 		}
-		if(color != "")
+		if(color != "#")
 			document.write('\
 				<style>\
 					.jumbotron {\
@@ -92,7 +92,6 @@
 						background-image: -o-linear-gradient(left, #C0D339, #628DC8);\
 						background-image: linear-gradient(left, #C0D339, #628DC8);\
 						background-repeat: repeat-x;\
-						border-radius: 4px;\
 					}\
 				</style>\
 			');

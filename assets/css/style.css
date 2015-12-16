@@ -1,3 +1,15 @@
+@font-face {
+  font-family: 'TitilliumText22L';
+  src: url('../fonts/TitilliumText22L-400wt.otf');
+}
+@font-face {
+  font-family: 'Corbel';
+  src: url('../fonts/corbel.ttf');
+}
+@font-face {
+  font-family: 'Avenir LT Std 65 Medium';
+  src: url('../fonts/AvenirLTStd-Medium.otf');
+}
 .text-center{
     text-align: center !important;
 }
