@@ -136,11 +136,9 @@
 				<label><?= $resp->descripcion;?></label>
 			</h2>
 			<div align="left">
-				<ol reversed>
-					<?php foreach ($resp->metricas as $metrica): ?>
-					<li><?= $metrica->descripcion;?></li>
-				<?php endforeach; ?>
-				</ol>
+				<p><?php foreach ($this->evaluacion_model->getMetricaByObjetivo($responsabilidad->id) as $metrica) :?>
+                    <label><?= $metrica->valor.'. '.$metrica->descripcion;?></label>
+                <?php endforeach; ?></p>
 			</div>
 			<?php endforeach; ?>
 		</div>
