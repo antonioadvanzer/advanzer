@@ -669,10 +669,11 @@ class Evaluacion_model extends CI_Model{
 
 	function getPagination($anio) {
 		$this->db->select('U.id,U.foto,U.nombre,A.nombre area,P.nombre posicion')
-			->join('Areas A','A.id = U.area')
+			->join('Areas A','A.id = U.area','LEFT OUTER')
 			->join('Posicion_Track PT','PT.id = U.posicion_track')
 			->join('Posiciones P','P.id = PT.posicion')
-			->where(array('U.fecha_ingreso <='=>$anio.'-09-30','U.estatus'=>1,'P.nivel <='=>8,'P.nivel >'=>3))
+			->where(array('U.fecha_ingreso <='=>$anio.'-09-30','U.estatus'=>1,'P.nivel <='=>8))
+			->where_not_in('U.id',array(1,2,51))
 			->group_by('U.id')
 			->order_by('U.nombre');
 		$result = $this->db->get('Users U')->result();
