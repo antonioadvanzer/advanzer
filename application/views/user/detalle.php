@@ -23,7 +23,7 @@
 		<input type="hidden" id="id" name="id" value="<?= $user->id;?>">
 	  <div class="col-md-6">
 		  <div class="form-group">
-		  	<img height="200px" src="<?= base_url("assets/images/fotos/$user->foto");?>">
+		  	<img class="img-circle avatar avatar-original" height="200px" src="<?= base_url("assets/images/fotos/$user->foto");?>?">
 		  </div>
 	  </div>
 	  <div class="col-md-3" align="center">
