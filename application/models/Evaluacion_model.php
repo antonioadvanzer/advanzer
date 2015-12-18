@@ -294,9 +294,9 @@ class Evaluacion_model extends CI_Model{
 				$data=array();
 				$items="";
 				foreach ($this->getIndicadoresByPosicion($posicion) as $indicador) :
+					$string="";
 					foreach ($this->getCompetenciasByIndicador($indicador->id,$posicion) as $competencia) :
 						$justificacion=array();
-						$string="";
 						array_push($categories,$competencia->nombre);
 						$temp=$this->db->select('AVG(DE.respuesta) promedio')->from('Detalle_ev_360 DE')
 							->join('Competencias C','C.id = DE.competencia')
