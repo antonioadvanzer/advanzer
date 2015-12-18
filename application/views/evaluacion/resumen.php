@@ -43,72 +43,75 @@
 	
 	<script>
 		function loadData(data){
-			$('#graph').highcharts({
-				colors: [color],
-				chart: {
-					type: 'column',
-					style: {
-						fontFamily: titleFont
-					}
-				},
-				title: {
-					text: 'Resultados 360°'
-				},
-				xAxis: {
-					categories: data.categories
-				},
-				yAxis: {
-					min: 0,
-					max: 6,
-					title: {
-						text: 'Media Ponderada'
-					},
-					stackLabels: {
-						enabled: false,
+			if(data.data != undefined)
+				$('#graph').highcharts({
+					colors: [color],
+					chart: {
+						type: 'column',
 						style: {
-							fontWeight: 'bold',
-							color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+							fontFamily: titleFont
 						}
-					}
-				},
-				legend: {
-					align: 'right',
-					x: -30,
-					verticalAlign: 'top',
-					y: 25,
-					floating: true,
-					backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
-					borderColor: '#CCC',
-					borderWidth: 1,
-					shadow: false
-				},
-				tooltip: {
-					formatter: function () {
-						return '<b>' + this.x + '</b><br/>' +
-						'Total: ' + this.point.stackTotal;
-					}
-				},
-				plotOptions: {
-					column: {
-						stacking: 'normal',
-						dataLabels: {
+					},
+					title: {
+						text: 'Resultados 360°'
+					},
+					xAxis: {
+						categories: data.categories
+					},
+					yAxis: {
+						min: 0,
+						max: 6,
+						title: {
+							text: 'Media Ponderada'
+						},
+						stackLabels: {
 							enabled: false,
-							color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
 							style: {
-								textShadow: '0 0 3px black'
+								fontWeight: 'bold',
+								color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
 							}
 						}
-					}
-				},
-				series: [{
-					name: data.name,
-					data: data.data
-				}]
-			});
+					},
+					legend: {
+						align: 'right',
+						x: -30,
+						verticalAlign: 'top',
+						y: 25,
+						floating: true,
+						backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+						borderColor: '#CCC',
+						borderWidth: 1,
+						shadow: false
+					},
+					tooltip: {
+						formatter: function () {
+							return '<b>' + this.x + '</b><br/>' +
+							'Total: ' + this.point.stackTotal;
+						}
+					},
+					plotOptions: {
+						column: {
+							stacking: 'normal',
+							dataLabels: {
+								enabled: false,
+								color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
+								style: {
+									textShadow: '0 0 3px black'
+								}
+							}
+						}
+					},
+					series: [{
+						name: data.name,
+						data: data.data
+					}]
+				});
 		}
 		$(function () {
+			colaborador=<?= $this->session->userdata('id');?>;
+			console.log(colaborador);
 			$.ajax({
-				url: '<?= base_url("evaluacion/getResumenByColaborador");?>',
+				url: '<?= base_url("evaluacion/getResumenByColaborador");?>/'+colaborador,
 				type: 'POST',
 				async: true,
 				dataType: "json",
