@@ -309,7 +309,8 @@ class Evaluacion_model extends CI_Model{
 							->where_in('asignacion',$ids)
 							->where('C.id',$competencia->id)->get()->result();
 						foreach ($temp2 as $t) :
-							$string .= "$t->justificacion<br>";
+							if($t->justificacion != "")
+								$string .= "$t->justificacion<br>";
 						endforeach;
 					endforeach;
 					$items .="<tr><td style='cursor:default'>$indicador->nombre</td><td style='cursor:default'>$string</td></tr>";
