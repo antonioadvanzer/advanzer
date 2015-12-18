@@ -279,6 +279,62 @@ class Evaluacion_model extends CI_Model{
 		return $this->db->get()->result();
 	}
 
+	function getResumen($evaluacion,$id) {
+		$posicion = $this->getPosicionByColaborador($id);
+		$result=new stdClass();
+		if ($posicion <= 5) :
+			$asignaciones = $this->db->select('id')->from('Evaluadores')
+				->where(array('evaluado'=>$id,'evaluacion'=>$evaluacion))->get()->result();
+			$ids=array();
+			foreach ($asignaciones as $as) {
+				array_push($ids, $as->id);
+			}
+			if(!empty($ids)){
+				$categories=array();
+				$data=array();
+				$items="";
+				foreach ($this->getIndicadoresByPosicion($posicion) as $indicador) :
+					foreach ($this->getCompetenciasByIndicador($indicador->id,$posicion) as $competencia) :
+						$justificacion=array();
+						$string="";
+						array_push($categories,$competencia->nombre);
+						$temp=$this->db->select('AVG(DE.respuesta) promedio')->from('Detalle_ev_360 DE')
+							->join('Competencias C','C.id = DE.competencia')
+							->where_in('asignacion',$ids)
+							->where('C.id',$competencia->id)->get()->first_row();
+						array_push($data, $temp->promedio);
+
+						$temp2=$this->db->select('justificacion')->from('Detalle_ev_360 DE')
+							->join('Competencias C','C.id = DE.competencia')
+							->where_in('asignacion',$ids)
+							->where('C.id',$competencia->id)->get()->result();
+						foreach ($temp2 as $t) :
+							$string .= "$t->justificacion<br>";
+						endforeach;
+					endforeach;
+					$items .="<tr><td style='cursor:default'>$indicador->nombre</td><td style='cursor:default'>$string</td></tr>";
+				endforeach;
+				$result->data = $data;
+				$result->justificacion = $items;
+				$result->categories = $categories;
+				$result->name = $this->db->where('id',$id)->get('Users')->first_row()->nombre;
+			}
+		endif;
+		return $result;
+	}
+
+	function getSubordinados($evaluacion,$jefe) {
+		$this->db->select('U.id,U.foto,U.nombre,A.nombre area,P.nombre posicion,T.nombre track')->from('Resultados_Evaluacion RE')
+			->join('Users U','U.id = RE.colaborador')
+			->join('Areas A','A.id = U.area','LEFT OUTER')
+			->join('Posicion_Track PT','PT.id = U.posicion_track','LEFT OUTER')
+			->join('Posiciones P','P.id = PT.posicion','LEFT OUTER')
+			->join('Tracks T','T.id = PT.track','LEFT OUTER')
+			->where(array('RE.evaluacion'=>$evaluacion,'U.estatus'=>1,'U.jefe'=>$jefe,'P.nivel <='=>5))
+			->order_by('U.nombre');
+		return $this->db->get()->result();
+	}
+
 	function getEvaluacionesByEvaluador($evaluador) {
 		if($evaluacion=$this->getEvaluacionById($this->getEvaluacionAnualVigente()->id)):
 			if($evaluacion->estatus == 2){

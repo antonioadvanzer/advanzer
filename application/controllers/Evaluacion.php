@@ -848,6 +848,22 @@ class Evaluacion extends CI_Controller {
         $this->layout->view('evaluacion/asignar_feedback',$data);
     }
 
+    public function resumen() {
+        $evaluacion=$this->evaluacion_model->getEvaluacionAnual();
+        $data['resumen'] = $this->evaluacion_model->getResumen($evaluacion,$this->session->userdata('id'));
+        $data['subordinados'] = $this->evaluacion_model->getSubordinados($evaluacion,$this->session->userdata('id'));
+        $this->layout->title('Advanzer - Resúmen Evaluación');
+        $this->layout->view('evaluacion/resumen',$data);
+    }
+
+    public function getResumenByColaborador($colaborador=null) {
+        $evaluacion=$this->evaluacion_model->getEvaluacionAnual();
+        if($colaborador==null)
+            $colaborador=$this->session->userdata('id');
+        $resumen=$this->evaluacion_model->getResumen($evaluacion,$colaborador);
+        echo json_encode($resumen, JSON_NUMERIC_CHECK);
+    }
+
     public function captura() {
         $tipo=$this->input->post('tipo');
         switch ($tipo) {

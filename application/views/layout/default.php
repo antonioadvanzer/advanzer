@@ -25,6 +25,7 @@
 	<script src="<?= base_url('assets/js/jquery.dataTables.js');?>"></script>
 	<script src="<?= base_url('assets/js/jasny-bootstrap.js');?>"></script>
 	<script src="<?= base_url('assets/js/bootstrap-select.js');?>"></script>
+	<script src="<?= base_url('assets/js/highcharts/highcharts.js');?>"></script>
 	<title><?=$title_for_layout?></title>
 	<style type="text/css">
 		body {
@@ -130,16 +131,18 @@
 													<li><a href="<?= base_url('objetivo/asignar_pesos');?>">Responsabilidades Por Área</a></li>
 												<?php //endif; ?>
 											<?php endif; 
-											if(in_array($this->session->userdata('tipo'), array(3,4,5,6))): ?>
+											if(in_array($this->session->userdata('tipo'), array(4,5,6))): ?>
 													<li><a href="<?= base_url('evaluacion');?>">Evaluaciones</a></li>
 													<!--<li><a href="<?= base_url('evaluacion/index/false');?>">Evaluaciones Confidencial</a></li>-->
 													<li><a href="<?= base_url('evaluacion/por_evaluador');?>">Evaluaciones por Evaluador</a></li>
 													<li><a href="<?= base_url('evaluacion/pendientes');?>">Evaluaciones Pendientes de Enviar</a></li>
+											<?php endif;
+											if($this->session->userdata('tipo') == 3):?>
 												<li><a href="<?= base_url('ver_requisiciones');?>">Requisiciones</a></li>
-											<?php endif;?>
+											<?php endif; ?>
 										</ul>
 									</li>
-									<?php if(in_array($this->session->userdata('tipo'), array(3,4,5,6))): ?>
+									<?php if(in_array($this->session->userdata('tipo'), array(4,5,6))): ?>
 										<li role="separator" class="divider"></li>
 										<li class="dropdown-submenu"><a tabindex="-1" href="#">ABC</a>
 											<ul class="dropdown-menu">
@@ -170,7 +173,10 @@
 									<li><a href="<?= base_url('evaluar');?>">Evaluaciones</a></li>
 								<?php if(in_array($this->session->userdata('tipo'), array(1,2,5,6))): ?>
 									<li><a href="<?= base_url('evaluacion/ci');?>">Compromisos Internos</a></li>
-								<?php endif; ?>
+								<?php endif;
+								if($this->session->userdata('posicion') <= 5): ?>
+									<li><a href="<?= base_url('evaluacion/resumen');?>">Resumén de Evaluación 360</a></li>
+								<?php endif;?>
 								<li><a href="">Vacaciones <small>(PROXIMAMENTE)</small></a></li>
 							</ul>
 						</li>

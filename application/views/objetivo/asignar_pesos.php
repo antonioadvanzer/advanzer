@@ -35,23 +35,23 @@
             <?php $total1=0;$total2=0;$total3=0;$total4=0;$total5=0;$total6=0;
             foreach ($area->objetivos as $resp) : ?>
               <tr>
-                <td><b>[<?= $resp->dominio;?>]</b> <small><?= $resp->nombre;?> - <small><i><?= $resp->tipo;?></i></small></small></td>
-                <td><input style="max-width:80px;text-align:center" class="form-control" type="text" maxlength="3" required pattern="[0-9]+" 
+                <td style="cursor:default"><b>[<?= $resp->dominio;?>]</b> <small><?= $resp->nombre;?> - <small><i><?= $resp->tipo;?></i></small></small></td>
+                <td style="cursor:default"><input style="max-width:80px;text-align:center" class="form-control" type="text" maxlength="3" required pattern="[0-9]+" 
                   value="<?php if(!empty($resp->analista)){ echo $resp->analista->valor; $total1+=$resp->analista->valor;}else echo "0";?>" 
                   onchange="if(this.value == '') this.value=0;change(this.value,<?= $resp->id;?>,<?= $area->id;?>,8);sumarColumna(<?= $area->id;?>,1);" ></td>
-                <td><input style="max-width:80px;text-align:center" class="form-control" type="text" maxlength="3" required pattern="[0-9]+" 
+                <td style="cursor:default"><input style="max-width:80px;text-align:center" class="form-control" type="text" maxlength="3" required pattern="[0-9]+" 
                   value="<?php if(!empty($resp->consultor)){ echo $resp->consultor->valor;$total2+=$resp->consultor->valor;}else echo "0";?>" 
                   onchange="change(this.value,<?= $resp->id;?>,<?= $area->id;?>,7);sumarColumna(<?= $area->id;?>,2);" ></td>
-                <td><input style="max-width:80px;text-align:center" class="form-control" type="text" maxlength="3" required pattern="[0-9]+" 
+                <td style="cursor:default"><input style="max-width:80px;text-align:center" class="form-control" type="text" maxlength="3" required pattern="[0-9]+" 
                   value="<?php if(!empty($resp->sr)){echo $resp->sr->valor; $total3+=$resp->sr->valor;}else echo "0";?>" 
                   onchange="change(this.value,<?= $resp->id;?>,<?= $area->id;?>,6);sumarColumna(<?= $area->id;?>,3);" ></td>
-                <td><input style="max-width:80px;text-align:center" class="form-control" type="text" maxlength="3" required pattern="[0-9]+" 
+                <td style="cursor:default"><input style="max-width:80px;text-align:center" class="form-control" type="text" maxlength="3" required pattern="[0-9]+" 
                   value="<?php if(!empty($resp->gerente)){ echo $resp->gerente->valor;$total4+=$resp->gerente->valor;}else echo "0";?>" 
                   onchange="change(this.value,<?= $resp->id;?>,<?= $area->id;?>,5);sumarColumna(<?= $area->id;?>,4);" ></td>
-                <td><input style="max-width:80px;text-align:center" class="form-control" type="text" maxlength="3" required pattern="[0-9]+" 
+                <td style="cursor:default"><input style="max-width:80px;text-align:center" class="form-control" type="text" maxlength="3" required pattern="[0-9]+" 
                   value="<?php if(!empty($resp->experto)){echo $resp->experto->valor;$total5+=$resp->experto->valor;}else echo "0";?>" 
                   onchange="change(this.value,<?= $resp->id;?>,<?= $area->id;?>,4);sumarColumna(<?= $area->id;?>,5);" ></td>
-                <td><input style="max-width:80px;text-align:center" class="form-control" type="text" maxlength="3" required pattern="[0-9]+" 
+                <td style="cursor:default"><input style="max-width:80px;text-align:center" class="form-control" type="text" maxlength="3" required pattern="[0-9]+" 
                   value="<?php if(!empty($resp->director)){ echo $resp->director->valor;$total6+=$resp->director->valor;}else echo "0";?>" 
                   onchange="change(this.value,<?= $resp->id;?>,<?= $area->id;?>,3);sumarColumna(<?= $area->id;?>,6);" ></td>
               </tr>
@@ -59,13 +59,13 @@
           </tbody>
           <tfoot>
             <tr>
-              <td align="right"><small><b>&sum;</b></small></td>
-              <td align="center"><small><?= $total1;?></small></td>
-              <td align="center"><small><?= $total2;?></small></td>
-              <td align="center"><small><?= $total3;?></small></td>
-              <td align="center"><small><?= $total4;?></small></td>
-              <td align="center"><small><?= $total5;?></small></td>
-              <td align="center"><small><?= $total6;?></small></td>
+              <td style="cursor:default" align="right"><small><b>&sum;</b></small></td>
+              <td style="cursor:default" align="center"><small><?= $total1;?></small></td>
+              <td style="cursor:default" align="center"><small><?= $total2;?></small></td>
+              <td style="cursor:default" align="center"><small><?= $total3;?></small></td>
+              <td style="cursor:default" align="center"><small><?= $total4;?></small></td>
+              <td style="cursor:default" align="center"><small><?= $total5;?></small></td>
+              <td style="cursor:default" align="center"><small><?= $total6;?></small></td>
             </tr>
           </tfoot>
         </table>

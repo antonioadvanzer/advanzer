@@ -208,25 +208,27 @@
 										<input type="hidden" value="<?= $comportamiento->id;?>" id="elemento">
 										<input type="hidden" value="<?= $evaluacion->id;?>" id="asignacion">
 										<input type="hidden" value="" id="tipo">
-										<span><?= $comportamiento->descripcion;?><span style="float:right;display:inline"><i>Respuesta</i>: 
-											<select onchange="this.form.boton.style.display='';if(this.options[this.selectedIndex].value == 3){
-													this.form.justificacion.value='';
-													this.form.justificacion.removeAttribute('required');}
-												else{
-													this.form.justificacion.setAttribute('required','required');
-													this.form.justificacion.focus();
-													if(this.form.justificacion.value.trim().split(' ').length >= 3)
-														this.form.boton.removeAttribute('disabled');
-												}
-												verify(this.form);" class="form-control" id="respuesta" 
-												style="max-width:70px;text-align:center">
-												<option disabled selected value="">-- Selecciona tu respuesta --</option>
-												<?php for ($i=5; $i >= 1; $i--) : ?>
-													<option <?php if(isset($comportamiento->respuesta) && $comportamiento->respuesta == $i) echo "selected";?>><?= $i;?></option>
-												<?php endfor; ?>
-											</select></span></span>
+										<span><?= $comportamiento->descripcion;?></span>
 										<div class="row" id="naranja">
-											<div class="col-md-6">
+											<div class="col-md-2"><i>Respuesta</i>: 
+												<select onchange="this.form.boton.style.display='';if(this.options[this.selectedIndex].value == 3){
+														this.form.justificacion.value='';
+														this.form.justificacion.removeAttribute('required');}
+													else{
+														this.form.justificacion.setAttribute('required','required');
+														this.form.justificacion.focus();
+														if(this.form.justificacion.value.trim().split(' ').length >= 3)
+															this.form.boton.removeAttribute('disabled');
+													}
+													verify(this.form);" class="form-control" id="respuesta" 
+													style="max-width:60px;text-align:center">
+													<option disabled selected value="">-- Selecciona tu respuesta --</option>
+													<?php for ($i=5; $i >= 1; $i--) : ?>
+														<option <?php if(isset($comportamiento->respuesta) && $comportamiento->respuesta == $i) echo "selected";?>><?= $i;?></option>
+													<?php endfor; ?>
+												</select>
+											</div>
+											<div class="col-md-5">
 												<div class="form-group" align="center">
 													<textarea id="justificacion" class="form-control" rows="2" style="max-width:300px;text-align:center;" 
 														onkeyup="if(this.value.trim().split(' ').length >= 3){ this.form.boton.removeAttribute('disabled');
@@ -234,7 +236,7 @@
 														required><?= $comportamiento->justificacion;?></textarea>
 												</div>
 											</div>
-											<div class="col-md-6">
+											<div class="col-md-5">
 												<div class="form-group" align="center">
 													<input id="boton" class="btn btn-lg btn-primary btn-block" style="max-width:200px;
 														<?php if(!$comportamiento->respuesta) echo "display:none;"?>

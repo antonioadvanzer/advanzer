@@ -70,8 +70,8 @@
 <div class="jumbotron">
 	<div class="container">
 		<h2 style="cursor:default;">Revisión de la Evaluación - <?= $evaluacion->nombre;?></h2>
-		<p><small>Evaluador: <i><?= $evaluador->nombre;?></i></small></p>
-		<p><small>Evalua a: <i><?= $evaluado->nombre;?></i></small></p>
+		<!--<p><small>Evaluador: <i><?= $evaluador->nombre;?></i></small></p>-->
+		<p><small>Evaluación a: <i><?= $evaluado->nombre;?></i></small></p>
 	</div>
 </div>
 <div class="container">

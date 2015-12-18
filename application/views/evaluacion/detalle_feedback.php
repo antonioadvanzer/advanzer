@@ -101,61 +101,63 @@
 				<table id="tbl" align="center" class="table table-hover table-condensed table-striped">
 					<thead>
 						<tr>
-							<th data-halign="center"></th>
-							<th data-halign="center">Evaluador</th>
-							<th data-halign="center">Calificación</th>
+							<!--<th data-halign="center"></th>
+							<th data-halign="center">Evaluador</th>-->
 							<th data-halign="center">Evaluación</th>
+							<th data-halign="center">Calificación</th>
 							<th data-halign="center">Comentarios</th>
 						</tr>
 					</thead>
 					<tbody data-link="row">
 						<?php foreach ($evaluaciones->evaluadores as $evaluador):?>
 							<tr>
-								<td align="center"><a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion");?>">
+								<!--<td align="center">
 									<img class="img-circle avatar avatar-original" height="40px" 
-										src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></a></td>
-								<td><?= $evaluador->nombre;?></td>
+										src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></td>
+								<td><?= $evaluador->nombre;?></td>-->
+								<td><a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion");?>">Anual</a></td>
 								<td><?= number_format(($evaluador->competencia*.3)+($evaluador->responsabilidad*.7),2);?></td>
-								<td>Anual</td>
 								<td><?php if($evaluador->comentarios) echo $evaluador->comentarios;?></td>
 							</tr>
 						<?php endforeach;
 						if(isset($evaluaciones->evaluadores360) && count($evaluaciones->evaluadores360) > 0)
 							foreach ($evaluaciones->evaluadores360 as $evaluador):?>
 								<tr>
-									<td align="center"><a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion");?>">
+									<!--<td align="center">
 										<img class="img-circle avatar avatar-original" height="40px" 
-											src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></a></td>
-									<td><?= $evaluador->nombre;?></td>
+											src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></td>
+									<td><?= $evaluador->nombre;?></td>-->
+									<td><a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion");?>">360</a></td>
 									<td><?= $evaluador->competencia;?></td>
-									<td>360</td>
 									<td><?= $evaluador->comentarios;?></td>
 								</tr>
 							<?php endforeach;
 						if(isset($evaluaciones->evaluadoresProyecto) && count($evaluaciones->evaluadoresProyecto) > 0)
 							foreach ($evaluaciones->evaluadoresProyecto as $evaluador):?>
 								<tr>
-									<td align="center"><a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion/1");?>">
+									<!--<td align="center">
 										<img class="img-circle avatar avatar-original" height="40px" 
-											src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></a></td>
-									<td><?= $evaluador->nombre;?></td>
+											src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></td>
+									<td><?= $evaluador->nombre;?></td>-->
+									<td><a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion/1");?>">
+										Proyecto - <?= $evaluador->evaluacion;?></a></td>
 									<td><?= number_format($evaluador->responsabilidad,2);?></td>
-									<td>Proyecto - <?= $evaluador->evaluacion;?></td>
 									<td><?php if($evaluador->comentarios) echo $evaluador->comentarios;?></td>
 								</tr>
 							<?php endforeach; ?>
 						<tr>
-							<td align="center"><?php if($evaluaciones->auto):?>
-								<a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/".$evaluaciones->auto->asignacion);?>">
-									<img class="img-circle avatar avatar-original" height="40px" 
-										src="<?= base_url('assets/images/fotos')."/".$evaluaciones->foto;?>"></a>
-								<?php else: ?><img class="img-circle avatar avatar-original" height="40px" 
+							<!--<td align="center">
+								<img class="img-circle avatar avatar-original" height="40px" 
 									src="<?= base_url('assets/images/fotos')."/".$evaluaciones->foto;?>">
+							</td>
+							<td><?= $evaluaciones->nombre;?></td>-->
+							<td><?php if($evaluaciones->auto):?>
+									<a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/".$evaluaciones->auto->asignacion);?>">
+									AUTOEVALUACIÓN</a>
+								<?php else: ?>AUTOEVALUACIÓN
 								<?php endif;?>
 							</td>
-							<td><?= $evaluaciones->nombre;?></td>
 							<td><?php if($evaluaciones->auto) echo number_format($evaluaciones->autoevaluacion,2);?></td>
-							<td>AUTOEVALUACIÓN</td>
 							<td><?php if($evaluaciones->auto) echo $evaluaciones->auto->comentarios;?></td>
 						</tr>
 					</tbody>
