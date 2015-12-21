@@ -109,25 +109,6 @@
 		}
 		$(function () {
 			$('#tbl').hide();
-			/*$.ajax({
-				url: '<?= base_url("evaluacion/getResumenByColaborador");?>/'+colaborador,
-				type: 'POST',
-				async: true,
-				dataType: "json",
-				beforeSend: function(xhr) {
-					$('#tbl').dataTable().fnDestroy();
-					$('#result').html('');
-				},
-				success: function (data) {
-					console.log(data.justificacion);
-					loadData(data);
-					$('#result').html(data.justificacion);
-					$('#tbl').DataTable({responsive: true});
-				},
-				error: function(data) {
-					console.log(data);
-				}
-			});*/
 
 			$("#indicador").change(function() {
 				$("#indicador option:selected").each(function() {
@@ -139,7 +120,7 @@
 					async: true,
 					dataType: "json",
 					beforeSend: function(xhr) {
-						$('#tbl').dataTable().fnDestroy();
+						$('#tbl').hide('slow').dataTable().fnDestroy();
 						$('#result').html('');
 					},
 					success: function (data) {
