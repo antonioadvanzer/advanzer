@@ -45,11 +45,95 @@
 							</div>
 						</div>
 					</div>
+					<div id="resultados">
+						<div class="row" id="chart">
+							<div class="col-md-12">
+								<div id="graph"></div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<table id="tbl" align="center"class="table table-hover table-condensed table-striped" style="display:none">
+									<thead>
+										<tr>
+											<th class="col-md-2" data-halign="center">Indicador</th>
+											<th data-halign="center">Comentarios</th>
+										</tr>
+									</thead>
+									<tbody id="datos"></tbody>
+								</table>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 	<script>
+		function loadData(data){
+			$('#graph').highcharts({
+				colors: [color],
+				chart: {
+					type: 'column',
+					style: {
+						fontFamily: titleFont
+					}
+				},
+				title: {
+					text: 'Resultados 360°'
+				},
+				xAxis: {
+					categories: data.categories
+				},
+				yAxis: {
+					min: 0,
+					max: 6,
+					title: {
+						text: 'Media Ponderada'
+					},
+					stackLabels: {
+						enabled: false,
+						style: {
+							fontWeight: 'bold',
+							color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+						}
+					}
+				},
+				legend: {
+					align: 'right',
+					x: -30,
+					verticalAlign: 'top',
+					y: 25,
+					floating: true,
+					backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+					borderColor: '#CCC',
+					borderWidth: 1,
+					shadow: false
+				},
+				tooltip: {
+					formatter: function () {
+						return '<b>' + this.x + '</b><br/>' +
+						'Total: ' + this.point.stackTotal;
+					}
+				},
+				plotOptions: {
+					column: {
+						stacking: 'normal',
+						dataLabels: {
+							enabled: false,
+							color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
+							style: {
+								textShadow: '0 0 3px black'
+							}
+						}
+					}
+				},
+				series: [{
+					name: data.name,
+					data: data.data
+				}]
+			});
+		}
 		$(document).ready(function() {
 			$("#anio").change(function() {
 				$("#anio option:selected").each(function() {
@@ -61,11 +145,39 @@
 					data: {anio : anio},
 					beforeSend: function (xhr) {
 						$('#result').hide();
+						$('#resultados').hide();
 						$('#cargando').show();
 					},
 					success: function(data) {
 						$('#cargando').hide();
 						$("#result").show().html(data);
+					}
+				});
+				$.ajax({
+					type: 'post',
+					url: "<?= base_url('main/load_graph');?>",
+					data: {anio : anio},
+					async: true,
+					dataType: "json",
+					beforeSend: function(xhr) {
+						$('#tbl').hide('slow');
+						$('#datos').html('');
+						$('#chart').hide('slow');
+					},
+					success: function (data) {
+						console.log(data.data);
+						$('#resultados').show('slow');
+						if(data.data != undefined){
+							$('#chart').show('slow');
+							loadData(data);
+						}else
+							$('#chart').hide('slow');
+						$('#datos').html(data.justificacion);
+						if(data.justificacion != undefined)
+							$('#tbl').show('slow');
+					},
+					error: function(data) {
+						console.log(data.responseText);
 					}
 				});
 			});

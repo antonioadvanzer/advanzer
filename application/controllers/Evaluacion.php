@@ -850,7 +850,7 @@ class Evaluacion extends CI_Controller {
 
     public function resumen() {
         $evaluacion=$this->evaluacion_model->getEvaluacionAnual();
-        $data['resumen'] = $this->evaluacion_model->getResumen($evaluacion,$this->session->userdata('id'));
+        $data['resumen'] = $this->evaluacion_model->getResumenByEvaluacion($evaluacion,$this->session->userdata('id'));
         $data['subordinados'] = $this->evaluacion_model->getSubordinados($evaluacion,$this->session->userdata('id'));
         $this->layout->title('Advanzer - Resúmen Evaluación');
         $this->layout->view('evaluacion/resumen',$data);
@@ -860,7 +860,7 @@ class Evaluacion extends CI_Controller {
         $evaluacion=$this->evaluacion_model->getEvaluacionAnual();
         if($colaborador==null)
             $colaborador=$this->session->userdata('id');
-        $resumen=$this->evaluacion_model->getResumen($evaluacion,$colaborador);
+        $resumen=$this->evaluacion_model->getResumenByEvaluacion($evaluacion,$colaborador);
         echo json_encode($resumen, JSON_NUMERIC_CHECK);
     }
 

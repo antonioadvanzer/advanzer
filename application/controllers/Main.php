@@ -130,6 +130,7 @@ class Main extends CI_Controller {
     }
 
     public function historial() {
+    	$this->valida_sesion();
     	$id=$this->session->userdata('id');
     	$data['colaborador'] = $this->user_model->searchById($this->session->userdata('id'));
     	$data['info'] = $this->user_model->getHistorialById($id);
@@ -141,9 +142,19 @@ class Main extends CI_Controller {
     	$id=$this->session->userdata('id');
     	$anio=$this->input->post('anio');
     	$info=$this->user_model->getHistorialByIdAnio($id,$anio);
+    	if(isset($info->rating)):
     	?>
     		<span class="text-muted">Rating Obtenido: </span><?= $info->rating;?>
-    	<?php
+    	<?php endif;
+    }
+    public function load_graph() {
+    	$resumen=new stdClass();
+    	$id=$this->session->userdata('id');
+		$anio=$this->input->post('anio');
+    	if($this->evaluacion_model->hasFeedback($anio,$id)):
+    		$resumen=$this->evaluacion_model->getResumen($anio,$id);
+    	endif;
+    	echo json_encode($resumen, JSON_NUMERIC_CHECK);
     }
 
     // Unset session and logout

@@ -18,7 +18,7 @@
 			<div class="input-group">
 				<span class="input-group-addon">Colaborador</span>
 				<select name="indicador" id="indicador" class="form-control">
-					<option value="<?= $this->session->userdata('id');?>" selected>Tú</option>
+					<option value="" selected disabled>-- Selecciona un colaborador --</option>
 					<?php foreach ($subordinados as $colab) : ?>
 						<option value="<?= $colab->id;?>"><?= $colab->nombre;?></option>
 					<?php endforeach; ?>
@@ -108,9 +108,8 @@
 				});
 		}
 		$(function () {
-			colaborador=<?= $this->session->userdata('id');?>;
-			console.log(colaborador);
-			$.ajax({
+			$('#tbl').hide();
+			/*$.ajax({
 				url: '<?= base_url("evaluacion/getResumenByColaborador");?>/'+colaborador,
 				type: 'POST',
 				async: true,
@@ -128,7 +127,7 @@
 				error: function(data) {
 					console.log(data);
 				}
-			});
+			});*/
 
 			$("#indicador").change(function() {
 				$("#indicador option:selected").each(function() {
@@ -147,7 +146,7 @@
 						console.log(data.justificacion);
 						loadData(data);
 						$('#result').html(data.justificacion);
-						$('#tbl').DataTable({responsive: true});
+						$('#tbl').show('slow').DataTable({responsive: true});
 					},
 					error: function(data) {
 						console.log(data);
