@@ -120,7 +120,8 @@
 					async: true,
 					dataType: "json",
 					beforeSend: function(xhr) {
-						$('#tbl').hide('slow').dataTable().fnDestroy();
+						$('#tbl').hide('slow');
+						$('#tbl').dataTable().fnDestroy();
 						$('#result').html('');
 					},
 					success: function (data) {
