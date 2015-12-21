@@ -376,8 +376,10 @@ class Evaluacion_model extends CI_Model{
 			->join('Posicion_Track PT','PT.id = U.posicion_track','LEFT OUTER')
 			->join('Posiciones P','P.id = PT.posicion','LEFT OUTER')
 			->join('Tracks T','T.id = PT.track','LEFT OUTER')
-			->where(array('RE.evaluacion'=>$evaluacion,'U.estatus'=>1,'U.jefe'=>$jefe,'P.nivel <='=>5))
+			->where(array('RE.evaluacion'=>$evaluacion,'U.estatus'=>1,'P.nivel <='=>5))
 			->order_by('U.nombre');
+			if(!in_array($this->session->userdata('tipo'),array(4,5,6)))
+				$this->db->where('U.jefe',$jefe);
 		return $this->db->get()->result();
 	}
 

@@ -174,7 +174,7 @@
 								<?php if(in_array($this->session->userdata('tipo'), array(1,2,5,6))): ?>
 									<li><a href="<?= base_url('evaluacion/ci');?>">Compromisos Internos</a></li>
 								<?php endif;
-								if($this->session->userdata('posicion') <= 5): ?>
+								if($this->session->userdata('posicion') <= 5 || in_array($this->session->userdata('tipo'),array(4,5,6))): ?>
 									<li><a href="<?= base_url('evaluacion/resumen');?>">Resumén de Evaluación 360</a></li>
 								<?php endif;?>
 								<li><a href="">Vacaciones <small>(PROXIMAMENTE)</small></a></li>

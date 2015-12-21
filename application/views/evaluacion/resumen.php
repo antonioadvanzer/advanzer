@@ -17,7 +17,8 @@
 			<h3><b>Colaboradores:</b></h3>
 			<div class="input-group">
 				<span class="input-group-addon">Colaborador</span>
-				<select name="indicador" id="indicador" class="form-control">
+				<select class="selectpicker" data-header="Selecciona al Colaborador que deseas consultar" data-width="300px" data-live-search="true" 
+					style="max-width:300px; text-align:center;" name="indicador" id="indicador" required>
 					<option value="" selected disabled>-- Selecciona un colaborador --</option>
 					<?php foreach ($subordinados as $colab) : ?>
 						<option value="<?= $colab->id;?>"><?= $colab->nombre;?></option>
@@ -29,7 +30,7 @@
 	<div id="graph"></div><hr>
 	<div class="row">
 		<div class="col-md-12">
-			<table id="tbl" align="center"class="display" data-hover="true">
+			<table id="tbl" align="center"class="table table-hover table-striped table-condensed">
 				<thead>
 					<tr>
 						<th class="col-md-2" data-halign="center">Indicador</th>
@@ -125,14 +126,13 @@
 					dataType: "json",
 					beforeSend: function(xhr) {
 						$('#tbl').hide('slow');
-						$('#tbl').dataTable().fnDestroy();
 						$('#result').html('');
 					},
 					success: function (data) {
 						console.log(data.justificacion);
 						loadData(data);
 						$('#result').html(data.justificacion);
-						$('#tbl').show('slow').DataTable({responsive: true});
+						$('#tbl').show('slow');
 					},
 					error: function(data) {
 						console.log(data);
