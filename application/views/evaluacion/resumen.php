@@ -56,7 +56,11 @@
 						text: 'Resultados 360°'
 					},
 					xAxis: {
-						categories: data.categories
+						categories: data.categories,
+						title: {
+							text: 'Competencias'
+						},
+
 					},
 					yAxis: {
 						min: 0,
