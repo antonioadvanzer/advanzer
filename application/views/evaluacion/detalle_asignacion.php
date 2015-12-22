@@ -10,7 +10,7 @@
 	  margin: 10px auto;
 	  padding: 15px 20px;
 	  background-color: #444;
-	  font-size: 2rem;
+	  font-size: 1.4rem;
 	  font-weight: normal;
 	  color: #FFF;
 	  text-transform: uppercase;
@@ -21,7 +21,7 @@
 	}
 	.accordion h2 {
 	  padding: 5px 100px;
-	  font-size: 1.2rem;
+	  font-size: 14px;
 	  color: #666666;
 	  text-transform: uppercase;
 	  border-radius: 10px 10px 10px 10px;
@@ -32,7 +32,7 @@
 	.accordion label {
 	  width: 100%;
 	  padding: 5px 70px;
-	  font-size: 1.4rem;
+	  font-size: .8rem;
 	  color: #000;
 	  margin-bottom: 0px;
 	}
@@ -47,6 +47,7 @@
 	  text-transform: uppercase;
 	  padding: 5px 100px 0px 60px;
 	  color: #333;
+	  font-size: 11px;
 	}
 	.accordion hr {
 		margin-top: 0px;

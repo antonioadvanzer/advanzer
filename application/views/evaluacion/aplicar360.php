@@ -16,7 +16,7 @@
 	.accordion h1 {
 	  padding: 15px 20px;
 	  background-color: #444;
-	  font-size: 2rem;
+	  font-size: 1.4rem;
 	  font-weight: normal;
 	  color: #FFF;
 	  text-transform: uppercase;
@@ -27,7 +27,7 @@
 	}
 	.accordion h2 {
 	  padding: 5px 25px;
-	  font-size: 1.2rem;
+	  font-size: 14px;
 	  color: #666666;
 	  text-transform: uppercase;
 	  border-radius: 10px 10px 10px 10px;
@@ -38,7 +38,7 @@
 	.accordion label {
 	  width: 100%;
 	  padding: 5px 30px;
-	  font-size: 1.4rem;
+	  font-size: .8rem;
 	  color: #000;
 	}
 	.accordion h3:hover {
@@ -48,7 +48,6 @@
 	.accordion h4 {
 	  padding: 5px 35px;
 	  background-color: #ffc25a;
-	  font-size: .9rem;
 	  color: #af720a; 
 	}
 	.accordion h4:hover {
@@ -57,7 +56,7 @@
 	.accordion p {
 	  padding: 0px 35px;
 	  background-color: #ddd;
-	  font-size: .8rem;
+	  font-size: 11px;
 	  color: #333;
 	  line-height: 1.3rem;
 	}

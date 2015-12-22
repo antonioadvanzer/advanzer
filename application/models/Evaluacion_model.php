@@ -380,6 +380,8 @@ class Evaluacion_model extends CI_Model{
 			->order_by('U.nombre');
 			if(!in_array($this->session->userdata('tipo'),array(4,5,6)))
 				$this->db->where('U.jefe',$jefe);
+			else
+				$this->db->where_not_in('U.id',array(1,2,51));
 		return $this->db->get()->result();
 	}
 

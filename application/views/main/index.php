@@ -44,28 +44,27 @@
 								display:block; margin:auto;" src="<?= base_url("assets/images/fotos/$colaborador->foto");?>">
 						</div>
 						<div class="col-md-8">
-							<div class="row"><div class="col-md-12"><h2 class="only-bottom-margin"><?= $colaborador->nombre;?></h2></div></div>
+							<div class="row"><div class="col-md-12"><h2 align="center" class="only-bottom-margin"><?= $colaborador->nombre;?></h2></div></div>
 							<hr>
 							<div class="row">
 								<div class="col-md-6">
-									<span class="text-muted">E-Mail: </span><?= $colaborador->email;?><br>
-									<span class="text-muted">Empresa: </span><?php if($colaborador->empresa == 1) echo "Advanzer";else echo"Entuizer";?><br>
-									<span class="text-muted">Plaza: </span><?= $colaborador->plaza;?><br>
-									<!--<span class="text-muted">Categoría: </span><?= $colaborador->categoria;?><br>-->
-									<span class="text-muted"># Empleado: </span><?= $colaborador->nomina;?><br>
-									<span class="text-muted">Fecha de ingreso: </span><?php $lenguage = 'es_ES.UTF-8';
+									<span class="text-muted">E-Mail: </span><span style="font-size:14px"><?= $colaborador->email;?></span><br>
+									<span class="text-muted">Empresa: </span><span style="font-size:14px"><?php if($colaborador->empresa == 1) echo "Advanzer";else echo"Entuizer";?></span><br>
+									<span class="text-muted">Plaza: </span><span style="font-size:14px"><?= $colaborador->plaza;?></span><br>
+									<span class="text-muted"># Empleado: </span><span style="font-size:14px"><?= $colaborador->nomina;?></span><br>
+									<span class="text-muted">Fecha de ingreso: </span><span style="font-size:14px"><?php $lenguage = 'es_ES.UTF-8';
 										putenv("LANG=$lenguage");
 										setlocale(LC_ALL, $lenguage);
 										$fecha=strtotime($colaborador->fecha_ingreso);
 										echo strftime("%A %d de %B del %Y",$fecha);
 										//$fecha=date_create($colaborador->fecha_ingreso);
-										//echo date_format($fecha,'l, F j\t\h, Y')?>
+										//echo date_format($fecha,'l, F j\t\h, Y')?></span>
 								</div>
 								<div class="col-md-6">
-									<span class="text-muted">Jefe: </span><?= $colaborador->nombre_jefe;?><br>
-									<span class="text-muted">Área: </span><?= $colaborador->nombre_area;?><br>
-									<span class="text-muted">Posición: </span><?= $colaborador->nombre_posicion;?><br>
-									<span class="text-muted">Track: </span><?= $colaborador->nombre_track;?><br>
+									<span class="text-muted">Jefe: </span><span style="font-size:14px"><?= $colaborador->nombre_jefe;?></span><br>
+									<span class="text-muted">Área: </span><span style="font-size:14px"><?= $colaborador->nombre_area;?></span><br>
+									<span class="text-muted">Posición: </span><span style="font-size:14px"><?= $colaborador->nombre_posicion;?></span><br>
+									<span class="text-muted">Track: </span><span style="font-size:14px"><?= $colaborador->nombre_track;?></span><br>
 								</div>
 							</div>
 						</div>
