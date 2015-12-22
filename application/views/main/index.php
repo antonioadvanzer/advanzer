@@ -72,7 +72,7 @@
 					</div>
 					<hr>
 					<nav class="navbar">
-						<div id="navbar" class="navbar-collapse collapse" aria-expanded="false">
+						<div class="navbar-collapse" aria-expanded="false">
 							<ul class="nav navbar-nav">
 								<?php if($evaluacion): ?>
 									<li><a href="<?= base_url("evaluar");?>">Evaluación</a></li>
