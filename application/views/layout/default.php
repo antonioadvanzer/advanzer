@@ -168,7 +168,7 @@
 								Servicios<span class="caret"></span></a>
 							<ul class="dropdown-menu">
 								<?php if(in_array($this->session->userdata('tipo'), array(3,5,6))): ?>
-									<li><a href="<?= base_url('requisiciones');?>">Requisiciones</a></li>
+									<li><a target="_blank" href="http://intranet.advanzer.com:8080/RH">Requisiciones</a></li>
 								<?php endif; ?>
 									<li><a href="<?= base_url('evaluar');?>">Evaluaciones</a></li>
 								<?php if(in_array($this->session->userdata('tipo'), array(1,2,5,6))): ?>
