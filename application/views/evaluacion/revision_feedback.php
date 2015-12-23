@@ -94,8 +94,6 @@
 	<script>
 	$(document).ready(function() {
 		$('#enterado').click(function(){
-			if(!confirm('Al enviar los compromisos no será posible editarlos después.\n ¿Seguro que desea enviar el feedback?'))
-				return false;
 			compromisos=$('#compromisos').val();
 			estatus=2;
 			id=$('#id').val();
