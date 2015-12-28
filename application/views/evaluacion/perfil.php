@@ -9,7 +9,7 @@
 	.accordion h1 {
 	  padding: 15px 20px;
 	  background-color: #444;
-	  font-size: 2rem;
+	  font-size: 1.4rem;
 	  font-weight: normal;
 	  color: #FFF;
 	  text-transform: uppercase;
@@ -38,7 +38,7 @@
 	.accordion label {
 	  width: 100%;
 	  padding: 5px 30px;
-	  font-size: 1.2rem;
+	  font-size: 1rem;
 	  color: #000; 
 	}
 	.accordion h3:hover {
@@ -57,7 +57,7 @@
 	.accordion p {
 	  padding: 15px 20px;
 	  background-color: #ddd;
-	  font-size: 1.2rem;
+	  font-size: 1rem;
 	  color: #333;
 	  line-height: 1.3rem;
 	}

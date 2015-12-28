@@ -38,7 +38,7 @@
 	.accordion label {
 	  width: 100%;
 	  padding: 5px 30px;
-	  font-size: .8rem;
+	  font-size: 1rem;
 	  color: #000;
 	}
 	.accordion h3:hover {
@@ -56,7 +56,7 @@
 	.accordion p {
 	  padding: 0px 35px;
 	  background-color: #ddd;
-	  font-size: 11px;
+	  font-size: 1rem;
 	  color: #333;
 	  line-height: 1.3rem;
 	}

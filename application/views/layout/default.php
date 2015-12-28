@@ -220,8 +220,8 @@
 		</div>
 	</nav>
 	<?=$content_for_layout?>
-	<hr>
 	<footer align="center">
+		<hr>
 		<p>&copy; Advanzer De México, S.A de C.V. 2015</p>
 	</footer>
 	</div> <!-- /container -->
