@@ -221,7 +221,6 @@
 	</nav>
 	<?=$content_for_layout?>
 	<footer align="center">
-		<hr>
 		<p>&copy; Advanzer De México, S.A de C.V. 2015</p>
 	</footer>
 	</div> <!-- /container -->
