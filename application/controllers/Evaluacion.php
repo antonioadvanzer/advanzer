@@ -724,7 +724,7 @@ class Evaluacion extends CI_Controller {
         $colaborador=$this->input->post('colaborador');
         $anual=$this->input->post('anual');
         $agregar=$this->input->post('agregar');
-        $this->input->post('evaluacion') ? $evaluacion=$this->input->post('evaluacion') : $evaluacion=$this->evaluacion_model->getEvaluacionAnualVigente()->id;
+        $this->input->post('evaluacion') ? $evaluacion=$this->input->post('evaluacion') : $evaluacion=$this->evaluacion_model->getEvaluacionAnual();
         $this->db->trans_begin();
         if(!empty($agregar))
             foreach ($agregar as $evaluador) :
