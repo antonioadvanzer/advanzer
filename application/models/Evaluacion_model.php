@@ -397,7 +397,7 @@ class Evaluacion_model extends CI_Model{
 	function getEvaluacionesByEvaluador($evaluador) {
 		if($ev = $this->getActiveEvaluation())
 			if($evaluacion=$this->getEvaluacionById($ev->id)):
-				if($evaluacion->estatus == 2){
+				if($evaluacion->estatus == 2 && $evaluacion->tipo==1){
 					$evaluacion = $evaluacion->id;
 					redirect("evaluacion/defineFeedback/$evaluacion");
 				}
@@ -409,7 +409,7 @@ class Evaluacion_model extends CI_Model{
 					->join('Tracks T','T.id = PT.track','LEFT OUTER')
 					->join('Evaluadores E','E.evaluado = U.id','LEFT OUTER')
 					->join('Evaluaciones Ev','Ev.id = E.evaluacion','LEFT OUTER')
-					->where(array('E.evaluador'=>$evaluador,'U.estatus'=>1,'Ev.estatus'=>1,'Ev.id'=>$evaluacion->id))
+					->where(array('E.evaluador'=>$evaluador,'U.estatus'=>1,'Ev.estatus'=>1,'Ev.inicio <='=>date('Y-m-d'),'Ev.fin >='=>date('Y-m-d')))
 					->order_by('E.estatus,Ev.nombre,U.nombre');
 				return $this->db->get()->result();
 			else:
