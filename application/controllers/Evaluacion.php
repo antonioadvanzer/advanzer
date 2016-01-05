@@ -760,9 +760,8 @@ class Evaluacion extends CI_Controller {
 
     public function evaluar() {
         $evaluador=$this->session->userdata('id');
-        $evaluacion = $this->evaluacion_model->getEvaluacionAnual();
-        if($evaluacion)
-            if($this->evaluacion_model->getEvaluacionById($evaluacion)->fin < date('Y-m-d'))
+        if($evaluacion = $this->evaluacion_model->getActiveEvaluation())
+            if($this->evaluacion_model->getEvaluacionById($evaluacion->id)->fin < date('Y-m-d'))
                 redirect("evaluacion/defineFeedback");
         //    $this->genera_autoevaluacion($evaluador);
         $data['colaboradores']=$this->evaluacion_model->getEvaluacionesByEvaluador($evaluador);

@@ -395,25 +395,26 @@ class Evaluacion_model extends CI_Model{
 	}
 
 	function getEvaluacionesByEvaluador($evaluador) {
-		if($evaluacion=$this->getEvaluacionById($this->getEvaluacionAnualVigente()->id)):
-			if($evaluacion->estatus == 2){
-				$evaluacion = $evaluacion->id;
-				redirect("evaluacion/defineFeedback/$evaluacion");
-			}
-			$this->db->select('U.id,U.foto,U.nombre,U.nomina,A.nombre area,P.nombre posicion,Ev.nombre evaluacion,E.estatus,E.id asignacion,
-				Ev.inicio,Ev.fin,Ev.tipo,Ev.estatus estatus_ev,T.nombre track,E.anual')->from('Users U')
-				->join('Areas A','A.id = U.area','LEFT OUTER')
-				->join('Posicion_Track PT','PT.id = U.posicion_track','LEFT OUTER')
-				->join('Posiciones P','P.id = PT.posicion','LEFT OUTER')
-				->join('Tracks T','T.id = PT.track','LEFT OUTER')
-				->join('Evaluadores E','E.evaluado = U.id','LEFT OUTER')
-				->join('Evaluaciones Ev','Ev.id = E.evaluacion','LEFT OUTER')
-				->where(array('E.evaluador'=>$evaluador,'U.estatus'=>1,'Ev.estatus'=>1))
-				->order_by('E.estatus,Ev.nombre,U.nombre');
-			return $this->db->get()->result();
-		else:
-			return null;
-		endif;
+		if($ev = $this->getActiveEvaluation())
+			if($evaluacion=$this->getEvaluacionById($ev->id)):
+				if($evaluacion->estatus == 2){
+					$evaluacion = $evaluacion->id;
+					redirect("evaluacion/defineFeedback/$evaluacion");
+				}
+				$this->db->select('U.id,U.foto,U.nombre,U.nomina,A.nombre area,P.nombre posicion,Ev.nombre evaluacion,E.estatus,E.id asignacion,
+					Ev.inicio,Ev.fin,Ev.tipo,Ev.estatus estatus_ev,T.nombre track,E.anual')->from('Users U')
+					->join('Areas A','A.id = U.area','LEFT OUTER')
+					->join('Posicion_Track PT','PT.id = U.posicion_track','LEFT OUTER')
+					->join('Posiciones P','P.id = PT.posicion','LEFT OUTER')
+					->join('Tracks T','T.id = PT.track','LEFT OUTER')
+					->join('Evaluadores E','E.evaluado = U.id','LEFT OUTER')
+					->join('Evaluaciones Ev','Ev.id = E.evaluacion','LEFT OUTER')
+					->where(array('E.evaluador'=>$evaluador,'U.estatus'=>1,'Ev.estatus'=>1,'Ev.id'=>$evaluacion->id))
+					->order_by('E.estatus,Ev.nombre,U.nombre');
+				return $this->db->get()->result();
+			else:
+				return null;
+			endif;
 	}
 
 	function getEvaluados() {
@@ -709,7 +710,7 @@ class Evaluacion_model extends CI_Model{
 		endif;
 		(isset($r_proyectos)) ? (double)$responsabilidad = (($r_anual + $r_proyectos)/2)*.7 : (double)$responsabilidad = $r_anual*.7;
 		(double)$total = $responsabilidad+$competencia;
-		if(isset($evaluacion)):
+		if($evaluacion):
 			$res = $this->db->where(array('evaluacion'=>$evaluacion->id,'colaborador'=>$asignacion->evaluado))->get('Resultados_Evaluacion');
 			if($res->num_rows() == 1){
 				$id_r = $res->first_row()->id;
