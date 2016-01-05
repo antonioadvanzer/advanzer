@@ -424,7 +424,6 @@ class Evaluacion_model extends CI_Model{
 			->join('Posiciones P','P.id = PT.posicion','LEFT OUTER')
 			->join('Tracks T','T.id = PT.track','LEFT OUTER')
 			->where(array('U.estatus'=>1,'U.fecha_ingreso <='=>$anio.'-09-30'))
-			->where_not_in('U.id',array(1,2,51))
 			->order_by('U.nombre');
 		$result = $this->db->get()->result();
 		foreach ($result as $colaborador) : // getEvaluadores
@@ -733,7 +732,6 @@ class Evaluacion_model extends CI_Model{
 			->join('Posicion_Track PT','PT.id = U.posicion_track')
 			->join('Posiciones P','P.id = PT.posicion')
 			->where(array('U.fecha_ingreso <='=>$anio.'-09-30','U.estatus'=>1,'P.nivel <='=>8))
-			->where_not_in('U.id',array(1,2,51))
 			->group_by('U.id')
 			->order_by('U.nombre');
 		$result = $this->db->get('Users U')->result();
