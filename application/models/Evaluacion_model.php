@@ -173,7 +173,7 @@ class Evaluacion_model extends CI_Model{
 	}
 
 	function getPendientes($estatus="",$tipo="") {
-		$evaluacion=$this->getEvaluacionAnual();
+		$evaluacion=$this->getEvaluacionAnualVigente()->id;
 		$this->db->distinct()->select('U.id,U.foto,U.nombre,U.email')->from('Evaluadores Ev')
 			->join('Users U','Ev.evaluador = U.id')
 			->where(array('Ev.evaluacion'=>$evaluacion,'U.estatus'=>1))->order_by('U.nombre');

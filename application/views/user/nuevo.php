@@ -39,7 +39,7 @@
 		    </select>
 		  </div>
 		  <div class="form-group">
-			<label for="jefe">Jefe Directo:</label>
+			<label for="jefe">Jefe Directo:</label><br>
 			<select class="selectpicker" data-header="Selecciona al Jefe Directo" data-width="300px" data-live-search="true" 
 				style="max-width:300px; text-align:center;" name="jefe" id="jefe" required>
 				<option value="" disabled selected>-- Selecciona al Jefe Directo --</option>

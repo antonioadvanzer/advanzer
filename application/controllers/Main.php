@@ -15,8 +15,7 @@ class Main extends CI_Controller {
     	$this->valida_sesion();
     	$data=array();
     	$data['colaborador'] = $this->user_model->searchById($this->session->userdata('id'));
-    	if(!$data['evaluacion'] = $this->evaluacion_model->getActiveEvaluation())
-    		$data['evaluacion'] = $this->evaluacion_model->getEvaluacionById($this->evaluacion_model->getEvaluacionAnual());
+    	$data['evaluacion'] = $this->evaluacion_model->getActiveEvaluation();
 		$this->layout->title('Advanzer - Inicio');
 		$this->layout->view('main/index', $data);
 	}

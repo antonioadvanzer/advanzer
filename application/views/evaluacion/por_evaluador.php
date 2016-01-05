@@ -93,6 +93,6 @@
 	</div>
 	<script type="text/javascript">
 		$(document).ready(function() {
-			$('#tbl').DataTable({responsive: true});
+			$('#tbl').DataTable({responsive: true,paging: false,info: false});
 		} );
 	</script>

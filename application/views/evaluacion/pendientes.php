@@ -39,6 +39,13 @@
 						<th data-halign="center" align="center"># 360</th>
 						<th data-halign="center" align="center">Autoevaluación</th>
 					</tr>
+					<tr>
+						<th data-halign="center" align="center"></th>
+						<th data-halign="center" align="center">Evaluador</th>
+						<th data-halign="center" align="center"># Anuales</th>
+						<th data-halign="center" align="center"># 360</th>
+						<th data-halign="center" align="center">Autoevaluación</th>
+					</tr>
 				</thead>
 				<tbody>
 					<?php if($evaluadores)
@@ -53,12 +60,29 @@
 							</tr>
 						<?php endforeach; ?>
 				</tbody>
+				<tfoot>
+					<tr>
+						<td></td>
+						<td>Todos</td>
+						<td># Anuales</td>
+						<td># 360</td>
+						<td>Todos</td>
+					</tr>
+				</tfoot>
 			</table>
 		</div>
 	</div>
 	<script>
 		$(document).ready(function() {
-			$('#tbl').DataTable({responsive: true});
+			$('#tbl').dataTable({responsive: true}).columnFilter({
+				sPlaceHolder: "head:after",
+				aoColumns: [ null,
+					{ type: "select" },
+					{ type: "number" },
+					{ type: "number" },
+					{ type: "select" }
+				]
+			});
 
 			$("#tipo").change(function() {
 				$("#tipo option:selected").each(function() {
