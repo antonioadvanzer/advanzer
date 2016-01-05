@@ -631,9 +631,9 @@ class Evaluacion_model extends CI_Model{
 	}
 
 	function calculaResultado($asignacion) {
-		$evaluacion=$this->getEvaluacionAnualVigente();
+		$ev = $this->getEvaluacionAnualVigente();
 		$r_anual=0;
-		if($evaluacion):
+		if($evaluacion=$this->getEvaluacionById($ev->id)):
 			$posicion=$this->getPosicionByColaborador($asignacion->evaluado);
 			$jefe=$this->db->select('evaluador')->where(array('evaluado'=>$asignacion->evaluado,'anual'=>1,'evaluacion'=>$evaluacion->id))
 				->get('Evaluadores');
@@ -680,36 +680,34 @@ class Evaluacion_model extends CI_Model{
 			$res=$this->db->get();
 			if($res->num_rows() == 1)
 				(double)$r_anual = ($res->first_row()->total);
-		endif;
-		//evaluaciones de proyectos
-		if($proyectos=$this->getEvaluacionesProyecto($evaluacion->anio)):
-			$ids = array();
-			foreach ($proyectos as $row)
-				array_push($ids, $row->id);
-			$this->db->select('RR.total,E.fin_periodo,E.inicio_periodo')->from('Resultados_ev_Responsabilidad RR')
-				->join('Evaluadores Ev','Ev.id = RR.asignacion')
-				->join('Evaluaciones E','E.id = Ev.evaluacion')
-				->where('Ev.evaluado',$asignacion->evaluado)->where_in('E.id',$ids);
-			$res=$this->db->get();
-			if($res->num_rows() > 0):
-				$r_proyectos=0;
-				$dias_total=0;
-				foreach ($res->result() as $info) :
-					$diferencia=date_diff(date_create($info->inicio_periodo),date_create($info->fin_periodo));
-					$dias=(int)$diferencia->format("%a");
-					$dias_total+=$dias;
-				endforeach;
-				foreach ($res->result() as $info) :
-					$diferencia=date_diff(date_create($info->inicio_periodo),date_create($info->fin_periodo));
-					$dias=(int)$diferencia->format("%a");
-					($dias == 0) ? $dias=1:$dias=$dias;
-					$r_proyectos += $info->total*($dias/$dias_total);
-				endforeach;
+			//evaluaciones de proyectos
+			if($proyectos=$this->getEvaluacionesProyecto($evaluacion->anio)):
+				$ids = array();
+				foreach ($proyectos as $row)
+					array_push($ids, $row->id);
+				$this->db->select('RR.total,E.fin_periodo,E.inicio_periodo')->from('Resultados_ev_Responsabilidad RR')
+					->join('Evaluadores Ev','Ev.id = RR.asignacion')
+					->join('Evaluaciones E','E.id = Ev.evaluacion')
+					->where('Ev.evaluado',$asignacion->evaluado)->where_in('E.id',$ids);
+				$res=$this->db->get();
+				if($res->num_rows() > 0):
+					$r_proyectos=0;
+					$dias_total=0;
+					foreach ($res->result() as $info) :
+						$diferencia=date_diff(date_create($info->inicio_periodo),date_create($info->fin_periodo));
+						$dias=(int)$diferencia->format("%a");
+						$dias_total+=$dias;
+					endforeach;
+					foreach ($res->result() as $info) :
+						$diferencia=date_diff(date_create($info->inicio_periodo),date_create($info->fin_periodo));
+						$dias=(int)$diferencia->format("%a");
+						($dias == 0) ? $dias=1:$dias=$dias;
+						$r_proyectos += $info->total*($dias/$dias_total);
+					endforeach;
+				endif;
 			endif;
-		endif;
-		(isset($r_proyectos)) ? (double)$responsabilidad = (($r_anual + $r_proyectos)/2)*.7 : (double)$responsabilidad = $r_anual*.7;
-		(double)$total = $responsabilidad+$competencia;
-		if($evaluacion):
+			(isset($r_proyectos)) ? (double)$responsabilidad = (($r_anual + $r_proyectos)/2)*.7 : (double)$responsabilidad = $r_anual*.7;
+			(double)$total = $responsabilidad+$competencia;
 			$res = $this->db->where(array('evaluacion'=>$evaluacion->id,'colaborador'=>$asignacion->evaluado))->get('Resultados_Evaluacion');
 			if($res->num_rows() == 1){
 				$id_r = $res->first_row()->id;
@@ -787,12 +785,11 @@ class Evaluacion_model extends CI_Model{
 			$this->db->where_not_in('Us.id',$array_temp);
 		}
 
-		$this->db->select('Us.id,Us.nombre,P.nombre posicion,T.nombre track');
-		$this->db->where(array('Us.id !='=>$colaborador,'Us.estatus'=>1,'Us.empresa'=>$empresa));
-		$this->db->from('Users Us');
-		$this->db->join('Posicion_Track PT','PT.id = Us.posicion_track','LEFT OUTER');
-		$this->db->join('Posiciones P','P.id = PT.posicion','LEFT OUTER');
-		$this->db->join('Tracks T','T.id = PT.track','LEFT OUTER');
+		$this->db->select('Us.id,Us.nombre,P.nombre posicion,T.nombre track,Us.empresa')->from('Users Us')
+			->where(array('Us.id !='=>$colaborador,'Us.estatus'=>1))
+			->join('Posicion_Track PT','PT.id = Us.posicion_track','LEFT OUTER')
+			->join('Posiciones P','P.id = PT.posicion','LEFT OUTER')
+			->join('Tracks T','T.id = PT.track','LEFT OUTER');
 		return $this->db->order_by('Us.nombre')->get()->result();
 	}
 

@@ -40,9 +40,9 @@
 	  	  <div class="panel panel-primary">
 	  	  <div class="panel-heading">Evaluadores Asignados</div>
 			<select id="quitar" name="quitar" multiple class="form-control" style="overflow-y:auto;overflow-x:auto;min-height:300px;max-height:700px">
-			  <?php foreach($evaluadores as $colaborador) : ?>
-	            <option value="<?= $colaborador->id;?>" <?php if($colaborador->estatus != 0){ echo "disabled";$ocupado=1;} ?>>
-	                <?= "$colaborador->nombre - $colaborador->posicion ($colaborador->track)";?>
+			  <?php foreach($evaluadores as $colab) : ?>
+	            <option value="<?= $colab->id;?>" <?php if($colab->estatus != 0){ echo "disabled";$ocupado=1;} ?>>
+	                <?= "$colab->nombre - $colab->posicion ($colab->track)";?>
 	            </option>
 			  <?php endforeach; ?>
 			</select>
@@ -62,9 +62,10 @@
 	  	  <div class="panel panel-primary">
 	  	  <div class="panel-heading">Colaboradores Disponibles</div>
 			<select id="agregar" name="agregar" multiple class="form-control" style="overflow-y:auto;overflow-x:auto;min-height:300px;max-height:700px">
-	  	  	  <?php foreach($no_evaluadores as $colaborador) : ?>
-	            <option value="<?= $colaborador->id;?>"><?= "$colaborador->nombre - $colaborador->posicion ($colaborador->track)";?></option>
-	          <?php endforeach; ?>
+	  	  	  <?php foreach($no_evaluadores as $colab)
+	  	  	  	if(in_array($colab->id, array(1,2,40,85,21,14,17,22,33,61)) || $colaborador->empresa == $colab->empresa): ?>
+	            	<option value="<?= $colab->id;?>"><?= "$colab->nombre - $colab->posicion ($colab->track)";?></option>
+	          	<?php endif; ?>
 	        </select>
 	  	  </div>
 	  	</div>
