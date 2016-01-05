@@ -1046,7 +1046,7 @@ class Evaluacion_model extends CI_Model{
 				$this->db->insert('Resultados_ev_Competencia',array('asignacion'=>$asignacion,'total'=>$total));
 				break;
 		}
-		if($this->getActiveEvaluation())
+		if($this->getEvaluacionAnualVigente())
 			$this->calculaResultado($info);
 		$this->db->where('id',$info->id)->update('Evaluadores',array('comentarios'=>$comentarios));
 		if($this->ch_estatus($asignacion,2))
