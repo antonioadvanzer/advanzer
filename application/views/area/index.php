@@ -59,7 +59,7 @@
 
   <script>
     $(document).ready(function() {
-      $('#tbl').DataTable({responsive: true});
+      $('#tbl').DataTable({responsive: true,paging: false,info: false});
     } );
     
     /*$.bootstrapSortable(true);

@@ -63,7 +63,7 @@
 	  	  <div class="panel-heading">Colaboradores Disponibles</div>
 			<select id="agregar" name="agregar" multiple class="form-control" style="overflow-y:auto;overflow-x:auto;min-height:300px;max-height:700px">
 	  	  	  <?php foreach($no_evaluadores as $colab)
-	  	  	  	if(in_array($colab->id, array(1,2,40,85,21,14,17,22,33,61)) || $colaborador->empresa == $colab->empresa): ?>
+	  	  	  	if(in_array($colab->id, array(1,2,40,85,21,14,17,22,33,61,51,52,74)) || $colaborador->empresa == $colab->empresa): ?>
 	            	<option value="<?= $colab->id;?>"><?= "$colab->nombre - $colab->posicion ($colab->track)";?></option>
 	          	<?php endif; ?>
 	        </select>

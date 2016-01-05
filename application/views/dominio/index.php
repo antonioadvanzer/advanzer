@@ -77,7 +77,7 @@
       }(jQuery));*/
 
     $(document).ready(function() {
-      $('#resultados').DataTable({responsive: true});
+      $('#resultados').DataTable({responsive: true,paging: false,info: false});
       $("#area").change(function() {
         $("#dominio option:selected").each(function() {
           dominio = $('#dominio').val();
@@ -101,7 +101,7 @@
             $('#cargando').hide('slow');
             $('#resultados').show('slow');
             $("#result").show('slow').html(data);
-            $('#resultados').DataTable({responsive: true});
+            $('#resultados').DataTable({responsive: true,paging: false,info: false});
           }
         });
       });
@@ -130,7 +130,7 @@
               $('#cargando').hide('slow');
               $('#resultados').show('slow');
               $("#result").show('slow').html(data);
-              $('#resultados').DataTable({responsive: true});
+              $('#resultados').DataTable({responsive: true,paging: false,info: false});
             }
           });
       });
@@ -159,7 +159,7 @@
               $('#cargando').hide('slow');
               $('#resultados').show('slow');
               $("#result").show('slow').html(data);
-              $('#resultados').DataTable({responsive: true});
+              $('#resultados').DataTable({responsive: true,paging: false,info: false});
             }
           });
       });
