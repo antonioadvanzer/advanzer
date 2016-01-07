@@ -1,7 +1,7 @@
 <!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron">
 	<div class="container">
-		<h2>Resumén Proceso de Evaluación</h2>
+		<h2>Resumen Proceso de Evaluación</h2>
 	</div>
 </div>
 <div class="container">

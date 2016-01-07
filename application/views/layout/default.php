@@ -23,6 +23,7 @@
 	<!--<script src="<?= base_url('assets/js/tableExport.js');?>"></script>
 	<script src="<?= base_url('assets/js/bootstrap-table-export.js');?>"></script>-->
 	<script src="<?= base_url('assets/js/jquery.dataTables.js');?>"></script>
+	<script src="<?= base_url('assets/js/jquery.dataTables.columnFilter.js');?>"></script>
 	<script src="<?= base_url('assets/js/jasny-bootstrap.js');?>"></script>
 	<script src="<?= base_url('assets/js/bootstrap-select.js');?>"></script>
 	<script src="<?= base_url('assets/js/highcharts/highcharts.js');?>"></script>
@@ -136,9 +137,6 @@
 													<!--<li><a href="<?= base_url('evaluacion/index/false');?>">Evaluaciones Confidencial</a></li>-->
 													<li><a href="<?= base_url('evaluacion/por_evaluador');?>">Evaluaciones por Evaluador</a></li>
 													<li><a href="<?= base_url('evaluacion/pendientes');?>">Evaluaciones Pendientes de Enviar</a></li>
-											<?php endif;
-											if($this->session->userdata('tipo') == 3):?>
-												<li><a href="<?= base_url('ver_requisiciones');?>">Requisiciones</a></li>
 											<?php endif; ?>
 										</ul>
 									</li>
@@ -167,15 +165,15 @@
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
 								Servicios<span class="caret"></span></a>
 							<ul class="dropdown-menu">
-								<?php if(in_array($this->session->userdata('tipo'), array(3,5,6))): ?>
-									<li><a target="_blank" href="http://intranet.advanzer.com:8080/RH">Requisiciones</a></li>
-								<?php endif; ?>
+								<?php if($this->session->userdata('tipo') >= 3 || $this->session->userdata('posicion') <= 5):?>
+									<li><a href="<?= base_url('requisicion');?>">Requisiciones</a></li>
+								<?php endif;?>
 									<li><a href="<?= base_url('evaluar');?>">Evaluaciones</a></li>
 								<?php if(in_array($this->session->userdata('tipo'), array(1,2,5,6))): ?>
 									<li><a href="<?= base_url('evaluacion/ci');?>">Compromisos Internos</a></li>
 								<?php endif;
 								if($this->session->userdata('posicion') <= 5 || in_array($this->session->userdata('tipo'),array(4,5,6))): ?>
-									<li><a href="<?= base_url('evaluacion/resumen');?>">Resumén de Evaluación 360</a></li>
+									<li><a href="<?= base_url('evaluacion/resumen');?>">Resumen de Evaluación 360</a></li>
 								<?php endif;?>
 								<li><a href="">Vacaciones <small>(PROXIMAMENTE)</small></a></li>
 							</ul>
@@ -220,6 +218,7 @@
 		</div>
 	</nav>
 	<?=$content_for_layout?>
+	<br>
 	<footer align="center">
 		<p>&copy; Advanzer De México, S.A de C.V. 2015</p>
 	</footer>

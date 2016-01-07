@@ -1079,7 +1079,7 @@ class Evaluacion_model extends CI_Model{
 	}
 
 	function getEvaluacionAnualVigente() {
-		$result = $this->db->select('MAX(id) id,anio')->where_in('estatus',array(0,1))
+		$result = $this->db->select('MAX(id) id,anio')->where_in('estatus',array(1))
 			->where(array('tipo'=>1,'inicio <='=>date('Y-m-d'),'fin >='=>date('Y-m-d')))->get('Evaluaciones');
 		if($result->num_rows() != 0)
 			return $result->first_row();
@@ -1125,7 +1125,7 @@ class Evaluacion_model extends CI_Model{
 	function check_for_evaluations() {
 		$new=strtotime('-1 day',strtotime(date('Y-m-d')));
 		$fin=date('Y-m-d',$new);
-		$result = $this->db->from('Evaluaciones')->where(array('estatus !='=>2,'fin'=>$fin))->get();
+		$result = $this->db->from('Evaluaciones')->where(array('estatus'=>1,'fin'=>$fin))->get();
 		if($result->num_rows() != 0)
 			return $result->result();
 		return false;
