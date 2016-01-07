@@ -123,7 +123,7 @@ class Evaluacion extends CI_Controller {
         $this->valida_acceso('ci');
         $data['colaboradores'] = $this->evaluacion_model->getEvaluados();
         $data['info_archivos'] = $this->evaluacion_model->getInfoCaptura();
-        $data['evaluacion'] = $this->evaluacion_model->getEvaluacionById($this->evaluacion_model->getEvaluacionAnualVigente()->id);
+        $data['evaluacion'] = $this->evaluacion_model->getEvaluacionById($this->evaluacion_model->getEvaluacionAnual());
         $this->layout->title('Advanzer - Compromisos Internos');
         $this->layout->view('evaluacion/ci',$data);
     }
