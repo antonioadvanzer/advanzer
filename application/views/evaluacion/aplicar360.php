@@ -109,9 +109,9 @@
 				<div style="display:block;width:60%;position:absolute;top:20%;z-index:20;left: 50%;width: 60%;margin-left: -30%;text-align: center;">
 					<h2><b>Indicaciones</b></h2><hr>
 					<h4 align="left"><li>Recuerda evaluar objetivamente tomando en cuenta el desempeño de todo el año, no solo el de los últimos meses</li>
-						<li>Si tu respuesta es diferente a "<i>3</i>"" es indispensable justificar tu respuesta y darle clic a "<i>guardar</i>".</li>
+						<li>Si tu respuesta es diferente a "<i>3</i>" es indispensable justificar tu respuesta y darle clic a "<i>guardar</i>".</li>
 						<li>Son indispensables al menos 3 palabras para que se active la opción de "<i>guardar</i>"</li>
-						<li>Si deseas suspender la evaluación y continuar más tarde, asegúrate de darle “guardar” a todas tus respuestas 
+						<li>Si deseas suspender la evaluación y continuar más tarde, asegúrate de darle "<i>guardar</i>" a todas tus respuestas 
 							diferentes a "<i>3</i>" para conservar tu avance.</li>
 						<li>Al retomar la evaluación, se resaltarán los reactivos pendientes de respuesta</li>
 						<li>Antes de terminar y para poder enviar y cerrar cada evaluación se te solicitarán comentarios generales. Esto es, 
@@ -134,7 +134,7 @@
 						2. Cumple parcialmente las expectativas<br>
 						1. No cumple las expectativas<br>
 					</h4>
-					<h4 align="left">Recuerda que debes justificar cada respuesta diferente a <i>3</i> y darle ciic a "<i>guardar</i>" 
+					<h4 align="left">Recuerda que debes justificar cada respuesta diferente a "<i>3</i>" y darle clic a "<i>guardar</i>" 
 						para no perder tu avance.</h4>
 				</div>
 				<div class="carousel-caption"><h3 style="cursor:default;">Competencias</h3></div>
