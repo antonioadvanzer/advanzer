@@ -186,7 +186,7 @@
 						2. Cumple parcialmente las expectativas<br>
 						1. No cumple las expectativas<br>
 					</h4>
-					<h4 align="left">Recuerda que debes justificar cada respuesta diferente a "<i>3</i>"" y darle clic a "<i>guardar</i>" 
+					<h4 align="left">Recuerda que debes justificar cada respuesta diferente a "<i>3</i>" y darle clic a "<i>guardar</i>" 
 						para no perder tu avance.</h4>
 				</div>
 				<div class="carousel-caption"><h3 style="cursor:default;">Competencias</h3></div>
