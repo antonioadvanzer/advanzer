@@ -223,6 +223,8 @@
 							if($(this[4]).focus()){
 								$(form['children'][3]).css({'background-color':'#fc8111','border-radius':'10px 10px 10px 10px'});
 								console.log($(form['children']));
+								$('#mensaje').show();
+								$('[id^=finalizar]').hide();
 							}
 						}
 					});
@@ -234,6 +236,8 @@
 						if($(this[4]).focus()){
 							$(formulario['children'][3]).css({'background-color':'#fc8111','border-radius':'10px 10px 10px 10px'});
 							//console.log($(form['children'][4]));
+							$('#mensaje').show();
+							$('[id^=finalizar]').hide();
 						}
 					}else
 						$(formulario['children'][3]).css({'background-color':'','border-radius':''});
@@ -255,6 +259,7 @@
 				$('#mensaje').show();
 				$('[id^=finalizar]').hide();
 			}
+			mark();
 		}
 
 		function verify(form) {
