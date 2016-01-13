@@ -136,10 +136,12 @@
 				</div>
 			<?php endif;
 		elseif($evaluacion->tipo == 0) :
-			$total=$resultado->proyectos; ?>
+			$cont=0;
+			$items=0; ?>
 			<div class="row" align="center"><div class="col-md-12"><h1>Responsabilidades Funcionales</h1></div></div>
 			<div class="row">
-				<?php foreach ($evaluacion->dominios as $dominio) : ?>
+				<?php foreach ($evaluacion->dominios as $dominio) :
+					$cont += $dominio->respuesta; ?>
 					<div class="col-md-12">
 						<aside class="accordion">
 							<h1><?= $dominio->nombre;?></h1>
@@ -150,15 +152,19 @@
 					</div>
 				<?php endforeach; ?>
 			</div>
-		<?php else:
-			$total=$resultado->tres60; ?>
+			<?php $total=$cont / count($evaluacion->dominios);
+		else:
+			$cont=0;
+			$items=0; ?>
 			<div class="row" align="center"><div class="col-md-12"><h1>Competencias Laborales</h1></div></div>
 			<div class="row">
 				<?php foreach ($evaluacion->indicadores as $indicador) : ?>
 					<div class="col-md-12">
 						<aside class="accordion">
 							<h1><?= $indicador->nombre;?></h1>
-							<?php foreach ($indicador->competencias as $competencia) : ?>
+							<?php foreach ($indicador->competencias as $competencia) :
+								$cont += $competencia->respuesta;
+								$items++; ?>
 								<h2><?= $competencia->nombre; ?><span style="min-width:100px;float:right;display:block;">
 									<i>Respuesta: </i><?=$competencia->respuesta;?></span>
 									<?php if($competencia->justificacion): ?><label><?= $competencia->justificacion;?></label><?php endif; ?>
@@ -168,7 +174,8 @@
 					</div>
 				<?php endforeach; ?>
 			</div>
-		<?php endif;
+			<?php $total = $cont / $items;
+		endif;
 	endif; ?>
 	<div class="row" align="center"><div class="col-md-12"><h1>Comentarios Generales</h1></div></div>
 	<div class="row" align="center">
