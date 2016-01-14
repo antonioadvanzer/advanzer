@@ -241,8 +241,10 @@
 		$(document).ready(function() {
 			estatus = '<?= $evaluacion->estatus;?>';
 			console.log(estatus);
-			if(estatus==1)
+			if(estatus==1){
+				mark();
 				revisar();
+			}
 			$('[id^=finalizar]').hide();
 			$('[id^=finalizar]').submit(function(event){
 				var flag= mark();
@@ -352,7 +354,6 @@
 				$('#mensaje').show();
 				$('[id^=finalizar]').hide();
 			}
-			mark();
 		}
 
 		function verify(form) {

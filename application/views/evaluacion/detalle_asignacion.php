@@ -184,5 +184,5 @@
 				<label><?= $evaluacion->comentarios;?></label>
 			</aside>
 		</div>
-		<div class="col-md-12"><h1>Calificación:</h1><label><big><?= number_format(floor($total*100)/100,2);?></big></label></div>
+		<div class="col-md-12"><h1>Calificación:</h1><label><big><?= number_format($total,2);?></big></label></div>
 	</div>
