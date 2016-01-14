@@ -87,7 +87,7 @@
 		$total=0;
 		if($evaluacion->tipo == 1 && ($evaluacion->anual==1 || $evaluacion->evaluador == $evaluacion->evaluado)):
 			if(isset($evaluacion->dominios)): 
-				$total = $resultado->competencias*.3 + $resultado->responsabilidades*.7 ?>
+				$total = $resultado->competencias*.3 + $resultado->responsabilidades*.7; ?>
 				<div class="row" align="center"><div class="col-md-12"><h1>Responsabilidades Funcionales</h1></div></div>
 				<div class="row">
 					<?php foreach ($evaluacion->dominios as $dominio) : if(count($dominio->responsabilidades) > 0): ?>
