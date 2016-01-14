@@ -507,12 +507,12 @@ class Main extends CI_Controller {
 		$proyectos = $this->evaluacion_model->getEvaluacionesProyecto();
 		if($proyectos)
 			foreach ($proyectos as $proyecto) :
-				if($proyecto->inicio < date('Y-m-d') && $proyecto->fin > date('Y-m-d')):
+				if($proyecto->inicio <= date('Y-m-d') && $proyecto->fin >= date('Y-m-d')):
 					$msg2 = "Evaluation: '".$proyecto->nombre."' with id: ".$proyecto->id."\n";
 					$info = $this->evaluacion_model->getEvaluadoresPendientesByEvaluacion($proyecto->id);
 					$mensaje="<a style='text-decoration:none;' href='http://intranet.advanzer.com:3000/evaluar'><img align='center' width='100%' 
-						src='http://drive.google.com/uc?export=view&id=0B7vcCZhlhZiOZFBzZTFvVnhPSk0'/></a>";
-					if($response = $this->enviaRecordatorio($info->email,$mensaje))
+						src='http://drive.google.com/uc?export=view&id=0B7vcCZhlhZiOeERTQk1MR1g5ZUU'/></a>";
+					if($response = $this->enviaRecordatorio($info[0]->email,$mensaje))
 						$msg .= date("Y-m-d H:i:s")." - Succesfully executed with errors:\n $msg2\t$response";
 					else
 						$msg .= date("Y-m-d H:i:s")." - Succesfully executed with activity:\n$msg2\tMail sent to project leader";
@@ -553,26 +553,7 @@ class Main extends CI_Controller {
 
 	public function recordatorioDiario() {
 		$msg="";
-		$proyectos = $this->evaluacion_model->getEvaluacionesProyecto();
 		$evaluacion = $this->evaluacion_model->getEvaluacionById($this->evaluacion_model->getEvaluacionAnualVigente()->id);
-		if($proyectos):
-			foreach ($proyectos as $proyecto):
-				if($proyecto->inicio == date('Y-m-d') || $proyecto->fin == date('Y-m-d')):
-					if($evaluacion->fin == date('Y-m-d'))
-						$mensaje="<a style='text-decoration:none;' href='http://intranet.advanzer.com:3000/evaluar'><img align='center' width='100%' 
-						src='http://drive.google.com/uc?export=view&id=0B7vcCZhlhZiObmcwSl9jM2QzVDg'/></a>";
-					else
-						$mensaje="<a style='text-decoration:none;' href='http://intranet.advanzer.com:3000/evaluar'><img align='center' width='100%' 
-						src='http://drive.google.com/uc?export=view&id=0B7vcCZhlhZiOSGRscFU2Uy1zUEk'/></a>";
-					$msg2 = "\n\nEvaluation: '".$proyecto->nombre."' with id: ".$proyecto->id."\n";
-					$info = $this->evaluacion_model->getEvaluadoresPendientesByEvaluacion($proyecto->id);
-					if($response = $this->enviaRecordatorio($info->email,$mensaje))
-						$msg .= date("Y-m-d H:i:s")." - Succesfully executed with errors:\n $msg2\t$response";
-					else
-						$msg .= date("Y-m-d H:i:s")." - Succesfully executed with activity:\n$msg2\tMail sent to project leader";
-				endif;
-			endforeach;
-		endif;
 		if($evaluacion)
 			if($evaluacion->inicio == date('Y-m-d') || $evaluacion->fin == date('Y-m-d')):
 				if($evaluacion->fin == date('Y-m-d'))

@@ -1095,7 +1095,7 @@ class Evaluacion_model extends CI_Model{
 
 	function getEvaluacionesProyecto($anio=null) {
 		if($anio==null)
-			$anio=date('Y');
+			$anio=date('Y')-1;
 		$result = $this->db->where_in('estatus',array(1,2))->where(array('tipo'=>0,'anio'=>$anio))
 			->get('Evaluaciones');
 		if($result->num_rows() != 0):
