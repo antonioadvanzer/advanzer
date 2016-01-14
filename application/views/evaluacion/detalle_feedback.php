@@ -168,8 +168,8 @@
 	<script>
 	$(document).ready(function() {
 		$('#update').submit(function(event){
-			fortalezas=$('#fortalezas').val();
-			oportunidad=$('#oportunidad').val();
+			fortalezas=$('#fortalezas').val().replace(new RegExp("\n","g"), "<br>");
+			oportunidad=$('#oportunidad').val().replace(new RegExp("\n","g"), "<br>");
 			id=$('#id').val();
 			$.ajax({
 				url: '<?= base_url("evaluacion/updateFeedback");?>',

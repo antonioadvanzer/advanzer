@@ -239,11 +239,11 @@
 	</div>
 	<script>
 		$(document).ready(function() {
-			estatus = <?= $evaluacion->estatus;?>;
+			estatus = '<?= $evaluacion->estatus;?>';
+			console.log(estatus);
 			if(estatus==1)
-				mark();
+				revisar();
 			$('[id^=finalizar]').hide();
-			revisar();
 			$('[id^=finalizar]').submit(function(event){
 				var flag= mark();
 				console.log(flag);

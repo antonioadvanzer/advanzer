@@ -294,11 +294,10 @@
 	</div>
 	<script>
 		$(document).ready(function() {
-			estatus = <?= $evaluacion->estatus;?>;
+			estatus = '<?= $evaluacion->estatus;?>';
 			if(estatus==1)
-				mark();
+				revisar();
 			$('[id^=finalizar]').hide();
-			revisar();
 			$('[id^=finalizar]').submit(function(event){
 				asignacion=$('#finalizar_asignacion').val();
 				tipo=$('#finalizar_tipo').val();
