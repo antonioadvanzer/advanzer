@@ -409,7 +409,7 @@ class Evaluacion_model extends CI_Model{
 					->join('Tracks T','T.id = PT.track','LEFT OUTER')
 					->join('Evaluadores E','E.evaluado = U.id','LEFT OUTER')
 					->join('Evaluaciones Ev','Ev.id = E.evaluacion','LEFT OUTER')
-					->where(array('E.evaluador'=>$evaluador,'U.estatus'=>1,'Ev.estatus'=>1,'Ev.inicio <='=>date('Y-m-d'),'Ev.fin >='=>date('Y-m-d'),'Ev.tipo'=>1))
+					->where(array('E.evaluador'=>$evaluador,'U.estatus'=>1,'Ev.estatus'=>1,'Ev.inicio <='=>date('Y-m-d'),'Ev.fin >='=>date('Y-m-d')))
 					->order_by('E.estatus,Ev.nombre,U.nombre');
 				return $this->db->get()->result();
 			else:

@@ -176,7 +176,7 @@
 											<div class="col-md-6">
 												<div class="form-group" align="center">
 													<textarea id="justificacion" class="form-control" rows="2" style="max-width:300px;text-align:center;" 
-														onkeyup="if(this.value.trim().split(' ').length >= 3){ this.form.boton.removeAttribute('disabled');
+														onkeydown="if(this.value.trim().split(' ').length >= 3){ this.form.boton.removeAttribute('disabled');
 															}else{ this.form.boton.setAttribute('disabled','disabled');}" placeholder="Justifique su respuesta"
 														required><?= $comp->justificacion;?></textarea>
 												</div>
@@ -215,7 +215,7 @@
 							<div class="form-group" align="center">
 								<label>Comentarios generales de la evaluación</label>
 								<textarea id="comentarios" class="form-control" rows="5" style="text-align:center"required
-									onkeyup="this.form.enviar.removeAttribute('disabled');"><?= $evaluacion->comentarios;?></textarea>
+									onkeydown="this.form.enviar.removeAttribute('disabled');"><?= $evaluacion->comentarios;?></textarea>
 							</div>
 						</div>
 					</div>
