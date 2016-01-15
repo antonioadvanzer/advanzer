@@ -139,8 +139,8 @@
 									<img height="40px" class="img-circle avatar avatar-original" 
 										src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></a></td>
 								<td><?= $evaluador->nombre;?></td>
-								<td align="center"><?php if($evaluador->responsabilidad) echo number_format(floor($evaluador->responsabilidad*100)/100,2);?></td>
-								<td align="center"><?php if($evaluador->competencia) echo number_format(floor($evaluador->competencia*100)/100,2);?></td>
+								<td align="center"><?php if($evaluador->responsabilidad) echo number_format($evaluador->responsabilidad,2);?></td>
+								<td align="center"><?php if($evaluador->competencia) echo number_format($evaluador->competencia,2);?></td>
 								<td>Anual</td>
 								<td><?php if($evaluador->comentarios) echo $evaluador->comentarios;?></td>
 							</tr>
@@ -154,7 +154,7 @@
 										src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></a></td>
 								<td><?= $evaluador->nombre;?></td>
 								<td>&nbsp;</td>
-								<td align="center"><?php if($evaluador->competencia) echo number_format(floor($evaluador->competencia*100)/100,2);?></td>
+								<td align="center"><?php if($evaluador->competencia) echo number_format($evaluador->competencia,2);?></td>
 								<td>360</td>
 								<td><?= $evaluador->comentarios;?></td>
 							</tr>
@@ -167,7 +167,7 @@
 									<img height="40px" class="img-circle avatar avatar-original" 
 										src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></a></td>
 								<td><?= $evaluador->nombre;?></td>
-								<td align="center"><?php if($evaluador->responsabilidad) echo number_format(floor($evaluador->responsabilidad*100)/100,2);?></td>
+								<td align="center"><?php if($evaluador->responsabilidad) echo number_format($evaluador->responsabilidad,2);?></td>
 								<td>&nbsp;</td>
 								<td>Proyecto - <?= $evaluador->evaluacion;?></td>
 								<td><?php if($evaluador->comentarios) echo $evaluador->comentarios;?></td>
@@ -186,7 +186,7 @@
 						</td>
 						<td><?= $colaborador->nombre;?></td>
 						<td>&nbsp;</td>
-						<td align="center"><?php if($colaborador->auto) echo number_format(floor($colaborador->autoevaluacion*100)/100,2);?></td>
+						<td align="center"><?php if($colaborador->auto) echo number_format($colaborador->autoevaluacion,2);?></td>
 						<td>AUTOEVALUACIÓN</td>
 						<td><?php if($colaborador->auto) echo $colaborador->auto->comentarios;?></td>
 					</tr>

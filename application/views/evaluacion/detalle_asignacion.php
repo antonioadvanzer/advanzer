@@ -87,26 +87,30 @@
 		$total=0;
 		if($evaluacion->tipo == 1 && ($evaluacion->anual==1 || $evaluacion->evaluador == $evaluacion->evaluado)):
 			if(isset($evaluacion->dominios)): 
-				$total = $resultado->competencias*.3 + $resultado->responsabilidades*.7; ?>
-				<div class="row" align="center"><div class="col-md-12"><h1>Responsabilidades Funcionales</h1></div></div>
-				<div class="row">
-					<?php foreach ($evaluacion->dominios as $dominio) : if(count($dominio->responsabilidades) > 0): ?>
-						<div class="col-md-12">
-							<aside class="accordion">
-								<h1><?= $dominio->nombre;?></h1>
-								<?php foreach ($dominio->responsabilidades as $resp) :?>
-									<label style="padding: 5px 0px;">
-										<h2><?= $resp->nombre;?><span style="min-width:100px;float:right;">
-												<i>Respuesta</i>: <?= $resp->respuesta;?>
-											</span>
-											<?php if($resp->justificacion):?>Justificación: <label><?= $resp->justificacion;?></label><?php endif;?>
-										</h2>
-									</label>
-								<?php endforeach; ?>
-							</aside>
-						</div>
-					<?php endif; endforeach; ?>
-				</div>
+				if(count($evaluacion->dominios) > 0):
+					$total = $resultado->competencias*.3 + $resultado->responsabilidades*.7; ?>
+					<div class="row" align="center"><div class="col-md-12"><h1>Responsabilidades Funcionales</h1></div></div>
+					<div class="row">
+						<?php foreach ($evaluacion->dominios as $dominio) : if(count($dominio->responsabilidades) > 0): ?>
+							<div class="col-md-12">
+								<aside class="accordion">
+									<h1><?= $dominio->nombre;?></h1>
+									<?php foreach ($dominio->responsabilidades as $resp) :?>
+										<label style="padding: 5px 0px;">
+											<h2><?= $resp->nombre;?><span style="min-width:100px;float:right;">
+													<i>Respuesta</i>: <?= $resp->respuesta;?>
+												</span>
+												<?php if($resp->justificacion):?>Justificación: <label><?= $resp->justificacion;?></label><?php endif;?>
+											</h2>
+										</label>
+									<?php endforeach; ?>
+								</aside>
+							</div>
+						<?php endif; endforeach; ?>
+					</div>
+				<?php else:
+					$total = $resultado->competencias;
+				endif; ?>
 			<?php else:
 				$total=$resultado->autoevaluacion;
 			endif;
