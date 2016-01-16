@@ -44,11 +44,11 @@
 											<tr>
 												<td><a target="_blank" style="text-decoration:none" href="<?= base_url("evaluacion/detalle_asignacion/$colaborador->id");?>">
 													<small><?php if($colaborador->total){
-													echo number_format(floor($colaborador->total*100)/100,2);$count++;}?></small></a></td>
+													echo number_format($colaborador->total,2);$count++;}?></small></a></td>
 												<td><small><?php if($colaborador->total) 
-													echo number_format(floor($colaborador->responsabilidad*100)/100,2);?></small></td>
+													echo number_format($colaborador->responsabilidad,2);?></small></td>
 												<td><small><?php if($colaborador->total) 
-													echo number_format(floor($colaborador->competencia*100)/100,2);?></small></td>
+													echo number_format($colaborador->competencia,2);?></small></td>
 												<td><small><img class="img-circle avatar avatar-original" height="40px" 
 													src="<?= base_url('assets/images/fotos')."/"
 													.$colaborador->foto;?>"><?= $colaborador->nombre;?></small></td>
@@ -59,10 +59,10 @@
 											<tr>
 												<td><a target="_blank" style="text-decoration:none" href="<?= base_url("evaluacion/detalle_asignacion/$colaborador->id");?>">
 													<small><?php if($colaborador->total){
-													echo number_format(floor($colaborador->total*100)/100,2);$count++;}?></small></a></td>
+													echo number_format($colaborador->total,2);$count++;}?></small></a></td>
 												<td>&nbsp;</td>
 												<td><small><?php if($colaborador->total)
-													echo number_format(floor($colaborador->total*100)/100,2);?></small></td>
+													echo number_format($colaborador->total,2);?></small></td>
 												<td colspan="3"><small><img class="img-circle avatar avatar-original" height="40px" 
 													src="<?= base_url('assets/images/fotos')."/"
 													.$colaborador->foto;?>"><?= $colaborador->nombre;?></small></td>
@@ -73,9 +73,9 @@
 											<tr>
 												<td><a target="_blank" style="text-decoration:none" href="<?= base_url("evaluacion/detalle_asignacion/$colaborador->id");?>">
 													<small><?php if(isset($colaborador->total)){
-													echo number_format(floor($colaborador->total*100)/100,2);$count++;}?></small></a></td>
+													echo number_format($colaborador->total,2);$count++;}?></small></a></td>
 												<td><small><?php if(isset($colaborador->total))
-													echo number_format(floor($colaborador->total*100)/100,2);?></small></td>
+													echo number_format($colaborador->total,2);?></small></td>
 												<td>&nbsp;</td>
 												<td colspan="3"><small><img class="img-circle avatar avatar-original" height="40px" 
 													src="<?= base_url('assets/images/fotos')."/"

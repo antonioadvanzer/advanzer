@@ -50,7 +50,7 @@
 			<div class="col-md-4">
 				<h4>Resultados Globales</h4>
 				<div class="form-group" align="center">
-					<p align="center"><label>Resultado:&nbsp;&nbsp;</label><big><?= number_format(floor($colaborador->total*100)/100,2);?></big></p>
+					<p align="center"><label>Resultado:&nbsp;&nbsp;</label><big><?= number_format($colaborador->total,2);?></big></p>
 					<label for="nombre">Rating:</label>
 					<select id="rating" class="form-control" style="max-width:80px">
 						<option value="" selected disabled>-- Selecciona un valor --</option>
