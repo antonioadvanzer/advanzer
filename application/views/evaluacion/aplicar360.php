@@ -239,13 +239,13 @@
 	</div>
 	<script>
 		$(document).ready(function() {
-			estatus = '<?= $evaluacion->estatus;?>';
+			$('[id^=finalizar]').hide();
+			estatus = <?= $evaluacion->estatus;?>;
 			console.log(estatus);
 			if(estatus==1){
 				mark();
 				revisar();
 			}
-			$('[id^=finalizar]').hide();
 			$('[id^=finalizar]').submit(function(event){
 				var flag= mark();
 				console.log(flag);
@@ -346,6 +346,7 @@
 					flag = false;
 				}
 			});
+			console.log(flag)
 			if(flag){
 				$('#mensaje').hide();
 				$('[id^=finalizar]').show();
