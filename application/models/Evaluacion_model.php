@@ -358,7 +358,7 @@ class Evaluacion_model extends CI_Model{
 								$string .= "$t->justificacion<br>";
 						endforeach;
 					endforeach;
-					$items .="<tr><td style='cursor:default'>$indicador->nombre</td><td style='cursor:default'>$string</td></tr>";
+					$items .="<tr><td style='cursor:default'><small>$indicador->nombre</small></td><td style='cursor:default'><small>$string</small></td></tr>";
 				endforeach;
 				$result->data = $data;
 				$result->justificacion = $items;
