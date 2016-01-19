@@ -329,7 +329,7 @@ class Evaluacion_model extends CI_Model{
 		$result=new stdClass();
 		if ($posicion <= 5) :
 			$asignaciones = $this->db->select('Ev.id')->from('Evaluadores Ev')->join('Evaluaciones E','E.id = Ev.evaluacion')
-				->where(array('Ev.evaluado'=>$id,'E.id'=>$evaluacion))->get()->result();
+				->where(array('Ev.evaluado'=>$id,'E.id'=>$evaluacion,'Ev.estatus'=>2))->get()->result();
 			$ids=array();
 			foreach ($asignaciones as $as) {
 				array_push($ids, $as->id);
