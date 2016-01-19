@@ -138,11 +138,11 @@
 								<td align="center"><a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion");?>">
 									<img height="40px" class="img-circle avatar avatar-original" 
 										src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></a></td>
-								<td><?= $evaluador->nombre;?></td>
+								<td><small><?= $evaluador->nombre;?></small></td>
 								<td align="center"><?php if($evaluador->responsabilidad) echo number_format($evaluador->responsabilidad,2);?></td>
 								<td align="center"><?php if($evaluador->competencia) echo number_format($evaluador->competencia,2);?></td>
-								<td>Anual</td>
-								<td><?php if($evaluador->comentarios) echo $evaluador->comentarios;?></td>
+								<td><small>Anual</small></td>
+								<td><small><?php if($evaluador->comentarios) echo $evaluador->comentarios;?></small></td>
 							</tr>
 						<?php endforeach;
 					endif;
@@ -152,11 +152,11 @@
 								<td align="center"><a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion");?>">
 									<img height="40px" class="img-circle avatar avatar-original" 
 										src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></a></td>
-								<td><?= $evaluador->nombre;?></td>
+								<td><small><?= $evaluador->nombre;?></small></td>
 								<td>&nbsp;</td>
 								<td align="center"><?php if($evaluador->competencia) echo number_format($evaluador->competencia,2);?></td>
-								<td>360</td>
-								<td><?= $evaluador->comentarios;?></td>
+								<td><small>360</small></td>
+								<td><small><?= $evaluador->comentarios;?></small></td>
 							</tr>
 						<?php endforeach;
 					endif;
@@ -166,11 +166,11 @@
 								<td align="center"><a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion/1");?>">
 									<img height="40px" class="img-circle avatar avatar-original" 
 										src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></a></td>
-								<td><?= $evaluador->nombre;?></td>
+								<td><small><?= $evaluador->nombre;?></small></td>
 								<td align="center"><?php if($evaluador->responsabilidad) echo number_format($evaluador->responsabilidad,2);?></td>
 								<td>&nbsp;</td>
-								<td>Proyecto - <?= $evaluador->evaluacion;?></td>
-								<td><?php if($evaluador->comentarios) echo $evaluador->comentarios;?></td>
+								<td><small>Proyecto - <?= $evaluador->evaluacion;?></small></td>
+								<td><small><?php if($evaluador->comentarios) echo $evaluador->comentarios;?></small></td>
 							</tr>
 						<?php endforeach;
 					endif;?>
@@ -184,11 +184,11 @@
 									src="<?= base_url('assets/images/fotos')."/".$colaborador->foto;?>">
 							<?php endif; ?>
 						</td>
-						<td><?= $colaborador->nombre;?></td>
+						<td><small><?= $colaborador->nombre;?></small></td>
 						<td>&nbsp;</td>
 						<td align="center"><?php if($colaborador->auto) echo number_format($colaborador->autoevaluacion,2);?></td>
-						<td>AUTOEVALUACIÓN</td>
-						<td><?php if($colaborador->auto) echo $colaborador->auto->comentarios;?></td>
+						<td><small>AUTOEVALUACIÓN</small></td>
+						<td><small><?php if($colaborador->auto) echo $colaborador->auto->comentarios;?></small></td>
 					</tr>
 				</tbody>
 			</table>
