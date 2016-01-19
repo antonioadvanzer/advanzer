@@ -97,8 +97,9 @@ class User extends CI_Controller {
         $posiciones = $this->posicion_model->getByTrack($track);
         foreach ($posiciones as $posicion) : ?>
             <option value="<?= $posicion->id;?>"><?= $posicion->nombre;?></option>
-        <?php endforeach;
-    }
+        <?php endforeach;?>
+        <option value="" disabled selected>-- Selecciona una posición --</option>
+    <?php }
 
     public function nuevo($msg=null) {
         $this->valida_acceso();
