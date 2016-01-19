@@ -46,10 +46,10 @@
 							<tr>
 								<td style="cursor:default;" align="center"><img height="40px" class="img-circle avatar avatar-original" 
 									src="<?= base_url("assets/images/fotos/$evaluador->foto");?>"></td>
-								<td class="col-md-7" style="cursor:default;"><?= $evaluador->nombre;?></td>
-								<td style="cursor:default;" align="center"><?= $evaluador->anuales;?></td>
-								<td style="cursor:default;" align="center"><?= $evaluador->tres60;?></td>
-								<td style="cursor:default;" align="center"><?php if($evaluador->auto == 1) echo "No ha enviado";else echo "Enviada";?></td>
+								<td class="col-md-7" style="cursor:default;"><small><?= $evaluador->nombre;?></small></td>
+								<td style="cursor:default;" align="center"><small><?= $evaluador->anuales;?></small></td>
+								<td style="cursor:default;" align="center"><small><?= $evaluador->tres60;?></small></td>
+								<td style="cursor:default;" align="center"><small><?php if($evaluador->auto == 1) echo "No ha enviado";else echo "Enviada";?></small></td>
 							</tr>
 						<?php endforeach; ?>
 				</tbody>

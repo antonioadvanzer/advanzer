@@ -832,8 +832,8 @@ class Evaluacion extends CI_Controller {
                     <tr>
                         <td style="cursor:default;" align="center"><img height="40px" class="img-circle avatar avatar-original" 
                             src="<?= base_url("assets/images/fotos/$evaluador->foto");?>"></td>
-                        <td class="col-md-10" style="cursor:default;"><?= $evaluador->nombre;?></td>
-                        <td style="cursor:default;" align="center"><?= $evaluador->resultado;?></td>
+                        <td class="col-md-10" style="cursor:default;"><small><?= $evaluador->nombre;?></small></td>
+                        <td style="cursor:default;" align="center"><small><?= $evaluador->resultado;?></small></td>
                     </tr>
                 <?php endif;
             endforeach; ?>
