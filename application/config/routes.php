@@ -69,6 +69,8 @@ $route['evaluacion/(:num)'] = 'evaluacion/index/(:num)';
 $route['evaluar'] = 'evaluacion/evaluar';
 $route['historial'] = 'main/historial';
 $route['requisiciones'] = 'requisicion/index/true';
+$route['vacaciones'] = 'servicio/vacaciones';
+$route['solicitar_vacaciones'] = 'servicio/formato/1';
 /*
 $route['estructura_organizacional'] = 'info/estructura';
 $route['cartas_constancias'] = 'info/cartas_constancias';

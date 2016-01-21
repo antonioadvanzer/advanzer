@@ -321,7 +321,7 @@
 
 		$('#recision').submit(function(event){
 			id = $('#id').val();
-			fecha_baja = $('#fecha_baja').val();
+			fecha_baja = $('#baja').val();
 			$("#tipo_baja option:selected").each(function() {
 				tipo_baja = $('#tipo_baja').val();
 			});

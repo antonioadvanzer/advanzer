@@ -143,6 +143,7 @@ class User extends CI_Controller {
 
     public function recision() {
         $this->valida_acceso();
+        $this->db->trans_begin();
     	$id = $this->input->post('id');
         $datos = array(
             'fecha_baja'=>$this->input->post('fecha_baja'),
@@ -150,10 +151,16 @@ class User extends CI_Controller {
             'motivo'=>$this->input->post('motivo'),
             'estatus'=>0
         );
-    	if($this->user_model->enable_disable($id,$datos))
-    		$response['msg']="ok";
-    	else
-    		$response['msg'] = "Error al dar de baja al colaborador. Intenta de nuevo";
+    	$this->user_model->enable_disable($id,$datos);
+        $this->user_model->cleanUser($id);
+        if($this->db->trans_status() === FALSE):
+            $this->db->trans_rollback();
+            $response['msg'] = "Error al dar de baja al colaborador. Intenta de nuevo";
+        else:
+            $this->db->trans_commit();
+            $response['msg']="ok";
+        endif;
+
     	echo json_encode($response);
     }
 

@@ -142,6 +142,10 @@ class User_model extends CI_Model{
 			return false;
 	}
 
+	function cleanUser($id) {
+		$this->db->where('jefe',$id)->update('Users',array('jefe'=>null));
+	}
+
 	function getByText($valor="",$estatus=1,$orden='DESC') {
 		if($estatus < 2){$ids=array('');
 			$this->db->where('estatus',$estatus);
@@ -180,6 +184,15 @@ class User_model extends CI_Model{
 		$this->db->join('Posicion_Track PT','PT.id = U.posicion_track');
 		$this->db->join('Posiciones P','P.id = PT.posicion');
 		$this->db->join('Tracks T','T.id = PT.track');
+		return $this->db->where('U.estatus',1)->order_by('nombre','asc')->get('Users U')->result();
+	}
+
+	function getDirectores() {
+		$this->db->select('U.id,U.nombre')
+			->join('Posicion_Track PT','PT.id = U.posicion_track')
+			->join('Posiciones P','P.id = PT.posicion')
+			->join('Tracks T','T.id = PT.track');
+			$this->db->where('P.nivel <=',3);
 		return $this->db->where('U.estatus',1)->order_by('nombre','asc')->get('Users U')->result();
 	}
 
