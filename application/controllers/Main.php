@@ -68,6 +68,7 @@ class Main extends CI_Controller {
 		$client->setRedirectUri($redirect_uri);
 		$client->setDeveloperKey($simple_api_key);
 		$client->addScope("https://www.googleapis.com/auth/userinfo.email");
+		$client->setAccessType('offline');
 
 		// Send Client Request
 		$objOAuthService = new Google_Service_OAuth2($client);

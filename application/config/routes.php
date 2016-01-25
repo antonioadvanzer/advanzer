@@ -70,7 +70,7 @@ $route['evaluar'] = 'evaluacion/evaluar';
 $route['historial'] = 'main/historial';
 $route['requisiciones'] = 'requisicion/index/true';
 $route['vacaciones'] = 'servicio/vacaciones';
-$route['solicitar_vacaciones'] = 'servicio/formato/1';
+$route['solicitar_vacaciones'] = 'servicio/formato_vacaciones';
 /*
 $route['estructura_organizacional'] = 'info/estructura';
 $route['cartas_constancias'] = 'info/cartas_constancias';

@@ -109,7 +109,7 @@ class Evaluacion_model extends CI_Model{
 		$this->db->select('Us.id,Us.foto,Us.nombre')->from('Users Us');
 		$this->db->join('Evaluadores Ev','Us.id = Ev.evaluador','LEFT OUTER');
 		$this->db->join('Evaluaciones E','E.id = Ev.evaluacion');
-		$this->db->where(array('Us.estatus'=>1,'E.id'=>$evaluacion));
+		$this->db->where(array('Us.estatus'=>1,'E.anio'=>$anio));
 		$this->db->where('Ev.evaluado != Ev.evaluador');
 		$this->db->order_by('Us.nombre');
 		$result = $this->db->get()->result();
