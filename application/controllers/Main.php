@@ -90,8 +90,8 @@ class Main extends CI_Controller {
 
 		// Get User Data from Google and store them in $data
 		if ($client->getAccessToken()) {
-			$NewAccessToken = json_decode($_SESSION['access_token']);
-			$client->refreshToken($NewAccessToken->access_token);
+			/*$NewAccessToken = json_decode($_SESSION['access_token']);
+			$client->refreshToken($NewAccessToken->access_token);*/
 			$userData = $objOAuthService->userinfo->get();
 			$email = $userData->email;
 			$result=$this->user_model->do_login($email);
