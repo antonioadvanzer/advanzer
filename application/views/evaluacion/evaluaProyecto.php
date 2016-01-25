@@ -130,12 +130,12 @@
 							<div class="form-group" align="center" id="finalizar">
 								<label>Escribe un comentario adicional respecto al desempeño del colaborador en el Proyecto</label>
 								<textarea id="comentarios" class="form-control" rows="5" style="text-align:center" required
-									onkeydown="this.form.enviar.removeAttribute('disabled');"><?= $evaluacion->comentarios;?></textarea>
+									><?= $evaluacion->comentarios;?></textarea>
 							</div>
 						</div>
 					</div>
 					<div class="carousel-caption" align="center">
-						<button id="enviar" class="btn btn-lg btn-primary" style="max-width:200px; text-align:center;" disabled>Enviar Evaluación</button>
+						<button id="enviar" class="btn btn-lg btn-primary" style="max-width:200px; text-align:center;">Enviar Evaluación</button>
 						<h3 style="cursor:default;">Gracias por tu tiempo...!</h3>
 					</div>
 				</form>
