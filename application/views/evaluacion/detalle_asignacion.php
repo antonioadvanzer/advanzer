@@ -100,7 +100,7 @@
 											<h2><?= $resp->nombre;?><span style="min-width:100px;float:right;">
 													<i>Respuesta</i>: <?= $resp->respuesta;?>
 												</span>
-												<?php if($resp->justificacion):?>Justificación: <label><?= $resp->justificacion;?></label><?php endif;?>
+												<?php if($resp->justificacion):?><label><?= $resp->justificacion;?></label><?php endif;?>
 											</h2>
 										</label>
 									<?php endforeach; ?>
