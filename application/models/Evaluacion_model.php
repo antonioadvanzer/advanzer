@@ -173,44 +173,51 @@ class Evaluacion_model extends CI_Model{
 	}
 
 	function getPendientes($estatus="",$tipo="") {
-		$evaluacion=$this->getEvaluacionAnualVigente()->id;
-		$this->db->distinct()->select('U.id,U.foto,U.nombre,U.email')->from('Evaluadores Ev')
+		$evaluacion=$this->getEvaluacionAnualVigente();
+		$this->db->distinct()->select('U.id,U.foto,U.nombre,U.email')->from('Evaluadores Ev')->join('Evaluaciones E','E.id = Ev.evaluacion')
 			->join('Users U','Ev.evaluador = U.id')
-			->where(array('Ev.evaluacion'=>$evaluacion,'U.estatus'=>1))->order_by('U.nombre');
+			->where(array('E.anio'=>$evaluacion->anio,'U.estatus'=>1))->order_by('U.nombre');
 		$result = $this->db->get()->result();
 		foreach ($result as $evaluador) :
 			if($estatus == "" && $tipo == ""):
 				$this->db->select('count(id) total')->from('Evaluadores')
-					->where(array('evaluador'=>$evaluador->id,'evaluacion'=>$evaluacion,'estatus !='=>2,'anual'=>1));
+					->where(array('evaluador'=>$evaluador->id,'evaluacion'=>$evaluacion->id,'estatus !='=>2,'anual'=>1));
 				$evaluador->anuales=$this->db->get()->first_row()->total;
 				$this->db->select('count(id) total')->from('Evaluadores')
-					->where(array('evaluador'=>$evaluador->id,'evaluado !='=>$evaluador->id,'evaluacion'=>$evaluacion,'estatus !='=>2,'anual'=>0));
+					->where(array('evaluador'=>$evaluador->id,'evaluado !='=>$evaluador->id,'evaluacion'=>$evaluacion->id,'estatus !='=>2,'anual'=>0));
 				$evaluador->tres60=$this->db->get()->first_row()->total;
 				$this->db->select('count(id) total')->from('Evaluadores')
-					->where(array('evaluador'=>$evaluador->id,'evaluado'=>$evaluador->id,'evaluacion'=>$evaluacion,'estatus !='=>2,));
+					->where(array('evaluador'=>$evaluador->id,'evaluado'=>$evaluador->id,'evaluacion'=>$evaluacion->id,'estatus !='=>2,));
 				$res=$this->db->get();
 				($res->num_rows() > 0) ? $evaluador->auto=$res->first_row()->total : $evaluador->auto=0;
+				$this->db->select('count(E.id) total')->from('Evaluadores E')->join('Evaluaciones EV','Ev.id = E.evaluacion')
+					->where(array('Ev.anio'=>$evaluacion->anio,'E.evaluador'=>$evaluador->id,'E.evaluado !='=>$evaluador->id,'E.estatus !='=>2,'Ev.tipo'=>0));
+				$evaluador->proyectos=$this->db->get()->first_row()->total;
 			else:
 				if($estatus != "")
-					$this->db->where_in('estatus',$estatus);
+					$this->db->where_in('E.estatus',$estatus);
 				else
-					$this->db->where_in('estatus',array(0,1));
+					$this->db->where_in('E.estatus',array(0,1));
 				switch ($tipo) {
 					case '360':
-						$this->db->select('count(id) total')->from('Evaluadores')
-							->where(array('evaluador'=>$evaluador->id,'evaluado !='=>$evaluador->id,'evaluacion'=>$evaluacion,'anual'=>0));
+						$this->db->select('count(E.id) total')->from('Evaluadores E')
+							->where(array('E.evaluador'=>$evaluador->id,'E.evaluado !='=>$evaluador->id,'E.evaluacion'=>$evaluacion->id,'E.anual'=>0));
 						break;
 					case 'anual':
-						$this->db->select('count(id) total')->from('Evaluadores')
-							->where(array('evaluador'=>$evaluador->id,'evaluacion'=>$evaluacion,'anual'=>1));
+						$this->db->select('count(E.id) total')->from('Evaluadores E')
+							->where(array('E.evaluador'=>$evaluador->id,'E.evaluacion'=>$evaluacion->id,'E.anual'=>1));
 						break;
 					case 'auto':
-						$this->db->select('count(id) total')->from('Evaluadores')
-							->where(array('evaluador'=>$evaluador->id,'evaluado'=>$evaluador->id,'evaluacion'=>$evaluacion));
+						$this->db->select('count(E.id) total')->from('Evaluadores E')
+							->where(array('E.evaluador'=>$evaluador->id,'E.evaluado'=>$evaluador->id,'E.evaluacion'=>$evaluacion->id));
+						break;
+					case 'proyecto':
+						$this->db->select('count(E.id) total')->from('Evaluadores E')->join('Evaluaciones Ev','Ev.id = E.evaluacion')
+							->where(array('E.evaluador'=>$evaluador->id,'E.evaluado !='=>$evaluador->id,'Ev.tipo'=>0,'Ev.anio'=>$evaluacion->anio));
 						break;
 					default:
-						$this->db->select('count(id) total')->from('Evaluadores')
-							->where(array('evaluador'=>$evaluador->id,'evaluacion'=>$evaluacion));
+						$this->db->select('count(E.id) total')->from('Evaluadores E')
+							->where(array('E.evaluador'=>$evaluador->id,'E.evaluacion'=>$evaluacion));
 						break;
 				}
 				$evaluador->resultado=$this->db->get()->first_row()->total;

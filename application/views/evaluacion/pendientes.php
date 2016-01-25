@@ -11,6 +11,7 @@
 			<span class="input-group-addon">Tipo</span>
 			<select name="tipo" id="tipo" class="form-control">
 				<option value="" selected>Todas</option>
+				<option value="proyecto">Proyecto</option>
 				<option value="auto">Autoevaluación</option>
 				<option value="360">360</option>
 				<option value="anual">Anual</option>
@@ -35,6 +36,7 @@
 					<tr>
 						<th data-halign="center" align="center"></th>
 						<th data-halign="center" align="center">Evaluador</th>
+						<th data-halign="center" align="center"># Proyecto</th>
 						<th data-halign="center" align="center"># Anuales</th>
 						<th data-halign="center" align="center"># 360</th>
 						<th data-halign="center" align="center">Autoevaluación</th>
@@ -47,21 +49,13 @@
 								<td style="cursor:default;" align="center"><img height="40px" class="img-circle avatar avatar-original" 
 									src="<?= base_url("assets/images/fotos/$evaluador->foto");?>"></td>
 								<td class="col-md-7" style="cursor:default;"><small><?= $evaluador->nombre;?></small></td>
+								<td style="cursor:default;" align="center"><small><?= $evaluador->proyectos;?></small></td>
 								<td style="cursor:default;" align="center"><small><?= $evaluador->anuales;?></small></td>
 								<td style="cursor:default;" align="center"><small><?= $evaluador->tres60;?></small></td>
 								<td style="cursor:default;" align="center"><small><?php if($evaluador->auto == 1) echo "No ha enviado";else echo "Enviada";?></small></td>
 							</tr>
 						<?php endforeach; ?>
 				</tbody>
-				<tfoot>
-					<tr>
-						<td></td>
-						<td>Todos</td>
-						<td># Anuales</td>
-						<td># 360</td>
-						<td>Todos</td>
-					</tr>
-				</tfoot>
 			</table>
 		</div>
 	</div>
