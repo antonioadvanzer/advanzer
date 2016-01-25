@@ -21,6 +21,7 @@ class Main extends CI_Controller {
 	}
 
     public function login($err=null) {
+    	$this->verify_session();
     	$data=array();
     	$periodo_edicion = $this->evaluacion_model->getPeriodoEdicion();
     	if($err!=null)
@@ -68,7 +69,6 @@ class Main extends CI_Controller {
 		$client->setRedirectUri($redirect_uri);
 		$client->setDeveloperKey($simple_api_key);
 		$client->addScope("https://www.googleapis.com/auth/userinfo.email");
-		$client->setAccessType('offline');
 
 		// Send Client Request
 		$objOAuthService = new Google_Service_OAuth2($client);
@@ -123,7 +123,6 @@ class Main extends CI_Controller {
 			$this->layout->title('Advanzer - Login');
 			$re="main/login";
 		}
-		$this->verify_session();
 		// Load view and send values stored in $data
 		//$this->load->view('google_authentication', $data);
     	$this->layout->view($re, $data);
