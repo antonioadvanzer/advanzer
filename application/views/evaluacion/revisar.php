@@ -173,23 +173,21 @@
 								<td><small><?php if($evaluador->comentarios) echo $evaluador->comentarios;?></small></td>
 							</tr>
 						<?php endforeach;
-					endif;?>
-					<tr>
-						<td align="center"><?php if($colaborador->autoevaluacion): ?>
-							<a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/".$colaborador->auto->asignacion);?>">
-								<img height="40px" class="img-circle avatar avatar-original" 
-									src="<?= base_url('assets/images/fotos')."/".$colaborador->foto;?>"></a>
-							<?php else: ?>
-								<img height="40px" class="img-circle avatar avatar-original" 
-									src="<?= base_url('assets/images/fotos')."/".$colaborador->foto;?>">
-							<?php endif; ?>
-						</td>
-						<td><small><?= $colaborador->nombre;?></small></td>
-						<td>&nbsp;</td>
-						<td align="center"><?php if($colaborador->auto) echo number_format($colaborador->autoevaluacion,2);?></td>
-						<td><small>AUTOEVALUACIÓN</small></td>
-						<td><small><?php if($colaborador->auto) echo $colaborador->auto->comentarios;?></small></td>
-					</tr>
+					endif;
+					if($colaborador->autoevaluacion): ?>
+						<tr>
+							<td align="center">
+								<a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/".$colaborador->auto->asignacion);?>">
+									<img height="40px" class="img-circle avatar avatar-original" 
+										src="<?= base_url('assets/images/fotos')."/".$colaborador->foto;?>"></a>
+							</td>
+							<td><small><?= $colaborador->nombre;?></small></td>
+							<td>&nbsp;</td>
+							<td align="center"><?php if($colaborador->auto) echo number_format($colaborador->autoevaluacion,2);?></td>
+							<td><small>AUTOEVALUACIÓN</small></td>
+							<td><small><?php if($colaborador->auto) echo $colaborador->auto->comentarios;?></small></td>
+						</tr>
+					<?php endif; ?>
 				</tbody>
 			</table>
 		</div>
