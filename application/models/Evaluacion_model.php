@@ -190,7 +190,7 @@ class Evaluacion_model extends CI_Model{
 					->where(array('evaluador'=>$evaluador->id,'evaluado'=>$evaluador->id,'evaluacion'=>$evaluacion->id,'estatus !='=>2,));
 				$res=$this->db->get();
 				($res->num_rows() > 0) ? $evaluador->auto=$res->first_row()->total : $evaluador->auto=0;
-				$this->db->select('count(E.id) total')->from('Evaluadores E')->join('Evaluaciones EV','Ev.id = E.evaluacion')
+				$this->db->select('count(E.id) total')->from('Evaluadores E')->join('Evaluaciones Ev','Ev.id = E.evaluacion')
 					->where(array('Ev.anio'=>$evaluacion->anio,'E.evaluador'=>$evaluador->id,'E.evaluado !='=>$evaluador->id,'E.estatus !='=>2,'Ev.tipo'=>0));
 				$res=$this->db->get();
 				($res->num_rows() > 0) ? $evaluador->proyectos=$res->first_row()->total : $evaluador->proyectos=0;
