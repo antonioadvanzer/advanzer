@@ -128,7 +128,7 @@
 											src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></td>
 									<td><?= $evaluador->nombre;?></td>-->
 									<td><a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion");?>">360</a></td>
-									<td><?= $evaluador->competencia;?></td>
+									<td><?= number_format($evaluador->competencia,2);?></td>
 									<td><?= $evaluador->comentarios;?></td>
 								</tr>
 							<?php endforeach;
