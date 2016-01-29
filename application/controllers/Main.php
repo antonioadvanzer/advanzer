@@ -295,21 +295,21 @@ class Main extends CI_Controller {
 			$evaluadores="";
 			$comentarios="";
 			foreach ($colaborador->evaluadores as $evaluador) :
-				$evaluadores .= $evaluador->nombre." / ";
-				$comentarios .= $evaluador->comentarios." / ";
+				$evaluadores .= $evaluador->nombre."\n";
+				$comentarios .= $evaluador->comentarios."\n";
 			endforeach;
 			if(isset($colaborador->evaluadoresProyecto)):
 				foreach ($colaborador->evaluadoresProyecto as $evaluador) :
-					$evaluadores .= $evaluador->nombre." / ";
-					$comentarios .= $evaluador->comentarios." / ";
+					$evaluadores .= $evaluador->nombre."\n";
+					$comentarios .= $evaluador->comentarios."\n";
 				endforeach;
 			endif;
 			if($colaborador->nivel_posicion <= 5):
 				$cont=0;
 				if(isset($colaborador->evaluadores360)):
 					foreach ($colaborador->evaluadores360 as $evaluador) :
-						$evaluadores .= $evaluador->nombre." / ";
-						$comentarios .= $evaluador->comentarios." / ";
+						$evaluadores .= $evaluador->nombre."\n";
+						$comentarios .= $evaluador->comentarios."\n";
 						$cont++;
 					endforeach;
 				endif;
@@ -336,7 +336,7 @@ class Main extends CI_Controller {
 		$objSheet->getStyle('A2:Q'.$column)->getFont()->setSize(12);
 		$objSheet->getStyle('G2:H'.$column)->getFont()->setSize(16);
 		$objSheet->getStyle('I2:I'.$column)->getFont()->setSize(18);
-		$objSheet->getStyle('L2:L'.$column)->getFont()->setSize(24);
+		$objSheet->getStyle('M2:M'.$column)->getFont()->setSize(24);
 		$objSheet->getStyle('A2:Q'.$column)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
 		// create some borders
