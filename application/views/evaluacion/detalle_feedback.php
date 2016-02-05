@@ -34,11 +34,12 @@
 		<input type="hidden" id="id" value="<?= $feedback->id;?>">
 		<div class="row" align="center">
 			<div class="col-md-12">
-				<label>Rating Obtenido: </label><span><big><?= $feedback->rating;?></big></span>
-			</div>
-			<div class="col-md-12">
-				<label>Comentarios de la Junta:&nbsp;</label><span><?= $feedback->comentarios;?></span>
-			</div>
+				<label>Rating Obtenido: </label><span><big> <?= $feedback->rating;?></big></span>
+			</div><br>
+			<div class="col-md-2"></div>
+			<div class="col-md-10">
+				<label>Comentarios de la Junta:&nbsp;</label><span> <?= $feedback->comentarios;?></span>
+			</div><br>
 			<div class="col-md-2">
 				<img class="img-circle avatar avatar-original" src="<?= base_url("assets/images/fotos/$feedback->foto");?>" height="120px">
 				<label><?= $feedback->nombre;?></label>
@@ -112,9 +113,9 @@
 									<img class="img-circle avatar avatar-original" height="40px" 
 										src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></td>
 								<td><?= $evaluador->nombre;?></td>-->
-								<td><a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion");?>">Anual</a></td>
-								<td><?= number_format(($evaluador->competencia*.3)+($evaluador->responsabilidad*.7),2);?></td>
-								<td><?php if($evaluador->comentarios) echo $evaluador->comentarios;?></td>
+								<td><small><a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion");?>">Anual</a></small></td>
+								<td><small><?= number_format(($evaluador->competencia*.3)+($evaluador->responsabilidad*.7),2);?></small></td>
+								<td><small><?php if($evaluador->comentarios) echo $evaluador->comentarios;?></small></td>
 							</tr>
 						<?php endforeach;
 						if(isset($evaluaciones->evaluadores360) && count($evaluaciones->evaluadores360) > 0)
@@ -124,9 +125,9 @@
 										<img class="img-circle avatar avatar-original" height="40px" 
 											src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></td>
 									<td><?= $evaluador->nombre;?></td>-->
-									<td><a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion");?>">360</a></td>
-									<td><?= number_format($evaluador->competencia,2);?></td>
-									<td><?= $evaluador->comentarios;?></td>
+									<td><small><a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion");?>">360</a></small></td>
+									<td><small><?= number_format($evaluador->competencia,2);?></small></td>
+									<td><small><?= $evaluador->comentarios;?></small></td>
 								</tr>
 							<?php endforeach;
 						if(isset($evaluaciones->evaluadoresProyecto) && count($evaluaciones->evaluadoresProyecto) > 0)
@@ -136,10 +137,10 @@
 										<img class="img-circle avatar avatar-original" height="40px" 
 											src="<?= base_url('assets/images/fotos')."/".$evaluador->foto;?>"></td>
 									<td><?= $evaluador->nombre;?></td>-->
-									<td><a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion/1");?>">
-										Proyecto - <?= $evaluador->evaluacion;?></a></td>
-									<td><?= number_format($evaluador->responsabilidad,2);?></td>
-									<td><?php if($evaluador->comentarios) echo $evaluador->comentarios;?></td>
+									<td><small><a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion/1");?>">
+										Proyecto - <?= $evaluador->evaluacion;?></a></small></td>
+									<td><small><?= number_format($evaluador->responsabilidad,2);?></small></td>
+									<td><small><?php if($evaluador->comentarios) echo $evaluador->comentarios;?></small></td>
 								</tr>
 							<?php endforeach; ?>
 						<tr>
@@ -148,14 +149,14 @@
 									src="<?= base_url('assets/images/fotos')."/".$evaluaciones->foto;?>">
 							</td>
 							<td><?= $evaluaciones->nombre;?></td>-->
-							<td><?php if($evaluaciones->auto):?>
+							<td><small><?php if($evaluaciones->auto):?>
 									<a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/".$evaluaciones->auto->asignacion);?>">
 									AUTOEVALUACIÓN</a>
 								<?php else: ?>AUTOEVALUACIÓN
 								<?php endif;?>
-							</td>
-							<td><?php if($evaluaciones->auto) echo number_format($evaluaciones->autoevaluacion,2);?></td>
-							<td><?php if($evaluaciones->auto) echo $evaluaciones->auto->comentarios;?></td>
+							</small></td>
+							<td><small><?php if($evaluaciones->auto) echo number_format($evaluaciones->autoevaluacion,2);?></small></td>
+							<td><small><?php if($evaluaciones->auto) echo $evaluaciones->auto->comentarios;?></small></td>
 						</tr>
 					</tbody>
 				</table>

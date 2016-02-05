@@ -188,5 +188,7 @@
 				<label><?= $evaluacion->comentarios;?></label>
 			</aside>
 		</div>
-		<div class="col-md-12"><h1>Calificación:</h1><label><big><?= number_format($total,2);?></big></label></div>
+		<?php if($evaluacion->evaluado != $this->session->userdata('id')): ?>
+			<div class="col-md-12"><h1>Calificación:</h1><label><big><?= number_format($total,2);?></big></label></div>
+		<?php endif; ?>
 	</div>

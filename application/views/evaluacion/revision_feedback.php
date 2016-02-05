@@ -86,7 +86,50 @@
 					if($feedback->colaborador == $this->session->userdata('id') && $feedback->estatus !=2): ?>
 						<button id="enterado" type="button" class="btn btn-lg btn-primary btn-block" 
 							style="max-width:200px;text-align:center;">Enterado</button>
-				<?php endif; ?>
+					<?php endif;
+					if($feedback->estatus == 2): ?>
+						<h3><b>Detalle de tu evaluación:</b></h3>
+						<table id="tbl" align="center" class="table table-hover table-condensed table-striped">
+							<thead>
+								<tr>
+									<th data-halign="center">Evaluación</th>
+									<th data-halign="center">Comentarios</th>
+								</tr>
+							</thead>
+							<tbody data-link="row">
+								<?php foreach ($evaluaciones->evaluadores as $evaluador):?>
+									<tr>
+										<td><small><a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion");?>">Anual</a></small></td>
+										<td><small><?php if($evaluador->comentarios) echo $evaluador->comentarios;?></small></td>
+									</tr>
+								<?php endforeach;
+								if(isset($evaluaciones->evaluadores360) && count($evaluaciones->evaluadores360) > 0)
+									foreach ($evaluaciones->evaluadores360 as $evaluador):?>
+										<tr>
+											<td><small><a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion");?>">360</a></small></td>
+											<td><small><?= $evaluador->comentarios;?></small></td>
+										</tr>
+									<?php endforeach;
+								if(isset($evaluaciones->evaluadoresProyecto) && count($evaluaciones->evaluadoresProyecto) > 0)
+									foreach ($evaluaciones->evaluadoresProyecto as $evaluador):?>
+										<tr>
+											<td><small><a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion/1");?>">
+												Proyecto - <?= $evaluador->evaluacion;?></a></small></td>
+											<td><small><?php if($evaluador->comentarios) echo $evaluador->comentarios;?></small></td>
+										</tr>
+									<?php endforeach; ?>
+								<tr>
+									<td><small><?php if($evaluaciones->auto):?>
+											<a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/".$evaluaciones->auto->asignacion);?>">
+											AUTOEVALUACIÓN</a>
+										<?php else: ?>AUTOEVALUACIÓN
+										<?php endif;?>
+									</small></td>
+									<td><small><?php if($evaluaciones->auto) echo $evaluaciones->auto->comentarios;?></small></td>
+								</tr>
+							</tbody>
+						</table>
+					<?php endif; ?>
 				</div>
 			</div>
 		</div>
@@ -113,7 +156,7 @@
 					if(returnData['msg'] == "ok"){
 						$('#guardar').hide('slow');
 						alert('Respuesta recibida.');
-						window.document.location = '<?= base_url("evaluacion/evaluar");?>';
+						window.document.location.reload();
 					}else{
 						$('#alert').prop('display',true).show();
 						$('#msg').html(returnData['msg']);

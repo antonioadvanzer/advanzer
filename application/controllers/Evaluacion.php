@@ -204,6 +204,8 @@ class Evaluacion extends CI_Controller {
 
     public function revision_final($feedback) {
         $data['feedback'] = $this->evaluacion_model->getInfoFeedback($feedback);
+        $colaborador = $this->user_model->searchById($data['feedback']->colaborador);
+        $data['evaluaciones'] = $this->evaluacion_model->getResultadosByColaborador($colaborador);
         $this->layout->title('Advanzer - Feedback');
         $this->layout->view('evaluacion/revision_feedback',$data);
     }
