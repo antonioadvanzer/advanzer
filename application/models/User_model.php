@@ -217,7 +217,7 @@ class User_model extends CI_Model{
 		foreach ($result as $anio) :
 			if($anio->anio >= 2015):
 				$res = $this->db->where(array('E.anio'=>$anio->anio,'RE.colaborador'=>$id,'F.estatus'=>2))->from('Feedbacks F')
-					->join('Resultados_Evaluacion RE','Re.id=F.resultado')->join('Evaluaciones E','E.id = RE.evaluacion')->get();
+					->join('Resultados_Evaluacion RE','RE.id=F.resultado')->join('Evaluaciones E','E.id = RE.evaluacion')->get();
 				if($res->num_rows() == 0)
 					unset($result,$anio);
 			endif;
