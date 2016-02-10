@@ -8,6 +8,22 @@ class User_model extends CI_Model{
 		parent::__construct();
 	}
 
+	function solicitudes_pendientes($colaborador){
+		$this->db->select('Sv.id,Sv.dias,Sv.desde,Sv.hasta,Sv.regresa,Sv.fecha_solicitud,Sv.observaciones,U.nombre,Sv.tipo')->from('Solicitudes Sv')
+			->join('Users U','U.id = Sv.colaborador')
+			->where(array('Sv.autorizador'=>$colaborador,'Sv.estatus'=>1,'Sv.desde >='=>date('Y-m-d')));
+		return $this->db->get()->result();
+	}
+
+	function getSolicitudes(){
+		$result=$this->db->select('Sv.id,Sv.dias,Sv.desde,Sv.hasta,Sv.regresa,Sv.fecha_solicitud,Sv.observaciones,U.nombre,Sv.tipo,Sv.autorizador,Sv.estatus,Sv.razon')
+			->from('Solicitudes Sv')->join('Users U','U.id = Sv.colaborador')->get()->result();
+		foreach ($result as $solicitud) :
+			$solicitud->autorizador=$this->db->where('id',$solicitud->autorizador)->get('Users')->first_row()->nombre;
+		endforeach;
+		return $result;
+	}
+
 	function do_login($email,$password=null){
 		$this->db->select('U.id,U.email,U.nombre,U.foto,U.empresa,U.tipo,P.nivel nivel_posicion,A.id area,T.nombre track,A.direccion')
 			->from('Users U')->join('Areas A','A.id = U.area','LEFT OUTER')
@@ -197,7 +213,17 @@ class User_model extends CI_Model{
 	}
 
 	function getHistorialById($id) {
-		return $this->db->where('colaborador',$id)->get('Historial')->result();
+		$result = $this->db->where('colaborador',$id)->get('Historial')->result();
+		foreach ($result as $anio) :
+			if($anio->anio >= 2015):
+				$res = $this->db->where(array('E.anio'=>$anio->anio,'RE.colaborador'=>$id,'F.estatus'=>2))->from('Feedbacks F')
+					->join('Resultados_Evaluacion RE','Re.id=F.resultado')->join('Evaluaciones E','E.id = RE.evaluacion')->get();
+				if($res->num_rows() == 0)
+					unset($result,$anio);
+			endif;
+		endforeach;
+		if(isset($result))
+		return $result;
 	}
 
 	function getHistorialByIdAnio($id,$anio) {
