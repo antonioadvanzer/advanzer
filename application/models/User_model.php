@@ -219,7 +219,7 @@ class User_model extends CI_Model{
 				$res = $this->db->where(array('E.anio'=>$anio->anio,'RE.colaborador'=>$id,'F.estatus'=>2))->from('Feedbacks F')
 					->join('Resultados_Evaluacion RE','RE.id=F.resultado')->join('Evaluaciones E','E.id = RE.evaluacion')->get();
 				if($res->num_rows() == 0)
-					unset($result[$anio]);
+					unlink($result[$anio]);
 			endif;
 		endforeach;
 		if(isset($result))
