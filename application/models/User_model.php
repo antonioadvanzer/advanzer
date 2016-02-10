@@ -215,11 +215,12 @@ class User_model extends CI_Model{
 	function getHistorialById($id) {
 		$result = $this->db->where('colaborador',$id)->get('Historial')->result();
 		foreach ($result as $anio) :
+			$anio->flag=1;
 			if($anio->anio >= 2015):
 				$res = $this->db->where(array('E.anio'=>$anio->anio,'RE.colaborador'=>$id,'F.estatus'=>2))->from('Feedbacks F')
 					->join('Resultados_Evaluacion RE','RE.id=F.resultado')->join('Evaluaciones E','E.id = RE.evaluacion')->get();
 				if($res->num_rows() == 0)
-					unset($result->$anio);
+					$anio->flag=0;
 			endif;
 		endforeach;
 		if(isset($result))

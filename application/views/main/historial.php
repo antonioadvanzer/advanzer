@@ -29,9 +29,10 @@
 									<div class="col-md-6">
 										<select class="form-control" style="max-width:160px;" id="anio">
 											<option selected disabled>- Selecciona año -</option>
-											<?php foreach($info as $evaluacion): ?>
-												<option><?= $evaluacion->anio;?></option>
-											<?php endforeach; ?>
+											<?php foreach($info as $evaluacion)
+												if($evaluacion->flag==1): ?>
+													<option><?= $evaluacion->anio;?></option>
+												<?php endif; ?>
 										</select>
 									</div>
 								<?php else: ?>
