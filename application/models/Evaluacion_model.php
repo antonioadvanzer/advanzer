@@ -251,7 +251,7 @@ class Evaluacion_model extends CI_Model{
 	}
 
 	function getInfoFeedback($id) {
-		$this->db->select('F.id,F.compromisos,F.oportunidad,F.fortalezas,F.estatus,U.nombre,U.foto,RE.rating,RE.colaborador,RE.comentarios')
+		$this->db->select('F.id,F.compromisos,F.oportunidad,F.fortalezas,F.estatus,U.nombre,U.foto,RE.rating,RE.colaborador,RE.comentarios,RE.cumple_gastos,RE.cumple_harvest,RE.cumple_cv')
 			->from('Feedbacks F')
 			->join('Resultados_Evaluacion RE','RE.id = F.resultado')
 			->join('Users U','U.id = RE.colaborador')
