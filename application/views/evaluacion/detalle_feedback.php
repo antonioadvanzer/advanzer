@@ -43,7 +43,7 @@
 		<div class="row" align="center">
 			<div class="col-md-2"></div>
 			<div class="col-md-10">
-				<label>Comentarios de la Junta:&nbsp;</label><span> <?= $feedback->comentarios;?></span>
+				<label>Comentarios de la Junta:&nbsp;</label><p style="font-size: 13pt;"> <?= $feedback->comentarios;?></p>
 			</div><br>
 			<div class="col-md-2">
 				<img class="img-circle avatar avatar-original" src="<?= base_url("assets/images/fotos/$feedback->foto");?>" height="120px">
