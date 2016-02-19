@@ -50,13 +50,13 @@
 			<div class="col-md-5">
 				<div class="form-group">
 					<label for="fortalezas">Fortalezas/Logros:</label>
-					<p style="text-align:center;"><?= $feedback->fortalezas;?></p>
+					<p style="text-align:center;font-size: 13pt;"><?= $feedback->fortalezas;?></p>
 				</div>
 			</div>
 			<div class="col-md-5">
 				<div class="form-group">
 					<label for="oportunidad">Área(s) de Oportunidad:</label>
-					<p style="text-align:center;"><?= $feedback->oportunidad;?></p>
+					<p style="text-align:center;font-size: 13pt;"><?= $feedback->oportunidad;?></p>
 				</div>
 			</div>
 		</div>
@@ -65,7 +65,7 @@
 				<div class="col-md-12">
 					<div class="form-group">
 						<label for="compromisos">Compromisos:</label>
-						<p style="text-align:center;"><?= $feedback->compromisos;?></p>
+						<p style="text-align:center;font-size: 13pt;"><?= $feedback->compromisos;?></p>
 					</div>
 				</div>
 			</div>
