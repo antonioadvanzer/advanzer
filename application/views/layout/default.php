@@ -118,29 +118,29 @@
 					<a class="navbar-brand" href="<?= base_url(); ?>">INICIO</a>
 				<?php endif; ?>
 			</div>
-			<div id="navbar" class="navbar-collapse collapse" aria-expanded="false">
-				<ul class="nav navbar-nav">
-					<?php if($this->session->userdata('id') != ""):
-							if(in_array($this->session->userdata('tipo'), array(4,5,6)) || $this->session->userdata('posicion') <= 3 || $this->session->userdata('area') == 4): ?>
+			<?php if($this->session->userdata('id') != ""): ?>
+				<div id="navbar" class="navbar-collapse collapse" aria-expanded="false">
+					<ul class="nav navbar-nav">
+						<?php if(in_array($this->session->userdata('tipo'), array(4,5,6)) || $this->session->userdata('posicion') <= 3 || $this->session->userdata('area') == 4): ?>
 							<li class="dropdown">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
 									Administración<span class="caret"></span></a>
 								<ul class="dropdown-menu">
 									<li class="dropdown-submenu"><a tabindex="-1" href="#">Servicios</a>
 										<ul class="dropdown-menu">
-											<li><a href="<?= base_url('requisiciones');?>">Todas las Requisiciones</a></li>
-											<?php if($this->session->userdata('tipo') > 3): ?>
+											<?php if($this->session->userdata('posicion') <= 3): ?>
+												<?php //if($this->session->userdata('periodo_edicion') == 1): ?>
+													<li><a href="<?= base_url('objetivo/asignar_pesos');?>">Responsabilidades Por Área</a></li>
+												<?php //endif; ?>
+											<?php endif; 
+											if($this->session->userdata('tipo') > 3 || $this->session->userdata('area')==4): ?>
+												<li><a href="<?= base_url('requisiciones');?>">Todas las Requisiciones</a></li>
 												<li><a href="<?= base_url('admin_solicitudes');?>">Solicitudes</a></li>
-												<?php if($this->session->userdata('posicion') <= 3): ?>
-													<?php //if($this->session->userdata('periodo_edicion') == 1): ?>
-														<li><a href="<?= base_url('objetivo/asignar_pesos');?>">Responsabilidades Por Área</a></li>
-													<?php //endif; ?>
-												<?php endif; 
-												if($this->session->userdata('tipo') > 3): ?>
-														<li><a href="<?= base_url('evaluacion');?>">Evaluaciones</a></li>
-														<!--<li><a href="<?= base_url('evaluacion/index/false');?>">Evaluaciones Confidencial</a></li>-->
-														<li><a href="<?= base_url('evaluacion/por_evaluador');?>">Evaluaciones por Evaluador</a></li>
-														<li><a href="<?= base_url('evaluacion/pendientes');?>">Evaluaciones Pendientes de Enviar</a></li>
+												<?php if($this->session->userdata('tipo') > 3): ?>
+													<li><a href="<?= base_url('evaluacion');?>">Evaluaciones</a></li>
+													<!--<li><a href="<?= base_url('evaluacion/index/false');?>">Evaluaciones Confidencial</a></li>-->
+													<li><a href="<?= base_url('evaluacion/por_evaluador');?>">Evaluaciones por Evaluador</a></li>
+													<li><a href="<?= base_url('evaluacion/pendientes');?>">Evaluaciones Pendientes de Enviar</a></li>
 												<?php endif;
 											endif; ?>
 										</ul>
@@ -185,43 +185,13 @@
 								<li><a href="<?= base_url('viaticos_gastos');?>">Viáticos y Gastos de Viaje</a></li>
 							</ul>
 						</li>
-						<!--
-						<li><a href="<?= base_url('estructura_organizacional'); ?>">Estructura Organizacional</a></li>
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
-								Políticas <span class="caret"></span></a>
-							<ul class="dropdown-menu">
-								<li><a href="<?= base_url('cartas_constancias');?>">Cartas y Constancias Laborales</a></li>
-								<li><a href="<?= base_url('sap'); ?>">Certificación SAP</a></li>
-								<li><a href="<?= base_url('viaticos'); ?>">Viáticos y Gastos de Viaje</a></li>
-								<li><a href="<?= base_url('vacaciones');?>">Vacaciones</a></li>
-								<li><a href="<?= base_url('permisos');?>">Permisos</a></li>
-								<li><a href="<?= base_url('vestimenta');?>">Código de Vestimenta</a></li>
-								<li><a href="#">Horarios</a></li>
-								<li><a href="#">Días Festivos</a></li>
-							</ul>
-						</li>
-						<li><a href="#about">Evaluación de Desempeño y Guía de Crecimiento</a></li>
-						<li><a href="#about">SGMM</a></li>
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
-								e-Learning <span class="caret"></span></a>
-							<ul class="dropdown-menu">
-								<li><a href="#">SAP modules</a></li>
-							</ul>
-						</li>
-						<li><a href="#about">Cumpleaños del Mes</a></li>
-						<li><a href="#about">Eventos Internos</a></li>
-						-->
-					<?php endif; ?>
-				</ul>
-				<ul class="nav navbar-nav navbar-right">
-					<?php $idU=$this->session->userdata('id'); if($idU): ?>
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
 						<li><a href="#" style="cursor:default"><small><?= $this->session->userdata('nombre');?></small></a></li>
 						<li><a href="<?= base_url('logout'); ?>">LogOut</a></li>
-					<?php endif; ?>
-				</ul>
-			</div>
+					</ul>
+				</div>
+			<?php endif; ?>
 		</div>
 	</nav>
 	<?=$content_for_layout?>
