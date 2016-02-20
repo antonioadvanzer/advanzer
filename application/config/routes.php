@@ -70,7 +70,14 @@ $route['evaluar'] = 'evaluacion/evaluar';
 $route['historial'] = 'main/historial';
 $route['requisiciones'] = 'requisicion/index/true';
 $route['vacaciones'] = 'servicio/vacaciones';
+$route['admin_solicitudes'] = 'main/solicitudes';
 $route['solicitar_vacaciones'] = 'servicio/formato_vacaciones';
+$route['solicitudes'] = 'servicio/solicitudes';
+$route['permiso'] = 'servicio/permiso';
+$route['solicitar_permiso'] = 'servicio/formato_permiso';
+$route['viaticos_gastos'] = 'servicio/viaticos_gastos';
+$route['solicitar_viaticos_gastos'] = 'servicio/formato_viaticos_gastos';
+$route['comprobar_gastos'] = 'servicio/formato_comprobacion';
 /*
 $route['estructura_organizacional'] = 'info/estructura';
 $route['cartas_constancias'] = 'info/cartas_constancias';
