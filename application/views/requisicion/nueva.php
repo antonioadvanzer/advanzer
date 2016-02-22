@@ -3,7 +3,7 @@
 	<div class="container">
 		<h2>Requisición de Personal</h2>
 		<ul>
-			<li>Sea claro en sus necesidades, ésto facilitará la labor en la búsqueda del candidato que cubra de la mejor manera su requerimiento.</li>
+			<li>Sea claro en sus necesidades, esto facilitará la labor en la búsqueda del candidato que cubra de la mejor manera su requerimiento.</li>
 		</ul>
 	</div>
 </div>
@@ -87,8 +87,8 @@
 					</select>
 					<span class="input-group-addon">Tipo</span>
 					<select id="tipo" class="form-control" style="text-align:center;">
-						<option value="1">Posición Nueva</option>
-						<option value="2" selected>Sustitución</option>
+						<option value="1"selected>Posición Nueva</option>
+						<option value="2">Sustitución</option>
 					</select>
 					<span class="input-group-addon">Sustituye a:</span>
 					<select class="form-control" style="text-align:center;background-color:white"id="sustituye_a" name="sustituye_a">
@@ -101,11 +101,9 @@
 				<br>
 				<div class="input-group">
 					<span class="input-group-addon">Proyecto</span>
-					<input class="form-control" required value="" id="proyecto"
-						placeholder="Nombre del Proyecto">
+					<input class="form-control" required value="" id="proyecto">
 					<span class="input-group-addon">Clave del Proyecto</span>
-					<input class="form-control" value="" id="clave"
-						placeholder="Clave del Proyecto">
+					<input class="form-control" value="" id="clave">
 					<span class="input-group-addon">Costo Máximo</span>
 					<select id="costo" class="form-control">
 						<option>DE ACUERDO A TABULADOR</option>
@@ -124,8 +122,7 @@
 						<option value="">OTRO...</option>
 					</select>
 					<span class="input-group-addon">Especifique</span>
-					<input class="form-control" style="background-color:white" disabled value="" id="residencia_otro"
-						placeholder="Especfique la ciudad">
+					<input class="form-control" style="background-color:white" disabled value="" id="residencia_otro">
 					<span class="input-group-addon">Lugar de Trabajo</span>
 					<select id="lugar_trabajo" class="form-control">
 						<option>OFICINAS MTY-CDMX</option>
@@ -147,7 +144,7 @@
 						<option>DURACIÓN DEL PROYECTO</option>
 					</select>
 					<span class="input-group-addon">Entrevistará</span>
-					<input type="text" class="form-control" id="entrevista" placeholder="¿Quién entrevistará?" required>
+					<input type="text" class="form-control" id="entrevista" required>
 					<span class="input-group-addon">Disponibilidad p/Viajar</span>
 					<select id="disp_viajar" class="form-control">
 						<option>INDISTINTO</option>
@@ -188,8 +185,7 @@
 				<br>
 				<div class="input-group">
 					<span class="input-group-addon">Carrera</span>
-					<input class="form-control" required value="" id="carrera"
-						placeholder="Nombre de la Carrera">
+					<input class="form-control" required value="" id="carrera">
 					<span class="input-group-addon">Inglés Oral</span>
 					<select id="ingles_hablado" class="form-control" required>
 						<option>Excelente</option>
@@ -231,7 +227,7 @@
 				<div class="input-group">
 					<span class="input-group-addon" style="min-width:260px">Observaciones</span>
 					<textarea class="form-control" id="observaciones" rows="4" 
-						placeholder="Consideraciones adicionales a considerar al realizar la búsqueda de personal."></textarea>
+						placeholder="Consideraciones adicionales a tomar en cuenta para la búsqueda de personal."></textarea>
 				</div>
 				<br>
 			</div>
@@ -260,44 +256,40 @@
 					$("#residencia option:selected").each(function() {
 						residencia = $('#residencia').val();
 					});
-					if(residencia!=""){
+					if(residencia!="")
 						$('#residencia_otro').prop({'required':false,'disabled':true}).val('');
-					}else{
+					else
 						$('#residencia_otro').prop({'required':true,'disabled':false}).val('');
-					}
 				});
 
 				$("#tipo").change(function() {
 					$("#tipo option:selected").each(function() {
 						tipo = $('#tipo').val();
 					});
-					if(tipo==1){
+					if(tipo==1)
 						$('#sustituye_a').prop({'required':false,'disabled':true}).val('');
-					}else{
+					else
 						$('#sustituye_a').prop({'required':true,'disabled':false}).val('');
-					}
 				});
 				
 				$("#costo").change(function() {
 					$("#costo option:selected").each(function() {
 						costo = $('#costo').val();
 					});
-					if(costo!='DEFINIR'){
+					if(costo!='DEFINIR')
 						$('#costo_maximo').prop({'required':false,'disabled':true}).val('');
-					}else{
+					else
 						$('#costo_maximo').prop({'required':true,'disabled':false}).val('');
-					}
 				});
 				
 				$("#lugar_trabajo").change(function() {
 					$("#lugar_trabajo option:selected").each(function() {
 						lugar_trabajo = $('#lugar_trabajo').val();
 					});
-					if(lugar_trabajo!='OFICINAS DEL CLIENTE' && lugar_trabajo!='AMBOS'){
+					if(lugar_trabajo!='OFICINAS DEL CLIENTE' && lugar_trabajo!='AMBOS')
 						$('#domicilio_cte').prop({'required':false,'disabled':true}).val('');
-					}else{
+					else
 						$('#domicilio_cte').prop({'required':true,'disabled':false}).val('');
-					}
 				});
 
 				$("#track").change(function() {
@@ -420,10 +412,10 @@
 					},
 					success: function(data){
 						var returnedData = JSON.parse(data);
-						if(returnedData['msg']=="ok")
+						if(returnedData['msg']=="ok"){
 							alert('Se ha enviado para autorización');
 							window.document.location='<?= base_url("requisicion");?>';
-						else{
+						}else{
 							$('#cargando').hide('slow');
 							$('#update').show('slow');
 							$('#alert').prop('display',true).show('slow');
