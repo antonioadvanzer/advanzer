@@ -91,12 +91,7 @@
 						<option value="2">Sustitución</option>
 					</select>
 					<span class="input-group-addon">Sustituye a:</span>
-					<select class="form-control" style="text-align:center;background-color:white"id="sustituye_a" name="sustituye_a">
-						<option value="" selected disabled>-- Selecciona un Colaborador --</option>
-						<?php foreach($colaboradores as $colaborador): ?>
-							<option value="<?= $colaborador->id;?>"><?= $colaborador->nombre;?></option>
-						<?php endforeach; ?>
-					</select>
+					<input type="text" id="sustituye_a" style="background-color:white;" class="form-control" disabled>
 				</div>
 				<br>
 				<div class="input-group">
@@ -110,7 +105,7 @@
 						<option>DEFINIR</option>
 					</select>
 					<span class="input-group-addon">Define</span>
-					<input class="form-control" value="" id="costo_maximo" style="background-color:white;" disabled>
+					<input class="form-control" value="" id="costo_maximo" style="background-color:white;" disabled pattern="[0-9]+" placeholder="Número entero" title="Introduce un número entero">
 				</div>
 				<br>
 				<div class="input-group">
@@ -143,7 +138,7 @@
 						<option>12 MESES</option>
 						<option>DURACIÓN DEL PROYECTO</option>
 					</select>
-					<span class="input-group-addon">Entrevistará</span>
+					<span class="input-group-addon">Evaluador Técnico</span>
 					<input type="text" class="form-control" id="entrevista" required>
 					<span class="input-group-addon">Disponibilidad p/Viajar</span>
 					<select id="disp_viajar" class="form-control">
@@ -348,9 +343,7 @@
 					$("#tipo option:selected").each(function() {
 						data['tipo'] = $('#tipo').val();
 					});
-					$("#sustituye_a option:selected").each(function() {
-						data['sustituye_a'] = $('#sustituye_a').val();
-					});
+					data['sustituye_a'] = $('#sustituye_a').val();
 					data['proyecto'] = $('#proyecto').val();
 					data['clave'] = $('#clave').val();
 					$("#costo option:selected").each(function() {
@@ -361,7 +354,7 @@
 					$("#residencia option:selected").each(function() {
 						data['residencia'] = $('#residencia').val();
 					});
-					if(residencia="")
+					if(residencia=="")
 						data['residencia']=$('#residencia_otro').val();
 					$("#lugar_trabajo option:selected").each(function() {
 						data['lugar_trabajo'] = $('#lugar_trabajo').val();

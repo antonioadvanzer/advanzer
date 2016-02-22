@@ -29,19 +29,20 @@
 						<th data-halign="center">Fecha Solicitud</th>
 						<th data-halign="center">Solicita</th>
 						<th data-halign="center">Proyecto</th>
-						<th data-halign="center">Estatus</th>
 						<th data-halign="center">Track</th>
 						<th data-halign="center">Posición</th>
 						<th data-halign="center">Área</th>
 						<th data-halign="center">Empresa</th>
+						<th data-halign="center">Estatus</th>
 					</tr>
 				</thead>
 				<tbody data-link="row" class="rowlink">
 					<?php foreach ($requisiciones as $requisicion)
 						if($this->session->userdata('id') == $requisicion->solicita 
+							|| $this->session->userdata('tipo') >=4 
 							|| ($requisicion->director == $this->session->userdata('id') && $requisicion->estatus == 1)
 							|| ($requisicion->autorizador == $this->session->userdata('id') && $requisicion->estatus == 2)
-							|| ($this->session->userdata('tipo') >= 3 && $this->session->userdata('area') == 4)
+							|| ($this->session->userdata('tipo') == 3 && $this->session->userdata('area') == 4)
 						): 
 							switch ($requisicion->estatus) {
 								case 1:
@@ -75,12 +76,12 @@
 								<td><small><a style="text-decoration:none" href='<?= base_url("requisicion/ver/$requisicion->id");?>'><?= $requisicion->id;?></a></small></td>
 								<td><small><?= $requisicion->fecha_solicitud;?></small></td>
 								<td><small><?= $requisicion->solicitante;?></small></td>
-								<td><small><?= $requisicion->clave;?></small></td>
-								<td><small><?= $estatus;?></small></td>
+								<td><small><?= "$requisicion->proyecto";?></small></td>
 								<td><small><?= $requisicion->track;?></small></td>
 								<td><small><?= $requisicion->posicion;?></small></td>
 								<td><small><?= $requisicion->area;?></small></td>
 								<td><small><?= $empresa;?></small></td>
+								<td><small><?= $estatus;?></small></td>
 							</tr>
 						<?php endif; ?>
 				</tbody>

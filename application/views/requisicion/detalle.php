@@ -1,7 +1,7 @@
 <!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron">
 	<div class="container">
-		<h2>Detalle de Requisición</h2>
+		<h2>Detalle de Requisición - Folio #<?= $requisicion->id;?></h2>
 	</div>
 </div>
 <div class="container">
@@ -100,22 +100,17 @@
 					<br>
 					<div class="input-group">
 						<span class="input-group-addon">Empresa</span>
-						<select id="empresa" class="form-control" style="max-width:300px; text-align:center;" required>
+						<select id="empresa" class="form-control" style="text-align:center;" required>
 							<option value="1" <?php if($requisicion->empresa == 1) echo "selected";?>>Advanzer</option>
 							<option value="2" <?php if($requisicion->empresa == 2) echo "selected";?>>Entuizer</option>
 						</select>
 						<span class="input-group-addon">Tipo</span>
-						<select id="tipo" class="form-control" style="max-width:300px; text-align:center;">
+						<select id="tipo" class="form-control" style="text-align:center;">
 							<option <?php if($requisicion->tipo == 1) echo "selected";?>>Posición Nueva</option>
 							<option <?php if($requisicion->tipo == 2) echo "selected";?>>Sustitución</option>
 						</select>
 						<span class="input-group-addon">Sustituye a:</span>
-						<select class="form-control" style="text-align:center;background-color:white"id="sustituye_a" name="sustituye_a">
-							<option value="" selected disabled>-- Selecciona un Colaborador --</option>
-							<?php foreach($colaboradores as $colaborador): ?>
-								<option value="<?= $colaborador->id;?>" <?php if($requisicion->sustituye_a==$colaborador->id) echo "selected" ?>><?= $colaborador->nombre;?></option>
-							<?php endforeach; ?>
-						</select>
+						<input type="text" id="sustituye_a" style="background-color:white;" class="form-control" value="<?= $requisicion->sustituye_a;?>">
 					</div>
 					<br>
 					<div class="input-group">
@@ -129,7 +124,7 @@
 							<option <?php if($requisicion->costo!='DE ACUERDO A TABULADOR') echo "selected" ?>>DEFINIR</option>
 						</select>
 						<span class="input-group-addon">Define</span>
-						<input class="form-control" value="<?php if($requisicion->costo!='DE ACUERDO A TABULADOR') echo$requisicion->costo;?>" id="costo_maximo" style="background-color:white;" disabled>
+						<input class="form-control" value="<?php if($requisicion->costo!='DE ACUERDO A TABULADOR') echo$requisicion->costo;?>" id="costo_maximo" style="background-color:white;" disabled pattern="{0-9}+" placeholder="Número entero" title="Introduce un número entero">
 					</div>
 					<br>
 					<div class="input-group">
@@ -163,7 +158,7 @@
 							<option <?php if($requisicion->contratacion == '12 MESES') echo "selected";?>>12 MESES</option>
 							<option <?php if($requisicion->contratacion == 'DURACIÓN DEL PROYECTO') echo "selected";?>>DURACIÓN DEL PROYECTO</option>
 						</select>
-						<span class="input-group-addon">Entrevistará</span>
+						<span class="input-group-addon">Evaluador Técnico</span>
 						<input type="text" class="form-control" id="entrevista" required value="<?= $requisicion->entrevista;?>">
 						<span class="input-group-addon">Disponibilidad p/Viajar</span>
 						<select id="disp_viajar" class="form-control">
@@ -352,9 +347,7 @@
 					$("#tipo option:selected").each(function() {
 						data['tipo'] = $('#tipo').val();
 					});
-					$("#sustituye_a option:selected").each(function() {
-						data['sustituye_a'] = $('#sustituye_a').val();
-					});
+					data['sustituye_a'] = $('#sustituye_a').val();
 					data['proyecto'] = $('#proyecto').val();
 					data['clave'] = $('#clave').val();
 					$("#costo option:selected").each(function() {
@@ -365,7 +358,7 @@
 					$("#residencia option:selected").each(function() {
 						data['residencia'] = $('#residencia').val();
 					});
-					if(residencia="")
+					if(residencia=="")
 						data['residencia']=$('#residencia_otro').val();
 					$("#lugar_trabajo option:selected").each(function() {
 						data['lugar_trabajo'] = $('#lugar_trabajo').val();
@@ -547,7 +540,7 @@
 				if(accion == "rechazar"){
 					if(!confirm("¿Seguro que desea enviar los comentarios de la requisición?"))
 						return false;
-					if(autorizador != <?= $requisicion->director;?>){
+					if(autorizador == <?= $requisicion->director;?>){
 						estatus=4;
 						alerta="Se ha enviado notificación al solicitante";
 					}else{
@@ -650,7 +643,7 @@
 						console.log(returnedData);
 						if(returnedData['msg']=="ok"){
 							alert("Se ha cerrado la requisición");
-							window.document.location='<?= base_url("requisicion");?>';
+							window.document.location='<?= base_url("user/nuevo");?>/'+id;
 						}else{
 							$('#cargando').hide('slow');
 							$('#update').show('slow');
@@ -688,7 +681,7 @@
 				solicita=<?= $requisicion->solicita;?>;
 				estatus=<?= $requisicion->estatus;?>;
 				if(estatus != 4 || usuario != solicita){
-					$("#update :input").attr("disabled", true).css('cursor','default');
+					$("#update :input:not(button)").attr("disabled", true).css('background-color','white');
 					$("#update button").attr("disabled", false).css('cursor','pointer');
 				}
 				if(usuario == solicita && <?= $this->session->userdata('tipo');?> < 3){

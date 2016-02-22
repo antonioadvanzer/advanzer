@@ -163,7 +163,7 @@ class Requisicion extends CI_Controller {
 					$mensaje=$this->load->view("layout/requisicion_auth",$data,true);
 					break;
 				case '3': //para capital humano
-					$destinatario='perla.valdez@advanzer.com';
+					$destinatario=array('perla.valdez@advanzer.com','micaela.llano@advanzer.com');
 					$data['requisicion']=$requisicion;
 					$this->genera_excel($requisicion);
 					$mensaje=$this->load->view("layout/requisicion_rh",$data,true);
@@ -228,7 +228,7 @@ class Requisicion extends CI_Controller {
 			$destinatario=$this->user_model->searchById($requisicion->solicita)->email;
 			$data['requisicion']=$requisicion;
 			$mensaje=$this->load->view("layout/requisicion_closed",$data,true);
-			if(!$this->sendMail($destinatario->email,$mensaje))
+			if(!$this->sendMail($destinatario,$mensaje))
 				$response['msg']="ok";
 			else
 				$response['msg']="No se pudo enviar correo de notificación";
@@ -256,9 +256,7 @@ class Requisicion extends CI_Controller {
 		$this->email->clear(TRUE);
 
 		$this->email->from('notificaciones.ch@advanzer.com','Requisición de Personal - Portal Personal');
-		/*$this->email->to("micaela.llano@advanzer.com");
-		$this->email->bcc(array('enrique.bernal@advanzer.com','jesus.salas@advanzer.com'));
-		*/$this->email->to(array("jesus.salas@advanzer.com","perla.valdez@advanzer.com","micaela.llano@advanzer.com")); //$this->email->to($destinatario);
+		$this->email->to($destinatario);
 		$this->email->subject('Aviso de Requisición');
 		$this->email->message($mensaje);
 

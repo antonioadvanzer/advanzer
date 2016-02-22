@@ -75,6 +75,8 @@
 							<ul class="nav navbar-nav">
 								<?php if($evaluacion): ?>
 									<li><a href="<?= base_url("evaluar");?>">Evaluación</a></li>
+								<?php if($requisiciones_pendientes): ?>
+									<li><a href="<?= base_url("requisicion");?>">Requisiciones (<?= $requisiciones_pendientes?>)</a></li>
 								<?php endif;
 								if($this->session->userdata('posicion') <= 8 && !in_array($this->session->userdata('id'), array(1,2,51))): ?>
 									<li><a href="<?= base_url("evaluacion/perfil");?>">¿Qué me evalúan?</a></li>

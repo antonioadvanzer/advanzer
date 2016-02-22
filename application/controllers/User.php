@@ -12,6 +12,7 @@ class User extends CI_Controller {
     	$this->load->model('area_model');
         $this->load->model('track_model');
         $this->load->model('posicion_model');
+        $this->load->model('requisicion_model');
     }
 
     public function index($flag=null){
@@ -101,12 +102,13 @@ class User extends CI_Controller {
         <option value="" disabled selected>-- Selecciona una posición --</option>
     <?php }
 
-    public function nuevo($msg=null) {
+    public function nuevo($reqId=0) {
         $this->valida_acceso();
     	$data=array();
-    	if($msg!=null)
-    		$data['err_msg'] = $msg;
+        if($reqId != 0)
+            $data['requisicion']=$this->requisicion_model->getById($reqId);
         $data['tracks'] = $this->track_model->getAll();
+        $data['posiciones'] = $this->posicion_model->getAll();
     	$data['areas'] = $this->area_model->getAll();
         $data['jefes'] = $this->user_model->getAll();
     	$this->layout->title('Capital Humano - Nuevo Perfil');
@@ -126,6 +128,7 @@ class User extends CI_Controller {
             'categoria' => $this->input->post('categoria'),
             'tipo' => $this->input->post('tipo')
         );
+        $requisicion=$this->input->post('requisicion');
         $temp=explode('@',$this->input->post('email'));
         $temp=explode('.',$temp[0]);
         $array['password'] = md5($temp[0]);
@@ -136,6 +139,8 @@ class User extends CI_Controller {
     	if($id = $this->user_model->create($array)){
     		$response['msg']="ok";
     		$response['id']=$id;
+            if($requisicion > 0)
+                $this->db->where('id',$requisicion)->update('Requisiciones',array('colaborador_contratado'=>$id));
     	}else
     		$response['msg']="Error al intentar registrar perfil.Revisa los datos e intenta de nuevo";
         echo json_encode($response);
@@ -215,7 +220,7 @@ class User extends CI_Controller {
     }
 
     private function valida_acceso() {
-        if($this->session->userdata('tipo') < 4)
+        if($this->session->userdata('tipo') < 3)
         redirect();
     }
 }

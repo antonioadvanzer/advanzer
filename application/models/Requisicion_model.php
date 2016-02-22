@@ -26,8 +26,7 @@ class Requisicion_model extends CI_Model{
 	}
 
 	function getRequisiciones($colaborador,$flag) {
-		$this->db->select('R.id,R.fecha_solicitud,R.clave,R.estatus,T.nombre track,P.nombre posicion,A.nombre area,R.empresa,R.solicita,
-			R.director,R.autorizador,U.nombre solicitante')
+		$this->db->select('R.*,T.nombre track,P.nombre posicion,A.nombre area,U.nombre solicitante')
 			->join('Tracks T','T.id = R.track')->join('Posiciones P','P.id = R.posicion')->join('Areas A','A.id = R.area')
 			->join('Users U','U.id = R.solicita');
 		if(!$flag):
@@ -50,5 +49,13 @@ class Requisicion_model extends CI_Model{
 			return true;
 		else
 			return false;
+	}
+
+	function getPendientesByColaborador($colaborador) {
+		$extra="";
+		if($this->session->userdata('tipo') >= 3 && $this->session->userdata('area')==4)
+			$extra=" or estatus in(3,7)";
+		$this->db->where("(director=$colaborador and estatus=1) or (autorizador=$colaborador and estatus=2)$extra");
+		return $this->db->get('Requisiciones')->num_rows();
 	}
 }

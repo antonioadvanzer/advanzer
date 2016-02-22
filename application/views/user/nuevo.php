@@ -2,6 +2,10 @@
 <div class="jumbotron">
   <div class="container">
     <h2>Nuevo Perfil de Colaborador</h2>
+    <?php if(isset($requisicion)): $folio=$requisicion->id; ?>
+    	<p>Requisición Folio #<?= $folio;?></p>
+    <?php else: $folio="";
+    endif; ?>
   </div>
 </div>
 <div class="container">
@@ -20,6 +24,7 @@
   </div>
   <div class="row" align="center">
 	<form id="create" role="form" method="post" action="javascript:" class="form-signin">
+	  <input type="hidden" id="requisicion" value="<?= $folio;?>">
 	  <div class="col-md-4">
 		  <div class="form-group">
 		    <label for="nombre">Nombre:</label>
@@ -119,8 +124,12 @@
 
   <script type="text/javascript">
 	$(document).ready(function() {
+		requisicion=$('#requisicion').val();
+		if(requisicion != "")
+			loadReqInfo(requisicion);
 		$('.selectpicker').selectpicker();
 		$('#create').submit(function(event){
+			requisicion=$('#requisicion').val();
 			nombre = $('#nombre').val();
 			email = $('#email').val();
 			$("#empresa option:selected").each(function() {
@@ -151,7 +160,7 @@
 					type: 'post',
 					data: {'nombre':nombre,'email':email,'empresa':empresa,'jefe':jefe,'plaza':plaza,
 						'track':track,'posicion':posicion,'area':area,'ingreso':ingreso,'nomina':nomina,
-						'categoria':categoria,'tipo':tipo},
+						'categoria':categoria,'tipo':tipo,'requisicion':requisicion},
 					beforeSend: function() {
 						$('#create').hide('slow');
 						$('#cargando').show('slow');
@@ -210,5 +219,13 @@
 		$('#ingreso').datepicker({
 			dateFormat: 'yy-mm-dd'
 		});
+
+		function loadReqInfo(requisicion) {
+			$('#plaza').val("<?php if(isset($requisicion)) $requisicion->residencia;?>");
+			$('#track').val("<?php if(isset($requisicion)) $requisicion->track;?>");
+			$('#empresa').val("<?php if(isset($requisicion)) $requisicion->empresa;?>");
+			$('#area').val("<?php if(isset($requisicion)) $requisicion->area;?>");
+			$('#posicion').val("<?php if(isset($requisicion)) $requisicion->posicion;?>");
+		}
 	});
   </script>
