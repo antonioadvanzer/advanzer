@@ -319,7 +319,6 @@ class Requisicion extends CI_Controller {
 			$objSheet->getCell('AD1')->setValue('OBSERVACIONES');
 
 		//write content
-			($requisicion->sustituye_a) ? $nombre_sustituye=$this->user_model->searchById($requisicion->sustituye_a)->nombre : $nombre_sustituye='';
 			if($requisicion->empresa==1)
 				$empresa="ADVANZER";
 			else
@@ -339,7 +338,7 @@ class Requisicion extends CI_Controller {
 			$objSheet->getCell('I2')->setValue($requisicion->nombre_posicion);
 			$objSheet->getCell('J2')->setValue($empresa);
 			$objSheet->getCell('K2')->setValue($tipo);
-			$objSheet->getCell('L2')->setValue($nombre_sustituye);
+			$objSheet->getCell('L2')->setValue($requisicion->sustituye_a);
 			$objSheet->getCell('M2')->setValue($requisicion->proyecto);
 			$objSheet->getCell('N2')->setValue($requisicion->clave);
 			$objSheet->getCell('O2')->setValue($requisicion->costo);
