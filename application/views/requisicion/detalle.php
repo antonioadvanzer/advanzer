@@ -363,9 +363,7 @@
 					$("#lugar_trabajo option:selected").each(function() {
 						data['lugar_trabajo'] = $('#lugar_trabajo').val();
 					});
-					$("#domicilio_cte option:selected").each(function() {
-						data['domicilio_cte'] = $('#domicilio_cte').val();
-					});
+					data['domicilio_cte'] = $('#domicilio_cte').val();
 					$("#contratacion option:selected").each(function() {
 						data['contratacion'] = $('#contratacion').val();
 					});
