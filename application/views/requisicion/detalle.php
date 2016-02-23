@@ -684,9 +684,6 @@
 					$("#update :input:not(button)").attr("disabled", true).css('background-color','white');
 					$("#update button").attr("disabled", false).css('cursor','pointer');
 				}
-				if(usuario == solicita && <?= $this->session->userdata('tipo');?> < 3){
-					$('#detalle').hide();
-				}
 			}
 		});
 	</script>
