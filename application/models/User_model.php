@@ -8,11 +8,33 @@ class User_model extends CI_Model{
 		parent::__construct();
 	}
 
+	function solicitudesByColaborador($colaborador) {
+		$this->db->select('S.*,U.nombre')->from('Solicitudes S')
+			->join('Users U','U.id = S.autorizador')
+			->where('S.colaborador',$colaborador);
+		$result = $this->db->get()->result();
+		foreach ($result as $solicitud) {
+			if($solicitud->tipo == 4):
+				$solicitud->detalle = $this->db->where('solicitud',$solicitud->id)->get('Detalle_Viaticos')->first_row();
+			endif;
+		}
+		return $result;
+	}
+
 	function solicitudes_pendientes($colaborador){
-		$this->db->select('Sv.id,Sv.dias,Sv.desde,Sv.hasta,Sv.regresa,Sv.fecha_solicitud,Sv.observaciones,U.nombre,Sv.tipo')->from('Solicitudes Sv')
-			->join('Users U','U.id = Sv.colaborador')
-			->where(array('Sv.autorizador'=>$colaborador,'Sv.estatus'=>1,'Sv.desde >='=>date('Y-m-d')));
-		return $this->db->get()->result();
+		if($this->session->userdata('area') == 4)
+			$this->db->where("((S.estatus=2 and S.auth_ch=1) or (S.autorizador=$colaborador and S.estatus=1))");
+		else
+			$this->db->where(array('S.autorizador'=>$colaborador,'S.estatus'=>1));
+		$this->db->select('S.*,U.nombre')->from('Solicitudes S')
+			->join('Users U','U.id = S.colaborador');
+		$result = $this->db->get()->result();
+		foreach ($result as $solicitud) {
+			if($solicitud->tipo == 4):
+				$solicitud->detalle = $this->db->where('solicitud',$solicitud->id)->get('Detalle_Viaticos')->first_row();
+			endif;
+		}
+		return $result;
 	}
 
 	function getSolicitudes(){

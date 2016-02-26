@@ -120,7 +120,7 @@
 			<p><b>Vacante: </b><?="$requisicion->nombre_posicion - $requisicion->nombre_track"; ?></p>
 			<p><b>Área: </b><?=$requisicion->nombre_area;?></p>
 			<p>Ingresa a <a href='http://intranet.advanzer.com:3000/requisicion/ver/<?= $requisicion->id;?>'>Portal Personal >> Servicios >> Requisiciones</a> para darle seguimiento a la solicitud</p>
-			<p>Descarga <a target="_blank" href="http://intranet.advanzer.com:3000/assets/docs/requisicion_<?= $requisicion->id;?>">aquí</a> el detalle en formato XLS</p>
+			<p>Descarga <a target="_blank" href="http://intranet.advanzer.com:3000/assets/docs/requisicion_<?= $requisicion->id;?>.xlsx">aquí</a> el detalle en formato XLS</p>
 		</div>
 		<div class="col-md-12" align="center"><img width="100%" src="http://drive.google.com/uc?export=view&id=0B7vcCZhlhZiOOWNiNHJnZGhnaDA"></div>
 		<footer align="center">

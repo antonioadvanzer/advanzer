@@ -135,7 +135,7 @@
 											<?php endif; 
 											if($this->session->userdata('tipo') > 3 || $this->session->userdata('area')==4): ?>
 												<li><a href="<?= base_url('requisiciones');?>">Todas las Requisiciones</a></li>
-												<li><a href="<?= base_url('admin_solicitudes');?>">Solicitudes</a></li>
+												<li><a href="<?= base_url('admin_solicitudes');?>">Todas las Solicitudes</a></li>
 												<?php if($this->session->userdata('tipo') > 3): ?>
 													<li><a href="<?= base_url('evaluacion');?>">Evaluaciones</a></li>
 													<!--<li><a href="<?= base_url('evaluacion/index/false');?>">Evaluaciones Confidencial</a></li>-->
@@ -182,7 +182,7 @@
 								<?php endif;?>
 								<li><a href="<?= base_url('vacaciones');?>">Vacaciones</a></li>
 								<li><a href="<?= base_url('permiso');?>">Permisos de Ausencia</a></li>
-								<li><a href="<?= base_url('viaticos_gastos');?>">Viáticos y Gastos de Viaje</a></li>
+								<!--<li><a href="<?= base_url('viaticos_gastos');?>">Viáticos y Gastos de Viaje</a></li>-->
 							</ul>
 						</li>
 					</ul>

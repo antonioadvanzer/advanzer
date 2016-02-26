@@ -33,9 +33,9 @@
 	<div class="row" align="center">
 		<h4>
 			<div class="col-md-3">Rating: <span><?= $feedback->rating;?></span></div>
-			<div class="col-md-3">Gastos de Viaje: <span class="<?php if($feedback->cumple_gastos) echo"glyphicon glyphicon-ok"; else echo"glyphicon glyphicon-remove";?>"></span></div>
-			<div class="col-md-3">Asignaciones en Harvest: <span class="<?php if($feedback->cumple_harvest) echo"glyphicon glyphicon-ok"; else echo"glyphicon glyphicon-remove";?>"></span></div>
-			<div class="col-md-3">Actualización de CV: <span class="<?php if($feedback->cumple_cv) echo"glyphicon glyphicon-ok"; else echo"glyphicon glyphicon-remove";?>"></span></div></h4>
+			<div class="col-md-3">Gastos de Viaje: <span class="<?php if(isset($feedback->cumple_gastos) && $feedback->cumple_gastos == "SI") echo"glyphicon glyphicon-ok"; else echo"glyphicon glyphicon-remove";?>"></span></div>
+			<div class="col-md-3">Asignaciones en Harvest: <span class="<?php if(isset($feedback->cumple_harvest) && $feedback->cumple_harvest == "SI") echo"glyphicon glyphicon-ok"; else echo"glyphicon glyphicon-remove";?>"></span></div>
+			<div class="col-md-3">Actualización de CV: <span class="<?php if(isset($feedback->cumple_cv) && $feedback->cumple_cv == "SI") echo"glyphicon glyphicon-ok"; else echo"glyphicon glyphicon-remove";?>"></span></div></h4>
 	</div>
 	<hr>
 	<form id="update" role="form" method="post" action="javascript:" class="form-signin">

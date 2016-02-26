@@ -8,7 +8,7 @@
 	</div>
 </div>
 <div class="container">
-	<div align="center"><span style="cursor:pointer;" onclick="window.history.back();">&laquo;Regresar</span></div>
+	<div align="center"><a style="cursor:pointer;" onclick="window.history.back();">&laquo;Regresar</a></div>
 	<div align="center" id="alert" style="display:none">
 		<div class="alert alert-danger" role="alert" style="max-width:400px;">
 			<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>

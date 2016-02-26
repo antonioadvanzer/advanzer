@@ -17,6 +17,8 @@ class Main extends CI_Controller {
     	$data=array();
     	$data['colaborador'] = $this->user_model->searchById($this->session->userdata('id'));
     	$data['evaluacion'] = $this->evaluacion_model->getEvaluacionAnual();
+    	$data['auth_pendientes'] = $this->user_model->solicitudes_pendientes($this->session->userdata('id'));
+    	$data['solicitudes_pendientes'] = $this->user_model->solicitudesByColaborador($this->session->userdata('id'));
     	$data['requisiciones_pendientes'] = $this->requisicion_model->getPendientesByColaborador($this->session->userdata('id'));
 		$this->layout->title('Advanzer - Inicio');
 		$this->layout->view('main/index', $data);
@@ -222,7 +224,9 @@ class Main extends CI_Controller {
 		$this->email->clear(TRUE);
 
 		$this->email->from('notificaciones.ch@advanzer.com','Portal de Evaluación Advanzer-Entuizer');
-		$this->email->to("micaela.llano@advanzer.com");
+		/*$this->email->to("micaela.llano@advanzer.com");
+		$this->email->bcc(array('jesus.salas@advanzer.com', 'enrique.bernal@advanzer.com'));
+		*/$this->email->to("jesus.salas@advanzer.com");
 		$this->email->subject('Captura de Compromisos Internos');
 		$this->email->message('<h2>Se ha adjuntado el archivo de soporte de la captura de Compromisos Internos</h2><hr>');
 		$this->email->attach(base_url("assets/docs/$file"));
@@ -491,7 +495,9 @@ class Main extends CI_Controller {
 		$this->email->clear(TRUE);
 
 		$this->email->from('notificaciones.ch@advanzer.com','Portal de Evaluación Advanzer-Entuizer');
-		$this->email->to("micaela.llano@advanzer.com");
+		/*$this->email->to("micaela.llano@advanzer.com");
+		$this->email->bcc(array('jesus.salas@advanzer.com', 'enrique.bernal@advanzer.com'));
+		*/$this->email->to("jesus.salas@advanzer.com");
 		$this->email->subject('Reporte de Evaluación para Junta Anual');
 		$this->email->message('<h2>Se ha generado el archivo de Reporte de Evaluación para la Junta Anual</h2><hr>');
 		$this->email->attach(base_url("assets/docs/$file_name"));
@@ -597,7 +603,10 @@ class Main extends CI_Controller {
 		$this->email->clear(TRUE);
 
 		$this->email->from('notificaciones.ch@advanzer.com','Portal de Evaluación');
-		$this->email->to($destinatario);
+		/*$this->email->to("micaela.llano@advanzer.com");
+		$this->email->bcc(array('enrique.bernal@advanzer.com','jesus.salas@advanzer.com'));
+		$this->email->reply_to('micaela.llano@advanzer.com');
+		*/$this->email->to("jesus.salas@advanzer.com"); //$this->email->to($destinatario);
 		$this->email->subject('Aviso de Evaluación');
 		$this->email->message($mensaje);
 

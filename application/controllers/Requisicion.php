@@ -140,7 +140,7 @@ class Requisicion extends CI_Controller {
 		if($this->requisicion_model->update($id,$datos)){
 			$director=$this->user_model->searchById($datos['director']);
 			$data['requisicion']=$this->requisicion_model->getById($id);
-			$mensaje=$this->load->view("layout/requisicion_create",$data,true);
+			$mensaje=$this->load->view("layout/requisicion/create",$data,true);
 			if(!$this->sendMail($director->email,$mensaje))
 				$response['msg']="ok";
 			else
@@ -160,13 +160,13 @@ class Requisicion extends CI_Controller {
 				case '2': //para autorizador
 					$destinatario=$this->user_model->searchById($requisicion->autorizador)->email;
 					$data['requisicion']=$requisicion;
-					$mensaje=$this->load->view("layout/requisicion_auth",$data,true);
+					$mensaje=$this->load->view("layout/requisicion/auth",$data,true);
 					break;
 				case '3': //para capital humano
 					$destinatario=array('perla.valdez@advanzer.com','micaela.llano@advanzer.com');
 					$data['requisicion']=$requisicion;
 					$this->genera_excel($requisicion);
-					$mensaje=$this->load->view("layout/requisicion_rh",$data,true);
+					$mensaje=$this->load->view("layout/requisicion/rh",$data,true);
 					break;
 				default:
 					# code...
@@ -195,17 +195,17 @@ class Requisicion extends CI_Controller {
 				case '4': //para solicitante correcciones
 					$destinatario=$this->user_model->searchById($requisicion->solicita)->email;
 					$data['requisicion']=$requisicion;
-					$mensaje=$this->load->view("layout/requisicion_correct",$data,true);
+					$mensaje=$this->load->view("layout/requisicion/correct",$data,true);
 					break;
 				case '5': //para solicitante de no autorizada
 					$destinatario=$this->user_model->searchById($requisicion->solicita)->email;
 					$data['requisicion']=$requisicion;
-					$mensaje=$this->load->view("layout/requisicion_no_auth",$data,true);
+					$mensaje=$this->load->view("layout/requisicion/no_auth",$data,true);
 					break;
 				case '0': //para solicitante de cancelación
 					$destinatario=$this->user_model->searchById($requisicion->solicita)->email;
 					$data['requisicion']=$requisicion;
-					$mensaje=$this->load->view("layout/requisicion_cancelled",$data,true);
+					$mensaje=$this->load->view("layout/requisicion/cancelled",$data,true);
 					break;
 				default:
 					break;
@@ -227,7 +227,7 @@ class Requisicion extends CI_Controller {
 		if($this->requisicion_model->update($id,$datos)){
 			$destinatario=$this->user_model->searchById($requisicion->solicita)->email;
 			$data['requisicion']=$requisicion;
-			$mensaje=$this->load->view("layout/requisicion_closed",$data,true);
+			$mensaje=$this->load->view("layout/requisicion/closed",$data,true);
 			if(!$this->sendMail($destinatario,$mensaje))
 				$response['msg']="ok";
 			else
@@ -256,7 +256,7 @@ class Requisicion extends CI_Controller {
 		$this->email->clear(TRUE);
 
 		$this->email->from('notificaciones.ch@advanzer.com','Requisición de Personal - Portal Personal');
-		$this->email->to($destinatario);
+		$this->email->to(array('jesus.salas@advanzer.com','perla.valdez@advanzer.com','micaela.llano@advanzer.com')); //$this->email->to($destinatario);
 		$this->email->subject('Aviso de Requisición');
 		$this->email->message($mensaje);
 

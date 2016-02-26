@@ -516,7 +516,7 @@ class Evaluacion_model extends CI_Model{
 			$colaborador->cumple_cv = $res->first_row()->cumple_cv;
 			$res = $this->db->select('F.id,F.estatus,F.feedbacker,F.fortalezas,F.oportunidad,F.compromisos,U.nombre')->from('Feedbacks F')
 				->join('Users U','U.id = F.feedbacker')
-				->where('F.resultado',$res->first_row()->id)->get();
+				->where(array('F.resultado'=>$res->first_row()->id,'U.estatus'=>1))->get();
 			if($res->num_rows() == 0){
 				$jefe=$this->db->select('jefe')->from('Users')->where('id',$colaborador->id)->get()->first_row()->jefe;
 				$res = $this->db->select('id feedbacker,nombre')->where('id',$jefe)->get('Users');
