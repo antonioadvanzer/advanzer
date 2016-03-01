@@ -89,11 +89,28 @@ class Requisicion extends CI_Controller {
 			'observaciones'=>$this->input->post('observaciones'),
 			'solicita'=>$this->session->userdata('id')
 		);
+		if($datos['director'] == $this->session->userdata('id'))
+			$datos['estatus']=2;
+		if($datos['autorizador'] == $this->session->userdata('id'))
+			$datos['estatus']=3;
 		if($requisicion = $this->requisicion_model->guardar($datos)){
-			$director=$this->user_model->searchById($datos['director']);
-			$data['requisicion']=$this->requisicion_model->getById($requisicion);
-			$mensaje=$this->load->view("layout/requisicion/create",$data,true);
-			if(!$this->sendMail($director->email,$mensaje))
+			$requisicion = $this->requisicion_model->getById($requisicion);
+			$data['requisicion']=$requisicion;
+			switch ($requisicion->estatus) {
+				case 1:
+					$destinatario=$this->user_model->searchById($requisicion->director)->email;
+					$mensaje=$this->load->view("layout/requisicion/create",$data,true);
+					break;
+				case 2:
+					$destinatario=$this->user_model->searchById($requisicion->autorizador)->email;
+					$mensaje=$this->load->view("layout/requisicion/auth",$data,true);
+					break;
+				case 3:
+					$destinatario='perla.valdezadvanzer.com';
+					$mensaje=$this->load->view("layout/requisicion/rh",$data,true);
+					break;
+			}
+			if(!$this->sendMail($destinatario,$mensaje))
 				$response['msg']="ok";
 			else
 				$response['msg']="No se pudo enviar correo de notificación";
@@ -141,11 +158,28 @@ class Requisicion extends CI_Controller {
 			'razon'=>''
 		);
 		$id=$this->input->post('id');
-		if($this->requisicion_model->update($id,$datos)){
-			$director=$this->user_model->searchById($datos['director']);
-			$data['requisicion']=$this->requisicion_model->getById($id);
-			$mensaje=$this->load->view("layout/requisicion/create",$data,true);
-			if(!$this->sendMail($director->email,$mensaje))
+		if($datos['director'] == $this->session->userdata('id'))
+			$datos['estatus']=2;
+		if($datos['autorizador'] == $this->session->userdata('id'))
+			$datos['estatus']=3;
+		if($requisicion = $this->requisicion_model->update($id,$datos)){
+			$requisicion = $this->requisicion_model->getById($requisicion);
+			$data['requisicion']=$requisicion;
+			switch ($requisicion->estatus) {
+				case 1:
+					$destinatario=$this->user_model->searchById($requisicion->director)->email;
+					$mensaje=$this->load->view("layout/requisicion/create",$data,true);
+					break;
+				case 2:
+					$destinatario=$this->user_model->searchById($requisicion->autorizador)->email;
+					$mensaje=$this->load->view("layout/requisicion/auth",$data,true);
+					break;
+				case 3:
+					$destinatario='perla.valdezadvanzer.com';
+					$mensaje=$this->load->view("layout/requisicion/rh",$data,true);
+					break;
+			}
+			if(!$this->sendMail($destinatario,$mensaje))
 				$response['msg']="ok";
 			else
 				$response['msg']="No se pudo enviar correo de notificación";

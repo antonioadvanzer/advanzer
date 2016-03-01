@@ -265,9 +265,9 @@
 									<button id="realizada" type="button" class="btn btn-primary" style="min-width:200px;text-align:center;display:inline;">Completada</button>
 									<button id="sin_completar" type="button" class="btn" style="min-width:200px;text-align:center;display:inline;">Cerrar sin completar</button>
 								<?php endif;
-							if($requisicion->autorizador == $this->session->userdata('id')): ?>
+							if($requisicion->autorizador == $this->session->userdata('id') && $requisicion->autorizador != $requisicion->solicita): ?>
 								<button id="autorizar" type="button" class="btn btn-primary" style="min-width:200px;text-align:center;display:inline;">Autorizar</button>
-							<?php elseif($requisicion->director == $this->session->userdata('id')): ?>
+							<?php elseif($requisicion->director == $this->session->userdata('id') && $requisicion->director != $requisicion->solicita): ?>
 								<button id="aceptar" type="button" class="btn btn-primary" style="min-width:200px;text-align:center;display:inline;">Aceptar</button>
 							<?php elseif($requisicion->estatus==3): ?>
 								<button id="stand_by" type="button" class="btn btn-primary" style="min-width:200px;text-align:center;display:inline;">Stand By</button>
