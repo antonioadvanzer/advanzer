@@ -124,7 +124,7 @@
 							<option <?php if($requisicion->costo!='DE ACUERDO A TABULADOR') echo "selected" ?>>DEFINIR</option>
 						</select>
 						<span class="input-group-addon">Define</span>
-						<input class="form-control" value="<?php if($requisicion->costo!='DE ACUERDO A TABULADOR') echo$requisicion->costo;?>" id="costo_maximo" style="background-color:white;" disabled pattern="{0-9}+" placeholder="Número entero" title="Introduce un número entero">
+						<input class="form-control" value="<?php if($requisicion->costo!='DE ACUERDO A TABULADOR') echo$requisicion->costo;?>" id="costo_maximo" style="background-color:white;" disabled pattern="[0-9]+" placeholder="Número entero" title="Introduce un número entero">
 					</div>
 					<br>
 					<div class="input-group">
@@ -247,7 +247,7 @@
 							<textarea class="form-control" rows="4"><?= $requisicion->razon;?></textarea>
 						</div>
 					<?php endif; ?>
-					<?php if(in_array($requisicion->estatus,array(4,5,7))): ?>
+					<?php if(in_array($requisicion->estatus,array(4,5,6,7))): ?>
 						<div class="input-group">
 							<span class="input-group-addon" style="min-width:260px">Comentarios</span>
 							<textarea class="form-control" disabled rows="4"><?= $requisicion->razon;?></textarea>
@@ -262,8 +262,8 @@
 						<div class="btn-group btn-group-lg" role="group" aria-label="...">
 							<?php if($this->session->userdata('tipo') >= 3 && $this->session->userdata('area')==4)
 								if($requisicion->estatus == 3 || $requisicion->estatus==7): ?>
-									<button id="realizada" type="button" class="btn btn-primary" style="min-width:200px;text-align:center;display:inline;">Realizada</button>
-									<button id="cancelar" type="button" class="btn" style="min-width:200px;text-align:center;display:inline;">Cancelar</button>
+									<button id="realizada" type="button" class="btn btn-primary" style="min-width:200px;text-align:center;display:inline;">Completada</button>
+									<button id="sin_completar" type="button" class="btn" style="min-width:200px;text-align:center;display:inline;">Cerrar sin completar</button>
 								<?php endif;
 							if($requisicion->autorizador == $this->session->userdata('id')): ?>
 								<button id="autorizar" type="button" class="btn btn-primary" style="min-width:200px;text-align:center;display:inline;">Autorizar</button>
@@ -273,11 +273,9 @@
 							if($requisicion->solicita == $this->session->userdata('id')):
 								if($requisicion->estatus == 4): ?>
 									<button type="submit" class="btn btn-primary" style="min-width:200px;text-align:center;display:inline;">Actualizar</button>
-								<?php endif;
-								if($requisicion->estatus == 1 || $requisicion->estatus == 4): ?>
-									<button id="cancelar" type="button" class="btn" style="min-width:200px;text-align:center;display:inline;">Cancelar</button>
-								<?php endif;
-							elseif(in_array($requisicion->estatus,array(1,2))): ?>
+								<?php endif; ?>
+								<button id="cancelar" type="button" class="btn" style="min-width:200px;text-align:center;display:inline;">Cancelar</button>
+							<?php elseif(in_array($requisicion->estatus,array(1,2))): ?>
 								<button id="rechazar" type="button" class="btn" style="min-width:200px;text-align:center;display:inline;">Rechazar</button>
 							<?php endif; ?>
 						</div>
@@ -296,7 +294,42 @@
 			$('#fecha_estimada').datepicker({
 				dateFormat: 'yy-mm-dd'
 			});
-
+			$("#residencia").change(function() {
+				$("#residencia option:selected").each(function() {
+					residencia = $('#residencia').val();
+				});
+				if(residencia!="")
+					$('#residencia_otro').prop({'required':false,'disabled':true}).val('');
+				else
+					$('#residencia_otro').prop({'required':true,'disabled':false}).val('');
+			});
+			$("#tipo").change(function() {
+				$("#tipo option:selected").each(function() {
+					tipo = $('#tipo').val();
+				});
+				if(tipo==1)
+					$('#sustituye_a').prop({'required':false,'disabled':true}).val('');
+				else
+					$('#sustituye_a').prop({'required':true,'disabled':false}).val('');
+			});
+			$("#costo").change(function() {
+				$("#costo option:selected").each(function() {
+					costo = $('#costo').val();
+				});
+				if(costo!='DEFINIR')
+					$('#costo_maximo').prop({'required':false,'disabled':true}).val('');
+				else
+					$('#costo_maximo').prop({'required':true,'disabled':false}).val('');
+			});
+			$("#lugar_trabajo").change(function() {
+				$("#lugar_trabajo option:selected").each(function() {
+					lugar_trabajo = $('#lugar_trabajo').val();
+				});
+				if(lugar_trabajo!='OFICINAS DEL CLIENTE' && lugar_trabajo!='AMBOS')
+					$('#domicilio_cte').prop({'required':false,'disabled':true}).val('');
+				else
+					$('#domicilio_cte').prop({'required':true,'disabled':false}).val('');
+			});
 			$("#track").change(function() {
 				$("#track option:selected").each(function() {
 					track = $('#track').val();
@@ -523,11 +556,15 @@
 				$('#razon').show('slow');
 				$('#accion').val("rechazar");
 			});
-
 			$("#cancelar").click(function() {
 				$('#update').hide('slow');
 				$('#razon').show('slow');
 				$('#accion').val("cancelar");
+			});
+			$("#sin_completar").click(function() {
+				$('#update').hide('slow');
+				$('#razon').show('slow');
+				$('#accion').val("sin_completar");
 			});
 
 			$("#razon").submit(function(event) {
@@ -538,13 +575,8 @@
 				if(accion == "rechazar"){
 					if(!confirm("¿Seguro que desea enviar los comentarios de la requisición?"))
 						return false;
-					if(autorizador == <?= $requisicion->director;?>){
-						estatus=4;
-						alerta="Se ha enviado notificación al solicitante";
-					}else{
-						estatus=5;
-						alerta="Se ha rechazado la requisición y se ha notificado al solicitante";
-					}
+					estatus=4;
+					alerta="Se ha enviado notificación al solicitante";
 					$.ajax({
 						url: '<?= base_url("requisicion/rechazar");?>',
 						type: 'post',
@@ -595,6 +627,44 @@
 							var returnedData = JSON.parse(data);
 							if(returnedData['msg']=="ok"){
 								alert("Se ha cancelado la requisición");
+								window.document.location='<?= base_url("requisicion");?>';
+							}else{
+								$('#razon_txt').val("");
+								$('#cargando').hide('slow');
+								$('#update').show('slow');
+								$('#alert').prop('display',true).show('slow');
+								$('#msg').html(returnedData['msg']);
+								setTimeout(function() {
+									$("#alert").fadeOut(1500);
+								},3000);
+							}
+						},
+						error: function(xhr) {
+							console.log(xhr.statusText);
+							$('#cargando').hide('slow');
+							$('#razon').show('slow');
+							$('#alert').prop('display',true).show('slow');
+							$('#msg').html('Error, intenta de nuevo o contacta al Administrador de la Aplicación');
+							setTimeout(function() {
+								$("#alert").fadeOut(1500);
+							},3000);
+						}
+					});
+				}else if(accion == "sin_completar"){
+					if(!confirm("¿Seguro que desea cerrar la requisición?"))
+						return false;
+					$.ajax({
+						url: '<?= base_url("requisicion/cerrar");?>',
+						type: 'post',
+						data: {'id':id,'estatus':6,'razon':razon},
+						beforeSend: function() {
+							$('#razon').hide('slow');
+							$('#cargando').show('slow');
+						},
+						success: function(data){
+							var returnedData = JSON.parse(data);
+							if(returnedData['msg']=="ok"){
+								alert("Se ha cerrado la requisición");
 								window.document.location='<?= base_url("requisicion");?>';
 							}else{
 								$('#razon_txt').val("");

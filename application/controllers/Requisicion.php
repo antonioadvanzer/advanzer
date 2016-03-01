@@ -89,7 +89,7 @@ class Requisicion extends CI_Controller {
 		if($requisicion = $this->requisicion_model->guardar($datos)){
 			$director=$this->user_model->searchById($datos['director']);
 			$data['requisicion']=$this->requisicion_model->getById($requisicion);
-			$mensaje=$this->load->view("layout/requisicion_create",$data,true);
+			$mensaje=$this->load->view("layout/requisicion/create",$data,true);
 			if(!$this->sendMail($director->email,$mensaje))
 				$response['msg']="ok";
 			else
@@ -222,6 +222,7 @@ class Requisicion extends CI_Controller {
 
 	public function cerrar(){
 		$datos['estatus']=$this->input->post('estatus');
+		$datos['razon']=$this->input->post('razon');
 		$id=$this->input->post('id');
 		$requisicion=$this->requisicion_model->getById($id);
 		if($this->requisicion_model->update($id,$datos)){
@@ -256,7 +257,7 @@ class Requisicion extends CI_Controller {
 		$this->email->clear(TRUE);
 
 		$this->email->from('notificaciones.ch@advanzer.com','Requisición de Personal - Portal Personal');
-		$this->email->to(array('jesus.salas@advanzer.com','perla.valdez@advanzer.com','micaela.llano@advanzer.com')); //$this->email->to($destinatario);
+		$this->email->to(array('jesus.salas@advanzer.com'));//,'perla.valdez@advanzer.com','micaela.llano@advanzer.com')); //$this->email->to($destinatario);
 		$this->email->subject('Aviso de Requisición');
 		$this->email->message($mensaje);
 

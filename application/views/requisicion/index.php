@@ -55,10 +55,7 @@
 									$estatus="AUTORIZADA";
 									break;
 								case 4:
-									$estatus="PARA CORREGIR";
-									break;
-								case 5:
-									$estatus="NO AUTORIZADA";
+									$estatus="RECHAZADA";
 									break;
 								case 0:
 									$estatus="CANCELADA";
