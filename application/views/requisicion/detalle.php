@@ -275,7 +275,7 @@
 									<button type="submit" class="btn btn-primary" style="min-width:200px;text-align:center;display:inline;">Actualizar</button>
 								<?php endif; ?>
 								<button id="cancelar" type="button" class="btn" style="min-width:200px;text-align:center;display:inline;">Cancelar</button>
-							<?php elseif(in_array($requisicion->estatus,array(1,2))): ?>
+							<?php elseif(in_array($requisicion->estatus,array(1,2)) && in_array($this->session->userdata('id'), array($requisicion->director,$requisicion->autorizador))): ?>
 								<button id="rechazar" type="button" class="btn" style="min-width:200px;text-align:center;display:inline;">Rechazar</button>
 							<?php endif; ?>
 						</div>
