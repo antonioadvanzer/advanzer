@@ -6,7 +6,6 @@ class Requisicion extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->valida_sesion();
 		$this->load->model('area_model');
 		$this->load->model('track_model');
 		$this->load->model('posicion_model');
@@ -22,6 +21,7 @@ class Requisicion extends CI_Controller {
 
 	//basicas
 	public function index($flag=false){
+		$this->valida_sesion();
 		$colaborador=$this->user_model->searchById($this->session->userdata('id'));
 		$data=array();
 		$data['requisiciones']=$this->requisicion_model->getRequisiciones($colaborador,$flag);
@@ -29,6 +29,7 @@ class Requisicion extends CI_Controller {
 		$this->layout->view('requisicion/index',$data);
 	}
 	public function ver($id){
+		$this->valida_sesion();
 		$data=array();
 		$data['requisicion'] = $this->requisicion_model->getById($id);
 		$data['areas'] = $this->area_model->getAll();
@@ -40,6 +41,7 @@ class Requisicion extends CI_Controller {
 		$this->layout->view('requisicion/detalle',$data);
 	}
 	public function nueva(){
+		$this->valida_sesion();
 		$data=array();
 		$data['areas'] = $this->area_model->getAll();
 		$data['tracks'] = $this->track_model->getAll();
@@ -52,6 +54,7 @@ class Requisicion extends CI_Controller {
 	//función guardar --guardar los datos enviados por POST a la Base de Datos
 	//abc
 	public function guardar(){
+		$this->valida_sesion();
 		$datos = array(
 			'director'=>$this->input->post('director_area'),
 			'autorizador'=>$this->input->post('autorizador'),
@@ -101,6 +104,7 @@ class Requisicion extends CI_Controller {
 	}
 
 	public function update(){
+		$this->valida_sesion();
 		$datos = array(
 			'director'=>$this->input->post('director_area'),
 			'autorizador'=>$this->input->post('autorizador'),
@@ -152,6 +156,7 @@ class Requisicion extends CI_Controller {
 	}
 
 	public function ch_estatus(){
+		$this->valida_sesion();
 		$datos['estatus']=$this->input->post('estatus');
 		$id=$this->input->post('id');
 		$requisicion=$this->requisicion_model->getById($id);
@@ -184,11 +189,17 @@ class Requisicion extends CI_Controller {
 	}
 
 	public function rechazar(){
+		$this->valida_sesion();
 		$datos=array(
 			'estatus'=>$this->input->post('estatus'),
 			'razon'=>$this->input->post('razon')
 		);
 		$id=$this->input->post('id');
+		$requisicion=$this->requisicion_model->getById($id);
+		if($requisicion->estatus==2)
+			$data['quien']='AUTORIZADOR';
+		else
+			$data['quien']='DIRECTOR DE ÁREA';
 		if($this->requisicion_model->update($id,$datos)){
 			$requisicion=$this->requisicion_model->getById($id);
 			switch ($datos['estatus']) {
@@ -221,6 +232,7 @@ class Requisicion extends CI_Controller {
 	}
 
 	public function cerrar(){
+		$this->valida_sesion();
 		$datos['estatus']=$this->input->post('estatus');
 		$datos['razon']=$this->input->post('razon');
 		$id=$this->input->post('id');
@@ -265,6 +277,13 @@ class Requisicion extends CI_Controller {
 			return var_dump($this->email->print_debugger());
 		else
 			return false;
+	}
+
+	public function check_to_cancel(){
+		$requisiciones = $this->requisicion_model->getRequisiciones(true,true);
+		foreach ($requisiciones as $requisicion) :
+			$plazo = strtotime('+30 days',strtotime($requisicion->fecha_modificacion));
+		endforeach;
 	}
 
 	private function genera_excel($requisicion) {
