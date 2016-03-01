@@ -44,6 +44,7 @@ class Requisicion_model extends CI_Model{
 	}
 
 	function update($id,$datos){
+		$datos['usuario_modificacion']=$this->session->userdata('id');
 		$this->db->where('id',$id)->update('Requisiciones',$datos);
 		if($this->db->affected_rows() == 1)
 			return true;

@@ -63,6 +63,9 @@
 								case 6:
 									$estatus="CERRADA";
 									break;
+								case 7:
+									$estatus="STAND BY";
+									break;
 							}
 							if($requisicion->empresa == 1)
 								$empresa="Advanzer";

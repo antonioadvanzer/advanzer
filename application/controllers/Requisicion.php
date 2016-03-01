@@ -155,12 +155,35 @@ class Requisicion extends CI_Controller {
 		echo json_encode($response);
 	}
 
+	public function react(){
+		$this->valida_sesion();
+		$datos['estatus']=$this->input->post('estatus');
+		$id=$this->input->post('id');
+		if($this->requisicion_model->update($id,$datos)){
+			$requisicion=$this->requisicion_model->getById($id);
+			if($requisicion->usuario_modificacion == $requisicion->solicita) //el mismo solicitante reactiva
+				$destinatario='perla.valdez@advanzer.com';
+			else
+				$destinatario=$this->user_model->searchById($requisicion->autorizador)->email;
+			$data['requisicion']=$requisicion;
+			$mensaje=$this->load->view("layout/requisicion/react",$data,true);
+			if(!$this->sendMail($destinatario,$mensaje))
+				$response['msg']="ok";
+			else
+				$response['msg']="No se pudo enviar correo de notificación";
+			$response['msg']="ok";
+		}else
+			$response['msg']="Ha habido un error al actualizar la requisicion";
+
+		echo json_encode($response);
+	}
+
 	public function ch_estatus(){
 		$this->valida_sesion();
 		$datos['estatus']=$this->input->post('estatus');
 		$id=$this->input->post('id');
-		$requisicion=$this->requisicion_model->getById($id);
 		if($this->requisicion_model->update($id,$datos)){
+			$requisicion=$this->requisicion_model->getById($id);
 			switch ($datos['estatus']) {
 				case '2': //para autorizador
 					$destinatario=$this->user_model->searchById($requisicion->autorizador)->email;
@@ -168,13 +191,19 @@ class Requisicion extends CI_Controller {
 					$mensaje=$this->load->view("layout/requisicion/auth",$data,true);
 					break;
 				case '3': //para capital humano
-					$destinatario=array('perla.valdez@advanzer.com','micaela.llano@advanzer.com');
+					$destinatario='perla.valdez@advanzer.com';
 					$data['requisicion']=$requisicion;
 					$this->genera_excel($requisicion);
 					$mensaje=$this->load->view("layout/requisicion/rh",$data,true);
 					break;
-				default:
-					# code...
+				case '7': //stand by
+					if($requisicion->usuario_modificacion == $requisicion->solicita) //el mismo solicitante cambió a stand by
+						$destinatario='perla.valdez@advanzer.com';
+					else
+						$destinatario=$this->user_model->searchById($requisicion->solicita)->email;
+					$data['requisicion']=$requisicion;
+					$mensaje=$this->load->view("layout/requisicion/stand_by",$data,true);
+				default: # code...
 					break;
 			}
 			if(!$this->sendMail($destinatario,$mensaje))
@@ -269,7 +298,7 @@ class Requisicion extends CI_Controller {
 		$this->email->clear(TRUE);
 
 		$this->email->from('notificaciones.ch@advanzer.com','Requisición de Personal - Portal Personal');
-		$this->email->to(array('jesus.salas@advanzer.com'));//,'perla.valdez@advanzer.com','micaela.llano@advanzer.com')); //$this->email->to($destinatario);
+		$this->email->to('jesus.salas@advanzer.com');
 		$this->email->subject('Aviso de Requisición');
 		$this->email->message($mensaje);
 

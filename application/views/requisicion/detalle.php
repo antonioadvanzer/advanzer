@@ -269,6 +269,10 @@
 								<button id="autorizar" type="button" class="btn btn-primary" style="min-width:200px;text-align:center;display:inline;">Autorizar</button>
 							<?php elseif($requisicion->director == $this->session->userdata('id')): ?>
 								<button id="aceptar" type="button" class="btn btn-primary" style="min-width:200px;text-align:center;display:inline;">Aceptar</button>
+							<?php elseif($requisicion->estatus==3): ?>
+								<button id="stand_by" type="button" class="btn btn-primary" style="min-width:200px;text-align:center;display:inline;">Stand By</button>
+							<?php elseif($requisicion->estatus==7): ?>
+								<button id="reactivar" type="button" class="btn btn-primary" style="min-width:200px;text-align:center;display:inline;">Reactivar</button>
 							<?php endif;
 							if($requisicion->solicita == $this->session->userdata('id')):
 								if($requisicion->estatus == 4): ?>
@@ -712,6 +716,88 @@
 						if(returnedData['msg']=="ok"){
 							alert("Se ha cerrado la requisición");
 							window.document.location='<?= base_url("user/nuevo");?>/'+id;
+						}else{
+							$('#cargando').hide('slow');
+							$('#update').show('slow');
+							$('#alert').prop('display',true).show('slow');
+							$('#msg').html(returnedData['msg']);
+							setTimeout(function() {
+								$("#alert").fadeOut(1500);
+							},3000);
+						}
+					},
+					error: function(xhr) {
+						console.log(xhr.statusText);
+						$('#cargando').hide('slow');
+						$('#update').show('slow');
+						$('#alert').prop('display',true).show('slow');
+						$('#msg').html('Error, intenta de nuevo o contacta al Administrador de la Aplicación');
+						setTimeout(function() {
+							$("#alert").fadeOut(1500);
+						},3000);
+					}
+				});
+			});
+
+			$("#stand_by").click(function() {
+				if(!confirm('¿Seguro(a) que desea turnar la requisición a Stand By?'))
+					return false;
+				id = $("#id").val();
+				$.ajax({
+					url: '<?= base_url("requisicion/ch_estatus");?>',
+					type: 'post',
+					data: {'id':id,'estatus':7},
+					beforeSend: function() {
+						$('#update').hide('slow');
+						$('#cargando').show('slow');
+					},
+					success: function(data){
+						var returnedData = JSON.parse(data);
+						console.log(returnedData);
+						if(returnedData['msg']=="ok"){
+							alert("Se ha turnado la requisición a Stand By");
+							window.document.location='<?= base_url("requisicion");?>';
+						}else{
+							$('#cargando').hide('slow');
+							$('#update').show('slow');
+							$('#alert').prop('display',true).show('slow');
+							$('#msg').html(returnedData['msg']);
+							setTimeout(function() {
+								$("#alert").fadeOut(1500);
+							},3000);
+						}
+					},
+					error: function(xhr) {
+						console.log(xhr.statusText);
+						$('#cargando').hide('slow');
+						$('#update').show('slow');
+						$('#alert').prop('display',true).show('slow');
+						$('#msg').html('Error, intenta de nuevo o contacta al Administrador de la Aplicación');
+						setTimeout(function() {
+							$("#alert").fadeOut(1500);
+						},3000);
+					}
+				});
+			});
+			
+			$("#reactivar").click(function() {
+				if(!confirm('¿Seguro(a) que desea reactivar la requisición?'))
+					return false;
+				id = $("#id").val();
+				$.ajax({
+					url: '<?= base_url("requisicion/react");?>',
+					type: 'post',
+					data: {'id':id,'estatus':3},
+					beforeSend: function() {
+						$('#update').hide('slow');
+						$('#cargando').show('slow');
+					},
+					success: function(data){
+						var returnedData = JSON.parse(data);
+						console.log(returnedData);
+						if(returnedData['msg']=="ok"){
+							alert("Se ha reactivado la requisición");
+							window.document.location='<?= base_url("requisicion");?>';
 						}else{
 							$('#cargando').hide('slow');
 							$('#update').show('slow');
