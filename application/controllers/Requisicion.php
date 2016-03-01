@@ -345,7 +345,17 @@ class Requisicion extends CI_Controller {
 	public function check_to_cancel(){
 		$requisiciones = $this->requisicion_model->getRequisiciones(true,true);
 		foreach ($requisiciones as $requisicion) :
-			$plazo = strtotime('+30 days',strtotime($requisicion->fecha_modificacion));
+			$plazo = strtotime('+30 days',strtotime($requisicion->fecha_ultima_modificacion));
+			$plazo=date('Y-m-d H:i',$plazo);
+			$plazo=new DateTime($plazo);
+			$hoy = new DateTime(date('Y-m-d H:i'));
+			$diff=$plazo->diff($hoy);
+			if($diff->format('%r') != '-'):
+				$datos['estatus']=0;
+				$datos['razon']='Se cancela por falta de seguimiento al día '.date('Y-m-d');
+				$datos['usuario_modificacion']=null;
+				$this->requisicion_model->update($requisicion->id,$datos);
+			endif;
 		endforeach;
 	}
 
