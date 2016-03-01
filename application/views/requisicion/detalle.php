@@ -485,7 +485,7 @@
 						var returnedData = JSON.parse(data);
 						console.log(returnedData['msg']);
 						if(returnedData['msg']=="ok"){
-							alert('Se ha autorizado la requisición y se ha enviado notificado a Capital Humano');
+							alert('Se ha autorizado la requisición y se ha notificado a Capital Humano');
 							window.document.location='<?= base_url("requisicion");?>';
 						}else{
 							$('#cargando').hide('slow');

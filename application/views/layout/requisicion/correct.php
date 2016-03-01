@@ -114,6 +114,7 @@
 			<h4><b>Folio</b> #<b><?=$requisicion->id;?></b></h4>
 			<p><b>Vacante: </b><?="$requisicion->nombre_posicion - $requisicion->nombre_track"; ?></p>
 			<p><b>Área: </b><?=$requisicion->nombre_area;?></p>
+			<p><b>Rechaza: </b><?=$quien;?></p>
 			<p><b>Motivo de rechazo: </b><?=$requisicion->razon;?></p>
 			<p>Ingresa a <a href='http://intranet.advanzer.com:3000/requisicion/ver/<?= $requisicion->id;?>'>Portal Personal >> Servicios >> Requisiciones</a> para corregir la solicitud</p>
 		</div>
