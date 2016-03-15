@@ -367,7 +367,7 @@ class Requisicion extends CI_Controller {
 
 		$objPHPExcel = PHPExcel_IOFactory::createReader('Excel2007');
 		$objPHPExcel->setReadDataOnly(true);
-		$objPHPExcel = $objPHPExcel->load($_SERVER['DOCUMENT_ROOT'].'advanzer/assets/docs/requisicion_personal.xlsx');
+		$objPHPExcel = $objPHPExcel->load($_SERVER['DOCUMENT_ROOT'].'/assets/docs/requisicion_personal.xlsx');
 
 		$objSheet=$objPHPExcel->setActiveSheetIndex(0);
 		//Merge
