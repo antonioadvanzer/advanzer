@@ -99,9 +99,6 @@ class Main extends CI_Controller {
 			if($client->isAccessTokenExpired()) {
 				$authUrl = $client->createAuthUrl();
 				header('Location: ' . filter_var($authUrl, FILTER_SANITIZE_URL));
-			}else{
-				echo "No ha expirado".$client->getAccessToken();
-				exit();
 			}
 			/*$NewAccessToken = json_decode($_SESSION['access_token']);
 			$client->refreshToken($NewAccessToken->access_token);*/
