@@ -372,8 +372,7 @@ class Requisicion extends CI_Controller {
 		$objSheet=$objPHPExcel->setActiveSheetIndex(0);
 		//Merge
 			$objSheet->mergeCells('C1:G1');
-			$objSheet->mergeCells('B2:D2');
-			$objSheet->mergeCells('F2:G2');
+			$objSheet->mergeCells('B2:G2');
 			$objSheet->mergeCells('A3:G3');
 			$objSheet->mergeCells('B4:G4');
 			$objSheet->mergeCells('B5:G5');
@@ -453,9 +452,8 @@ class Requisicion extends CI_Controller {
 
 			$objSheet->setCellValue('B1',$requisicion->id)
 			->setCellValue('B2',$requisicion->nombre_solicita)
-			->setCellValue('D2',$requisicion->nombre_posicion)       
 			->setCellValue('B4',$requisicion->fecha_solicitud)
-			->setCellValue('B5',$requisicion->nombre_track)
+			->setCellValue('D2',$requisicion->nombre_posicion)
 			->setCellValue('B6',1)
 			->setCellValue('B8',$empresa)
 			->setCellValue('B9',$requisicion->nombre_area)
@@ -478,7 +476,7 @@ class Requisicion extends CI_Controller {
 			->setCellValue('B32',$requisicion->observaciones)
 			->setCellValue('B34',$requisicion->entrevista);
 
-		$file_name = "requisicion_".$requisicion->id.".xlsx";
+		$file_name = "requisicion_".$requisicion->id;
 		header('Content-Type: application/vnd.ms-excel');
 		header('Content-Disposition: attachment;filename="'.$file_name.'"');
 		header('Cache-Control: max-age=0');		
