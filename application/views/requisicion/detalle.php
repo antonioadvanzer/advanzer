@@ -842,7 +842,7 @@
 				solicita=<?= $requisicion->solicita;?>;
 				estatus=<?= $requisicion->estatus;?>;
 				if(estatus != 4 || usuario != solicita){
-					$("#update :input:not(button)").attr("disabled", true).css('background-color','white');
+					$("#update :input:not(button)").attr("disabled", true).css({'background-color':'white','cursor':'default'});
 					$("#update button").attr("disabled", false).css('cursor','pointer');
 				}
 			}
