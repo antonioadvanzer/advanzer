@@ -659,13 +659,13 @@
 				this.picker.css({
 					top: top,
 					right: right,
-					zIndex: zIndex
+					zIndex: 10
 				});
 			} else {
 				this.picker.css({
 					top: top,
 					left: left,
-					zIndex: zIndex
+					zIndex: 10
 				});
 			}
 			return this;

@@ -14,7 +14,7 @@ class User_model extends CI_Model{
 			->where('S.colaborador',$colaborador);
 		$result = $this->db->get()->result();
 		foreach ($result as $solicitud) {
-			if($solicitud->tipo == 4):
+			if($solicitud->tipo == 3):
 				$solicitud->detalle = $this->db->where('solicitud',$solicitud->id)->get('Detalle_Viaticos')->first_row();
 			endif;
 		}
@@ -30,7 +30,7 @@ class User_model extends CI_Model{
 			->join('Users U','U.id = S.colaborador');
 		$result = $this->db->get()->result();
 		foreach ($result as $solicitud) {
-			if($solicitud->tipo == 4):
+			if($solicitud->tipo == 3):
 				$solicitud->detalle = $this->db->where('solicitud',$solicitud->id)->get('Detalle_Viaticos')->first_row();
 			endif;
 		}
@@ -38,7 +38,7 @@ class User_model extends CI_Model{
 	}
 
 	function getSolicitudes(){
-		$result=$this->db->select('Sv.id,Sv.dias,Sv.desde,Sv.hasta,Sv.regresa,Sv.fecha_solicitud,Sv.observaciones,U.nombre,Sv.tipo,Sv.autorizador,Sv.estatus,Sv.razon')
+		$result=$this->db->select('Sv.*,U.nombre')
 			->from('Solicitudes Sv')->join('Users U','U.id = Sv.colaborador')->get()->result();
 		foreach ($result as $solicitud) :
 			$solicitud->autorizador=$this->db->where('id',$solicitud->autorizador)->get('Users')->first_row()->nombre;
@@ -94,7 +94,7 @@ class User_model extends CI_Model{
 
 	function getPagination($flag) {
 		$this->db->select('U.id,U.nomina,U.categoria,U.plaza,U.nombre,U.email,U.foto,U.empresa,U.estatus,A.nombre area,
-			T.nombre track,P.nombre posicion');
+			T.nombre track,P.nombre posicion,U.fecha_ingreso');
 		$this->db->join('Areas A','U.area = A.id','LEFT OUTER');
 		$this->db->join('Posicion_Track PT','PT.id = U.posicion_track','LEFT OUTER');
 		$this->db->join('Tracks T','PT.track = T.id','LEFT OUTER');
@@ -112,8 +112,7 @@ class User_model extends CI_Model{
 	}
 
 	function searchById($id) {
-		$this->db->select('U.id,U.email,U.nombre,U.foto,U.empresa,U.estatus,U.categoria,U.nomina,U.area,U.plaza,A.nombre nombre_area,U.tipo,U.jefe,
-			U.fecha_ingreso,P.id posicion, T.id track,P.nivel nivel_posicion,T.nombre nombre_track,P.nombre nombre_posicion,U.fecha_ingreso');
+		$this->db->select('U.*,A.nombre nombre_area,P.id posicion,T.id track,P.nivel nivel_posicion,T.nombre nombre_track,P.nombre nombre_posicion');
 		$this->db->join('Posicion_Track PT','PT.id = U.posicion_track','LEFT OUTER');
 		$this->db->join('Posiciones P','P.id = PT.posicion','LEFT OUTER');
 		$this->db->join('Tracks T','T.id = PT.track','LEFT OUTER');

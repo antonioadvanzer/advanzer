@@ -10,6 +10,7 @@ class Main extends CI_Controller {
     	$this->load->model('user_model');
     	$this->load->model('evaluacion_model');
     	$this->load->model('requisicion_model');
+    	$this->load->model('solicitudes_model');
     }
  
     public function index() {
@@ -95,6 +96,13 @@ class Main extends CI_Controller {
 
 		// Get User Data from Google and store them in $data
 		if ($client->getAccessToken()) {
+			if($client->isAccessTokenExpired()) {
+				$authUrl = $client->createAuthUrl();
+				header('Location: ' . filter_var($authUrl, FILTER_SANITIZE_URL));
+			}else{
+				echo "No ha expirado".$client->getAccessToken();
+				exit();
+			}
 			/*$NewAccessToken = json_decode($_SESSION['access_token']);
 			$client->refreshToken($NewAccessToken->access_token);*/
 			$userData = $objOAuthService->userinfo->get();
@@ -619,5 +627,70 @@ class Main extends CI_Controller {
 		$data['solicitudes'] = $this->user_model->getSolicitudes();
 		$this->layout->title('Advanzer - Solicitudes');
 		$this->layout->view('servicio/admin_solicitudes',$data);
+	}
+
+	public function vacation_expired() {
+		$vacaciones=$this->solicitudes_model->getVacacionesExpired();
+		foreach ($vacaciones as $registro) :
+			$datos=array(
+				'dias_acumulados'=>(int)$registro->dias_acumulados-(int)$registro->dias_uno,
+				'dias_uno'=>$registro->dias_dos,
+				'vencimiento_uno'=>$registro->vencimiento_dos,
+				'dias_dos'=>null,
+				'vencimiento_dos'=>null,
+			);
+			$this->solicitudes_model->actualiza_dias_vacaciones($registro->colaborador,$datos);
+		endforeach;
+	}
+
+	public function vacation_register() {
+		$colaboradores=$this->user_model->getPagination(null);
+		foreach ($colaboradores as $colaborador):
+			$aniversario=date('m-d',strtotime($colaborador->fecha_ingreso));
+			if($aniversario == date('m-d')):
+				$ingreso=new DateTime($colaborador->fecha_ingreso);
+				$hoy=new DateTime(date('Y-m-d'));
+				$diff = $ingreso->diff($hoy);
+				switch ($diff->y):
+					case 1: $dias=6;										break;
+					case 2: $dias=8;										break;
+					case 3: $dias=10;										break;
+					case 4: $dias=12;										break;
+					case 5:case 6:case 7:case 8:case 9: $dias=14;			break;
+					case 10:case 11:case 12:case 13:case 14: $dias=16;		break;
+					case 15:case 16:case 17:case 18:case 19: $dias=18;		break;
+					case 20:case 21:case 22:case 23:case 24: $dias=20;		break;
+					default: $dias=22;										break;
+				endswitch;
+				if($acumulados = $this->solicitudes_model->getAcumulados($colaborador->id)):
+					$datos['dias_dos']=$dias;
+					$datos['vencimiento_dos'] = strtotime('+18 month',strtotime($colaborador->fecha_ingreso));
+					$datos['dias_acumulados'] = (int)$acumulados->dias_acumulados + (int)$dias;
+				else:
+					$datos['dias_uno']=$dias;
+					$datos['vencimiento_uno'] = strtotime('+18 month',strtotime($colaborador->fecha_ingreso));
+					$datos['dias_acumulados'] = $dias;
+				endif;
+				$this->solicitudes_model->actualiza_dias_vacaciones($colaborador->id,$datos);
+			endif;
+		endforeach;
+	}
+
+	public function solicitud_expired() {
+		$solicitudes = $this->solicitudes_model->getAll();
+		foreach ($solicitudes as $solicitud):
+			//identificar las solicitudes que no han sido canceladas o cerradas
+			if(($solicitud->estatus==2 && $solicitud->auth_ch==1) || !in_array($solicitud->estatus,array(0,2,4))):
+				$cancelacion = strtotime('+30 days',strtotime($solicitud->fecha_ultima_modificacion));
+				$cancelacion = date('Y-m-d',$cancelacion);
+				$cancelacion = new DateTime($cancelacion);
+				$hoy=new DateTime(date('Y-m-d'));
+				if($hoy->diff($cancelacion)->d == 0):
+					$datos['estatus']=0;
+					$datos['razon']='Se cancela por falta de seguimiento al día '.date('Y-m-d');
+					$this->solicitudes_model->update_solicitud($solicitud->id,$datos);
+				endif;
+			endif;
+		endforeach;
 	}
 }
