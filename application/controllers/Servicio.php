@@ -169,7 +169,8 @@ class Servicio extends CI_Controller {
 			'regresa'=>$this->input->post('regresa'),
 			'observaciones'=>$this->input->post('observaciones'),
 			'tipo'=>$this->input->post('tipo'),
-			'motivo'=>$this->input->post('motivo')
+			'motivo'=>$this->input->post('motivo'),
+			'fecha_solicitud'=>date('Y-m-d')
 		);
 		if($datos['tipo'] == 2):
 			if(!in_array($datos['motivo'],array('MATRIMONIO','NACIMIENTO DE HIJOS','FALLECIMIENTO DE CÓNYUGE','FALLECIMIENTO DE HERMANOS','FALLECIMIENTO DE HIJOS','FALLECIMIENTO DE PADRES','FALLECIMIENTO DE PADRES POLÍTICOS')))
