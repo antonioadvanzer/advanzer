@@ -114,8 +114,7 @@
 			<div class="col-md-2"></div>
 			<div class="col-md-8">
 				<div class="btn-group btn-group-lg" role="group" aria-label="...">
-					<button id="solicitar" type="submit" class="btn btn-primary" style="min-width:200px;text-align:center;display:inline;">Solicitar</button>
-					<!--<button id="cancelar" type="button" class="btn" style="min-width:200px;text-align:center;display:none;">Cancelar</button>-->
+					<button id="solicitar" type="submit" class="btn btn-primary" style="min-width:200px;text-align:center;">Solicitar</button>
 				</div>
 			</div>
 		</div>

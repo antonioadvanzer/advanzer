@@ -9,18 +9,21 @@ class Solicitudes_model extends CI_Model{
 	}
 
 	function getAll() {
-		$result = $this->db->select('Sv.id,Sv.dias,Sv.desde,Sv.hasta,Sv.regresa,Sv.fecha_solicitud,Sv.observaciones,U.nombre,Sv.estatus,Sv.autorizador,Sv.razon')
-			->from('Solicitudes Sv')->join('Users U','U.id = Sv.colaborador')->where('Sv.tipo',1)->get()->result();
-		foreach ($result as $colaborador) :
-			$colaborador->autorizador = $this->db->where('id',$colaborador->autorizador)->get('Users')->first_row()->nombre;
-		endforeach;
-		return $result;
+		return $this->db->get('Solicitudes')->result();
 	}
 
 	function getSolicitudById($id) {
 		$result = $this->db->where('id',$id)->get('Solicitudes')->first_row();
 		$result->nombre_solicita=$this->db->where('id',$result->colaborador)->get('Users')->first_row()->nombre;
 		$result->nombre_autorizador=$this->db->where('id',$result->autorizador)->get('Users')->first_row()->nombre;
+		if($result->tipo == 3):
+				$result->detalle = $this->db->where('solicitud',$result->id)->get('Detalle_Viaticos')->first_row();
+			endif;
+		return $result;
+	}
+
+	function getViaticosInfo($datos) {
+		$result = $this->db->where($datos)->join('Detalle_Viaticos','Detalle_Viaticos.solicitud=Solicitudes.id')->get('Solicitudes')->first_row();
 		return $result;
 	}
 
@@ -69,7 +72,7 @@ class Solicitudes_model extends CI_Model{
 		if($tipo==2 || $tipo==3)
 			$tipo='2 or S.tipo=3';
 		elseif($tipo==4){
-			$this->db->select('S.id,S.colaborador,S.autorizador,S.desde,S.hasta,S.regresa,S.observaciones,S.razon,S.estatus,S.fecha_solicitud,S.dias,S.tipo,centro_costo,motivo_viaje,origen,destino,tipo_vuelo,hotel,ubicacion,hotel_flag,autobus_flag,gasolina_flag,mensajeria_flag,vuelo_flag,renta_flag,taxi_flag,taxi_aero_flag,hora_salida_uno,hora_salida_dos,hora_regreso_uno,hora_regreso_dos,fecha_salida_uno,fecha_salida_dos,fecha_regreso_uno,fecha_regreso_dos,ruta_salida_uno,ruta_salida_dos,ruta_regreso_uno,ruta_regreso_dos')->join('Detalle_Viaticos as DV ','solicitud=S.id');
+			$this->db->select('*')->join('Detalle_Viaticos as DV ','solicitud=S.id');
 		}
 		$result = $this->db->where('(S.tipo='.$tipo.') and ((S.colaborador = '.$colaborador.' and S.regresa >="'.date("Y-m-d").'" and S.estatus != 3) or (S.colaborador = '.$colaborador.' and S.estatus = 1))')->get('Solicitudes S');
 		if($result->num_rows() > 0)
@@ -95,5 +98,10 @@ class Solicitudes_model extends CI_Model{
 			return true;
 		else
 			return false;
+	}
+
+	function getVacacionesExpired() {
+		$this->db->where('vencimiento_uno <',date('Y-m-d'));
+		return $this->db->get('Vacaciones')->result();
 	}
 }
