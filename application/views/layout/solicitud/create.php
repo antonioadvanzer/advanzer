@@ -117,7 +117,7 @@
 				switch($solicitud->tipo){
 					case 1: $tipo="VACACIONES";											break;
 					case 2: $tipo="PERMISO DE AUSENCIA ($solicitud->motivo)";			break;
-					case 4: $tipo="VIÁTICOS Y GASTOS DE VIAJE";							break;
+					case 3: $tipo="VIÁTICOS Y GASTOS DE VIAJE ($solicitud->motivo)";	break;
 					default: $tipo="";													break;
 				}
 			echo $tipo; ?></p>

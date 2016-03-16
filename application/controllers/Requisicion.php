@@ -40,6 +40,10 @@ class Requisicion extends CI_Controller {
 		$this->layout->title('Advanzer - Detalle Requisición');
 		$this->layout->view('requisicion/detalle',$data);
 	}
+	public function choose(){
+		$this->layout->title('Advanzer - Elegir Requisición');
+		$this->layout->view('requisicion/choose');
+	}
 	public function nueva(){
 		$this->valida_sesion();
 		$data=array();

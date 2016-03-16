@@ -1,6 +1,6 @@
 <div class="jumbotron">
 	<div class="container">
-		<h2 align="left"><b>Solicitudes</b></h2>
+		<h2 align="left"><b>Solicitudes Capturadas</b></h2>
 	</div>
 </div>
 <div class="container">
@@ -11,7 +11,6 @@
 	<div class="row">
 		<div class="col-md-12">
 			<?php if(!empty($solicitudes)): ?>
-				<h3>Solicitudes Capturadas</h3></a>
 				<table id="tbl" class="display" align="center" data-toggle="table" data-hover="true" data-striped="true">
 					<thead>
 						<tr>
@@ -22,26 +21,27 @@
 							<th data-halign="center">Días</th>
 							<th data-halign="center">Desde</th>
 							<th data-halign="center">Hasta</th>
-							<th data-halign="center">Regresa</th>
 							<th data-halign="center">Observaciones</th>
-							<th data-halign="center">Estatus</th>
 							<th data-halign="center">Razón</th>
+							<th data-halign="center">Estatus</th>
 						</tr>
 					</thead>
 					<tbody data-link="row" class="rowlink">
 						<?php foreach ($solicitudes as $solicitud):
 							switch ($solicitud->estatus) {
-							 	case 0: $estatus="CANCELADA";						break;
-							 	case 1: $estatus="ENVIADA";							break;
-							 	case 2: $estatus="AUTORIZADA";						break;
-							 	case 3: $estatus="RECHAZADA";						break;
-							 	case 4: $estatus="AUTORIZADA POR CAPITAL HUMANO";	break;
+							 	case 0: $estatus="CANCELADA";$razon=$solicitud->razon;							break;
+							 	case 1: $estatus="ENVIADA";$razon=$solicitud->motivo;							break;
+							 	case 2: $estatus="AUTORIZADA";$razon=$solicitud->motivo;
+							 		if($solicitud->auth_ch)
+							 			$estatus='PENDIENTE AUTORIZACIÓN DE CAPITAL HUMANO';
+							 		break;
+							 	case 3: $estatus="RECHAZADA";$razon=$solicitud->razon;							break;
+							 	case 4: $estatus="AUTORIZADA POR CAPITAL HUMANO";$razon=$solicitud->motivo;		break;
 							}
 							switch ($solicitud->tipo) {
 							 	case 1: $tipo="VACACIONES";				break;
-							 	case 2: $tipo='PERMISO CON GOCE';		break;
-							 	case 3: $tipo='PERMISO SIN GOCE';		break;
-							 	case 4: $tipo='VIATICOS Y GASTOS DE VIAJE';		break;
+							 	case 2: $tipo='PERMISO DE AUSENCIA';		break;
+							 	case 3: $tipo='VIATICOS Y GASTOS DE VIAJE';		break;
 							 	default:
 							 		# code...
 							 		break;
@@ -54,10 +54,9 @@
 								<td style="cursor:default;"><small><?= $solicitud->dias;?></small></td>
 								<td style="cursor:default;"><small><?= $solicitud->desde;?></small></td>
 								<td style="cursor:default;"><small><?= $solicitud->hasta;?></small></td>
-								<td style="cursor:default;"><small><?= $solicitud->regresa;?></small></td>
 								<td style="cursor:default;"><small><?= $solicitud->observaciones;?></small></td>
+								<td style="cursor:default;"><small><?= $razon;?></small></td>
 								<td style="cursor:default;"><small><?= $estatus;?></small></td>
-								<td style="cursor:default;"><small><?= $solicitud->razon;?></small></td>
 							</tr>
 						<?php endforeach; ?>
 					</tbody>

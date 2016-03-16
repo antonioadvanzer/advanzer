@@ -13,7 +13,7 @@
 		</div>
 	</div>
 	<div>
-		<label style="cursor:pointer" onclick="location.href='<?= base_url('requisicion/nueva/');?>'">
+		<label style="cursor:pointer" onclick="location.href='<?= base_url('requisicion/choose/');?>'">
 			<span class="glyphicon glyphicon-plus"></span>Nueva Requisición</label>
 	</div>
 	<div class="row" align="center">
