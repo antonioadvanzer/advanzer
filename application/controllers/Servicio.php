@@ -28,6 +28,15 @@ class Servicio extends CI_Controller {
 		$this->layout->title('Advanzer - Comprobación de Gastos');
 		$this->layout->view('servicio/formato_comprobacion',$data);
 	}
+	public function getViaticosInfo() {
+		$datos=array(
+			'colaborador'=>$this->input->post('colaborador'),
+			'tipo'=>$this->input->post('tipo'),
+			'centro_costo'=>$this->input->post('centro_costo')
+		);
+		$response['viaticos']=$this->solicitudes_model->getViaticosInfo($datos);
+		echo json_encode($response);
+	}
 	public function viaticos_gastos() {
 		$data=array();
 		$data['yo']=$this->user_model->searchById($this->session->userdata('id'));
@@ -58,7 +67,7 @@ class Servicio extends CI_Controller {
 		$data=array();
 		$data['yo']=$this->user_model->searchById($this->session->userdata('id'));
 		$data['colaboradores']=$this->user_model->getAll();
-		$this->layout->title('Advanzer - Solicita Vacaciones');
+		$this->layout->title('Advanzer - Solicita Permiso');
 		$this->layout->view('servicio/formato_permiso',$data);
 	}
 	public function solicitudes() {
@@ -162,31 +171,34 @@ class Servicio extends CI_Controller {
 			'tipo'=>$this->input->post('tipo'),
 			'motivo'=>$this->input->post('motivo')
 		);
-		if(!in_array($datos['motivo'],array('MATRIMONIO','NACIMIENTO DE HIJOS','FALLECIMIENTO DE CÓNYUGE','FALLECIMIENTO DE HERMANOS','FALLECIMIENTO DE HIJOS','FALLECIMIENTO DE PADRES','FALLECIMIENTO DE PADRES POLÍTICOS')))
-			$datos['auth_ch']=1;
-		elseif($this->input->post('un_anio')==1)
-			$datos['auth_ch']=1;
-		//validación de fecha de  ingreso
-		if($ochoMeses=$this->input->post('ochoMeses')):
-			$colaborador=$this->user_model->searchById($datos['colaborador']);
-			$disponibles=$this->input->post('acumulados')+$this->input->post('disponibles');
-			$desde=new DateTime($datos['desde']);
-			$nueveMeses = strtotime ( '+9 month' , strtotime ( $colaborador->fecha_ingreso ) ) ;
-			$nueveMeses = date ( 'Y-m-d' , $nueveMeses );
-			$nueveMeses = new DateTime($nueveMeses);
-			if($nueveMeses->diff($desde)->format('%r'))
+		if($datos['tipo'] == 2):
+			if(!in_array($datos['motivo'],array('MATRIMONIO','NACIMIENTO DE HIJOS','FALLECIMIENTO DE CÓNYUGE','FALLECIMIENTO DE HERMANOS','FALLECIMIENTO DE HIJOS','FALLECIMIENTO DE PADRES','FALLECIMIENTO DE PADRES POLÍTICOS')))
 				$datos['auth_ch']=1;
-			//validación de días disponibles
-			if($datos['dias'] > $disponibles)
-			$datos['auth_ch']=1;
+			elseif($this->input->post('un_anio')==1)
+				$datos['auth_ch']=1;
+		endif;
+		if($datos['tipo'] == 1):
+			//validación de fecha de  ingreso
+			if($ochoMeses=$this->input->post('ochoMeses')):
+				$colaborador=$this->user_model->searchById($datos['colaborador']);
+				$disponibles=$this->input->post('acumulados')+$this->input->post('disponibles');
+				$desde=new DateTime($datos['desde']);
+				$nueveMeses = strtotime ( '+9 month' , strtotime ( $colaborador->fecha_ingreso ) ) ;
+				$nueveMeses = date ( 'Y-m-d' , $nueveMeses );
+				$nueveMeses = new DateTime($nueveMeses);
+				if($nueveMeses->diff($desde)->format('%r'))
+					$datos['auth_ch']=1;
+				//validación de días disponibles
+				if($datos['dias'] > $disponibles)
+				$datos['auth_ch']=1;
+			endif;
 		endif;
 		$this->db->trans_begin();
 		$solicitud=$this->solicitudes_model->registra_solicitud($datos);
 		$solicitud=$this->solicitudes_model->getSolicitudById($solicitud);
 		if($datos['tipo']==3):
-			$datos=array(
+			$data=array(
 				'centro_costo'=>$this->input->post('centro'),
-				'motivo_viaje'=>$this->input->post('motivo'),
 				'origen'=>$this->input->post('origen'),
 				'destino'=>$this->input->post('destino'),
 				'hotel_flag'=>$this->input->post('hotel_flag'),
@@ -198,22 +210,26 @@ class Servicio extends CI_Controller {
 				'mensajeria_flag'=>$this->input->post('mensajeria_flag'),
 				'taxi_aero_flag'=>$this->input->post('taxi_aero_flag'),
 				'tipo_vuelo'=>$this->input->post('tipo_vuelo'),
-				'hotel'=>$this->input->post('hotel'),
-				'ubicacion'=>$this->input->post('ubicacion'),
-				'hora_salida_uno'=>$this->input->post('hora_salida_uno'),
-				'fecha_salida_uno'=>$this->input->post('fecha_salida_uno'),
-				'ruta_salida_uno'=>$this->input->post('ruta_salida_uno'),
-				'hora_salida_dos'=>$this->input->post('hora_salida_dos'),
-				'fecha_salida_dos'=>$this->input->post('fecha_salida_dos'),
-				'ruta_salida_dos'=>$this->input->post('ruta_salida_dos'),
-				'hora_regreso_uno'=>$this->input->post('hora_regreso_uno'),
-				'fecha_regreso_uno'=>$this->input->post('fecha_regreso_uno'),
-				'ruta_regreso_uno'=>$this->input->post('ruta_regreso_uno'),
-				'hora_regreso_dos'=>$this->input->post('hora_regreso_dos'),
-				'fecha_regreso_dos'=>$this->input->post('fecha_regreso_dos'),
-				'ruta_regreso_dos'=>$this->input->post('ruta_regreso_dos')
+				'hora_salida'=>$this->input->post('hora_salida'),
+				'fecha_salida'=>$this->input->post('fecha_salida'),
+				'ruta_salida'=>$this->input->post('ruta_salida'),
+				'hora_regreso'=>$this->input->post('hora_regreso'),
+				'fecha_regreso'=>$this->input->post('fecha_regreso'),
+				'ruta_regreso'=>$this->input->post('ruta_regreso'),
+				'hospedaje'=>$this->input->post('hospedaje'),
+				'num_recompensa'=>$this->input->post('recompensas')
 			);
-			$this->solicitudes_model->update_detalle_viaticos($solicitud,$datos);
+			$this->solicitudes_model->update_detalle_viaticos($solicitud->id,$data);
+		endif;
+		if($datos['tipo']==2 && $_FILES['file']['tmp_name']!=""):
+			$ext = explode(".", $_FILES['file']['name']);
+			$config['upload_path'] = './assets/docs/permisos/';
+			$config['file_name'] = 'permiso_'.$solicitud->id.'.'.end($ext);
+			$config['overwrite'] = TRUE;
+			$config['allowed_types'] = '*';
+			$this->load->library('upload', $config);
+			if (!$this->upload->do_upload('file'))
+				echo $this->upload->display_errors('','');
 		endif;
 		if($this->db->trans_status() === FALSE){
 			$this->db->trans_rollback();
@@ -236,9 +252,10 @@ class Servicio extends CI_Controller {
 
 		echo json_encode($response);
 	}
-	public function autorizar_vacaciones() {
+	public function autorizar_solicitud() {
 		$id = $this->input->post('solicitud');
 		$datos['estatus']=$this->input->post('estatus');
+		$datos['usuario_modificacion']=$this->session->userdata('id');
 		$this->db->trans_begin();
 		$this->solicitudes_model->update_solicitud($id,$datos);
 		if($this->db->trans_status() === FALSE){
@@ -248,12 +265,19 @@ class Servicio extends CI_Controller {
 			$solicitud = $this->solicitudes_model->getSolicitudById($id);
 			$data['solicitud']=$solicitud;
 			if($solicitud->auth_ch==1 && $solicitud->estatus == 2){
-				$destinatario=array('perla.valdez@advanzer.com','micaela.llano@advanzer.com');
+				$destinatario='micaela.llano@advanzer.com';
 				$mensaje=$this->load->view("layout/solicitud/rh",$data,true);
 			}else{
 				$destinatario=$this->user_model->searchById($solicitud->colaborador)->email;
 				$mensaje=$this->load->view("layout/solicitud/auth",$data,true);
-				$this->actualiza_dias_disponibles($solicitud);
+				if($solicitud->tipo == 1)
+					$this->actualiza_dias_disponibles($solicitud);
+				if($solicitud->tipo == 3){
+					$this->genera_excel($solicitud);
+					$dest=array('viaticos@advanzer.com','recepcion@advanzer.com');
+					$msj=$this->load->view('layout/solicitud/viaticos',$data,true);
+					$this->sendMail($dest,$msj);
+				}
 			}
 			if(!$this->sendMail($destinatario,$mensaje)){
 				$this->db->trans_commit();
@@ -271,6 +295,7 @@ class Servicio extends CI_Controller {
 		$datos=array(
 			'razon'=>$this->input->post('razon'),
 			'estatus'=>$this->input->post('estatus'),
+			'usuario_modificacion'=>$this->session->userdata('id')
 		);
 		$id=$this->input->post('solicitud');
 		$this->db->trans_begin();
@@ -313,8 +338,8 @@ class Servicio extends CI_Controller {
 		$this->email->initialize($config);
 		$this->email->clear(TRUE);
 
-		$this->email->from('notificaciones.ch@advanzer.com','Servicios - Portal Personal');
-		$this->email->to(array('jesus.salas@advanzer.com','perla.valdez@advanzer.com','micaela.llano@advanzer.com'));//$this->email->to($destinatario);
+		$this->email->from('notificaciones.ch@advanzer.com','Solicitudes - Portal Personal');
+		$this->email->to('jesus.salas@advanzer.com');//,'perla.valdez@advanzer.com','micaela.llano@advanzer.com'));//$this->email->to($destinatario);
 		$this->email->subject('Aviso de Solicitud');
 		$this->email->message($mensaje);
 
@@ -353,5 +378,119 @@ class Servicio extends CI_Controller {
 		}
 		$datos['dias_acumulados']=$dias_acumulados;
 		$this->solicitudes_model->actualiza_dias_vacaciones($colaborador->id,$datos);
+	}
+
+	private function genera_excel($solicitud) {
+		$this->load->library('excel');
+
+		$objPHPExcel = new PHPExcel();
+		$objPHPExcel->getProperties()->setCreator("Portal Personal - Solicitudes - Advanzer de México")
+			->setLastModifiedBy("Portal Personal")
+			->setTitle("Detalle de Solicitud")
+			->setSubject("Detalle de Solicitud")
+			->setDescription("Detallado de nueva solicitud de Viáticos y Gastos de Viaje");
+		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+
+		//Style head
+			$objSheet = $objPHPExcel->getActiveSheet(0);
+			$objSheet->setTitle('Detalle Solicitud');
+			$objSheet->getStyle('A1:V1')->getFont()->setBold(true)->setName('Calibri')->setSize(12)->getColor()->setRGB('FFFFFF');
+			$objSheet->getStyle('A1:V1')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+			$objSheet->getStyle('A1:V1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			$objSheet->getStyle('A1:V1')->getFill('')->applyFromArray(array('type'=>PHPExcel_Style_Fill::FILL_SOLID, 'startcolor'=>array('rgb'=>'5FC16F')));
+			$objSheet->getRowDimension(1)->setRowHeight(35);
+
+		// write header
+			$objSheet->getCell('A1')->setValue('AÑO');
+			$objSheet->getCell('B1')->setValue('MES');
+			$objSheet->getCell('C1')->setValue('F.COMPRA');
+			$objSheet->getCell('D1')->setValue('NOMBRE');
+			$objSheet->getCell('E1')->setValue('RUTA');
+			$objSheet->getCell('F1')->setValue('CENTRO DE COSTO');
+			$objSheet->getCell('G1')->setValue('FECHA SALIDA');
+			$objSheet->getCell('H1')->setValue('FECHA REGRESO');
+			$objSheet->getCell('I1')->setValue('HORARIO SALIDA');
+			$objSheet->getCell('J1')->setValue('HORARIO REGRESO');
+			$objSheet->getCell('K1')->setValue('AEROLINEA');
+			$objSheet->getCell('L1')->setValue('COSTO');
+			$objSheet->getCell('M1')->setValue('CLAVE');
+			$objSheet->getCell('N1')->setValue('CARGO X SERVICIO');
+			$objSheet->getCell('O1')->setValue('AGENCIA');
+			$objSheet->getCell('P1')->setValue('CARGO');
+			$objSheet->getCell('Q1')->setValue('FACTURA CXS');
+			$objSheet->getCell('R1')->setValue('CLAVE AGENCIA');
+			$objSheet->getCell('S1')->setValue('FACTURA AEROLINEA');
+			$objSheet->getCell('T1')->setValue('TARIIFA NORMAL');
+			$objSheet->getCell('U1')->setValue('EJECUTIVO');
+			$objSheet->getCell('V1')->setValue('F VIATICO');
+
+		//write content
+			$fecha=strtotime($solicitud->fecha_solicitud);
+			$hora_salida=strtotime($solicitud->detalle->hora_salida);
+			$hora_regreso=strtotime($solicitud->detalle->hora_regreso);
+			$objSheet->getCell('A2')->setValue(date('Y',$fecha));
+			$objSheet->getCell('B2')->setValue(strftime('%B',$fecha));
+			$objSheet->getCell('C2')->setValue('');
+			$objSheet->getCell('D2')->setValue($solicitud->nombre_solicita);
+			$objSheet->getCell('E2')->setValue($solicitud->detalle->origen.' - '.$solicitud->detalle->destino);
+			$objSheet->getCell('F2')->setValue($solicitud->detalle->centro_costo);
+			$objSheet->getCell('G2')->setValue($solicitud->detalle->fecha_salida);
+			$objSheet->getCell('H2')->setValue($solicitud->detalle->fecha_regreso);
+			$objSheet->getCell('I2')->setValue(strftime('%H:%M',$hora_salida));
+			$objSheet->getCell('J2')->setValue(strftime('%H:%M',$hora_regreso));
+			$objSheet->getCell('K2')->setValue('');
+			$objSheet->getCell('L2')->setValue('');
+			$objSheet->getCell('M2')->setValue('');
+			$objSheet->getCell('N2')->setValue('');
+			$objSheet->getCell('O2')->setValue('');
+			$objSheet->getCell('P2')->setValue('');
+			$objSheet->getCell('Q2')->setValue('');
+			$objSheet->getCell('R2')->setValue('');
+			$objSheet->getCell('S2')->setValue('');
+			$objSheet->getCell('T2')->setValue('');
+			$objSheet->getCell('U2')->setValue('');
+			$objSheet->getCell('V2')->setValue($solicitud->id);
+			$objSheet->getStyle('A2:AD2')->getAlignment()->setWrapText(true);
+			$objSheet->getRowDimension(2)->setRowHeight(-1);
+
+		//style content
+			$objSheet->getStyle('G2')->getNumberFormat()->setFormatCode('yyyy-mm-dd');
+			$objSheet->getStyle('H2')->getNumberFormat()->setFormatCode('yyyy-mm-dd');
+
+		$file_name = "solicitud_".$solicitud->id.".xlsx";
+
+		$objWriter->save(getcwd()."/assets/docs/$file_name");
+	}
+
+	public function leeXML() {
+		if($_FILES['factura']['tmp_name']!=""):
+			$this->load->helper('xml');
+			$xml = simplexml_load_file($_FILES['factura']['tmp_name']);
+			foreach ($xml->xpath('//cfdi:Comprobante') as $cfdiComprobante):
+				$response['fecha'] = substr($cfdiComprobante['fecha'],0,10);
+				$response['subTotal'] = $cfdiComprobante['subTotal'];
+				$response['total'] = $cfdiComprobante['total'];
+			endforeach;
+			foreach ($xml->xpath('//cfdi:Comprobante//cfdi:Emisor') as $Emisor)
+					$response['prestador'] = $Emisor['nombre'];
+			foreach ($xml->xpath('//cfdi:Comprobante//cfdi:Impuestos') as $Traslado)
+				$response['iva'] = $Traslado['totalImpuestosTrasladados'][0];
+			echo json_encode($response);
+		endif;
+	}
+
+	public function guardar_comprobante() {
+		$datos=array(
+			'colaborador'=>$this->input->post('colaborador'),
+			'centro_costo'=>$this->input->post('centro_costo'),
+			'diferencia'=>(float)$this->input->post('diferencia'),
+			'fecha'=>$this->input->post('fecha')[0],
+			'concepto'=>$this->input->post('concepto')[0],
+			'prestador'=>$this->input->post('prestador')[0],
+			'importe'=>$this->input->post('importe')[0],
+			'iva'=>$this->input->post('iva')[0],
+			'total'=>$this->input->post('total')[0]
+		);
+		print_r($datos);
 	}
 }

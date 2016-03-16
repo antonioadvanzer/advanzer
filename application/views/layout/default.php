@@ -9,15 +9,15 @@
 	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/bootstrap-table.css');?>">
 	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/bootstrap-theme.css');?>">
 	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/style.css');?>">
-	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/datepicker/css/bootstrap-datepicker.min.css');?>">
+	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/datepicker/css/bootstrap-datepicker.css');?>">
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/jquery.dataTables.min.css');?>">
 	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/bootstrap-select.css');?>">
 	<script src="<?= base_url('assets/js/jquery.min.js');?>"></script>
-	<script src="<?= base_url('assets/js/bootstrap.min.js');?>"></script>
 	<!--<script src="<?= base_url('assets/js/bootstrap-table.js');?>"></script>-->
 	<script src="<?= base_url('assets/js/docs.min.js');?>"></script>
 	<script src="<?= base_url('assets/datepicker/js/bootstrap-datepicker.min.js');?>"></script>
+	<script src="<?= base_url('assets/js/bootstrap.min.js');?>"></script>
 	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 	<script src="<?= base_url('assets/js/moment.min.js');?>"></script>
 	<!--<script src="<?= base_url('assets/js/tableExport.js');?>"></script>
@@ -135,10 +135,9 @@
 											<?php endif; 
 											if($this->session->userdata('tipo') > 3 || $this->session->userdata('area')==4): ?>
 												<li><a href="<?= base_url('requisiciones');?>">Todas las Requisiciones</a></li>
-												<!--<li><a href="<?= base_url('admin_solicitudes');?>">Todas las Solicitudes</a></li>-->
+												<li><a href="<?= base_url('admin_solicitudes');?>">Todas las Solicitudes</a></li>
 												<?php if($this->session->userdata('tipo') > 3): ?>
 													<li><a href="<?= base_url('evaluacion');?>">Evaluaciones</a></li>
-													<!--<li><a href="<?= base_url('evaluacion/index/false');?>">Evaluaciones Confidencial</a></li>-->
 													<li><a href="<?= base_url('evaluacion/por_evaluador');?>">Evaluaciones por Evaluador</a></li>
 													<li><a href="<?= base_url('evaluacion/pendientes');?>">Evaluaciones Pendientes de Enviar</a></li>
 												<?php endif;
@@ -180,9 +179,9 @@
 								if($this->session->userdata('posicion') <= 5 || in_array($this->session->userdata('tipo'),array(4,5,6))): ?>
 									<li><a href="<?= base_url('evaluacion/resumen');?>">Resumen de Evaluación 360</a></li>
 								<?php endif;?>
-								<!--<li><a href="<?= base_url('vacaciones');?>">Vacaciones</a></li>-->
-								<!--<li><a href="<?= base_url('permiso');?>">Permisos de Ausencia</a></li>-->
-								<!--<li><a href="<?= base_url('viaticos_gastos');?>">Viáticos y Gastos de Viaje</a></li>-->
+								<li><a href="<?= base_url('vacaciones');?>">Vacaciones</a></li>
+								<li><a href="<?= base_url('permiso');?>">Permisos de Ausencia</a></li>
+								<li><a href="<?= base_url('viaticos_gastos');?>">Viáticos y Gastos de Viaje</a></li>
 							</ul>
 						</li>
 					</ul>
