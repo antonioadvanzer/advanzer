@@ -2559,7 +2559,7 @@ output {
   width: 100%;
   height: 34px;
   padding: 6px 12px;
-  font-size: 14px;
+  font-size: 12.5pt;
   line-height: 1.42857143;
   color: #555;
   background-color: #fff;
@@ -2995,20 +2995,20 @@ select[multiple].input-lg {
 @media (min-width: 768px) {
   .form-horizontal .form-group-lg .control-label {
     padding-top: 14.333333px;
-    font-size: 18px;
+    font-size: 14pt;
   }
 }
 @media (min-width: 768px) {
   .form-horizontal .form-group-sm .control-label {
     padding-top: 6px;
-    font-size: 12px;
+    font-size: 12.5pt;
   }
 }
 .btn {
   display: inline-block;
   padding: 6px 12px;
   margin-bottom: 0;
-  font-size: 14px;
+  font-size: 14pt;
   font-weight: normal;
   line-height: 1.42857143;
   text-align: center;
@@ -3493,21 +3493,21 @@ fieldset[disabled] .btn-link:focus {
 .btn-lg,
 .btn-group-lg > .btn {
   padding: 10px 16px;
-  font-size: 18px;
+  font-size: 15pt;
   line-height: 1.3333333;
   border-radius: 6px;
 }
 .btn-sm,
 .btn-group-sm > .btn {
   padding: 5px 10px;
-  font-size: 12px;
+  font-size: 10pt;
   line-height: 1.5;
   border-radius: 3px;
 }
 .btn-xs,
 .btn-group-xs > .btn {
   padding: 1px 5px;
-  font-size: 12px;
+  font-size: 10pt;
   line-height: 1.5;
   border-radius: 3px;
 }
@@ -3586,7 +3586,7 @@ tbody.collapse.in {
   min-width: 160px;
   padding: 5px 0;
   margin: 2px 0 0;
-  font-size: 14px;
+  font-size: 12.5pt;
   text-align: left;
   list-style: none;
   background-color: #fff;
@@ -3661,7 +3661,7 @@ tbody.collapse.in {
 .dropdown-header {
   display: block;
   padding: 3px 20px;
-  font-size: 12px;
+  font-size: 11pt;
   line-height: 1.42857143;
   color: #777;
   white-space: nowrap;
@@ -3892,7 +3892,7 @@ tbody.collapse.in {
 .input-group-lg > .input-group-btn > .btn {
   height: 46px;
   padding: 10px 16px;
-  font-size: 18px;
+  font-size: 16pt;
   line-height: 1.3333333;
   border-radius: 6px;
 }
@@ -3915,7 +3915,7 @@ select[multiple].input-group-lg > .input-group-btn > .btn {
 .input-group-sm > .input-group-btn > .btn {
   height: 30px;
   padding: 5px 10px;
-  font-size: 12px;
+  font-size: 11pt;
   line-height: 1.5;
   border-radius: 3px;
 }
@@ -3950,7 +3950,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 }
 .input-group-addon {
   padding: 6px 12px;
-  font-size: 14px;
+  font-size: 12.5pt;
   font-weight: normal;
   line-height: 1;
   color: #555;
@@ -3961,12 +3961,12 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 }
 .input-group-addon.input-sm {
   padding: 5px 10px;
-  font-size: 12px;
+  font-size: 12.5pt;
   border-radius: 3px;
 }
 .input-group-addon.input-lg {
   padding: 10px 16px;
-  font-size: 18px;
+  font-size: 16pt;
   border-radius: 6px;
 }
 .input-group-addon input[type="radio"],
@@ -4328,7 +4328,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   float: left;
   height: 50px;
   padding: 15px 15px;
-  font-size: 18px;
+  font-size: 15pt;
   line-height: 20px;
 }
 .navbar-brand:hover,
@@ -4828,7 +4828,7 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
 .pagination-lg > li > a,
 .pagination-lg > li > span {
   padding: 10px 16px;
-  font-size: 18px;
+  font-size: 15pt;
   line-height: 1.3333333;
 }
 .pagination-lg > li:first-child > a,
@@ -4844,7 +4844,7 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
 .pagination-sm > li > a,
 .pagination-sm > li > span {
   padding: 5px 10px;
-  font-size: 12px;
+  font-size: 11pt;
   line-height: 1.5;
 }
 .pagination-sm > li:first-child > a,
@@ -4966,7 +4966,7 @@ a.label:focus {
   display: inline-block;
   min-width: 10px;
   padding: 3px 7px;
-  font-size: 12px;
+  font-size: 11pt;
   font-weight: bold;
   line-height: 1;
   color: #fff;
@@ -5021,7 +5021,7 @@ a.badge:focus {
 }
 .jumbotron p {
   margin-bottom: 15px;
-  font-size: 21px;
+  font-size: 19pt;
   font-weight: 200;
 }
 .jumbotron > hr {
@@ -5046,7 +5046,7 @@ a.badge:focus {
   }
   .jumbotron h1,
   .jumbotron .h1 {
-    font-size: 63px;
+    font-size: 55pt;
   }
 }
 .thumbnail {
@@ -5187,7 +5187,7 @@ a.thumbnail.active {
   float: left;
   width: 0;
   height: 100%;
-  font-size: 12px;
+  font-size: 12.5pt;
   line-height: 20px;
   color: #fff;
   text-align: center;
@@ -5521,7 +5521,7 @@ button.list-group-item-danger.active:focus {
 .panel-title {
   margin-top: 0;
   margin-bottom: 0;
-  font-size: 16px;
+  font-size: 16pt;
   color: inherit;
 }
 .panel-title > a,
@@ -5891,7 +5891,7 @@ button.list-group-item-danger.active:focus {
 }
 .close {
   float: right;
-  font-size: 21px;
+  font-size: 21pt;
   font-weight: bold;
   line-height: 1;
   color: #000;
@@ -6043,7 +6043,7 @@ button.close {
   z-index: 1070;
   display: block;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 12px;
+  font-size: 12.5pt;
   font-style: normal;
   font-weight: normal;
   line-height: 1.42857143;
@@ -6162,7 +6162,7 @@ button.close {
   max-width: 276px;
   padding: 1px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 14px;
+  font-size: 14pt;
   font-style: normal;
   font-weight: normal;
   line-height: 1.42857143;
@@ -6202,7 +6202,7 @@ button.close {
 .popover-title {
   padding: 8px 14px;
   margin: 0;
-  font-size: 14px;
+  font-size: 14pt;
   background-color: #f7f7f7;
   border-bottom: 1px solid #ebebeb;
   border-radius: 5px 5px 0 0;
@@ -6372,7 +6372,7 @@ button.close {
   bottom: 0;
   left: 0;
   width: 15%;
-  font-size: 20px;
+  font-size: 19pt;
   color: #fff;
   text-align: center;
   text-shadow: 0 1px 2px rgba(0, 0, 0, .6);
@@ -6490,7 +6490,7 @@ button.close {
     width: 30px;
     height: 30px;
     margin-top: -15px;
-    font-size: 30px;
+    font-size: 28pt;
   }
   .carousel-control .glyphicon-chevron-left,
   .carousel-control .icon-prev {
