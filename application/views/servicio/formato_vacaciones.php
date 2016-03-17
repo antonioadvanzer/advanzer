@@ -46,8 +46,8 @@
 		</div>
 		<br>
 		<div class="row" align="center">
-			<div class="col-md-3"></div>
-			<div class="col-md-6">
+			<div class="col-md-2"></div>
+			<div class="col-md-8">
 				<div class="input-group">
 					<span class="input-group-addon"># Nómina</span>
 					<input class="form-control" style="text-align:center;cursor:default;background-color: #fff" value="" id="d_nomina" disabled>
@@ -61,21 +61,21 @@
 					<span class="input-group-addon">Antigüedad</span>
 					<input class="form-control" style="text-align:center;cursor:default;background-color: #fff" value="" id="d_antiguo" disabled>
 				</div>
+				<br>
+				<div class="input-group">
+					<span class="input-group-addon">Días Disponibles a la Fecha</span>
+					<input class="form-control" style="text-align:center;cursor:default;background-color: #fff" id="disponibles" disabled>
+						<span class="input-group-addon">Vencimiento</span>
+					<input class="form-control" style="min-width:250px;text-align:center;cursor:default;background-color: #fff" id="vencimiento" 
+						value="" disabled>
+				</div>
+				
 			</div>
 		</div>
 		<hr>
 		<div class="row" align="center">
 			<div class="col-md-2"></div>
 			<div class="col-md-8">
-				<br>
-				<div class="input-group">
-					<span class="input-group-addon">Días Disponibles a la Fecha</span>
-					<input class="form-control" style="text-align:center;cursor:default;background-color: #fff" id="disponibles" disabled>
-						<span class="input-group-addon">Vencimiento</span>
-					<input class="form-control" style="min-width:350px;text-align:center;cursor:default;background-color: #fff" id="vencimiento" 
-						value="" disabled>
-				</div>
-				<br>
 				<div id="generales">
 					<h3>Detalle de Solicitud</h3>
 					<div class="input-group">
@@ -93,13 +93,13 @@
 					<br>
 					<div class="input-group">
 						<span class="input-group-addon" style="min-width:260px">Observaciones</span>
-						<textarea class="form-control" id="observaciones" rows="4" placeholder="Observaciones" required></textarea>
+						<textarea class="form-control" id="observaciones" rows="4" placeholder="Agrega cualquier comentario que consideres relevante para la autorización de tus días" required></textarea>
 					</div>
 					<br>
 				</div>
-				<!--<div id="auth" style="display:none;color:red;border-color:red;border-radius:10px;border-style:dashed;">
-					<h4>Tu solicitud se excede de la política de Vacaciones, se turnará al área de Capital Humano para validación antes de enviarla a tu Jefe/Líder para autorizar la misma</h4>
-				</div>-->
+				<div id="auth" style="display:none;color:red;border-color:red;border-radius:10px;border-style:dashed;">
+					<h5>Estás solicitando días adicionales a los que te corresponden actualmente. Se revisará si procede tu solicitud.</h5>
+				</div>
 				<br>
 			</div>
 		</div>
@@ -167,6 +167,10 @@
 				$('#hasta').val('');
 				$('#regresa').val('');
 			}
+			if(dias > parseInt($('#disponibles').val()))
+				$('#auth').show('slow');
+			else
+				$('#auth').hide('slow');
 		}
 		sumaFecha = function(d, fecha){
 			var Fecha = new Date();
@@ -218,7 +222,7 @@
 			});
 
 			$("#update").submit(function(event){
-				if(!confirm('¿Seguro que desea enviar la solicitud?'))
+				if(!confirm('SE ESTÁ ENVIANDO TU SOLICITUD A AUTORIZACION. TAN PRONTO SEA RESUELTA, SE TE NOTIFICARÁ POR CORREO.'))
 					return false;
 				//get form values
 					$("#colaborador option:selected").each(function() {
@@ -236,12 +240,14 @@
 					hasta = $('#hasta').val();
 					regresa = $('#regresa').val();
 					observaciones = $('#observaciones').val();
+					if(dias > disponibles)
+						observaciones += '\n\nEstá solicitando días adicionales ('+parseInt(dias-disponibles)+') a los que te corresponden actualmente.'
 					ochoMeses=$('#ochoMeses').val();
 				$.ajax({
 					url: '<?= base_url("servicio/registra_solicitud");?>',
 					type: 'post',
 					data: {'colaborador':colaborador,'autorizador':autorizador,'dias':dias,'desde':desde,'hasta':hasta,'regresa':regresa,
-						'observaciones':observaciones,'tipo':1,'ochoMeses':ochoMeses,'disponibles':disponibles,'acumulados':acumulados},
+						'observaciones':observaciones,'tipo':1,'ochoMeses':ochoMeses,'acumulados':acumulados},
 					beforeSend: function() {
 						$('#update').hide('slow');
 						$('#cargando').show('slow');

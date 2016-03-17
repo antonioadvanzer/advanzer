@@ -14,13 +14,12 @@
 			<img src="<?= base_url('assets/images/loading.gif');?>"></div></div>
 	</div>
 	<div class="row">
-		<div align="center"><button class="btn link" onclick="location.href='<?= base_url("solicitar_vacaciones");?>';"><big>Solicitud de Vacaciones</big></button></div>
+		<div align="center"><button class="btn btn-primary" onclick="location.href='<?= base_url("solicitar_vacaciones");?>';"><big>Solicitud de Vacaciones</big></button></div>
 		<hr>
 	</div>
 	<div class="row">
 		<div class="col-md-12">
-			Las vacaciones que generan los empleados de Advanzer y Entuizer son de acuerdo al artículo 76 de la Ley Federal del Trabajo, 
-			la tabla que indica los mismos es la siguiente:
+			Las vacaciones que generas como empleado de Advanzer/Entuizer son de acuerdo al artículo 76 de la Ley Federal del Trabajo (en rojo los días que te corresponden de acuerdo a tu antigüedad):
 			<p><table width="50%" align="center" class="tbl table-condensed table-bordered">
 				<tbody>
 					<tr>
@@ -57,21 +56,17 @@
 				</div>
 				<div class="panel-body" id="premisas">
 					<p><ol type="a">
-						<li>Los días que se tomarán a cuenta son los días hábiles según el horario establecido de cada empleado. 
-							(Por ejemplo: Si el empleado labora de Lunes a Viernes, solamente serán tomados a cuenta de vacaciones esos 5 días 
-							y los días Sábado y Domingo serán respetados como descanso).</li>
-						<li>El empleado podrá disfrutar de días proporcionales de vacaciones a partir de los 9 meses de ingreso a la empresa.</li>
-						<li>A partir de tu fecha de aniversario cuentas con un período de 18 meses para disfrutar tus días generados en dicho aniversario. Los días de vacaciones que no se disfruten dentro del período de 18 meses establecido no se acumularán 
-							para el siguiente período. Por ningún motivo se pagarán los días no disfrutados.</li>
-						<li>La Prima Vacacional será pagada en la segunda quincena del mes que corresponda al aniversario del empleado 
-							dentro de la empresa y corresponde al 25% de los días de vacaciones generados en el período que acabe de cerrar.</li>
-						<li>El colaborador se encargará de solicitar las siguientes autorizaciones (según aplique):
+						<li>Los días que se consideran como hábiles, son los días que laboras de acuerdo a tus condiciones contractuales. Por ejemplo: Si laboras de Lunes a Viernes, los días hábiles son esos 5 y los días Sábado y Domingo no se contabilizan como vacaciones sino como días de descanso.</li>
+						<li>Podrás disfrutar de los días proporcionales de vacaciones que te corresponden a partir de los 9 meses de ingreso a la empresa.</li>
+						<li>A partir de tu fecha de aniversario cuentas con un período de 18 meses para disfrutar tus días de vacaciones. Los días de vacaciones que no se disfruten dentro del período de 18  meses establecido no se acumularán para el siguiente período y caducarán. Por ningún motivo se pagarán los días no disfrutados.</li>
+						<li>La Prima Vacacional será pagada en la segunda quincena del mes que corresponda a tu aniversario de la empresa y corresponde al 25% de los días de vacaciones generados en el período que acabe de cerrar.</li>
+						<li>Las vacaciones deberán solicitarse con un período mínimo de 30 días y las autorizaciones que deberás gestionar son las siguientes (según aplique):
 							<ul type="square">
-								<li>Si está en proyecto: al líder de proyecto con un tiempo mínimo de anticipación de 30 días.</li>
-								<li>Si no está en proyecto o es área administrativa: al superior inmediato de acuerdo a la estructura con un tiempo 
-									mínimo de anticipación de 30 días.</li>
+								<li>Si estás en proyecto: El líder de proyecto te autorizará.</li>
+								<li>Si no está en proyecto o eres área administrativa: El superior inmediato de acuerdo a la estructura será quien autorice.</li>
 							</ul>
 						</li>
+						<li>Una vez autorizadas por tu líder/superior, tu solicitud pasará a validación por parte de Capital Humano. Una vez que Capital Humano valide, se te notificará vía correo electrónico.</li>
 					</ol></p>
 				</div>
 			</div>
@@ -82,9 +77,6 @@
 			<style>\
 				.tbl > tbody > tr > th {\
 					background: '+color+'\
-				}\
-				button.link{\
-					background-color: '+color+'\
 				}\
 			</style>\
 		');

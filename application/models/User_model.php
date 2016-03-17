@@ -37,7 +37,7 @@ class User_model extends CI_Model{
 				$solicitud->detalle = $this->db->where('solicitud',$solicitud->id)->get('Detalle_Viaticos')->first_row();
 			endif;
 			if($solicitud->tipo == 1):
-				$solicitud->historial=$this->db->where("tipo=1 and (estatus=3 or (estatus !=3 and DATEDIFF(fecha_ultima_modificacion,CURDATE())<7))")->get('Solicitudes')->result();
+				$solicitud->historial=$this->db->where("id != $solicitud->id and tipo=1 and (estatus=3 or (estatus !=3 and DATEDIFF(fecha_ultima_modificacion,CURDATE())<7))")->get('Solicitudes')->result();
 			endif;
 		}
 		return $result;

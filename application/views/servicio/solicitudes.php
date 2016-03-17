@@ -105,12 +105,26 @@
 													</div>
 												<?php endif;
 											endif;
-											if($solicitud->tipo==1 && isset($solicitud->historial)): ?>
+											if($solicitud->tipo==1 && count($solicitud->historial)>0): ?>
 												<div class="col-md-3">
-													<h5 align="center">HISTORIAL</h5><br>
-													<?php foreach ($solicitud->historial as $registro) : ?>
-														<p align="center"><?=$registro->dias.' días el '.date_format(date_create($registro->desde),'j F'); ?></p>
-													<?php endforeach; ?>
+													<h5 align="center">HISTORIAL</h5>
+													<div class="row" align="center">
+														<div class="col-md-2"><b>Días</b></div>
+														<div class="col-md-5"><b>Desde</b></div>
+														<div class="col-md-5"><b>Estatus</b></div>
+														<?php foreach ($solicitud->historial as $registro) :
+															switch ($registro->estatus) {
+																case 0: $estatus='CANCELADA';								break;
+																case 1: $estatus='ENVIADA';									break;
+																case 2: $estatus='EN REVISIÓN POR CAPITAL HUMANO';			break;
+																case 3: $estatus='AUTORIZADA';								break;
+																case 4: $estatus='RECHAZADA';								break;
+															} ?>
+															<div class="col-md-2"><?= $registro->dias;?></div>
+															<div class="col-md-5"><?= $registro->desde;?></div>
+															<div class="col-md-5"><?= $estatus;?></div>
+														<?php endforeach; ?>
+													</div>
 												</div>
 											<?php endif; ?>
 											<div class="col-md-4">
