@@ -150,6 +150,7 @@ class Servicio extends CI_Controller {
 		$ochoMeses = date ( 'Y-m-d' , $ochoMeses );
 		$ochoMeses = new DateTime($ochoMeses);
 		$result->disponibles=floor(($result->diff->days-($result->diff->y*365))*$dias2/365);
+		$result->extra=$dias2-$result->disponibles;
 		if($dias_disponibles=$this->solicitudes_model->getDiasDisponibles($result->id))
 			$result->disponibles += (int)$dias_disponibles;
 		$result->acumulados=$this->solicitudes_model->getAcumulados($result->id);
@@ -172,32 +173,10 @@ class Servicio extends CI_Controller {
 			'motivo'=>$this->input->post('motivo'),
 			'fecha_solicitud'=>date('Y-m-d')
 		);
-		if($datos['tipo'] == 2):
-			if(!in_array($datos['motivo'],array('MATRIMONIO','NACIMIENTO DE HIJOS','FALLECIMIENTO DE CÓNYUGE','FALLECIMIENTO DE HERMANOS','FALLECIMIENTO DE HIJOS','FALLECIMIENTO DE PADRES','FALLECIMIENTO DE PADRES POLÍTICOS')))
-				$datos['auth_ch']=1;
-			elseif($this->input->post('un_anio')==1)
-				$datos['auth_ch']=1;
-		endif;
-		if($datos['tipo'] == 1):
-			//validación de fecha de  ingreso
-			if($ochoMeses=$this->input->post('ochoMeses')):
-				$colaborador=$this->user_model->searchById($datos['colaborador']);
-				$disponibles=$this->input->post('acumulados')+$this->input->post('disponibles');
-				$desde=new DateTime($datos['desde']);
-				$nueveMeses = strtotime ( '+9 month' , strtotime ( $colaborador->fecha_ingreso ) ) ;
-				$nueveMeses = date ( 'Y-m-d' , $nueveMeses );
-				$nueveMeses = new DateTime($nueveMeses);
-				if($nueveMeses->diff($desde)->format('%r'))
-					$datos['auth_ch']=1;
-				//validación de días disponibles
-				if($datos['dias'] > $disponibles)
-				$datos['auth_ch']=1;
-			endif;
-		endif;
 		$this->db->trans_begin();
 		$solicitud=$this->solicitudes_model->registra_solicitud($datos);
 		$solicitud=$this->solicitudes_model->getSolicitudById($solicitud);
-		if($datos['tipo']==3):
+		if($datos['tipo']==4):
 			$data=array(
 				'centro_costo'=>$this->input->post('centro'),
 				'origen'=>$this->input->post('origen'),
@@ -222,7 +201,7 @@ class Servicio extends CI_Controller {
 			);
 			$this->solicitudes_model->update_detalle_viaticos($solicitud->id,$data);
 		endif;
-		if($datos['tipo']==2 && $_FILES['file']['tmp_name']!=""):
+		if(($datos['tipo']==2 || $datos['tipo']==3) && $_FILES['file']['tmp_name']!=""):
 			$ext = explode(".", $_FILES['file']['name']);
 			$config['upload_path'] = './assets/docs/permisos/';
 			$config['file_name'] = 'permiso_'.$solicitud->id.'.'.end($ext);
@@ -265,15 +244,13 @@ class Servicio extends CI_Controller {
 		}else{
 			$solicitud = $this->solicitudes_model->getSolicitudById($id);
 			$data['solicitud']=$solicitud;
-			if($solicitud->auth_ch==1 && $solicitud->estatus == 2){
+			if($solicitud->estatus == 2){
 				$destinatario='micaela.llano@advanzer.com';
 				$mensaje=$this->load->view("layout/solicitud/rh",$data,true);
 			}else{
 				$destinatario=$this->user_model->searchById($solicitud->colaborador)->email;
 				$mensaje=$this->load->view("layout/solicitud/auth",$data,true);
-				if($solicitud->tipo == 1)
-					$this->actualiza_dias_disponibles($solicitud);
-				if($solicitud->tipo == 3){
+				if($solicitud->tipo == 4){
 					$this->genera_excel($solicitud);
 					$dest=array('viaticos@advanzer.com','recepcion@advanzer.com');
 					$msj=$this->load->view('layout/solicitud/viaticos',$data,true);

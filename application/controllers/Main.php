@@ -677,7 +677,7 @@ class Main extends CI_Controller {
 		$solicitudes = $this->solicitudes_model->getAll();
 		foreach ($solicitudes as $solicitud):
 			//identificar las solicitudes que no han sido canceladas o cerradas
-			if(($solicitud->estatus==2 && $solicitud->auth_ch==1) || !in_array($solicitud->estatus,array(0,2,4))):
+			if(!in_array($solicitud->estatus,array(0,3,4))):
 				$cancelacion = strtotime('+30 days',strtotime($solicitud->fecha_ultima_modificacion));
 				$cancelacion = date('Y-m-d',$cancelacion);
 				$cancelacion = new DateTime($cancelacion);
@@ -688,6 +688,14 @@ class Main extends CI_Controller {
 					$this->solicitudes_model->update_solicitud($solicitud->id,$datos);
 				endif;
 			endif;
+		endforeach;
+	}
+
+	public function inicia_vacaciones() {
+		$vacaciones=$this->solicitudes_model->getVacaciones();
+		foreach ($vacaciones as $registro) :
+			$solicitud=$this->solicitudes_model->getSolicitudById($registro->id)
+			$this->actualiza_dias_disponibles($solicitud);
 		endforeach;
 	}
 }

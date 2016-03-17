@@ -39,8 +39,6 @@
 						</thead>
 						<tbody>
 							<?php foreach ($solicitudes as $solicitud):
-								if($solicitud->auth_ch && $this->session->userdata('area') != 4)
-									$solicitud->observaciones.="<br><i>Requiere Autorización de Capital Humano</i>";
 								if(isset($solicitud->detalle)):
 									$detalle=$solicitud->detalle;
 									$vuelos="";
@@ -68,8 +66,8 @@
 								endif;
 								switch ($solicitud->tipo) {
 								 	case 1: $tipo='VACACIONES';						break;
-								 	case 2: $tipo='PERMISO DE AUSENCIA';			break;
-								 	case 3: $tipo='VIÁTICOS Y GASTOS DE VIAJE';		break;
+								 	case 2:case 3: $tipo='PERMISO DE AUSENCIA';		break;
+								 	case 4: $tipo='VIÁTICOS Y GASTOS DE VIAJE';		break;
 								 	default: $tipo='';								break;
 								} ?>
 								<tr data-target="#collapse<?= $solicitud->id;?>" class="highlighted" data-toggle="collapse">
@@ -81,27 +79,38 @@
 									<td><small><?= $solicitud->hasta;?></small></td>
 								</tr>
 								<tr id="collapse<?= $solicitud->id;?>" class="collapse out">
-									<td height="100px" style="cursor:default;" colspan="8"><small>
-										<?php if($solicitud->tipo < 3):
-											if($solicitud->tipo==2): ?>
-												<div class="col-md-1">
-													<?php $filename=base_url("assets/docs/permisos/permiso_$solicitud->id");
-													if(file_exists($filename)): ?>
+									<td height="100px" style="cursor:default;" colspan="7"><small>
+										<?php if($solicitud->tipo < 4):
+											if($solicitud->tipo==2 || $solicitud->tipo==3):
+												$filename=base_url("assets/docs/permisos/permiso_$solicitud->id");
+												if(file_exists($filename)): ?>
+													<div class="col-md-2">
 														<h5 align="center">COMPROBANTE</h5><br>
 														<p align="center"><a href="<?= $filename;?>;?>" download><span class="glyphicon glyphicon-download-alt"></span> descargar</a></p>
-													<?php endif; ?>
-												</div>
+													</div>
+												<?php endif; ?>
 												<div class="col-md-2">
 													<h5 align="center">MOTIVO</h5><br>
 													<p align="center"><?=$solicitud->motivo; ?></p>
 												</div>
-											<?php endif; ?>
-											<div class="col-md-5">
+												<?php if(!in_array($solicitud->motivo,array('MATRIMONIO','NACIMIENTO DE HIJOS','FALLECIMIENTO DE CÓNYUGE','FALLECIMIENTO DE HERMANOS','FALLECIMIENTO DE HIJOS','FALLECIMIENTO DE PADRES','FALLECIMIENTO DE PADRES POLÍTICOS'))): ?>
+													<div class="col-md-3" align="center">
+														<h5 align="center">TIPO DE PERMISO</h5><br>
+														<label class="radio-inline">
+															<input type="radio" name="tipo" id="con_goce" value="CON GOCE" <?php if($solicitud->tipo=2) echo"checked";?>> CON GOCE
+														</label>
+														<label class="radio-inline">
+															<input type="radio" name="tipo" id="sin_goce" value="SIN GOCE" <?php if($solicitud->tipo=3) echo"checked";?>> SIN GOCE
+														</label>
+													</div>
+												<?php endif;
+											endif; ?>
+											<div class="col-md-4">
 												<h5 align="center">OBSERVACIONES</h5><br>
 												<p align="center"><?=$solicitud->observaciones; ?></p>
 											</div>
 										<?php else: ?>
-											<div class="col-md-1">
+											<div class="col-md-2">
 												<h5 align="center">Centro de Costo</h5>
 												<p align="center"><?= $detalle->centro_costo;?></p>
 											</div>
@@ -113,7 +122,7 @@
 												<h5 align="center">Viaje</h5>
 												<p align="center"><?= $detalle->origen." - ".$detalle->destino;?></p>
 											</div>
-											<div class="col-md-2">
+											<div class="col-md-1">
 												<h5 align="center">Conceptos</h5>
 												<ul type="square">
 													<?php foreach ($conceptos as $concepto) : ?>
@@ -121,11 +130,7 @@
 													<?php endforeach; ?>
 												</ul>
 											</div>
-											<div class="col-md-1">
-												<h5 align="center">Tipo de Vuelo</h5>
-												<p align="center"><?= $detalle->tipo_vuelo;?></p>
-											</div>
-											<div class="col-md-2">
+											<div class="col-md-3">
 												<h5 align="center">Vuelos</h5>
 												<p align="center"><?= $vuelos;?></p>
 											</div>
@@ -134,13 +139,13 @@
 											<h5>&nbsp;</h5>
 											<div align="center" class="btn-group btn-group-lg" role="group" aria-label="...">
 												<?php if($this->session->userdata('area')==4): ?>
-													<button onclick="actualizar(<?= $solicitud->id;?>,4);" type="button" class="btn btn-primary" 
+													<button onclick="actualizar(<?= $solicitud->id;?>,3);" type="button" class="btn btn-primary" 
 														style="text-align:center;display:inline;">Autorizar</button>
 												<?php else: ?>
 													<button onclick="actualizar(<?= $solicitud->id;?>,2);" type="button" class="btn btn-primary" 
 														style="text-align:center;display:inline;">Autorizar</button>
 												<?php endif; ?>
-												<button onclick="$('#tbl').hide('slow');$('#razon').show('slow');$('#estatus').val(3);$('#solicitud').val(<?= $solicitud->id;?>);" type="button" class="btn" style="text-align:center;display:inline;">Rechazar</button>
+												<button onclick="$('#tbl').hide('slow');$('#razon').show('slow');$('#estatus').val(4);$('#solicitud').val(<?= $solicitud->id;?>);" type="button" class="btn" style="text-align:center;display:inline;">Rechazar</button>
 											</div>
 										</div>
 									</small></td>
@@ -160,12 +165,11 @@
 								<th data-halign="center">Días</th>
 								<th data-halign="center">Desde</th>
 								<th data-halign="center">Hasta</th>
+								<th data-halign="center">Estatus</th>
 							</tr>
 						</thead>
 						<tbody>
 							<?php foreach ($propias as $solicitud):
-								if($solicitud->auth_ch && $solicitud->estatus==1)
-									$solicitud->observaciones.="<br><i>Requiere Autorización de Capital Humano</i>";
 								if(isset($solicitud->detalle)):
 									$detalle=$solicitud->detalle;
 									$vuelos="";
@@ -192,19 +196,16 @@
 										array_push($conceptos,"TAXI AEROPUERTO");
 								endif;
 								switch ($solicitud->estatus) {
-									case 0: $estatus='CANCELADA';						break;
-									case 1: $estatus='ENVIADA';							break;
-									case 2: $estatus='AUTORIZADA';
-										if($solicitud->auth_ch)
-											$estatus='PENDIENTE AUTORIZACIÓN DE CAPITAL HUMANO';
-										break;
-									case 3: $estatus='RECHAZADA';						break;
-									case 4: $estatus='AUTORIZADA POR CAPITAL HUMANO';	break;
+									case 0: $estatus='CANCELADA';								break;
+									case 1: $estatus='ENVIADA';									break;
+									case 2: $estatus='EN REVISIÓN POR CAPITAL HUMANO';			break;
+									case 3: $estatus='AUTORIZADA';								break;
+									case 4: $estatus='RECHAZADA';								break;
 								}
 								switch ($solicitud->tipo) {
 								 	case 1: $tipo='VACACIONES';						break;
-								 	case 2: $tipo='PERMISO CON GOCE';				break;
-								 	case 3: $tipo='VIÁTICOS Y GASTOS DE VIAJE';		break;
+								 	case 2:case 3: $tipo='PERMISO DE AUSENCIA';		break;
+								 	case 4: $tipo='VIÁTICOS Y GASTOS DE VIAJE';		break;
 								 	default: $tipo='';								break;
 								 } ?>
 								<tr data-target="#collapse<?= $solicitud->id;?>" class="highlighted" data-toggle="collapse">
@@ -214,12 +215,13 @@
 									<td><small><?= $solicitud->dias;?></small></td>
 									<td><small><?= $solicitud->desde;?></small></td>
 									<td><small><?= $solicitud->hasta;?></small></td>
+									<td><small><?= $estatus;?></small></td>
 								</tr>
 								<tr id="collapse<?= $solicitud->id;?>" class="collapse out">
-									<td height="100px" style="cursor:default;" colspan="6"><small>
-										<?php if($solicitud->tipo < 3):
-											if($solicitud->tipo==2): ?>
-												<div class="col-md-1">
+									<td height="100px" style="cursor:default;" colspan="7"><small>
+										<?php if($solicitud->tipo < 4):
+											if($solicitud->tipo==2 || $solicitud->tipo==3): ?>
+												<div class="col-md-2">
 													<?php $filename=base_url("assets/docs/permisos/permiso_$solicitud->id");
 													$file_headers = @get_headers($filename);
 													if($file_headers[0] != 'HTTP/1.1 404 Not Found' && $file_headers[0] != 'HTTP/1.0 404 Not Found'): ?>
@@ -237,7 +239,7 @@
 												<p align="center"><?=$solicitud->observaciones; ?></p>
 											</div>
 										<?php else: ?>
-											<div class="col-md-1">
+											<div class="col-md-2">
 												<h5 align="center">Centro de Costo</h5>
 												<p align="center"><?= $detalle->centro_costo;?></p>
 											</div>
@@ -257,26 +259,18 @@
 													<?php endforeach; ?>
 												</ul>
 											</div>
-											<div class="col-md-1">
-												<h5 align="center">Vuelo</h5>
-												<p align="center"><?= $detalle->tipo_vuelo;?></p>
-											</div>
-											<div class="col-md-2">
+											<div class="col-md-3">
 												<h5 align="center">Vuelos</h5>
 												<p align="center"><?= $vuelos;?></p>
 											</div>
 										<?php endif; ?>
-										<div class="col-md-1">
-											<h5 align="center">Estatus</h5>
-											<p align="center"><?= $estatus;?></p>
-										</div>
-										<?php if($solicitud->estatus == 3): ?>
+										<?php if($solicitud->estatus == 4): ?>
 											<div class="col-md-2">
 												<h5 align="center">Razón de Rechazo</h5>
 												<p align="center"><?=$solicitud->razon; ?></p>
 											</div>
 										<?php endif;
-										if($solicitud->colaborador == $this->session->userdata('id') && ($solicitud->estatus == 1 || ($solicitud->estatus==2 && $solicitud->auth_ch==1))): ?>
+										if(($solicitud->colaborador == $this->session->userdata('id') && ($solicitud->estatus == 1 || $solicitud->estatus==2)) || (($this->session->userdata('area')==4 || $this->session->userdata('tipo') >= 4) && $solicitud->estatus<4 && $solicitud->estatus>0)): ?>
 											<div class="col-md-1" align="center">
 												<h5>&nbsp;</h5>
 												<button onclick="$('#tbl').hide('slow');$('#razon').show('slow');$('#estatus').val(0);$('#solicitud').val(<?= $solicitud->id;?>);" type="button" class="btn" style="text-align:center;display:inline;">Cancelar</button>
@@ -305,7 +299,7 @@
 		');
 
 		function actualizar(solicitud,estatus) {
-			if(!confirm('¿Seguro(a) que desea autorizar la solicitud?'))
+			if(!confirm('¿Seguro(|) que desea autorizar la solicitud?'))
 				return false;
 			$.ajax({
 				url: '<?= base_url("servicio/autorizar_solicitud");?>',

@@ -14,6 +14,10 @@
 			<img src="<?= base_url('assets/images/loading.gif');?>"></div></div>
 	</div>
 	<div class="row">
+		<div align="center"><button class="btn link" onclick="location.href='<?= base_url("solicitar_vacaciones");?>';"><big>Solicitud de Vacaciones</big></button></div>
+		<hr>
+	</div>
+	<div class="row">
 		<div class="col-md-12">
 			Las vacaciones que generan los empleados de Advanzer y Entuizer son de acuerdo al artículo 76 de la Ley Federal del Trabajo, 
 			la tabla que indica los mismos es la siguiente:
@@ -43,30 +47,27 @@
 						<td style="cursor:default" <?php if($date_dif->y+1 >= 25 && $date_dif->y+1 <= 29) echo 'bgcolor="red"' ?>>22</td></tr>
 				</tbody>
 			</table></p>
-			<div align="center"><a style="text-decoration:none;" class="link" href="<?= base_url('solicitar_vacaciones');?>">>>Solicitud de Vacaciones<<</a></div>
 		</div>
-		<hr>
+	</div><br>
+	<div class="row">
 		<div class="col-md-12">
 			<div class="panel panel-default" style="background-color:color;">
 				<div class="panel-heading">
-					<a href="#premisas" data-toggle="collapse" aria-expanded="false">
-						<h3 class="panel-title">Premisas Básicas</h3></a>
+						<h3 class="panel-title">Premisas Básicas</h3>
 				</div>
-				<div class="panel-body collapse" id="premisas">
+				<div class="panel-body" id="premisas">
 					<p><ol type="a">
 						<li>Los días que se tomarán a cuenta son los días hábiles según el horario establecido de cada empleado. 
 							(Por ejemplo: Si el empleado labora de Lunes a Viernes, solamente serán tomados a cuenta de vacaciones esos 5 días 
 							y los días Sábado y Domingo serán respetados como descanso).</li>
-						<li>El empleado podrá disfrutar de sus vacaciones al cumplir 9 meses de ingreso a la empresa.</li>
-						<li>Los días de vacaciones se disfrutarán dentro de un período de 18 meses a partir del aniversario del cual se 
-							generan. Los días de vacaciones que no se disfruten dentro del período de 18 meses establecido no se acumularán 
+						<li>El empleado podrá disfrutar de días proporcionales de vacaciones a partir de los 9 meses de ingreso a la empresa.</li>
+						<li>A partir de tu fecha de aniversario cuentas con un período de 18 meses para disfrutar tus días generados en dicho aniversario. Los días de vacaciones que no se disfruten dentro del período de 18 meses establecido no se acumularán 
 							para el siguiente período. Por ningún motivo se pagarán los días no disfrutados.</li>
 						<li>La Prima Vacacional será pagada en la segunda quincena del mes que corresponda al aniversario del empleado 
 							dentro de la empresa y corresponde al 25% de los días de vacaciones generados en el período que acabe de cerrar.</li>
 						<li>El colaborador se encargará de solicitar las siguientes autorizaciones (según aplique):
 							<ul type="square">
-								<li>Si está en proyecto: al líder de proyecto y al superior inmediato de acuerdo a la estructura con un tiempo mínimo de 
-									anticipación de 30 días.</li>
+								<li>Si está en proyecto: al líder de proyecto con un tiempo mínimo de anticipación de 30 días.</li>
 								<li>Si no está en proyecto o es área administrativa: al superior inmediato de acuerdo a la estructura con un tiempo 
 									mínimo de anticipación de 30 días.</li>
 							</ul>
@@ -82,8 +83,8 @@
 				.tbl > tbody > tr > th {\
 					background: '+color+'\
 				}\
-				a.link{\
-					color: '+color+'\
+				button.link{\
+					background-color: '+color+'\
 				}\
 			</style>\
 		');

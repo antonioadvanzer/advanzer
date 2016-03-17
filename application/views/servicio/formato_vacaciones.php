@@ -44,23 +44,22 @@
 				</div>
 			</div>
 		</div>
-		<hr>
+		<br>
 		<div class="row" align="center">
 			<div class="col-md-3"></div>
 			<div class="col-md-6">
-				<label>DATOS</label>
 				<div class="input-group">
 					<span class="input-group-addon"># Nómina</span>
-					<input class="form-control" style="max-width:100px;text-align:center;cursor:default;background-color: #fff" value="" id="d_nomina" disabled>
+					<input class="form-control" style="text-align:center;cursor:default;background-color: #fff" value="" id="d_nomina" disabled>
 					<span class="input-group-addon">Área Actual</span>
 					<input class="form-control" style="min-width:300px;text-align:center;cursor:default;background-color: #fff" value="" id="d_area" disabled>
 				</div>
 				<br>
 				<div class="input-group">
 					<span class="input-group-addon">Fecha de Ingreso</span>
-					<input class="form-control" style="max-width:300px;text-align:center;cursor:default;background-color: #fff" value="" id="d_ingreso" disabled>
+					<input class="form-control" style="text-align:center;cursor:default;background-color: #fff" value="" id="d_ingreso" disabled>
 					<span class="input-group-addon">Antigüedad</span>
-					<input class="form-control" style="max-width:300px;text-align:center;cursor:default;background-color: #fff" value="" id="d_antiguo" disabled>
+					<input class="form-control" style="text-align:center;cursor:default;background-color: #fff" value="" id="d_antiguo" disabled>
 				</div>
 			</div>
 		</div>
@@ -70,30 +69,25 @@
 			<div class="col-md-8">
 				<br>
 				<div class="input-group">
-					<span class="input-group-addon" id="pendientes_label">Días del año en curso</span>
-					<input class="form-control" style="max-width:80px;text-align:center;cursor:default;background-color: #fff" id="disponibles" disabled>
-					<span class="input-group-addon">Días generados</span>
-					<input class="form-control" style="max-width:80px;text-align:center;cursor:default;background-color: #fff" id="acumulados" 
-						value="0" disabled>
+					<span class="input-group-addon">Días Disponibles a la Fecha</span>
+					<input class="form-control" style="text-align:center;cursor:default;background-color: #fff" id="disponibles" disabled>
 						<span class="input-group-addon">Vencimiento</span>
-					<input class="form-control" style="min-width:250px;text-align:center;cursor:default;background-color: #fff" id="vencimiento" 
+					<input class="form-control" style="min-width:350px;text-align:center;cursor:default;background-color: #fff" id="vencimiento" 
 						value="" disabled>
 				</div>
 				<br>
 				<div id="generales">
-					<label>DETALLE SOLICITUD</label>
+					<h3>Detalle de Solicitud</h3>
 					<div class="input-group">
-						<span class="input-group-addon">Días</span>
-						<input class="form-control" style="max-width:80px;text-align:center;background-color:white;cursor:default" required value="1" id="dias"
-							placeholder="# días" onkeyup="calculaFechas();$('#auth').show('slow');">
+						<span class="input-group-addon">Días a Solicitar</span>
+						<select class="form-control" style="background-color:white;min-width:80px" required id="dias" onchange="calculaFechas();"></select>
 						<span class="input-group-addon">Desde</span>
-						<input class="form-control" type="text" id="desde" style="max-width:300px; text-align:center;background-color:white;cursor:default" 
-							value="<?= date('Y-m-d');?>" required>
+						<input class="form-control" type="text" id="desde" style="min-width:100px; text-align:center;background-color:white;cursor:default" value="<?= date('Y-m-d');?>" required>
 						<span class="input-group-addon">Hasta</span>
-						<input class="form-control" type="text" id="hasta" style="max-width:300px; text-align:center;background-color:white;cursor:default" 
+						<input class="form-control" type="text" id="hasta" style="min-width:100px; text-align:center;background-color:white;cursor:default" 
 							value="" readonly required>
 						<span class="input-group-addon">Regresa a Laborar</span>
-						<input class="form-control" type="text" id="regresa" style="max-width:300px; text-align:center;background-color:white;cursor:default" 
+						<input class="form-control" type="text" id="regresa" style="min-width:100px; text-align:center;background-color:white;cursor:default" 
 							value="" readonly required>
 					</div>
 					<br>
@@ -104,9 +98,9 @@
 					</div>
 					<br>
 				</div>
-				<div id="auth" style="display:none;">
-					<h2>Si tu solicitud se excede de la política de Vacaciones, se turnará al área de Capital Humano para validación final una vez que tu Jefe/Líder haya autorizado la misma</h2>
-				</div>
+				<!--<div id="auth" style="display:none;color:red;border-color:red;border-radius:10px;border-style:dashed;">
+					<h4>Tu solicitud se excede de la política de Vacaciones, se turnará al área de Capital Humano para validación antes de enviarla a tu Jefe/Líder para autorizar la misma</h4>
+				</div>-->
 				<br>
 			</div>
 		</div>
@@ -135,24 +129,20 @@
 						$('#autorizador').val(returnedData['jefe']);
 						$('#autorizador').selectpicker('refresh');
 						$('#disponibles').val(returnedData['disponibles']);
+						$('#dias').empty();
 						if(returnedData['acumulados']['dias_acumulados'] > 0){
-							$('#acumulados').val(returnedData['acumulados']['dias_acumulados']);
+							$('#disponibles').val(parseInt(returnedData['acumulados']['dias_acumulados']) + parseInt($('#disponibles').val()));
 							$('#vencimiento').val(returnedData['acumulados']['dias_uno']+' días vencen el '+returnedData['acumulados']['vencimiento_uno']);
-						}else{
-							//$('#disponibles').val(returnedData['disponibles']+returnedData['acumulados']['dias_acumulados']);
-							$('#acumulados').val('0');
+						}else
 							$('#vencimiento').val('');
+						for (var i = 1; i <= (parseInt($('#disponibles').val())+parseInt(returnedData['extra'])); i++) {
+							$('#dias').append(new Option(i,i,true,true));
 						}
 						$('#d_nomina').val(returnedData['nomina']);
 						$('#d_area').val(returnedData['nombre_area']);
 						$('#d_ingreso').val(returnedData['fecha_ingreso']);
 						$('#d_antiguo').val(returnedData['diff']['y']+' años, '+returnedData['diff']['m']+' meses');
-						antiguo=parseInt(returnedData['diff']['y'])*12 + parseInt(returnedData['diff']['m']);
-						if(antiguo < 9)
-							$('#auth').show('slow');
-						else
-							$('#auth').hide('slow');
-						$('#dias').val('1');
+						$('#dias').val('');
 						$('#desde').val(returnedData['fecha_minima']);
 						calculaFechas();
 						$('#observaciones').val('');
@@ -164,8 +154,11 @@
 			}
 		}
 		function calculaFechas() {
-			patron = /^\d*$/; 
-			dias=parseInt($('#dias').val());
+			patron = /^\d*$/;
+			$('#dias :selected').each(function(){
+				dias=$('#dias').val();
+			})
+			dias=parseInt(dias);
 			if(dias > 0){
 				inicio=$('#desde').val();
 				hasta=sumaFecha(dias,inicio);
@@ -219,7 +212,6 @@
 
 			$("#desde").change(function() {
 				calculaFechas();
-				$('#auth').show('slow');
 			});
 
 			$("#colaborador").change(function() {
@@ -236,7 +228,9 @@
 					$("#autorizador option:selected").each(function() {
 						autorizador = $('#autorizador').val();
 					});
-					dias = $('#dias').val();
+					$('#dias :selected').each(function(){
+						dias=$('#dias').val();
+					})
 					acumulados = $('#acumulados').val();
 					disponibles = $('#disponibles').val();
 					desde = $('#desde').val();

@@ -11,10 +11,10 @@ class User_model extends CI_Model{
 	function solicitudesByColaborador($colaborador) {
 		$this->db->select('S.*,U.nombre')->from('Solicitudes S')
 			->join('Users U','U.id = S.autorizador')
-			->where('S.colaborador',$colaborador);
+			->where("S.colaborador = $colaborador AND (S.estatus in(1,2) or hasta > NOW() or DATEDIFF(fecha_ultima_modificacion,CURDATE()) < 7)");
 		$result = $this->db->get()->result();
 		foreach ($result as $solicitud) {
-			if($solicitud->tipo == 3):
+			if($solicitud->tipo == 4):
 				$solicitud->detalle = $this->db->where('solicitud',$solicitud->id)->get('Detalle_Viaticos')->first_row();
 			endif;
 		}
@@ -23,14 +23,14 @@ class User_model extends CI_Model{
 
 	function solicitudes_pendientes($colaborador){
 		if($this->session->userdata('area') == 4)
-			$this->db->where("((S.estatus=2 and S.auth_ch=1) or (S.autorizador=$colaborador and S.estatus=1))");
+			$this->db->where("(S.estatus=2 or (S.autorizador=$colaborador and S.estatus=1))");
 		else
 			$this->db->where(array('S.autorizador'=>$colaborador,'S.estatus'=>1));
 		$this->db->select('S.*,U.nombre')->from('Solicitudes S')
 			->join('Users U','U.id = S.colaborador');
 		$result = $this->db->get()->result();
 		foreach ($result as $solicitud) {
-			if($solicitud->tipo == 3):
+			if($solicitud->tipo == 4):
 				$solicitud->detalle = $this->db->where('solicitud',$solicitud->id)->get('Detalle_Viaticos')->first_row();
 			endif;
 		}

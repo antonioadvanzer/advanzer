@@ -9,7 +9,7 @@
 			<img src="<?= base_url('assets/images/loading.gif');?>"></div></div>
 	</div>
 	<div class="row">
-		<div align="center"><a style="text-decoration:none;" class="link" href="<?= base_url('solicitar_permiso');?>">>>Solicitud de Ausencia<<</a></div>
+		<div align="center"><button class="btn link" onclick="location.href='<?= base_url("solicitar_permiso");?>';"><big>Solicitud de Ausencia</big></button></div>
 		<hr>
 		<div class="col-md-12">
 			La ausencia a las labores por parte del colaborador de la cual haya conocimiento con antelación podrá ser autorizada como permiso (con goce o sin goce de sueldo) de acuerdo a los lineamientos que continuación se describen:
@@ -79,6 +79,9 @@
 				}\
 				a.link{\
 					color: '+color+'\
+				}\
+				button.link{\
+					background-color: '+color+'\
 				}\
 			</style>\
 		');

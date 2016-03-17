@@ -82,6 +82,9 @@
 						font-family: "'+titleFont+'";\
 						src: url("<?= base_url("assets/fonts");?>/'+font+'");\
 					}\
+					.badge {\
+						background-color: '+color+';\
+					}\
 				</style>\
 			');
 		else

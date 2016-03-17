@@ -16,7 +16,7 @@ class Solicitudes_model extends CI_Model{
 		$result = $this->db->where('id',$id)->get('Solicitudes')->first_row();
 		$result->nombre_solicita=$this->db->where('id',$result->colaborador)->get('Users')->first_row()->nombre;
 		$result->nombre_autorizador=$this->db->where('id',$result->autorizador)->get('Users')->first_row()->nombre;
-		if($result->tipo == 3):
+		if($result->tipo == 4):
 				$result->detalle = $this->db->where('solicitud',$result->id)->get('Detalle_Viaticos')->first_row();
 			endif;
 		return $result;
@@ -103,5 +103,9 @@ class Solicitudes_model extends CI_Model{
 	function getVacacionesExpired() {
 		$this->db->where('vencimiento_uno <',date('Y-m-d'));
 		return $this->db->get('Vacaciones')->result();
+	}
+
+	function getVacaciones() {
+		return $this->db->where(array('desde'=>'CURDATE()','estatus'=>3))->get('Vacaciones')->result();
 	}
 }
