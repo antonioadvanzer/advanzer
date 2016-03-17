@@ -141,8 +141,6 @@
 	</div>
 	<div class="row" align="center">
 	  <div class="col-md-12">
-		  <button type="submit" class="btn btn-lg btn-primary btn-block" 
-		  	style="max-width:200px; text-align:center;">Actualizar</button>
 		  <?php if($user->estatus == 1): ?>
 		  	<span style="float:right;">
 		  		<label onclick="$('#update_foto').hide('slow');$('#update').hide('slow');$('#recision').
@@ -157,9 +155,18 @@
 		  		<label onclick="$('#update_foto').hide('slow');$('#update').hide('slow');$('#rehab').
 		  			show('slow');" style="cursor:pointer;">Rehabilitar al colaborador</label>
 		  	</span>
-		  	<?php endif; ?>
-		  </span>
+		  <?php endif; ?>
+		  <?php if(isset($user->bitacora)): ?>
+			<span>
+				<label onclick="$('#update_foto').hide('slow');$('#update').hide('slow');$('#bitacora').show('slow');" style="cursor:pointer;">Historial de Vacaciones/Permisos</label>
+			</span>
+		  <?php endif; ?>
 	  </div>
+	</div>
+	<div class="row" align="center">
+		<div class="col-md-12">
+			<button type="submit" class="btn btn-lg btn-primary btn-block" style="max-width:200px; text-align:center;">Actualizar</button>
+		</div>
 	</div>
   </form>
   <form id="historial" style="display:none" role="form" method="post" action="javascript:" class="form-signin">
@@ -246,6 +253,62 @@
 		</div>
 	  </div>
   </form>
+  <div class="row" align="center" id="bitacora" style="display:none;">
+	<table class="table" align="center" data-toggle="table" data-hover="true" data-striped="true">
+		<thead>
+			<tr>
+				<th data-halign="center">Tipo</th>
+				<th data-halign="center">Solicitud</th>
+				<th data-halign="center">Autorizador</th>
+				<th data-halign="center">Días</th>
+				<th data-halign="center">Desde</th>
+				<th data-halign="center">Observaciones</th>
+				<th data-halign="center">Razón</th>
+				<th data-halign="center">Estatus</th>
+			</tr>
+		</thead>
+		<tbody data-link="row" class="rowlink">
+			<?php foreach ($user->bitacora as $solicitud):
+				switch ($solicitud->estatus) {
+				 	case 0: $estatus="CANCELADA";$razon=$solicitud->razon;							break;
+				 	case 1: $estatus="ENVIADA";$razon=$solicitud->motivo;							break;
+				 	case 2: $estatus='EN REVISIÓN POR CAPITAL HUMANO';$razon=$solicitud->motivo;	break;
+					case 3: $estatus='AUTORIZADA';$razon=$solicitud->motivo;						break;
+					case 4: $estatus='RECHAZADA';$razon=$solicitud->razon;							break;
+				}
+				switch ($solicitud->tipo) {
+				 	case 1: $tipo='VACACIONES';						break;
+					case 2:
+						$tipo='PERMISO DE AUSENCIA';
+						if($solicitud->estatus==3)
+							$tipo.=' CON GOCE';
+						break;
+					case 3:
+						$tipo='PERMISO DE AUSENCIA';
+						if($solicitud->estatus==3)
+							$tipo.=' SIN GOCE';
+						break;
+					case 4: $tipo='VIÁTICOS Y GASTOS DE VIAJE';		break;
+					default: $tipo='';								break;
+				} ?>
+				<tr>
+					<td style="cursor:default;"><small><?= $tipo;?></small></td>
+					<td style="cursor:default;"><small><?= date('Y-m-d',strtotime($solicitud->fecha_solicitud));?></small></td>
+					<td style="cursor:default;"><small><?= $solicitud->nombre;?></small></td>
+					<td style="cursor:default;"><small><?= $solicitud->dias;?></small></td>
+					<td style="cursor:default;"><small><?= $solicitud->desde;?></small></td>
+					<td style="cursor:default;"><small><?= $solicitud->observaciones;?></small></td>
+					<td style="cursor:default;"><small><?= $razon;?></small></td>
+					<td style="cursor:default;"><small><?= $estatus;?></small></td>
+				</tr>
+			<?php endforeach; ?>
+		</tbody>
+	</table>
+	<span style="float:right;"><label 
+	  	onclick="$('#bitacora').hide('slow');$('#update_foto').show('slow');$('#update').show('slow');" style="cursor:pointer;">
+	  	Ver Perfil</label></span>
+  </div>
+
   <script type="text/javascript">
 
 	$(document).ready(function() {

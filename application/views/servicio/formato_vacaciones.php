@@ -93,8 +93,7 @@
 					<br>
 					<div class="input-group">
 						<span class="input-group-addon" style="min-width:260px">Observaciones</span>
-						<textarea class="form-control" id="observaciones" rows="4" placeholder="Observaciones" 
-							style="background-color:white;cursor:default" required></textarea>
+						<textarea class="form-control" id="observaciones" rows="4" placeholder="Observaciones" required></textarea>
 					</div>
 					<br>
 				</div>

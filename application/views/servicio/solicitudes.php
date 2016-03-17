@@ -97,14 +97,22 @@
 													<div class="col-md-3" align="center">
 														<h5 align="center">TIPO DE PERMISO</h5><br>
 														<label class="radio-inline">
-															<input type="radio" name="tipo" id="con_goce" value="CON GOCE" <?php if($solicitud->tipo=2) echo"checked";?>> CON GOCE
+															<input type="radio" name="tipo" id="con_goce" value="CON GOCE" <?php if($solicitud->tipo==2) echo"checked";?>> CON GOCE
 														</label>
 														<label class="radio-inline">
-															<input type="radio" name="tipo" id="sin_goce" value="SIN GOCE" <?php if($solicitud->tipo=3) echo"checked";?>> SIN GOCE
+															<input type="radio" name="tipo" id="sin_goce" value="SIN GOCE" <?php if($solicitud->tipo==3) echo"checked";?>> SIN GOCE
 														</label>
 													</div>
 												<?php endif;
-											endif; ?>
+											endif;
+											if($solicitud->tipo==1 && isset($solicitud->historial)): ?>
+												<div class="col-md-3">
+													<h5 align="center">HISTORIAL</h5><br>
+													<?php foreach ($solicitud->historial as $registro) : ?>
+														<p align="center"><?=$registro->dias.' días el '.date_format(date_create($registro->desde),'j F'); ?></p>
+													<?php endforeach; ?>
+												</div>
+											<?php endif; ?>
 											<div class="col-md-4">
 												<h5 align="center">OBSERVACIONES</h5><br>
 												<p align="center"><?=$solicitud->observaciones; ?></p>
@@ -135,7 +143,7 @@
 												<p align="center"><?= $vuelos;?></p>
 											</div>
 										<?php endif; ?>
-										<div class="col-md-3" align="center">
+										<div class="col-md-3" align="center" style="float:right;">
 											<h5>&nbsp;</h5>
 											<div align="center" class="btn-group btn-group-lg" role="group" aria-label="...">
 												<?php if($this->session->userdata('area')==4): ?>
@@ -204,7 +212,16 @@
 								}
 								switch ($solicitud->tipo) {
 								 	case 1: $tipo='VACACIONES';						break;
-								 	case 2:case 3: $tipo='PERMISO DE AUSENCIA';		break;
+								 	case 2:
+								 		$tipo='PERMISO DE AUSENCIA';
+								 		if($solicitud->estatus==3)
+								 			$tipo.=' CON GOCE';
+								 		break;
+								 	case 3:
+								 		$tipo='PERMISO DE AUSENCIA';
+								 		if($solicitud->estatus==3)
+								 			$tipo.=' SIN GOCE';
+								 		break;
 								 	case 4: $tipo='VIÁTICOS Y GASTOS DE VIAJE';		break;
 								 	default: $tipo='';								break;
 								 } ?>
@@ -221,14 +238,14 @@
 									<td height="100px" style="cursor:default;" colspan="7"><small>
 										<?php if($solicitud->tipo < 4):
 											if($solicitud->tipo==2 || $solicitud->tipo==3): ?>
-												<div class="col-md-2">
-													<?php $filename=base_url("assets/docs/permisos/permiso_$solicitud->id");
-													$file_headers = @get_headers($filename);
-													if($file_headers[0] != 'HTTP/1.1 404 Not Found' && $file_headers[0] != 'HTTP/1.0 404 Not Found'): ?>
+												<?php $filename=base_url("assets/docs/permisos/permiso_$solicitud->id");
+												$file_headers = @get_headers($filename);
+												if($file_headers[0] != 'HTTP/1.1 404 Not Found' && $file_headers[0] != 'HTTP/1.0 404 Not Found'): ?>
+													<div class="col-md-2">
 														<h5 align="center">COMPROBANTE</h5><br>
 														<p align="center"><a href="<?= $filename;?>" download><span class="glyphicon glyphicon-download-alt"></span> descargar</a></p>
-													<?php endif; ?>
-												</div>
+													</div>
+												<?php endif; ?>
 												<div class="col-md-2">
 													<h5 align="center">MOTIVO</h5><br>
 													<p align="center"><?=$solicitud->motivo; ?></p>
@@ -271,7 +288,7 @@
 											</div>
 										<?php endif;
 										if(($solicitud->colaborador == $this->session->userdata('id') && ($solicitud->estatus == 1 || $solicitud->estatus==2)) || (($this->session->userdata('area')==4 || $this->session->userdata('tipo') >= 4) && $solicitud->estatus<4 && $solicitud->estatus>0)): ?>
-											<div class="col-md-1" align="center">
+											<div class="col-md-1" align="right" style="float:right;">
 												<h5>&nbsp;</h5>
 												<button onclick="$('#tbl').hide('slow');$('#razon').show('slow');$('#estatus').val(0);$('#solicitud').val(<?= $solicitud->id;?>);" type="button" class="btn" style="text-align:center;display:inline;">Cancelar</button>
 											</div>
@@ -301,10 +318,14 @@
 		function actualizar(solicitud,estatus) {
 			if(!confirm('¿Seguro(|) que desea autorizar la solicitud?'))
 				return false;
+			if($('#con_goce').is(':checked'))
+				tipo=3;
+			if($('#sin_goce').is(':checked'))
+				tipo=2;
 			$.ajax({
 				url: '<?= base_url("servicio/autorizar_solicitud");?>',
 				type: 'post',
-				data: {'solicitud':solicitud,'estatus':estatus},
+				data: {'solicitud':solicitud,'estatus':estatus,'tipo':tipo},
 				beforeSend: function() {
 					$('#tbl').hide('slow');
 					$('#cargando').show('slow');

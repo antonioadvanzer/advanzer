@@ -112,6 +112,7 @@
 		<div style="width:80%" class="container">
 			<h2>No se ha autorizado tu Solicitud</h2>
 			<h4><b>Folio</b> #<b><?=$solicitud->id;?></b></h4>
+			<p><b>Días: </b><?=$solicitud->dias;?></p>
 			<p><b>Tipo: </b><?php 
 				switch($solicitud->tipo){
 					case 1: $tipo="VACACIONES";											break;

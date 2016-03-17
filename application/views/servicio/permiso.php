@@ -77,9 +77,6 @@
 				.tbl > thead > tr > th {\
 					background: '+color+'\
 				}\
-				a.link{\
-					color: '+color+'\
-				}\
 				button.link{\
 					background-color: '+color+'\
 				}\

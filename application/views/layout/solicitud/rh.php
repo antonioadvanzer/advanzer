@@ -114,6 +114,7 @@
 			<h4><b>Folio</b> #<b><?=$solicitud->id;?></b></h4>
 			<p><b>Solicita: </b><?= $solicitud->nombre_solicita;?></p>
 			<p><b>Autoriza: </b><?= $solicitud->nombre_autorizador;?></p>
+			<p><b>Días: </b><?=$solicitud->dias;?></p>
 			<p><b>Tipo: </b><?php 
 				switch($solicitud->tipo){
 					case 1: $tipo="VACACIONES";											break;

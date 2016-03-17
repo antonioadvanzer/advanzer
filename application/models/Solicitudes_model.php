@@ -17,8 +17,8 @@ class Solicitudes_model extends CI_Model{
 		$result->nombre_solicita=$this->db->where('id',$result->colaborador)->get('Users')->first_row()->nombre;
 		$result->nombre_autorizador=$this->db->where('id',$result->autorizador)->get('Users')->first_row()->nombre;
 		if($result->tipo == 4):
-				$result->detalle = $this->db->where('solicitud',$result->id)->get('Detalle_Viaticos')->first_row();
-			endif;
+			$result->detalle = $this->db->where('solicitud',$result->id)->get('Detalle_Viaticos')->first_row();
+		endif;
 		return $result;
 	}
 
@@ -31,8 +31,13 @@ class Solicitudes_model extends CI_Model{
 		$result = $this->db->select('dias_acumulados')->from('Vacaciones')->where(array('colaborador'=>$colaborador,'dias_acumulados <'=>0))->get();
 		if($result->num_rows() == 1)
 			return $result->first_row()->dias_acumulados;
-		else
-			return 0;
+		else{
+			$result = $this->db->select('dias')->from('Solicitudes')->where(array('colaborador'=>$colaborador,'estatus not in(0,4)'))->get();
+			if($result->num_rows() == 1)
+				return (int)$result->first_row()->dias*-1;
+			else
+				return 0;
+		}
 	}
 
 	function getAcumulados($colaborador) {

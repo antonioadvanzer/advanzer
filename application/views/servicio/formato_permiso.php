@@ -92,7 +92,7 @@
 				</div>
 				<br>
 				<div class="input-group">
-					<span class="input-group-addon">Días Disponibles</span>
+					<span class="input-group-addon">Días a Solicitar</span>
 					<select class="form-control" id="dias" onchange="calculaFechas();" required>
 						<option value="" selected disabled>-- Elegir --</option>
 						<option>1</option>

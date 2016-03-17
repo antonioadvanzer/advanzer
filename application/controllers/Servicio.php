@@ -201,15 +201,14 @@ class Servicio extends CI_Controller {
 			);
 			$this->solicitudes_model->update_detalle_viaticos($solicitud->id,$data);
 		endif;
-		if(($datos['tipo']==2 || $datos['tipo']==3) && $_FILES['file']['tmp_name']!=""):
+		if(($datos['tipo']==2) && !empty($_FILES)):
 			$ext = explode(".", $_FILES['file']['name']);
 			$config['upload_path'] = './assets/docs/permisos/';
 			$config['file_name'] = 'permiso_'.$solicitud->id.'.'.end($ext);
 			$config['overwrite'] = TRUE;
 			$config['allowed_types'] = '*';
 			$this->load->library('upload', $config);
-			if (!$this->upload->do_upload('file'))
-				echo $this->upload->display_errors('','');
+			$this->upload->do_upload('file');
 		endif;
 		if($this->db->trans_status() === FALSE){
 			$this->db->trans_rollback();
@@ -234,6 +233,8 @@ class Servicio extends CI_Controller {
 	}
 	public function autorizar_solicitud() {
 		$id = $this->input->post('solicitud');
+		if($this->input->post('tipo'))
+			$datos['tipo']=$this->input->post('tipo');
 		$datos['estatus']=$this->input->post('estatus');
 		$datos['usuario_modificacion']=$this->session->userdata('id');
 		$this->db->trans_begin();
