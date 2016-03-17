@@ -115,8 +115,8 @@
 			<p><b>Solicita: </b><?= $solicitud->nombre_solicita;?></p>
 			<p><b>Desde: </b><?=$solicitud->desde;?></p>
 			<p><b>Hasta: </b><?=$solicitud->hasta;?></p>
-			<p>Ingresa a <a href='http://localhost/advanzer/solicitudes'>Portal Personal >> Solicitudes</a> para darle seguimiento a la solicitud</p>
-			<p>Descarga <a target="_blank" href="http://localhost/advanzer/assets/docs/solicitud_<?= $solicitud->id;?>.xlsx">aquí</a> el detalle en formato para Excel</p>
+			<p>Ingresa a <a href='http://intranet.advanzer.com:3000/solicitudes'>Portal Personal >> Solicitudes</a> para darle seguimiento a la solicitud</p>
+			<p>Descarga <a target="_blank" href="http://intranet.advanzer.com:3000/assets/docs/solicitud_<?= $solicitud->id;?>.xlsx">aquí</a> el detalle en formato para Excel</p>
 		</div>
 		<div class="col-md-12" align="center"><img width="100%" src="http://drive.google.com/uc?export=view&id=0B7vcCZhlhZiOOWNiNHJnZGhnaDA"></div>
 		<footer align="center">
