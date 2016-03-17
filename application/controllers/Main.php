@@ -694,7 +694,7 @@ class Main extends CI_Controller {
 	public function inicia_vacaciones() {
 		$vacaciones=$this->solicitudes_model->getVacaciones();
 		foreach ($vacaciones as $registro) :
-			$solicitud=$this->solicitudes_model->getSolicitudById($registro->id)
+			$solicitud=$this->solicitudes_model->getSolicitudById($registro->id);
 			$this->actualiza_dias_disponibles($solicitud);
 		endforeach;
 	}
