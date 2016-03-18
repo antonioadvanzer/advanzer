@@ -74,20 +74,20 @@
 		</div>
 		<hr>
 		<div class="row" align="center">
-			<div class="col-md-2"></div>
-			<div class="col-md-8">
+			<div class="col-md-1"></div>
+			<div class="col-md-10">
 				<div id="generales">
 					<h3>Detalle de Solicitud</h3>
 					<div class="input-group">
 						<span class="input-group-addon">Días a Solicitar</span>
 						<select class="form-control" style="background-color:white;min-width:80px" required id="dias" onchange="calculaFechas();"></select>
 						<span class="input-group-addon">Desde</span>
-						<input class="form-control" type="text" id="desde" style="min-width:100px; text-align:center;background-color:white;cursor:default" value="<?= date('Y-m-d');?>" required>
+						<input class="form-control" type="text" id="desde" style="text-align:center;background-color:white;cursor:default" value="<?= date('Y-m-d');?>" required>
 						<span class="input-group-addon">Hasta</span>
-						<input class="form-control" type="text" id="hasta" style="min-width:100px; text-align:center;background-color:white;cursor:default" 
+						<input class="form-control" type="text" id="hasta" style="text-align:center;background-color:white;cursor:default" 
 							value="" readonly required>
 						<span class="input-group-addon">Regresa a Laborar</span>
-						<input class="form-control" type="text" id="regresa" style="min-width:100px; text-align:center;background-color:white;cursor:default" 
+						<input class="form-control" type="text" id="regresa" style="text-align:center;background-color:white;cursor:default" 
 							value="" readonly required>
 					</div>
 					<br>

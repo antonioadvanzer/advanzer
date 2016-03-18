@@ -61,16 +61,16 @@
 				<br>
 				<div class="input-group">
 					<span class="input-group-addon">Fecha de Ingreso</span>
-					<input class="form-control" style="max-width:300px;ttext-align:center;cursor:default;background-color:white" value="" id="d_ingreso" disabled>
+					<input class="form-control" style="max-width:150px;ttext-align:center;cursor:default;background-color:white" value="" id="d_ingreso" disabled>
 					<span class="input-group-addon">Antigüedad</span>
-					<input class="form-control" style="max-width:300px;ttext-align:center;cursor:default;background-color:white" value="" id="d_antiguo" disabled>
+					<input class="form-control" style="max-width:350px;ttext-align:center;cursor:default;background-color:white" value="" id="d_antiguo" disabled>
 				</div>
 			</div>
 		</div>
 		<hr>
 		<div class="row" align="center">
-			<div class="col-md-2"></div>
-			<div class="col-md-8">
+			<div class="col-md-1"></div>
+			<div class="col-md-10">
 				<h3>Detalle de Solicitud</h3>
 				<div class="input-group">
 					<span class="input-group-addon">Motivo</span>
@@ -112,7 +112,7 @@
 				<p style="width:80%;border-radius:10px;border-color:red;border-style:dotted;color:red;display:none" id="otro_label"><small>Favor de redactar el detalle de su ausencia en el campo <i>Observaciones</i> para que su Jefe/Líder o bien Capital Humano decida si el permiso será CON goce o SIN goce de sueldo</small></p>
 				<div class="input-group">
 					<span class="input-group-addon" style="min-width:260px">Observaciones</span>
-					<textarea class="form-control" id="observaciones" rows="4" placeholder="Detalle del Permiso" required></textarea>
+					<textarea class="form-control" id="observaciones" rows="4" placeholder="Agrega cualquier comentario que consideres relevante para la autorización de tus días" required></textarea>
 				</div>
 				<br>
 				<br>
