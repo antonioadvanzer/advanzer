@@ -80,6 +80,9 @@
 				</label>
 				<label class="checkbox-inline">
 					<input type="checkbox" id="mensajeria_flag" value=""> Mensajería
+				</label>
+				<label class="checkbox-inline">
+					<input type="checkbox" id="comida_flag" value=""> Comida
 				</label><br>
 				<label class="checkbox-inline">
 					<input type="checkbox" id="vuelo_flag" value=""> Vuelo
@@ -176,6 +179,7 @@
 						$('#autobus_flag').prop('checked',false);
 						$('#gasolina_flag').prop('checked',false);
 						$('#mensajeria_flag').prop('checked',false);
+						$('#comida_flag').prop('checked',false);
 						$('#vuelo_flag').prop('checked',false);
 						$('#renta_flag').prop('checked',false);
 						$('#taxi_flag').prop('checked',false);
@@ -289,6 +293,7 @@
 					destino = $('#destino').val();
 					hotel_flag=0;
 					autobus_flag=0;
+					comida_flag=0;
 					vuelo_flag=0;
 					renta_flag=0;
 					gasolina_flag=0;
@@ -304,6 +309,8 @@
 							renta_flag=1;
 						if($('#vuelo_flag').is(':checked'))
 							vuelo_flag=1;
+						if($('#comida_flag').is(':checked'))
+							comida_flag=1;
 						if($('#gasolina_flag').is(':checked'))
 							gasolina_flag=1;
 						if($('#taxi_flag').is(':checked'))
@@ -324,7 +331,7 @@
 				$.ajax({
 					url: '<?= base_url("servicio/registra_solicitud");?>',
 					type: 'post',
-					data: {'colaborador':colaborador,'autorizador':autorizador,'centro':centro,'motivo':motivo,'dias':dias,'desde':desde,'hasta':hasta,'origen':origen,'destino':destino,'hotel_flag':hotel_flag,'autobus_flag':autobus_flag,'vuelo_flag':vuelo_flag,'renta_flag':renta_flag,'gasolina_flag':gasolina_flag,'taxi_flag':taxi_flag,'mensajeria_flag':mensajeria_flag,'taxi_aero_flag':taxi_aero_flag,'tipo_vuelo':tipo_vuelo,'hora_salida':hora_salida,'fecha_salida':fecha_salida,'ruta_salida':ruta_salida,'hora_regreso':hora_regreso,'fecha_regreso':fecha_regreso,'ruta_regreso':ruta_regreso,'hospedaje':hospedaje,'recompensas':recompensas,'tipo':3},
+					data: {'colaborador':colaborador,'autorizador':autorizador,'centro':centro,'motivo':motivo,'dias':dias,'desde':desde,'hasta':hasta,'origen':origen,'destino':destino,'hotel_flag':hotel_flag,'autobus_flag':autobus_flag,'vuelo_flag':vuelo_flag,'renta_flag':renta_flag,'gasolina_flag':gasolina_flag,'taxi_flag':taxi_flag,'mensajeria_flag':mensajeria_flag,'comida_flag':comida_flag,'taxi_aero_flag':taxi_aero_flag,'tipo_vuelo':tipo_vuelo,'hora_salida':hora_salida,'fecha_salida':fecha_salida,'ruta_salida':ruta_salida,'hora_regreso':hora_regreso,'fecha_regreso':fecha_regreso,'ruta_regreso':ruta_regreso,'hospedaje':hospedaje,'recompensas':recompensas,'tipo':4},
 					beforeSend: function() {
 						$('#update').hide('slow');
 						$('#cargando').show('slow');

@@ -263,7 +263,7 @@
 				$.ajax({
 					url: '<?= base_url("servicio/getViaticosInfo");?>',
 					type: 'post',
-					data: {'colaborador':colaborador,'centro_costo':centro_costo,'tipo':3},
+					data: {'colaborador':colaborador,'centro_costo':centro_costo,'tipo':4},
 					success: function(data){
 						var returnedData = JSON.parse(data);
 						if(returnedData['viaticos'])

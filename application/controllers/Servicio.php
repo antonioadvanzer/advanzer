@@ -184,6 +184,7 @@ class Servicio extends CI_Controller {
 				'hotel_flag'=>$this->input->post('hotel_flag'),
 				'autobus_flag'=>$this->input->post('autobus_flag'),
 				'vuelo_flag'=>$this->input->post('vuelo_flag'),
+				'comida_flag'=>$this->input->post('comida_flag'),
 				'renta_flag'=>$this->input->post('renta_flag'),
 				'gasolina_flag'=>$this->input->post('gasolina_flag'),
 				'taxi_flag'=>$this->input->post('taxi_flag'),
@@ -267,7 +268,31 @@ class Servicio extends CI_Controller {
 				$response['msg']="No se pudo enviar correo de notificación. Intenta de nuevo";
 			}
 		}
-
+		echo json_encode($response);
+	}
+	public function confirmar_anticipo() {
+		$datos['anticipo']=$this->input->post('anticipo');
+		$id=$this->input->post('solicitud');
+		$this->db->trans_begin();
+		$this->solicitudes_model->update_detalle_viaticos($id,$datos);
+		if($this->db->trans_status() === FALSE){
+			$this->db->trans_rollback();
+			$response['msg'] = "Error aplicando el anticipo de viáticos. Intenta de nuevo";
+		}else{
+			$solicitud=$this->solicitudes_model->getSolicitudById($id);
+			$data['solicitud']=$solicitud;
+			$data['anticipo']=$datos['anticipo'];
+			$destinatario=$this->user_model->searchById($solicitud->colaborador)->email;
+			$mensaje=$this->load->view("layout/solicitud/anticipo",$data,true);
+			if(!$this->sendMail($destinatario,$mensaje)){
+				$this->db->trans_commit();
+				$response['msg']="ok";
+			}
+			else{
+				$this->db->trans_rollback();
+				$response['msg']="No se pudo enviar correo de notificación. Intenta de nuevo";
+			}
+		}
 		echo json_encode($response);
 	}
 	public function rechazar_solicitud() {

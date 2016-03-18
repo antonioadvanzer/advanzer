@@ -41,11 +41,13 @@
 							<?php foreach ($solicitudes as $solicitud):
 								if(isset($solicitud->detalle)):
 									$detalle=$solicitud->detalle;
+									if($detalle->anticipo != 0)
+										break;
 									$vuelos="";
 									if($detalle->ruta_salida)
-										$vuelos.=$detalle->fecha_salida." ".$detalle->hora_salida ." (".$detalle->ruta_salida.") <br>";
+										$vuelos.=$detalle->fecha_salida." ".date_format(date_create($detalle->hora_salida),'H:i')." (".$detalle->ruta_salida.") <br>";
 									if($detalle->ruta_regreso)
-										$vuelos.=$detalle->fecha_regreso." ".$detalle->hora_regreso ." (".$detalle->ruta_regreso.") <br>";
+										$vuelos.=$detalle->fecha_regreso." ".date_format(date_create($detalle->hora_regreso),'H:i')." (".$detalle->ruta_regreso.") <br>";
 									$conceptos=array();
 									if($detalle->hotel_flag)
 										array_push($conceptos, 'HOTEL');
@@ -53,6 +55,8 @@
 										array_push($conceptos,"AUTOBÚS");
 									if($detalle->vuelo_flag)
 										array_push($conceptos,"VUELO");
+									if($detalle->comida_flag)
+										array_push($conceptos,"COMIDA");
 									if($detalle->renta_flag)
 										array_push($conceptos,"RENTA DE AUTO");
 									if($detalle->gasolina_flag)
@@ -152,22 +156,33 @@
 													<?php endforeach; ?>
 												</ul>
 											</div>
-											<div class="col-md-3">
+											<div class="col-md-2">
 												<h5 align="center">Vuelos</h5>
 												<p align="center"><?= $vuelos;?></p>
+											</div>
+											<div class="col-md-1">
+												<h5 align="center">Anticipo</h5>
+												<?php if($this->session->userdata('area')==9 && $solicitud->autorizador!=$this->session->userdata('id')): ?>
+													<input class="form-control" style="background-color:white;float:left;" required value="" id="anticipo">
+												<?php endif; ?>
 											</div>
 										<?php endif; ?>
 										<div class="col-md-3" align="center" style="float:right;">
 											<h5>&nbsp;</h5>
 											<div align="center" class="btn-group btn-group-lg" role="group" aria-label="...">
-												<?php if($this->session->userdata('area')==4): ?>
+												<?php if($this->session->userdata('area')==4 || ($solicitud->tipo==4 && $solicitud->autorizador==$this->session->userdata('id'))): ?>
 													<button onclick="actualizar(<?= $solicitud->id;?>,3);" type="button" class="btn btn-primary" 
 														style="text-align:center;display:inline;">Autorizar</button>
+												<?php elseif($this->session->userdata('area')==9 && $solicitud->autorizador!=$this->session->userdata('id')): ?>
+													<button onclick="confirmar(<?= $solicitud->id;?>);" type="button" class="btn btn-primary" 
+														style="text-align:center;display:inline;">Confirmar</button>
 												<?php else: ?>
 													<button onclick="actualizar(<?= $solicitud->id;?>,2);" type="button" class="btn btn-primary" 
 														style="text-align:center;display:inline;">Autorizar</button>
+												<?php endif;
+												if($this->session->userdata('area')==4 || $solicitud->autorizador==$this->session->userdata('id')): ?>
+													<button onclick="$('#tbl').hide('slow');$('#razon').show('slow');$('#estatus').val(4);$('#solicitud').val(<?= $solicitud->id;?>);" type="button" class="btn" style="text-align:center;display:inline;">Rechazar</button>
 												<?php endif; ?>
-												<button onclick="$('#tbl').hide('slow');$('#razon').show('slow');$('#estatus').val(4);$('#solicitud').val(<?= $solicitud->id;?>);" type="button" class="btn" style="text-align:center;display:inline;">Rechazar</button>
 											</div>
 										</div>
 									</small></td>
@@ -206,6 +221,8 @@
 										array_push($conceptos,"AUTOBÚS");
 									if($detalle->vuelo_flag)
 										array_push($conceptos,"VUELO");
+									if($detalle->comida_flag)
+										array_push($conceptos,"COMIDA");
 									if($detalle->renta_flag)
 										array_push($conceptos,"RENTA DE AUTO");
 									if($detalle->gasolina_flag)
@@ -329,9 +346,55 @@
 			</style>\
 		');
 
-		function actualizar(solicitud,estatus) {
-			if(!confirm('¿Seguro(|) que desea autorizar la solicitud?'))
+		function confirmar(solicitud) {
+			anticipo=$('#anticipo').val();
+			if(anticipo==''){
+				alert('Especifica el anticipo');
+				$('#anticipo').focus();
 				return false;
+			}
+			if(!confirm('¿Notificar el anticipo de $'+anticipo+'?'))
+				return false;
+			$.ajax({
+				url: '<?= base_url("servicio/confirmar_anticipo");?>',
+				type: 'post',
+				data: {'solicitud':solicitud,'anticipo':anticipo},
+				beforeSend: function() {
+					$('#tbl').hide('slow');
+					$('#cargando').show('slow');
+				},
+				success: function(data){
+					console.log(data);
+					var returnedData = JSON.parse(data);
+					if(returnedData['msg']=="ok"){
+						alert('Se ha notificado el anticipo');
+						window.document.location.reload();
+					}else{
+						$('#cargando').hide('slow');
+						$('#tbl').show('slow');
+						$('#alert').prop('display',true).show('slow');
+						$('#msg').html(returnedData['msg']);
+						setTimeout(function() {
+							$("#alert").fadeOut(1500);
+						},3000);
+					}
+				},
+				error: function(xhr) {
+					console.log(xhr);
+					$('#cargando').hide('slow');
+					$('#tbl').show('slow');
+					$('#alert').prop('display',true).show('slow');
+					$('#msg').html('Error, intenta de nuevo o contacta al Administrador de la Aplicación');
+					setTimeout(function() {
+						$("#alert").fadeOut(1500);
+					},3000);
+				}
+			});
+		}
+		function actualizar(solicitud,estatus) {
+			if(!confirm('¿Seguro que desea autorizar la solicitud?'))
+				return false;
+			tipo=<?= $solicitud->tipo;?>;
 			if($('#con_goce').is(':checked'))
 				tipo=3;
 			if($('#sin_goce').is(':checked'))

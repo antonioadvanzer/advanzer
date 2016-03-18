@@ -241,7 +241,7 @@
 					regresa = $('#regresa').val();
 					observaciones = $('#observaciones').val();
 					if(dias > disponibles)
-						observaciones += '\n\nEstá solicitando días adicionales ('+parseInt(dias-disponibles)+') a los que te corresponden actualmente.'
+						observaciones += '\n\nEstá solicitando '+parseInt(dias-disponibles)+' día(s) extra(s) a los que tiene disponible(s) actualmente.'
 					ochoMeses=$('#ochoMeses').val();
 				$.ajax({
 					url: '<?= base_url("servicio/registra_solicitud");?>',

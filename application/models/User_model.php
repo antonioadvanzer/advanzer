@@ -26,7 +26,9 @@ class User_model extends CI_Model{
 
 	function solicitudes_pendientes($colaborador){
 		if($this->session->userdata('area') == 4)
-			$this->db->where("(S.estatus=2 or (S.autorizador=$colaborador and S.estatus=1))");
+			$this->db->where("((S.tipo != 4 and S.estatus=2) or (S.autorizador=$colaborador and S.estatus=1))");
+		elseif($this->session->userdata('area')==9)
+			$this->db->where("((S.estatus=3 and S.tipo=4) or (S.autorizador=$colaborador and S.estatus=1))");
 		else
 			$this->db->where(array('S.autorizador'=>$colaborador,'S.estatus'=>1));
 		$this->db->select('S.*,U.nombre')->from('Solicitudes S')

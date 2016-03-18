@@ -9,9 +9,8 @@
 			<img src="<?= base_url('assets/images/loading.gif');?>"></div></div>
 	</div>
 	<div class="row">
-		<div class="col-md-3"></div>
-		<div class="col-md-3" align="center"><button class="btn btn-primary" onclick="location.href='<?= base_url("solicitar_viaticos_gastos");?>';"><big>Solicitud de Víaticos y Gastos de Viaje</big></button></div>
-		<div class="col-md-3" align="center"><button class="btn btn-primary" onclick="location.href='<?= base_url("comprobar_gastos");?>';"><big>Comprobación de Gastos</big></button></div>
+		<div class="col-md-6" align="center"><button class="btn btn-primary" onclick="location.href='<?= base_url("solicitar_viaticos_gastos");?>';"><big>Solicitud de Víaticos y Gastos de Viaje</big></button></div>
+		<div class="col-md-6" align="center"><button class="btn btn-primary" onclick="location.href='<?= base_url("comprobar_gastos");?>';"><big>Comprobación de Gastos</big></button></div>
 	</div><hr>
 	<div class="row">
 		<div class="col-md-12">

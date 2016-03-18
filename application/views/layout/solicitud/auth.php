@@ -115,13 +115,14 @@
 			<p><b>Días: </b><?=$solicitud->dias;?></p>
 			<p><b>Tipo: </b><?php 
 				switch($solicitud->tipo){
-					case 1: $tipo="VACACIONES";											break;
-					case 2: $tipo="PERMISO DE AUSENCIA ($solicitud->motivo)";			break;
-					case 3: $tipo="VIÁTICOS Y GASTOS DE VIAJE ($solicitud->motivo)";	break;
-					default: $tipo="";													break;
+					case 1: $tipo="VACACIONES";														break;
+					case 2: $tipo="PERMISO DE AUSENCIA CON GOCE DE SUELDO ($solicitud->motivo)";	break;
+					case 3: $tipo="PERMISO DE AUSENCIA SIN GOCE DE SUELDO ($solicitud->motivo)";	break;
+					case 4: $tipo="VIÁTICOS Y GASTOS DE VIAJE ($solicitud->motivo)";				break;
+					default: $tipo="";																break;
 				}
 			echo $tipo; ?></p>
-			<?php if($solicitud->tipo==3): ?>
+			<?php if($solicitud->tipo==4): ?>
 				<p>En breve se te confirmará el depósito del anticipo.</p>
 			<?php else: ?>
 				<p><b>Desde: </b><?=$solicitud->desde;?></p>
