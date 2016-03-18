@@ -32,7 +32,7 @@ class Solicitudes_model extends CI_Model{
 		if($result->num_rows() == 1)
 			return $result->first_row()->dias_acumulados;
 		else{
-			$result = $this->db->select('dias')->from('Solicitudes')->where(array('tipo'=>1,'colaborador'=>$colaborador,'estatus not in(0,4)'))->get();
+			$result = $this->db->select('dias')->from('Solicitudes')->where(array('tipo'=>1,'colaborador'=>$colaborador))->where_not_in('estatus',array(0,4))->get();
 			if($result->num_rows() == 1)
 				return (int)$result->first_row()->dias*-1;
 			else
