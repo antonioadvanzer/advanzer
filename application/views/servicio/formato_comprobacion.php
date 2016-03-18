@@ -92,22 +92,22 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td></td>
-						<td><input type="text" value="0" readonly id="suma_importe" class="form-control"></td>
-						<td><input type="text" value="0" readonly id="suma_iva" class="form-control"></td>
-						<td><input type="text" value="0" readonly id="suma_total" class="form-control"></td>
+						<td style="cursor:default;"></td>
+						<td style="cursor:default;"><input type="text" value="0" readonly id="suma_importe" class="form-control"></td>
+						<td style="cursor:default;"><input type="text" value="0" readonly id="suma_iva" class="form-control"></td>
+						<td style="cursor:default;"><input type="text" value="0" readonly id="suma_total" class="form-control"></td>
 					</tr>
 					<tr>
-						<td><span class="input-group-addon">Anticipo</span></td>
-						<td></td>
-						<td></td>
-						<td><input type="text" class="form-control" value="0" id="anticipo" onchange="setDiferencia();"></td>
+						<td style="cursor:default;"><span class="input-group-addon">Anticipo</span></td>
+						<td style="cursor:default;"></td>
+						<td style="cursor:default;"></td>
+						<td style="cursor:default;"><input type="text" class="form-control" value="0" id="anticipo" disabled style="cursor:default;" onchange="setDiferencia();"></td>
 					</tr>
 					<tr>
-						<td><span class="input-group-addon">Diferencia</span></td>
-						<td></td>
-						<td></td>
-						<td><input type="text" class="form-control" value="0" id="diferencia" readonly></td>
+						<td style="cursor:default;"><span class="input-group-addon">Diferencia</span></td>
+						<td style="cursor:default;"></td>
+						<td style="cursor:default;"></td>
+						<td style="cursor:default;"><input type="text" class="form-control" value="0" id="diferencia" readonly></td>
 					</tr>
 				</tbody>
 			</table>
