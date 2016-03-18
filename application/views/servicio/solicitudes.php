@@ -41,8 +41,6 @@
 							<?php foreach ($solicitudes as $solicitud):
 								if(isset($solicitud->detalle)):
 									$detalle=$solicitud->detalle;
-									if($detalle->anticipo != 0)
-										break;
 									$vuelos="";
 									if($detalle->ruta_salida)
 										$vuelos.=$detalle->fecha_salida." ".date_format(date_create($detalle->hora_salida),'H:i')." (".$detalle->ruta_salida.") <br>";
@@ -319,9 +317,14 @@
 											</div>
 										<?php endif;
 										if(($solicitud->colaborador == $this->session->userdata('id') && ($solicitud->estatus == 1 || $solicitud->estatus==2)) || (($this->session->userdata('area')==4 || $this->session->userdata('tipo') >= 4) && $solicitud->estatus<4 && $solicitud->estatus>0)): ?>
-											<div class="col-md-1" align="right" style="float:right;">
-												<h5>&nbsp;</h5>
-												<button onclick="$('#tbl').hide('slow');$('#razon').show('slow');$('#estatus').val(0);$('#solicitud').val(<?= $solicitud->id;?>);" type="button" class="btn" style="text-align:center;display:inline;">Cancelar</button>
+											<div class="col-md-1" style="float:right;">
+												<?php if(($solicitud->tipo==4 && $solicitud->detalle->anticipo==0) || $solicitud->tipo!=4): ?>
+													<h5>&nbsp;</h5>
+													<button onclick="$('#tbl').hide('slow');$('#razon').show('slow');$('#estatus').val(0);$('#solicitud').val(<?= $solicitud->id;?>);" type="button" class="btn" style="text-align:center;display:inline;">Cancelar</button>
+												<?php else: ?>
+													<h5 align="center">Anticipo</h5>
+													<p align="center">$<?= $solicitud->detalle->anticipo;?></p>
+												<?php endif; ?>
 											</div>
 										<?php endif; ?>
 									</small></td>
