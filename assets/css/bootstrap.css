@@ -1098,7 +1098,7 @@ html {
 }
 body {
   /*font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;*/
-  font-size: 12.5pt;
+  font-size: 13pt;
   line-height: 1.42857143;
   color: #333;
   background-color: #fff;
@@ -2559,7 +2559,7 @@ output {
   width: 100%;
   height: 34px;
   padding: 6px 12px;
-  font-size: 12.5pt;
+  font-size: 13pt;
   line-height: 1.42857143;
   color: #555;
   background-color: #fff;
@@ -3001,7 +3001,7 @@ select[multiple].input-lg {
 @media (min-width: 768px) {
   .form-horizontal .form-group-sm .control-label {
     padding-top: 6px;
-    font-size: 12.5pt;
+    font-size: 13pt;
   }
 }
 .btn {
@@ -3586,7 +3586,7 @@ tbody.collapse.in {
   min-width: 160px;
   padding: 5px 0;
   margin: 2px 0 0;
-  font-size: 12.5pt;
+  font-size: 13pt;
   text-align: left;
   list-style: none;
   background-color: #fff;
@@ -3950,7 +3950,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 }
 .input-group-addon {
   padding: 6px 12px;
-  font-size: 12.5pt;
+  font-size: 13pt;
   font-weight: normal;
   line-height: 1;
   color: #555;
@@ -3961,7 +3961,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 }
 .input-group-addon.input-sm {
   padding: 5px 10px;
-  font-size: 12.5pt;
+  font-size: 13pt;
   border-radius: 3px;
 }
 .input-group-addon.input-lg {
@@ -5187,7 +5187,7 @@ a.thumbnail.active {
   float: left;
   width: 0;
   height: 100%;
-  font-size: 12.5pt;
+  font-size: 13pt;
   line-height: 20px;
   color: #fff;
   text-align: center;
@@ -6043,7 +6043,7 @@ button.close {
   z-index: 1070;
   display: block;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 12.5pt;
+  font-size: 13pt;
   font-style: normal;
   font-weight: normal;
   line-height: 1.42857143;
