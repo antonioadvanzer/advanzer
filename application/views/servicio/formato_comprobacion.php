@@ -19,20 +19,29 @@
 			<img src="<?= base_url('assets/images/loading.gif');?>"></div></div>
 	</div>
 	<div class="row" align="center">
-		<div class="col-md-2"></div>
-		<div class="col-md-8">
-			<div class="input-group">
+		<div class="col-md-4"></div>
+		<div class="col-md-4">
+			<div class="input-group" style="display:<?php if($this->session->userdata('tipo')<4) echo"none";?>;">
 				<span class="input-group-addon">Colaborador</span>
 				<select class="selectpicker" data-header="Selecciona al Colaborador" data-width="300px" data-live-search="true" 
-					style="max-width:300px;text-align:center;" id="colaborador" required <?php if($this->session->userdata('tipo')<4) echo"disabled";?>>
+					style="max-width:300px;text-align:center;" id="colaborador" required>
 					<option value="" disabled selected>-- Selecciona al Colaborador --</option>
 					<?php foreach($colaboradores as $colaborador): ?>
 						<option value="<?= $colaborador->id;?>" <?php if($colaborador->id==$this->session->userdata('id'))echo"selected";?>><?= $colaborador->nombre;?></option>
 					<?php endforeach; ?>
 				</select>
-				<span class="input-group-addon">Centro de Costo</span>
-				<input type="text" class="form-control" id="centro_costo" value="" required>
-			</div><br>
+			</div>
+			<div class="input-group">
+				<span class="input-group-addon">Autorizador</span>
+				<select class="selectpicker" data-header="Selecciona al autorizador" data-width="300px" data-live-search="true" 
+					style="max-width:300px;text-align:center;" id="autorizador" required>
+					<option value="" disabled selected>-- Selecciona al Jefe Directo / Líder --</option>
+					<?php foreach($colaboradores as $colaborador)
+						if($colaborador->id != $this->session->userdata('id')): ?>
+							<option value="<?= $colaborador->id;?>" <?php if($colaborador->id==$yo->jefe)echo"selected";?>><?= $colaborador->nombre;?></option>
+						<?php endif; ?>
+				</select>
+			</div>
 		</div>
 	</div>
 	<div class="row" id="registros" align="center">
@@ -121,6 +130,13 @@
 		</div>
 	</div>
 	<script>
+		document.write('\
+			<style>\
+				.required {\
+					background: '+color+'\
+				}\
+			</style>\
+		');
 		function leeXML(form) {
 			if(form.factura.value ==''){
 				form.elements['fecha[]'].value='';

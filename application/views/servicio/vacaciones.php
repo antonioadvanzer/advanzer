@@ -16,30 +16,46 @@
 	<div class="row">
 		<div class="col-md-12">
 			Las vacaciones que generas como empleado de Advanzer/Entuizer son de acuerdo al artículo 76 de la Ley Federal del Trabajo (en rojo los días que te corresponden de acuerdo a tu antigüedad):
-			<p><table width="50%" align="center" class="tbl table-condensed table-bordered">
+			<p><table align="center" style="width:50%" class="tbl table table-condensed table-bordered">
 				<tbody>
 					<tr>
-						<th style="cursor:default">Años</th>
-						<td style="cursor:default" <?php if($date_dif->y+1 == 1) echo 'bgcolor="red"' ?>>1</td>
-						<td style="cursor:default" <?php if($date_dif->y+1 == 2) echo 'bgcolor="red"' ?>>2</td>
-						<td style="cursor:default" <?php if($date_dif->y+1 == 3) echo 'bgcolor="red"' ?>>3</td>
-						<td style="cursor:default" <?php if($date_dif->y+1 == 4) echo 'bgcolor="red"' ?>>4</td>
-						<td style="cursor:default" <?php if($date_dif->y+1 >= 5 && $date_dif->y+1 <= 9) echo 'bgcolor="red"' ?>>5-9</td>
-						<td style="cursor:default" <?php if($date_dif->y+1 >= 10 && $date_dif->y+1 <= 14) echo 'bgcolor="red"' ?>>10-14</td>
-						<td style="cursor:default" <?php if($date_dif->y+1 >= 15 && $date_dif->y+1 <= 19) echo 'bgcolor="red"' ?>>15-19</td>
-						<td style="cursor:default" <?php if($date_dif->y+1 >= 20 && $date_dif->y+1 <= 24) echo 'bgcolor="red"' ?>>20-24</td>
-						<td style="cursor:default" <?php if($date_dif->y+1 >= 25 && $date_dif->y+1 <= 29) echo 'bgcolor="red"' ?>>25-29</td>
+						<th width="10%" style="cursor:default;text-align:center;">Años</th>
+						<td width="10%" style="cursor:default;text-align:center;" <?php if($date_dif->y+1 == 1) echo 'bgcolor="red"' ?>>1</td>
+						<td width="10%" style="cursor:default;text-align:center;" <?php if($date_dif->y+1 == 2) echo 'bgcolor="red"' ?>>2</td>
+						<td width="10%" style="cursor:default;text-align:center;" <?php if($date_dif->y+1 == 3) echo 'bgcolor="red"' ?>>3</td>
+						<td width="10%" style="cursor:default;text-align:center;" <?php if($date_dif->y+1 == 4) echo 'bgcolor="red"' ?>>4</td>
+						<td width="10%" style="cursor:default;text-align:center;" <?php if($date_dif->y+1 >= 5 && $date_dif->y+1 <= 9) echo 'bgcolor="red"' ?>>5-9</td>
+						<td width="10%" style="cursor:default;text-align:center;" <?php if($date_dif->y+1 >= 10 && $date_dif->y+1 <= 14) echo 'bgcolor="red"' ?>>10-14</td>
+						<td width="10%" style="cursor:default;text-align:center;" <?php if($date_dif->y+1 >= 15 && $date_dif->y+1 <= 19) echo 'bgcolor="red"' ?>>15-19</td>
+						<td width="10%" style="cursor:default;text-align:center;" <?php if($date_dif->y+1 >= 20 && $date_dif->y+1 <= 24) echo 'bgcolor="red"' ?>>20-24</td>
+						<td width="10%" style="cursor:default;text-align:center;" <?php if($date_dif->y+1 >= 25 && $date_dif->y+1 <= 29) echo 'bgcolor="red"' ?>>25-29</td>
 					</tr>
-					<tr><th style="cursor:default">Días</th>
-						<td style="cursor:default" <?php if($date_dif->y+1 == 1) echo 'bgcolor="red"' ?>>6</td>
-						<td style="cursor:default" <?php if($date_dif->y+1 == 2) echo 'bgcolor="red"' ?>>8</td>
-						<td style="cursor:default" <?php if($date_dif->y+1 == 3) echo 'bgcolor="red"' ?>>10</td>
-						<td style="cursor:default" <?php if($date_dif->y+1 == 4) echo 'bgcolor="red"' ?>>12</td>
-						<td style="cursor:default" <?php if($date_dif->y+1 >= 5 && $date_dif->y+1 <= 9) echo 'bgcolor="red"' ?>>14</td>
-						<td style="cursor:default" <?php if($date_dif->y+1 >= 10 && $date_dif->y+1 <= 14) echo 'bgcolor="red"' ?>>16</td>
-						<td style="cursor:default" <?php if($date_dif->y+1 >= 15 && $date_dif->y+1 <= 19) echo 'bgcolor="red"' ?>>18</td>
-						<td style="cursor:default" <?php if($date_dif->y+1 >= 20 && $date_dif->y+1 <= 24) echo 'bgcolor="red"' ?>>20</td>
-						<td style="cursor:default" <?php if($date_dif->y+1 >= 25 && $date_dif->y+1 <= 29) echo 'bgcolor="red"' ?>>22</td></tr>
+					<tr><th style="cursor:default;text-align:center;">Días</th>
+						<td style="cursor:default;text-align:center;" <?php if($date_dif->y+1 == 1) echo 'bgcolor="red"' ?>>6</td>
+						<td style="cursor:default;text-align:center;" <?php if($date_dif->y+1 == 2) echo 'bgcolor="red"' ?>>8</td>
+						<td style="cursor:default;text-align:center;" <?php if($date_dif->y+1 == 3) echo 'bgcolor="red"' ?>>10</td>
+						<td style="cursor:default;text-align:center;" <?php if($date_dif->y+1 == 4) echo 'bgcolor="red"' ?>>12</td>
+						<td style="cursor:default;text-align:center;" <?php if($date_dif->y+1 >= 5 && $date_dif->y+1 <= 9) echo 'bgcolor="red"' ?>>14</td>
+						<td style="cursor:default;text-align:center;" <?php if($date_dif->y+1 >= 10 && $date_dif->y+1 <= 14) echo 'bgcolor="red"' ?>>16</td>
+						<td style="cursor:default;text-align:center;" <?php if($date_dif->y+1 >= 15 && $date_dif->y+1 <= 19) echo 'bgcolor="red"' ?>>18</td>
+						<td style="cursor:default;text-align:center;" <?php if($date_dif->y+1 >= 20 && $date_dif->y+1 <= 24) echo 'bgcolor="red"' ?>>20</td>
+						<td style="cursor:default;text-align:center;" <?php if($date_dif->y+1 >= 25 && $date_dif->y+1 <= 29) echo 'bgcolor="red"' ?>>22</td></tr>
+				</tbody>
+			</table><p>
+			<p><table align="center" style="width:50%" class="table table-bordered table-condensed">
+				<thead>
+					<tr>
+						<th>Días Disponibles</th>
+						<th>Días próximos a vencer</th>
+						<th>Fecha de próximo vencimiento</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td style="cursor:default;text-align:center;"><?php if($yo->acumulados) echo$yo->disponibles + $yo->acumulados->dias_acumulados;else echo$yo->disponibles?></td>
+						<td style="cursor:default;text-align:center;"><?php if($yo->acumulados) echo $yo->acumulados->dias_uno;else echo 0;?></td>
+						<td style="cursor:default;text-align:center;"><?php if($yo->acumulados) echo date_format(date_create($yo->acumulados->vencimiento_uno),'j-M-Y')?></td>
+					</tr>
 				</tbody>
 			</table></p>
 		</div>
@@ -76,6 +92,9 @@
 		document.write('\
 			<style>\
 				.tbl > tbody > tr > th {\
+					background: '+color+'\
+				}\
+				table>thead>tr>th {\
 					background: '+color+'\
 				}\
 			</style>\

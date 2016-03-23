@@ -29,12 +29,14 @@
 					<table class="table" align="center" data-toggle="table" data-hover="true" data-striped="true">
 						<thead>
 							<tr>
-								<th data-halign="center">Tipo</th>
-								<th data-halign="center">Fecha de Solicitud</th>
-								<th data-halign="center">Colaborador</th>
-								<th data-halign="center">Días</th>
-								<th data-halign="center">Desde</th>
-								<th data-halign="center">Hasta</th>
+								<th style="text-align:center">Folio</th>
+								<th style="text-align:center">Tipo</th>
+								<th style="text-align:center">Fecha de Solicitud</th>
+								<th style="text-align:center">Colaborador</th>
+								<th style="text-align:center">Días</th>
+								<th style="text-align:center">Desde</th>
+								<th style="text-align:center">Hasta</th>
+								<th style="text-align:center">Historial</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -73,15 +75,17 @@
 								 	default: $tipo='';								break;
 								} ?>
 								<tr data-target="#collapse<?= $solicitud->id;?>" class="highlighted" data-toggle="collapse">
-									<td><small><?= $tipo;?></small></td>
-									<td><small><?= date('Y-m-d',strtotime($solicitud->fecha_solicitud));?></small></td>
-									<td><small><?=$solicitud->nombre; ?></small></td>
-									<td><small><?= $solicitud->dias;?></small></td>
-									<td><small><?= $solicitud->desde;?></small></td>
-									<td><small><?= $solicitud->hasta;?></small></td>
+									<td align="center"><small><?= $solicitud->id;?></small></td>
+									<td align="center"><small><?= $tipo;?></small></td>
+									<td align="center"><small><?= date('Y-m-d',strtotime($solicitud->fecha_solicitud));?></small></td>
+									<td align="center"><small><?=$solicitud->nombre; ?></small></td>
+									<td align="center"><small><?= $solicitud->dias;?></small></td>
+									<td align="center"><small><?= $solicitud->desde;?></small></td>
+									<td align="center"><small><?= $solicitud->hasta;?></small></td>
+									<td align="center"><a target="_blank" title="Ver Historial del Colaborador" href="<?= base_url("servicio/historial/$solicitud->tipo/$solicitud->colaborador");?>"><span class="glyphicon glyphicon-time"></span></a></td>
 								</tr>
 								<tr id="collapse<?= $solicitud->id;?>" class="collapse out">
-									<td height="100px" style="cursor:default;" colspan="7"><small>
+									<td height="100px" style="cursor:default;" colspan="8"><small>
 										<?php if($solicitud->tipo < 4):
 											if($solicitud->tipo==2 || $solicitud->tipo==3):
 												$filename=base_url("assets/docs/permisos/permiso_$solicitud->id");
@@ -99,36 +103,14 @@
 													<div class="col-md-3" align="center">
 														<h5 align="center">TIPO DE PERMISO</h5><br>
 														<label class="radio-inline">
-															<input type="radio" name="tipo" id="con_goce" value="CON GOCE" <?php if($solicitud->tipo==2) echo"checked";?>> CON GOCE
+															<input type="radio" name="tipo" id="con_goce" value="JUSTIFICADO" <?php if($solicitud->tipo==2) echo"checked";?>> JUSTIFICADO
 														</label>
 														<label class="radio-inline">
-															<input type="radio" name="tipo" id="sin_goce" value="SIN GOCE" <?php if($solicitud->tipo==3) echo"checked";?>> SIN GOCE
+															<input type="radio" name="tipo" id="sin_goce" value="SIN JUSTIFICAR" <?php if($solicitud->tipo==3) echo"checked";?>> SIN JUSTIFICAR
 														</label>
 													</div>
 												<?php endif;
-											endif;
-											if($solicitud->tipo==1 && count($solicitud->historial)>0): ?>
-												<div class="col-md-3">
-													<h5 align="center">HISTORIAL</h5>
-													<div class="row" align="center">
-														<div class="col-md-2"><b>Días</b></div>
-														<div class="col-md-5"><b>Desde</b></div>
-														<div class="col-md-5"><b>Estatus</b></div>
-														<?php foreach ($solicitud->historial as $registro) :
-															switch ($registro->estatus) {
-																case 0: $estatus='CANCELADA';								break;
-																case 1: $estatus='ENVIADA';									break;
-																case 2: $estatus='EN REVISIÓN POR CAPITAL HUMANO';			break;
-																case 3: $estatus='AUTORIZADA';								break;
-																case 4: $estatus='RECHAZADA';								break;
-															} ?>
-															<div class="col-md-2"><?= $registro->dias;?></div>
-															<div class="col-md-5"><?= $registro->desde;?></div>
-															<div class="col-md-5"><?= $estatus;?></div>
-														<?php endforeach; ?>
-													</div>
-												</div>
-											<?php endif; ?>
+											endif; ?>
 											<div class="col-md-4">
 												<h5 align="center">OBSERVACIONES</h5><br>
 												<p align="center"><?=$solicitud->observaciones; ?></p>
@@ -191,47 +173,21 @@
 				<?php endif;
 				if(!empty($propias)): ?>
 					<h3>Tus Solicitudes</h3>
-					<table class="table" align="center" data-toggle="table" data-hover="true" data-striped="true">
+					<table class="table table-hover table-striped" align="center">
 						<thead>
 							<tr>
-								<th data-halign="center">Tipo</th>
-								<th data-halign="center">Fecha de Solicitud</th>
-								<th data-halign="center">Autorizador</th>
-								<th data-halign="center">Días</th>
-								<th data-halign="center">Desde</th>
-								<th data-halign="center">Hasta</th>
-								<th data-halign="center">Estatus</th>
+								<th style="text-align:center">Folio</th>
+								<th style="text-align:center">Tipo</th>
+								<th style="text-align:center">Fecha de Solicitud</th>
+								<th style="text-align:center">Autorizador</th>
+								<th style="text-align:center">Días</th>
+								<th style="text-align:center">Desde</th>
+								<th style="text-align:center">Hasta</th>
+								<th style="text-align:center">Estatus</th>
 							</tr>
 						</thead>
-						<tbody>
+						<tbody data-link="row" class="rowlink">
 							<?php foreach ($propias as $solicitud):
-								if(isset($solicitud->detalle)):
-									$detalle=$solicitud->detalle;
-									$vuelos="";
-										if($detalle->ruta_salida)
-											$vuelos.=$detalle->fecha_salida." ".$detalle->hora_salida ." (".$detalle->ruta_salida.") <br>";
-										if($detalle->ruta_regreso)
-											$vuelos.=$detalle->fecha_regreso." ".$detalle->hora_regreso ." (".$detalle->ruta_regreso.") <br>";
-									$conceptos=array();
-									if($detalle->hotel_flag)
-										array_push($conceptos, 'HOTEL');
-									if($detalle->autobus_flag)
-										array_push($conceptos,"AUTOBÚS");
-									if($detalle->vuelo_flag)
-										array_push($conceptos,"VUELO");
-									if($detalle->comida_flag)
-										array_push($conceptos,"COMIDA");
-									if($detalle->renta_flag)
-										array_push($conceptos,"RENTA DE AUTO");
-									if($detalle->gasolina_flag)
-										array_push($conceptos,"GASOLINA");
-									if($detalle->taxi_flag)
-										array_push($conceptos,"TAXI");
-									if($detalle->mensajeria_flag)
-										array_push($conceptos,"MENSAJERÍA");
-									if($detalle->taxi_aero_flag)
-										array_push($conceptos,"TAXI AEROPUERTO");
-								endif;
 								switch ($solicitud->estatus) {
 									case 0: $estatus='CANCELADA';								break;
 									case 1: $estatus='ENVIADA';									break;
@@ -244,90 +200,25 @@
 								 	case 2:
 								 		$tipo='PERMISO DE AUSENCIA';
 								 		if($solicitud->estatus==3)
-								 			$tipo.=' CON GOCE';
+								 			$tipo.=' JUSTIFICADO';
 								 		break;
 								 	case 3:
 								 		$tipo='PERMISO DE AUSENCIA';
 								 		if($solicitud->estatus==3)
-								 			$tipo.=' SIN GOCE';
+								 			$tipo.=' SIN JUSTIFICAR';
 								 		break;
 								 	case 4: $tipo='VIÁTICOS Y GASTOS DE VIAJE';		break;
 								 	default: $tipo='';								break;
 								 } ?>
-								<tr data-target="#collapse<?= $solicitud->id;?>" class="highlighted" data-toggle="collapse">
-									<td><small><?= $tipo;?></small></td>
-									<td><small><?= date('Y-m-d',strtotime($solicitud->fecha_solicitud));?></small></td>
-									<td><small><?= $solicitud->nombre;?></small></td>
-									<td><small><?= $solicitud->dias;?></small></td>
-									<td><small><?= $solicitud->desde;?></small></td>
-									<td><small><?= $solicitud->hasta;?></small></td>
-									<td><small><?= $estatus;?></small></td>
-								</tr>
-								<tr id="collapse<?= $solicitud->id;?>" class="collapse out">
-									<td height="100px" style="cursor:default;" colspan="7"><small>
-										<?php if($solicitud->tipo < 4):
-											if($solicitud->tipo==2 || $solicitud->tipo==3): ?>
-												<?php $filename=base_url("assets/docs/permisos/permiso_$solicitud->id");
-												$file_headers = @get_headers($filename);
-												if($file_headers[0] != 'HTTP/1.1 404 Not Found' && $file_headers[0] != 'HTTP/1.0 404 Not Found'): ?>
-													<div class="col-md-2">
-														<h5 align="center">COMPROBANTE</h5><br>
-														<p align="center"><a href="<?= $filename;?>" download><span class="glyphicon glyphicon-download-alt"></span> descargar</a></p>
-													</div>
-												<?php endif; ?>
-												<div class="col-md-2">
-													<h5 align="center">MOTIVO</h5><br>
-													<p align="center"><?=$solicitud->motivo; ?></p>
-												</div>
-											<?php endif; ?>
-											<div class="col-md-5">
-												<h5 align="center">OBSERVACIONES</h5><br>
-												<p align="center"><?=$solicitud->observaciones; ?></p>
-											</div>
-										<?php else: ?>
-											<div class="col-md-2">
-												<h5 align="center">Centro de Costo</h5>
-												<p align="center"><?= $detalle->centro_costo;?></p>
-											</div>
-											<div class="col-md-2">
-												<h5 align="center">Motivo del Viaje</h5>
-												<p align="center"><?= $solicitud->motivo;?></p>
-											</div>
-											<div class="col-md-1">
-												<h5 align="center">Viaje</h5>
-												<p align="center"><?= $detalle->origen." - ".$detalle->destino;?></p>
-											</div>
-											<div class="col-md-2">
-												<h5 align="center">Conceptos</h5>
-												<ul type="square">
-													<?php foreach ($conceptos as $concepto) : ?>
-														<li><?= $concepto;?></li>
-													<?php endforeach; ?>
-												</ul>
-											</div>
-											<div class="col-md-3">
-												<h5 align="center">Vuelos</h5>
-												<p align="center"><?= $vuelos;?></p>
-											</div>
-										<?php endif; ?>
-										<?php if($solicitud->estatus == 4): ?>
-											<div class="col-md-2">
-												<h5 align="center">Razón de Rechazo</h5>
-												<p align="center"><?=$solicitud->razon; ?></p>
-											</div>
-										<?php endif;
-										if(($solicitud->colaborador == $this->session->userdata('id') && ($solicitud->estatus == 1 || $solicitud->estatus==2)) || (($this->session->userdata('area')==4 || $this->session->userdata('tipo') >= 4) && $solicitud->estatus<4 && $solicitud->estatus>0)): ?>
-											<div class="col-md-1" style="float:right;">
-												<?php if(($solicitud->tipo==4 && $solicitud->detalle->anticipo==0) || $solicitud->tipo!=4): ?>
-													<h5>&nbsp;</h5>
-													<button onclick="$('#tbl').hide('slow');$('#razon').show('slow');$('#estatus').val(0);$('#solicitud').val(<?= $solicitud->id;?>);" type="button" class="btn" style="text-align:center;display:inline;">Cancelar</button>
-												<?php else: ?>
-													<h5 align="center">Anticipo</h5>
-													<p align="center">$<?= $solicitud->detalle->anticipo;?></p>
-												<?php endif; ?>
-											</div>
-										<?php endif; ?>
-									</small></td>
+								<tr onmouseover="this.style.background=color;" onmouseout="this.style.background='transparent';">
+									<td align="center"><small><a href='<?= base_url("servicio/ver/$solicitud->id");?>'><?= $solicitud->id;?></small></td>
+									<td align="center"><small><?= $tipo;?></small></td>
+									<td align="center"><small><?= date('Y-m-d',strtotime($solicitud->fecha_solicitud));?></small></td>
+									<td align="center"><small><?= $solicitud->nombre;?></small></td>
+									<td align="center"><small><?= $solicitud->dias;?></small></td>
+									<td align="center"><small><?= $solicitud->desde;?></small></td>
+									<td align="center"><small><?= $solicitud->hasta;?></small></td>
+									<td align="center"><small><?= $estatus;?></small></td>
 								</tr>
 							<?php endforeach; ?>
 						</tbody>

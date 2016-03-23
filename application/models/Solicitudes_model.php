@@ -22,6 +22,20 @@ class Solicitudes_model extends CI_Model{
 		return $result;
 	}
 
+	function getSolicitudByTipoColaborador($tipo,$colaborador) {
+		if($tipo==2 || $tipo==3)
+			$this->db->where_in('tipo',array(2,3));
+		else
+			$this->db->where('tipo',$tipo);
+		$result = $this->db->where('colaborador',$colaborador)->where_not_in('estatus',array(1,2))->get('Solicitudes')->result();
+		foreach ($result as $solicitud):
+			if($solicitud->tipo == 4)
+				$solicitud->detalle = $this->db->where('solicitud',$solicitud->id)->get('Detalle_Viaticos')->first_row();
+			$solicitud->nombre_autorizador=$this->db->where('id',$solicitud->autorizador)->get('Users')->first_row()->nombre;
+		endforeach;
+		return $result;
+	}
+
 	function getViaticosInfo($datos) {
 		$result = $this->db->where($datos)->join('Detalle_Viaticos','Detalle_Viaticos.solicitud=Solicitudes.id')->get('Solicitudes')->first_row();
 		return $result;

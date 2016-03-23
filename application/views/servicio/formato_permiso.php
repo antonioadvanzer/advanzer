@@ -25,25 +25,27 @@
 	</div>
 	<form id="update" role="form" method="post" action="javascript:" class="form-signin" enctype="multipart/form-data">
 		<div class="row" align="center">
-			<div class="col-md-2"></div>
-			<div class="col-md-8">
-				<div class="input-group">
+			<div class="col-md-4"></div>
+			<div class="col-md-4">
+				<div class="input-group" style="display:<?php if($this->session->userdata('tipo')<4) echo"none";?>;">
 					<span class="input-group-addon">Colaborador</span>
 					<select class="selectpicker" data-header="Selecciona al Colaborador" data-width="300px" data-live-search="true" 
-						id="colaborador" required <?php if($this->session->userdata('tipo')<4) echo"disabled";?>>
+						style="max-width:300px;text-align:center;" id="colaborador" required>
 						<option value="" disabled selected>-- Selecciona al Colaborador --</option>
 						<?php foreach($colaboradores as $colaborador): ?>
 							<option value="<?= $colaborador->id;?>" <?php if($colaborador->id==$this->session->userdata('id'))echo"selected";?>><?= $colaborador->nombre;?></option>
 						<?php endforeach; ?>
 					</select>
-					<span class="input-group-addon">Jefe Directo / Líder</span>
+				</div>
+				<div class="input-group">
+					<span class="input-group-addon required">Autorizador</span>
 					<select class="selectpicker" data-header="Selecciona al autorizador" data-width="300px" data-live-search="true" 
 						style="max-width:300px;text-align:center;" id="autorizador" required>
 						<option value="" disabled selected>-- Selecciona al Jefe Directo / Líder --</option>
 						<?php foreach($colaboradores as $colaborador)
 							if($colaborador->id != $this->session->userdata('id')): ?>
 								<option value="<?= $colaborador->id;?>" <?php if($colaborador->id==$yo->jefe)echo"selected";?>><?= $colaborador->nombre;?></option>
-						<?php endif; ?>
+							<?php endif; ?>
 					</select>
 				</div>
 			</div>
@@ -73,7 +75,7 @@
 			<div class="col-md-10">
 				<h3>Detalle de Solicitud</h3>
 				<div class="input-group">
-					<span class="input-group-addon">Motivo</span>
+					<span class="input-group-addon required">Motivo</span>
 					<select class="form-control" id="motivo" required>
 						<option value="" selected disabled>-- Selecciona el motivo --</option>
 						<option value="2">MATRIMONIO</option>
@@ -85,14 +87,14 @@
 						<option value="2">FALLECIMIENTO DE PADRES POLÍTICOS</option>
 						<option>Otro</option>
 					</select>
-					<span class="input-group-addon" id="especifique_label">Especifique</span>
+					<span class="input-group-addon required" id="especifique_label">Especifique</span>
 					<input class="form-control" id="especifique" value="" disabled style="background-color:white;">
-					<span class="input-group-addon">Comprobante</span>
+					<span class="input-group-addon required">Comprobante</span>
 					<input class="form-control" type="file" id="file" name="file" value="">
 				</div>
 				<br>
 				<div class="input-group">
-					<span class="input-group-addon">Días a Solicitar</span>
+					<span class="input-group-addon required">Días a Solicitar</span>
 					<select class="form-control" id="dias" onchange="calculaFechas();" required>
 						<option value="" selected disabled>-- Elegir --</option>
 						<option>1</option>
@@ -101,17 +103,17 @@
 						<option>4</option>
 						<option>5</option>
 					</select>
-					<span class="input-group-addon">Desde</span>
+					<span class="input-group-addon required">Desde</span>
 					<input class="form-control" type="text" id="desde" style="text-align:center;background-color:white;cursor:default" 
 						value="<?= date('Y-m-d');?>" required readonly>
-					<span class="input-group-addon">Hasta</span>
+					<span class="input-group-addon required">Hasta</span>
 					<input class="form-control" type="text" id="hasta" style="text-align:center;background-color:white;cursor:default" 
 						value="" readonly required>
 				</div>
 				<br>
 				<p style="width:80%;border-radius:10px;border-color:red;border-style:dotted;color:red;display:none" id="otro_label"><small>Favor de redactar el detalle de su ausencia en el campo <i>Observaciones</i> para que su Jefe/Líder o bien Capital Humano decida si el permiso será CON goce o SIN goce de sueldo</small></p>
 				<div class="input-group">
-					<span class="input-group-addon" style="min-width:260px">Observaciones</span>
+					<span class="input-group-addon required" style="min-width:260px">Observaciones</span>
 					<textarea class="form-control" id="observaciones" rows="4" placeholder="Agrega cualquier comentario que consideres relevante para la autorización de tus días" required></textarea>
 				</div>
 				<br>
@@ -128,6 +130,13 @@
 		</div>
 	</form>
 	<script>
+		document.write('\
+			<style>\
+				.required {\
+					background: '+color+'\
+				}\
+			</style>\
+		');
 		function getColaborador() {
 			$('#colaborador :selected').each(function(){
 				colaborador=$('#colaborador').val();

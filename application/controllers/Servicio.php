@@ -21,6 +21,25 @@ class Servicio extends CI_Controller {
 	}
 
 	//básicas
+	public function historial($tipo,$colaborador) {
+		$data['colaborador']=$this->user_model->searchById($colaborador)->nombre;
+		$data['solicitudes']=$this->solicitudes_model->getSolicitudByTipoColaborador($tipo,$colaborador);
+		switch ($tipo) :
+			case 1: $tipo='VACACIONES';						break;
+			case 2: case 3:	$tipo='PERMISO DE AUSENCIA';	break;
+			case 4: $tipo='VIÁTICOS Y GASTOS DE VIAJE';		break;
+			default: $tipo='';								break;
+		endswitch;
+		$data['tipo']=$tipo;
+		$this->layout->title('Advanzer - Historial de Solicitudes');
+		$this->layout->view('servicio/historial_solicitud',$data);
+	}
+	public function ver($solicitud) {
+		$data['solicitud']=$this->solicitudes_model->getSolicitudById($solicitud);
+		$data['colaboradores']=$this->user_model->getAll();
+		$this->layout->title('Advanzer - Detalle de Solicitud');
+		$this->layout->view('servicio/detalle_solicitud',$data);
+	}
 	public function formato_comprobacion() {
 		$data=array();
 		$data['yo']=$this->user_model->searchById($this->session->userdata('id'));
@@ -80,7 +99,55 @@ class Servicio extends CI_Controller {
 	}
 	public function vacaciones() {
 		$data=array();
-		$data['yo']=$this->user_model->searchById($this->session->userdata('id'));
+		$result=$this->user_model->searchById($this->session->userdata('id'));
+		$ingreso=new DateTime($result->fecha_ingreso);
+		$hoy=new DateTime(date('Y-m-d'));
+		$diff = $ingreso->diff($hoy);
+		switch($diff->y){
+			case 0:
+				$dias=0;
+				$dias2=6;
+				$disponibles=floor(($diff->days-($diff->y*365))*6/365);
+				break;
+			case 1:
+				$dias=6;
+				$dias2=8;
+				break;
+			case 2:
+				$dias=8;
+				$dias2=10;
+				break;
+			case 3:
+				$dias=10;
+				$dias2=12;
+				break;
+			case 4:case 5:case 6:case 7:case 8:
+				$dias=10;
+				$dias2=14;
+				break;
+			case 9:case 10:case 11:case 12:case 13:
+				$dias=14;
+				$dias2=16;
+				break;
+			case 14:case 15:case 16:case 17:case 18:
+				$dias=16;
+				$dias2=18;
+				break;
+			case 19:case 20:case 21:case 22:case 23:
+				$dias=18;
+				$dias2=20;
+				break;
+			default:
+				$dias=20;
+				$dias2=22;
+				break;
+		}
+		$result->disponibles=floor(($diff->days-($diff->y*365))*$dias2/365);
+		$result->extra=$dias2-$result->disponibles;
+		if($dias_disponibles=$this->solicitudes_model->getDiasDisponibles($result->id))
+			$result->disponibles += (int)$dias_disponibles;
+		$result->acumulados=$this->solicitudes_model->getAcumulados($result->id);
+		$data['yo']=$result;
 		$this->layout->title('Advanzer - Vacaciones');
 		$this->layout->view('servicio/vacaciones',$data);
 	}
@@ -237,6 +304,7 @@ class Servicio extends CI_Controller {
 		if($this->input->post('tipo'))
 			$datos['tipo']=$this->input->post('tipo');
 		$datos['estatus']=$this->input->post('estatus');
+		$datos['auth_uno']=1;
 		$datos['usuario_modificacion']=$this->session->userdata('id');
 		$this->db->trans_begin();
 		$this->solicitudes_model->update_solicitud($id,$datos);

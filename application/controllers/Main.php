@@ -20,6 +20,11 @@ class Main extends CI_Controller {
     	$data['evaluacion'] = $this->evaluacion_model->getEvaluacionAnual();
     	$data['auth_pendientes'] = $this->user_model->solicitudes_pendientes($this->session->userdata('id'));
     	$data['solicitudes_pendientes'] = $this->user_model->solicitudesByColaborador($this->session->userdata('id'));
+    	$cont=0;
+		foreach ($data['solicitudes_pendientes'] as $solicitud)
+    		if(in_array($solicitud->estatus,array(1,2)))
+				$cont++;
+		$data['cont']=$cont;
     	$data['requisiciones_pendientes'] = $this->requisicion_model->getPendientesByColaborador($this->session->userdata('id'));
 		$this->layout->title('Advanzer - Inicio');
 		$this->layout->view('main/index', $data);

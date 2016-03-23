@@ -20,24 +20,27 @@
 	</div>
 	<form id="update" role="form" method="post" action="javascript:" class="form-signin">
 		<div class="row" align="center">
-			<div class="col-md-2"></div>
-			<div class="col-md-8">
-				<div class="input-group">
-					<span class="input-group-addon">Colaborador</span>
+			<div class="col-md-4"></div>
+			<div class="col-md-4">
+				<div class="input-group" style="display:<?php if($this->session->userdata('tipo')<4) echo"none";?>;">
+					<span class="input-group-addon required">Colaborador</span>
 					<select class="selectpicker" data-header="Selecciona al Colaborador" data-width="300px" data-live-search="true" 
-						style="max-width:300px;text-align:center;" id="colaborador" required <?php if($this->session->userdata('tipo')<4) echo"disabled";?>>
+						style="max-width:300px;text-align:center;" id="colaborador" required>
 						<option value="" disabled selected>-- Selecciona al Colaborador --</option>
 						<?php foreach($colaboradores as $colaborador): ?>
 							<option value="<?= $colaborador->id;?>" <?php if($colaborador->id==$this->session->userdata('id'))echo"selected";?>><?= $colaborador->nombre;?></option>
 						<?php endforeach; ?>
 					</select>
-					<span class="input-group-addon">Jefe Directo / Líder</span>
+				</div>
+				<div class="input-group">
+					<span class="input-group-addon required">Autorizador</span>
 					<select class="selectpicker" data-header="Selecciona al autorizador" data-width="300px" data-live-search="true" 
 						style="max-width:300px;text-align:center;" id="autorizador" required>
 						<option value="" disabled selected>-- Selecciona al Jefe Directo / Líder --</option>
-						<?php foreach($colaboradores as $colaborador): ?>
-							<option value="<?= $colaborador->id;?>" <?php if($colaborador->id==$yo->jefe)echo"selected";?>><?= $colaborador->nombre;?></option>
-						<?php endforeach; ?>
+						<?php foreach($colaboradores as $colaborador)
+							if($colaborador->id != $this->session->userdata('id')): ?>
+								<option value="<?= $colaborador->id;?>" <?php if($colaborador->id==$yo->jefe)echo"selected";?>><?= $colaborador->nombre;?></option>
+							<?php endif; ?>
 					</select>
 				</div>
 			</div>
@@ -46,56 +49,58 @@
 		<div class="row" align="center">
 			<div class="col-md-6">
 				<div class="input-group">
-					<span style="min-width:250px" class="input-group-addon">Centro de Costo</span>
+					<span style="min-width:250px" class="input-group-addon required">Centro de Costo</span>
 					<input class="form-control" style="background-color:white;" value="" id="centro" required>
 				</div><br>
 				<div class="input-group">
-					<span style="min-width:250px" class="input-group-addon" style="min-width:260px">Motivo del Viaje</span>
+					<span style="min-width:250px" class="input-group-addon required" style="min-width:260px">Motivo del Viaje</span>
 					<input class="form-control" style="background-color:white;" value="" id="motivo" required>
 				</div><br>
 				<div class="input-group">
-					<span class="input-group-addon">Días</span>
+					<span class="input-group-addon required">Días</span>
 					<input class="form-control" style="background-color:white;" required value="1" id="dias" placeholder="# días" onkeyup="calculaFechas();">
-					<span class="input-group-addon">Desde</span>
+					<span class="input-group-addon required">Desde</span>
 					<input class="form-control" type="text" id="desde" value="<?= date('Y-m-d');?>" style="text-align:center;background-color:white" readonly required>
-					<span class="input-group-addon">Hasta</span>
+					<span class="input-group-addon required">Hasta</span>
 					<input class="form-control" type="text" id="hasta" value="" style="text-align:center;background-color:white;" readonly required>
 				</div><br>
 				<div class="input-group">
-					<span class="input-group-addon">Orígen</span>
+					<span class="input-group-addon required">Orígen</span>
 					<input class="form-control" style="background-color:white;" required value="" id="origen">
-					<span class="input-group-addon">Destino</span>
+					<span class="input-group-addon required">Destino</span>
 					<input class="form-control" type="text" id="destino" style="background-color:white;" value="" required>
 				</div>
 				<br>
-				<label>Conceptos que se Solicitan</label><br>
-				<label class="checkbox-inline">
-					<input type="checkbox" id="hotel_flag" value=""> Hotel
-				</label>
-				<label class="checkbox-inline">
-					<input type="checkbox" id="autobus_flag" value=""> Autobús
-				</label>
-				<label class="checkbox-inline">
-					<input type="checkbox" id="gasolina_flag" value=""> Gasolina
-				</label>
-				<label class="checkbox-inline">
-					<input type="checkbox" id="mensajeria_flag" value=""> Mensajería
-				</label>
-				<label class="checkbox-inline">
-					<input type="checkbox" id="comida_flag" value=""> Comida
-				</label><br>
-				<label class="checkbox-inline">
-					<input type="checkbox" id="vuelo_flag" value=""> Vuelo
-				</label>
-				<label class="checkbox-inline">
-					<input type="checkbox" id="renta_flag" value=""> Renta de Auto
-				</label>
-				<label class="checkbox-inline">
-					<input type="checkbox" id="taxi_flag" value=""> Taxi
-				</label>
-				<label class="checkbox-inline">
-					<input type="checkbox" id="taxi_aero_flag" value=""> Taxi Aeropuerto
-				</label>
+				<div class="input-group">
+					<span class="input-group-addon required">Conceptos que se Solicitan</span> 
+					<label style="min-width:20%;float:left;" class="checkbox-inline">
+						<input type="checkbox" id="hotel_flag" value=""> Hotel
+					</label>
+					<label style="min-width:20%;float:left;" class="checkbox-inline">
+						<input type="checkbox" id="autobus_flag" value=""> Autobús
+					</label>
+					<label style="min-width:20%;float:left;" class="checkbox-inline">
+						<input type="checkbox" id="gasolina_flag" value=""> Gasolina
+					</label>
+					<label style="min-width:20%;float:left;" class="checkbox-inline">
+						<input type="checkbox" id="mensajeria_flag" value=""> Mensajería
+					</label>
+					<label style="min-width:20%;float:left;" class="checkbox-inline">
+						<input type="checkbox" id="comida_flag" value=""> Comida
+					</label><br>
+					<label style="min-width:20%;float:left;" class="checkbox-inline">
+						<input type="checkbox" id="vuelo_flag" value=""> Vuelo
+					</label>
+					<label style="min-width:20%;float:left;" class="checkbox-inline">
+						<input type="checkbox" id="renta_flag" value=""> Renta de Auto
+					</label>
+					<label style="min-width:20%;float:left;" class="checkbox-inline">
+						<input type="checkbox" id="taxi_flag" value=""> Taxi
+					</label>
+					<label style="min-width:20%;float:left;" class="checkbox-inline">
+						<input type="checkbox" id="taxi_aero_flag" value=""> Taxi Aeropuerto
+					</label>
+				</div>
 			</div>
 			<div class="col-md-6">
 				<label class="radio-inline">
@@ -107,12 +112,12 @@
 				<table width="100%">
 					<thead>
 						<tr>
-							<th></th><th><span class="input-group-addon">Hora</span></th><th><span class="input-group-addon">Fecha</span></th><th><span class="input-group-addon">Ruta</span></th>
+							<th></th><th><span class="input-group-addon required">Hora</span></th><th><span class="input-group-addon required">Fecha</span></th><th><span class="input-group-addon required">Ruta</span></th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr>
-							<td width="25%"><span class="input-group-addon">Salida</span></td>
+							<td width="25%"><span class="input-group-addon required">Salida</span></td>
 							<td width="15%"><input class="form-control" type="time" id="hora_salida" required title="Formato de 24 hrs (p. ej. 07:00) <<Se tomará un rango de 1hr antes o después para la búsqueda>>" pattern="[0-2]{1}[0-9]{1}:[0-5]{1}[0-9]{1}"></td>
 							<td width="20%"><input id="fecha_salida" type="text" class="form-control" style="background-color:white;" readonly required></td>
 							<td><input id="ruta_salida" type="text" class="form-control" required></td>
@@ -122,12 +127,12 @@
 				<table id="regreso" width="100%">
 					<thead>
 						<tr>
-							<th></th><th><span class="input-group-addon">Hora</span></th><th><span class="input-group-addon">Fecha</span></th><th><span class="input-group-addon">Ruta</span></th>
+							<th></th><th><span class="input-group-addon required">Hora</span></th><th><span class="input-group-addon required">Fecha</span></th><th><span class="input-group-addon required">Ruta</span></th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr>
-							<td width="25%"><span class="input-group-addon">Regreso</span></td>
+							<td width="25%"><span class="input-group-addon required">Regreso</span></td>
 							<td width="15%"><input class="form-control" type="time" id="hora_regreso" title="Formato de 24 hrs (p. ej. 07:00) <<Se tomará un rango de 1hr antes o después para la búsqueda>>" pattern="[0-2]{1}[0-9]{1}:[0-5]{1}[0-9]{1}"></td>
 							<td width="20%"><input id="fecha_regreso" type="text" class="form-control" style="background-color:white" readonly></td>
 							<td><input id="ruta_regreso" type="text" class="form-control"></td>
@@ -136,13 +141,13 @@
 				</table>
 				<br>
 				<div class="input-group">
-					<span class="input-group-addon" style="min-width:170px">Zona de Hospedaje</span>
+					<span class="input-group-addon required" style="min-width:170px">Zona de Hospedaje</span>
 					<input style="min-width:300px" class="form-control" required value="" id="hospedaje">
 				</div>
 				<br>
 				<div class="input-group">
-					<span class="input-group-addon" style="min-width:170px"># Plan de Recompensas</span>
-					<input style="min-width:300px" class="form-control" value="" id="recompensas" placeholder="(Payback, Interjet)" pattern="[0-9]*">
+					<span class="input-group-addon required" style="min-width:170px"># Plan de Recompensas</span>
+					<input style="min-width:300px" class="form-control" value="" id="recompensas" placeholder="Opcional (Payback, Interjet)" pattern="[0-9]*" title="*Facilita la captura de tu información al realizar la compra del vuelo">
 				</div>
 				<br>
 			</div>
@@ -156,6 +161,13 @@
 		</div>
 	</form>
 	<script>
+		document.write('\
+			<style>\
+				.required {\
+					background: '+color+'\
+				}\
+			</style>\
+		');
 		function getColaborador() {
 			$('#colaborador :selected').each(function(){
 				colaborador=$('#colaborador').val();
@@ -249,7 +261,7 @@
 			$('#fecha_regreso').datepicker({
 				dateFormat: 'yy-mm-dd'
 			});
-			$('input[type=time]').tooltip();
+			$('input').tooltip();
 			$("#desde").change(function() {
 				calculaFechas();
 			});

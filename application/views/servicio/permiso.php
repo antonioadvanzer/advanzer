@@ -10,11 +10,11 @@
 	</div>
 	<div class="row">
 		<div class="col-md-12">
-			<p>La ausencia a las labores por parte del colaborador de la cual haya conocimiento con antelación podrá ser autorizada como permiso (con goce o sin goce de sueldo) de acuerdo a los lineamientos que continuación se describen:
+			<p>La ausencia a tus labores de la cual haya conocimiento con antelación podrá ser autorizada como permiso (con goce o sin goce de sueldo) de acuerdo a los lineamientos que continuación se describen.
 			<ol type="1">
-				<p><li>Permiso con Goce de Sueldo</li>
+				<p><li>Ausencias Justificadas</li>
 				<ol type="a">
-					<p><li>Las situaciones previstas por Capital Humano dentro de las cuales se podrá autorizar un permiso con Goce de Sueldo serán las siguientes:
+					<p><li>Las situaciones previstas por Capital Humano dentro de las cuales se podrá autorizar un permiso de ausencia justificada serán las siguientes:
 						<p><table width="50%" align="center" class="tbl table-condensed table-bordered">
 							<thead>
 								<tr>
@@ -47,26 +47,29 @@
 							</tbody>
 						</table></p>
 					</li></p>
-					<p><li> Procedimiento</li></p>
-					<ol type="i">
-						<p><li>En los casos de las situaciones mencionadas en el cuadro anterior, el colaborador deberá enviar la <a class="link" style="text-decoration:none" href="<?= base_url('solicitar_permiso');?>">Solicitud de Ausencia</a> a su Jefe Directo y anexar el comprobante de la ocasión por la cual se vuelve relevante el permiso.</li></p>
-						<p><li>Deberá estar al pendiente de la solicitud para asegurarse de que llegue a Capital Humano.</li></p>
-					</ol>
-				</ol></p>
-				<p><li>Permiso Sin Goce Sueldo</li>
-				<ol type="a">
-					<p><li>En el caso que algún colaborador sepa con antelación que requerirá ausentarse de sus labores por una situación específica y justificada y el motivo no sea contemplado dentro del punto anterior, podrá solicitar una autorización de Permiso Sin Goce de Sueldo para evitar que le afecte su historial de asistencia.</li></p>
-					<p><li>Solamente podrán ser solicitadas Autorizaciones Sin Goce de Sueldo por personal con antigüedad mayor a un año.</li></p>
-					<p><li>Se podrá solicitar autorización para ausentarse un máximo 5 días hábiles seguidos (de acuerdo a la fecha de ingreso del colaborador).</li></p>
 					<p><li>Procedimiento</li></p>
 					<ol type="i">
-						<p><li>El colaborador deberá solicitar la autorización de parte de su superior inmediato de acuerdo a la estructura, tan pronto tenga conocimiento del motivo del permiso.</li></p>
-						<p><li>El colaborador deberá llenar enviar la <a class="link" style="text-decoration:none" href="<?= base_url('solicitar_permiso');?>">Solicitud de Ausencia</a>.</li></p>
-						<p><li>Una vez que se haya autorizado y llegue a Capital Humano se le notificará por correo la fecha de descuento en nómina.</li></p>
+						<p><li>Ingresar a tu Portal Personal, llena la Solicitud de Ausencia y enviala a autorización con tu Superior Inmediato o Líder de Proyecto.</li></p>
+						<p><li>Una vez autorizada por tu Superior Inmediato o Líder de Proyecto pasará a validación a Capital Humano.</li></p>
+						<p><li>Contando con ambas autorizaciones, serás notificado vía correo electrónico.</li></p>
+					</ol>
+				</ol></p>
+				<p><li>Otras Ausencias</li>
+				<ol type="a">
+					<p><li>En el caso que requirieras ausentarte con antelación de tus labores por una situación específica y justificada y el motivo no sea contemplado dentro del punto anterior, deberás primeramente considerar solicitar los días de ausencia vía vacaciones.</li></p>
+					<p><li>En caso de no contar con días disponibles deberás llenar la Solicitud de Ausencia, tu Superior Inmediato o Líder de Proyecto indicará si se te otorga el permiso con goce o sin goce de sueldo, en función de tu justificación.</li></p>
+					<p><li>Capital Humano será quien defina si procede o no tu permiso con goce o sin goce de sueldo.</li></p>
+					<p><li>El periodo máximo de Permiso de Ausencia es de 5 días</li></p>
+					<p><li>Procedimiento</li></p>
+					<ol type="i">
+						<p><li>Deberás ingresar a tu Portal Personal, llenar y enviar la Solicitud de Ausencia marcando como motivo "Otros", especificar el motivo y detallar en el campo de Observaciones el motivo de la ausencia.</li></p>
+						<p><li>Si se trata de Ausencia por enfermedad, deberás adjuntar a la Solicitud de Ausencia el comprobante médico o incapacidad respectiva.</li></p>
+						<p><li>Una vez autorizada por tu Superior Inmediato/Líder de Proyecto pasará a validación a Capital Humano.</li></p>
+						<p><li>Una vez que cuentes con las autorizaciones requeridas, serás notificado vía correo electrónico si fue autorizado o no el permiso y de serlo, si será con goce o sin goce de sueldo.</li></p>
 					</ol>
 				</ol></p>
 			</ol>
-			Podrán existir situaciones dentro de las cuales se podrá autorizar un Permiso con Goce de Sueldo que se encuentren fuera de las nombradas anteriormente. En estos casos la solicitud llegará a Capital Humano quien se encargará de revisar la situación particular y definirá qué aplica.</p>
+			Cualquier situación no expuesta en esta Política, deberás verificarlo con Capital Humano.</p>
 		</div>
 	</div>
 	<div class="row" align="center">

@@ -14,6 +14,7 @@
 				<table id="tbl" class="display" align="center" data-toggle="table" data-hover="true" data-striped="true">
 					<thead>
 						<tr>
+							<th data-halign="center">Folio</th>
 							<th data-halign="center">Tipo</th>
 							<th data-halign="center">Solicitud</th>
 							<th data-halign="center">Colaborador</th>
@@ -50,6 +51,7 @@
 								 	default: $tipo='';								break;
 								 } ?>
 							<tr>
+								<td style="cursor:default;"><small><?= $solicitud->id;?></small></td>
 								<td style="cursor:default;"><small><?= $tipo;?></small></td>
 								<td style="cursor:default;"><small><?= date('Y-m-d',strtotime($solicitud->fecha_solicitud));?></small></td>
 								<td style="cursor:default;"><small><?= $solicitud->nombre;?></small></td>

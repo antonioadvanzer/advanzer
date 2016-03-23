@@ -74,7 +74,7 @@
 						<div class="navbar-collapse" aria-expanded="false">
 							<ul class="nav navbar-nav">
 								<?php if(count($auth_pendientes)+count($solicitudes_pendientes)): ?>
-									<li><a href="<?= base_url("solicitudes");?>"><b>Solicitudes <span class="badge"><?= count($auth_pendientes)+ count($solicitudes_pendientes);?></span></b></a></li>
+									<li><a href="<?= base_url("solicitudes");?>">Solicitudes <span class="badge"><?php if($count=count($auth_pendientes)+ $cont>0) echo $count;?></span></a></li>
 								<?php endif;
 								if($requisiciones_pendientes): ?>
 									<li><a href="<?= base_url("requisicion");?>"><b>Requisiciones <span class="badge"><?= $requisiciones_pendientes?></span></b></a></li>
