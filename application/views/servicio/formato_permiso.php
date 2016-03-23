@@ -111,7 +111,7 @@
 						value="" readonly required>
 				</div>
 				<br>
-				<p style="width:80%;border-radius:10px;border-color:red;border-style:dotted;color:red;display:none" id="otro_label"><small>Favor de redactar el detalle de su ausencia en el campo <i>Observaciones</i> para que su Jefe/Líder o bien Capital Humano decida si el permiso será JUSTIFICADO o SIN JUSTIFICAR de sueldo</small></p>
+				<p style="width:80%;border-radius:10px;border-color:red;border-style:dotted;color:red;display:none" id="otro_label"><small>Favor de redactar el detalle de su ausencia en el campo <i>Observaciones</i> para que su Jefe/Líder o bien Capital Humano decida si el permiso será JUSTIFICADO o SIN JUSTIFICAR</small></p>
 				<div class="input-group">
 					<span class="input-group-addon required" style="min-width:260px">Observaciones</span>
 					<textarea class="form-control" id="observaciones" rows="4" placeholder="Agrega cualquier comentario que consideres relevante para la autorización de tus días" required></textarea>
