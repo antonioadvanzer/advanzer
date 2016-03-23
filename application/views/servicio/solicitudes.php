@@ -1,6 +1,9 @@
 <div class="jumbotron">
 	<div class="container">
 		<h2 align="left"><b>Solicitudes</b></h2>
+		<?php if(!empty($solicitudes)): ?>
+			<p><small>Para aceptar o rechazar una solicitud pendiente, es necesario hacer click sobre ella y escoger la opción deseada</small></p>
+		<?php endif; ?>
 	</div>
 </div>
 <div class="container">
@@ -100,14 +103,9 @@
 													<p align="center"><?=$solicitud->motivo; ?></p>
 												</div>
 												<?php if(!in_array($solicitud->motivo,array('MATRIMONIO','NACIMIENTO DE HIJOS','FALLECIMIENTO DE CÓNYUGE','FALLECIMIENTO DE HERMANOS','FALLECIMIENTO DE HIJOS','FALLECIMIENTO DE PADRES','FALLECIMIENTO DE PADRES POLÍTICOS'))): ?>
-													<div class="col-md-3" align="center">
+													<div class="col-md-2" align="center">
 														<h5 align="center">TIPO DE PERMISO</h5><br>
-														<label class="radio-inline">
-															<input type="radio" name="tipo" id="con_goce" value="JUSTIFICADO" <?php if($solicitud->tipo==2) echo"checked";?>> JUSTIFICADO
-														</label>
-														<label class="radio-inline">
-															<input type="radio" name="tipo" id="sin_goce" value="SIN JUSTIFICAR" <?php if($solicitud->tipo==3) echo"checked";?>> SIN JUSTIFICAR
-														</label>
+														<p align="center"><?php if($solicitud->tipo==2) echo"CON GOCE DE SUELDO"; else echo"SIN GOCE DE SUELDO";?></p>
 													</div>
 												<?php endif;
 											endif; ?>

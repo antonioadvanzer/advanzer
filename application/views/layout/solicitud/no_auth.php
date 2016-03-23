@@ -110,15 +110,16 @@
 	<div class="container">
 		<div class="col-md-12" align="center"><img width="100%" src="http://drive.google.com/uc?export=view&id=0B7vcCZhlhZiONkE0ZU9qcVU5S3M"></div>
 		<div style="width:80%" class="container">
-			<h2>No se ha autorizado tu Solicitud</h2>
+			<h2>Se ha rechazado tu Solicitud</h2>
 			<h4><b>Folio</b> #<b><?=$solicitud->id;?></b></h4>
 			<p><b>Días: </b><?=$solicitud->dias;?></p>
 			<p><b>Tipo: </b><?php 
 				switch($solicitud->tipo){
-					case 1: $tipo="VACACIONES";												break;
-					case 2:case3: $tipo="PERMISO DE AUSENCIA";								break;
-					case 4: $tipo="VIÁTICOS Y GASTOS DE VIAJE ($solicitud->motivo)";		break;
-					default: $tipo="";														break;
+					case 1: $tipo="VACACIONES";														break;
+					case 2: $tipo="PERMISO DE AUSENCIA CON GOCE DE SUELDO ($solicitud->motivo)";	break;
+					case 3: $tipo="PERMISO DE AUSENCIA SIN GOCE DE SUELDO ($solicitud->motivo)";	break;
+					case 4: $tipo="VIÁTICOS Y GASTOS DE VIAJE ($solicitud->motivo)";				break;
+					default: $tipo="";																break;
 				}
 			echo $tipo; ?></p>
 			<p><b>Motivo de rechazo: </b><?=$solicitud->razon;?></p>

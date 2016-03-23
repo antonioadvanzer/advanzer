@@ -72,7 +72,7 @@
 							else
 								$empresa="Entuizer";
 							?>
-							<tr>
+							<tr onmouseover="this.style.background=color;" onmouseout="this.style.background='transparent';">
 								<td><small><a style="text-decoration:none" href='<?= base_url("requisicion/ver/$requisicion->id");?>'><?= $requisicion->id;?></a></small></td>
 								<td><small><?= $requisicion->fecha_solicitud;?></small></td>
 								<td><small><?= $requisicion->solicitante;?></small></td>

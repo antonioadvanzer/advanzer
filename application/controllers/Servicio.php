@@ -144,8 +144,11 @@ class Servicio extends CI_Controller {
 		}
 		$result->disponibles=floor(($diff->days-($diff->y*365))*$dias2/365);
 		$result->extra=$dias2-$result->disponibles;
-		if($dias_disponibles=$this->solicitudes_model->getDiasDisponibles($result->id))
+		$result->de_solicitud=0;
+		if($dias_disponibles=$this->solicitudes_model->getDiasDisponibles($result->id)){
+			$result->de_solicitud=$dias_disponibles;
 			$result->disponibles += (int)$dias_disponibles;
+		}
 		$result->acumulados=$this->solicitudes_model->getAcumulados($result->id);
 		$data['yo']=$result;
 		$this->layout->title('Advanzer - Vacaciones');
@@ -240,6 +243,8 @@ class Servicio extends CI_Controller {
 			'motivo'=>$this->input->post('motivo'),
 			'fecha_solicitud'=>date('Y-m-d')
 		);
+		if($datos['motivo'] == "ENFERMEDAD")
+			$datos['estatus']=3;
 		$this->db->trans_begin();
 		$solicitud=$this->solicitudes_model->registra_solicitud($datos);
 		$solicitud=$this->solicitudes_model->getSolicitudById($solicitud);
@@ -284,9 +289,14 @@ class Servicio extends CI_Controller {
 		}
 		else{
 			//enviar mail de aviso al autorizador
-			$destinatario=$this->user_model->searchById($solicitud->autorizador)->email;
 			$data['solicitud']=$solicitud;
-			$mensaje=$this->load->view("layout/solicitud/create",$data,true);
+			if($solicitud->motivo == "ENFERMEDAD"){
+				$destinatario=array($this->user_model->searchById($solicitud->autorizador)->email,'micaela.llano@advanzer.com');
+				$mensaje=$this->load->view("layout/solicitud/enfermedad",$data,true);
+			}else{
+				$destinatario=$this->user_model->searchById($solicitud->autorizador)->email;
+				$mensaje=$this->load->view("layout/solicitud/create",$data,true);
+			}
 			if(!$this->sendMail($destinatario,$mensaje)){
 				$this->db->trans_commit();
 				$response['msg']="ok";
@@ -371,6 +381,7 @@ class Servicio extends CI_Controller {
 		);
 		$id=$this->input->post('solicitud');
 		$this->db->trans_begin();
+		$estatus=$this->solicitudes_model->getSolicitudById($id)->estatus;
 		$this->solicitudes_model->update_solicitud($id,$datos);
 		if($this->db->trans_status() === FALSE){
 			$this->db->trans_rollback();
@@ -380,6 +391,16 @@ class Servicio extends CI_Controller {
 			$data['solicitud']=$solicitud;
 			$destinatario=$this->user_model->searchById($solicitud->colaborador)->email;
 			$mensaje=$this->load->view("layout/solicitud/no_auth",$data,true);
+			if(!in_array($solicitud->tipo,array(4,5)))
+				if($estatus == 2){
+					$dest=$this->user_model->searchById($solicitud->autorizador)->email;
+					$msj=$this->load->view("layout/solicitud/cancela",$data,true);
+					$this->sendMail($dest,$msj);
+				}elseif($estatus == 3){
+					$dest=array($this->user_model->searchById($solicitud->autorizador)->email,'micaela.llano@advanzer.com');
+					$msj=$this->load->view("layout/solicitud/cancela",$data,true);
+					$this->sendMail($dest,$msj);
+				}
 			if(!$this->sendMail($destinatario,$mensaje)){
 				$this->db->trans_commit();
 				$response['msg']="ok";
@@ -552,17 +573,44 @@ class Servicio extends CI_Controller {
 	}
 
 	public function guardar_comprobante() {
+		$flag=true;
 		$datos=array(
 			'colaborador'=>$this->input->post('colaborador'),
 			'centro_costo'=>$this->input->post('centro_costo'),
-			'diferencia'=>(float)$this->input->post('diferencia'),
 			'fecha'=>$this->input->post('fecha')[0],
 			'concepto'=>$this->input->post('concepto')[0],
 			'prestador'=>$this->input->post('prestador')[0],
 			'importe'=>$this->input->post('importe')[0],
 			'iva'=>$this->input->post('iva')[0],
-			'total'=>$this->input->post('total')[0]
+			'total'=>$this->input->post('total')[0],
+			'diferencia'=>(float)$this->input->post('diferencia')
 		);
 		print_r($datos);
+		$this->db->trans_begin();
+		$comprobante=$this->solicitudes_model->registra_comprobante($datos);
+		
+		if($_FILES['factura']['tmp_name']!=""):
+			$config['upload_path'] = './assets/docs/facturas/';
+			$config['allowed_types'] = 'xml';
+			$config['file_name'] = $comprobante.'.xml';
+			$config['overwrite'] = TRUE;
+			//load upload class library
+			$this->load->library('upload', $config);
+
+			if (!$this->upload->do_upload('factura')){
+				$response['msg'] = $this->upload->display_errors();
+				$flag=false;
+			}
+			else
+				chgrp($upload_data['file_path'], 'apache');
+		endif;
+
+		if($this->db->trans_status() === FALSE || $flag != true):
+			$this->db->trans_rollback();
+			$response['msg'] .= " Error al registrar el comprobante. Intenta de nuevo";
+		else:
+			$this->db->trans_commit();
+			$response['msg']="ok";
+		endif;
 	}
 }

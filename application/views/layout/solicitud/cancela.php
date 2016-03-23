@@ -4,7 +4,6 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Mensaje Solicitud</title>
 	<style type="text/css">
 		.jumbotron {
 			-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#628DC8, endColorstr=#ffffff)";
@@ -110,22 +109,13 @@
 	<div class="container">
 		<div class="col-md-12" align="center"><img width="100%" src="http://drive.google.com/uc?export=view&id=0B7vcCZhlhZiONkE0ZU9qcVU5S3M"></div>
 		<div style="width:80%" class="container">
-			<h2>Se ha registrado una nueva Solicitud</h2>
-			<h4><b>Folio</b> #<b><?=$solicitud->id;?></b></h4>
-			<p><b>Solicita: </b><?= $solicitud->nombre_solicita;?></p>
-			<p><b>Días: </b><?=$solicitud->dias;?></p>
-			<p><b>Tipo: </b><?php 
-				switch($solicitud->tipo){
-					case 1: $tipo="VACACIONES";														break;
-					case 2: $tipo="PERMISO DE AUSENCIA CON GOCE DE SUELDO ($solicitud->motivo)";	break;
-					case 3: $tipo="PERMISO DE AUSENCIA SIN GOCE DE SUELDO ($solicitud->motivo)";	break;
-					case 4: $tipo="VIÁTICOS Y GASTOS DE VIAJE ($solicitud->motivo)";				break;
-					default: $tipo="";																break;
-				}
-			echo $tipo; ?></p>
-			<p><b>Desde: </b><?=$solicitud->desde;?></p>
-			<p><b>Hasta: </b><?=$solicitud->hasta;?></p>
-			<p>Ingresa a <a href='http://intranet.advanzer.com:3000/solicitudes'>Portal Personal >> Solicitudes</a> para darle seguimiento a la solicitud</p>
+			<?php 
+			switch($solicitud->tipo){
+				case 1: $tipo="VACACIONES";											break;
+				case 2:case 3: $tipo="PERMISO DE AUSENCIA ($solicitud->motivo)";	break;
+				default: $tipo="";													break;
+			}?>
+			<p><?= $solicitud->nombre_solicita;?> ha cancelado una solicitud de <?= $tipo;?> que ya haz autorizado con Folio #<b><?=$solicitud->id;?></b> en la que solicitó <?=$solicitud->dias;?> días comprendido(s) entre <?= date_format(date_create($solicitud->desde),'D j F, Y');?> hasta el <?=date_format(date_create($solicitud->hasta),'D j F, Y');?> por motivo de: <b><?= $solicitud->razon;?></b></p>
 		</div>
 		<div class="col-md-12" align="center"><img width="100%" src="http://drive.google.com/uc?export=view&id=0B7vcCZhlhZiOOWNiNHJnZGhnaDA"></div>
 		<footer align="center">

@@ -15,7 +15,10 @@ class Solicitudes_model extends CI_Model{
 	function getSolicitudById($id) {
 		$result = $this->db->where('id',$id)->get('Solicitudes')->first_row();
 		$result->nombre_solicita=$this->db->where('id',$result->colaborador)->get('Users')->first_row()->nombre;
-		$result->nombre_autorizador=$this->db->where('id',$result->autorizador)->get('Users')->first_row()->nombre;
+		if($result->autorizador)
+			$result->nombre_autorizador=$this->db->where('id',$result->autorizador)->get('Users')->first_row()->nombre;
+		else
+			$result->nombre_autorizador='ÁREA DE FINANZAS';
 		if($result->tipo == 4):
 			$result->detalle = $this->db->where('solicitud',$result->id)->get('Detalle_Viaticos')->first_row();
 		endif;
@@ -31,7 +34,10 @@ class Solicitudes_model extends CI_Model{
 		foreach ($result as $solicitud):
 			if($solicitud->tipo == 4)
 				$solicitud->detalle = $this->db->where('solicitud',$solicitud->id)->get('Detalle_Viaticos')->first_row();
-			$solicitud->nombre_autorizador=$this->db->where('id',$solicitud->autorizador)->get('Users')->first_row()->nombre;
+			if($solicitud->autorizador)
+				$solicitud->nombre_autorizador=$this->db->where('id',$solicitud->autorizador)->get('Users')->first_row()->nombre;
+			else
+				$solicitud->nombre_autorizador='ÁREA DE FINANZAS';
 		endforeach;
 		return $result;
 	}

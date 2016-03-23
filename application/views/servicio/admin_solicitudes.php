@@ -21,46 +21,36 @@
 							<th data-halign="center">Autorizador</th>
 							<th data-halign="center">Días</th>
 							<th data-halign="center">Desde</th>
-							<th data-halign="center">Observaciones</th>
-							<th data-halign="center">Razón</th>
+							<th data-halign="center">Hasta</th>
 							<th data-halign="center">Estatus</th>
 						</tr>
 					</thead>
 					<tbody data-link="row" class="rowlink">
 						<?php foreach ($solicitudes as $solicitud):
 							switch ($solicitud->estatus) {
-							 	case 0: $estatus="CANCELADA";$razon=$solicitud->razon;							break;
-							 	case 1: $estatus="ENVIADA";$razon=$solicitud->motivo;							break;
-							 	case 2: $estatus='EN REVISIÓN POR CAPITAL HUMANO';$razon=$solicitud->motivo;	break;
-								case 3: $estatus='AUTORIZADA';$razon=$solicitud->motivo;						break;
-								case 4: $estatus='RECHAZADA';$razon=$solicitud->razon;							break;
+							 	case 0: $estatus="CANCELADA";						break;
+							 	case 1: $estatus="ENVIADA";							break;
+							 	case 2: $estatus='EN REVISIÓN POR CAPITAL HUMANO';	break;
+								case 3: $estatus='AUTORIZADA';						break;
+								case 4: $estatus='RECHAZADA';						break;
 							}
 							switch ($solicitud->tipo) {
 								 	case 1: $tipo='VACACIONES';						break;
-								 	case 2:
-								 		$tipo='PERMISO DE AUSENCIA';
-								 		if($solicitud->estatus==3)
-								 			$tipo.=' CON GOCE';
-								 		break;
-								 	case 3:
-								 		$tipo='PERMISO DE AUSENCIA';
-								 		if($solicitud->estatus==3)
-								 			$tipo.=' SIN GOCE';
-								 		break;
+								 	case 2:	$tipo='PERMISO DE AUSENCIA CON GOCE';	break;
+								 	case 3:	$tipo='PERMISO DE AUSENCIA SIN GOCE';	break;
 								 	case 4: $tipo='VIÁTICOS Y GASTOS DE VIAJE';		break;
 								 	default: $tipo='';								break;
 								 } ?>
-							<tr>
-								<td style="cursor:default;"><small><?= $solicitud->id;?></small></td>
-								<td style="cursor:default;"><small><?= $tipo;?></small></td>
-								<td style="cursor:default;"><small><?= date('Y-m-d',strtotime($solicitud->fecha_solicitud));?></small></td>
-								<td style="cursor:default;"><small><?= $solicitud->nombre;?></small></td>
-								<td style="cursor:default;"><small><?= $solicitud->autorizador;?></small></td>
-								<td style="cursor:default;"><small><?= $solicitud->dias;?></small></td>
-								<td style="cursor:default;"><small><?= $solicitud->desde;?></small></td>
-								<td style="cursor:default;"><small><?= $solicitud->observaciones;?></small></td>
-								<td style="cursor:default;"><small><?= $razon;?></small></td>
-								<td style="cursor:default;"><small><?= $estatus;?></small></td>
+							<tr onmouseover="this.style.background=color;" onmouseout="this.style.background='transparent';">
+								<td align="center"><a href="<?= base_url("servicio/ver/$solicitud->id");?>"><small><?= $solicitud->id;?></small></a></td>
+								<td align="center"><small><?= $tipo;?></small></td>
+								<td align="center"><small><?= date('Y-m-d',strtotime($solicitud->fecha_solicitud));?></small></td>
+								<td align="center"><small><?= $solicitud->nombre;?></small></td>
+								<td align="center"><small><?= $solicitud->autorizador;?></small></td>
+								<td align="center"><small><?= $solicitud->dias;?></small></td>
+								<td align="center"><small><?= $solicitud->desde;?></small></td>
+								<td align="center"><small><?= $solicitud->hasta;?></small></td>
+								<td align="center"><small><?= $estatus;?></small></td>
 							</tr>
 						<?php endforeach; ?>
 					</tbody>
@@ -70,6 +60,6 @@
 	</div>
 	<script>
 		$(document).ready(function() {
-			$('#tbl').DataTable({responsive: true,info: false,order: [[ 9, "asc" ]]});
+			$('#tbl').DataTable({responsive: true,info: false,order: [[ 2, "desc" ]]});
 		});
 	</script>

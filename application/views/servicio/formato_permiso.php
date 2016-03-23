@@ -85,6 +85,7 @@
 						<option value="3">FALLECIMIENTO DE HIJOS</option>
 						<option value="3">FALLECIMIENTO DE PADRES</option>
 						<option value="2">FALLECIMIENTO DE PADRES POLÍTICOS</option>
+						<option value="42">ENFERMEDAD</option>
 						<option>Otro</option>
 					</select>
 					<span class="input-group-addon required" id="especifique_label">Especifique</span>
@@ -111,7 +112,7 @@
 						value="" readonly required>
 				</div>
 				<br>
-				<p style="width:80%;border-radius:10px;border-color:red;border-style:dotted;color:red;display:none" id="otro_label"><small>Favor de redactar el detalle de su ausencia en el campo <i>Observaciones</i> para que su Jefe/Líder o bien Capital Humano decida si el permiso será JUSTIFICADO o SIN JUSTIFICAR</small></p>
+				<p style="width:80%;border-radius:10px;border-color:red;border-style:dotted;color:red;display:none" id="otro_label"><small>Favor de redactar el detalle de tu ausencia en el campo <i>Observaciones</i> para facilitar la resolución de la solicitud</small></p>
 				<div class="input-group">
 					<span class="input-group-addon required" style="min-width:260px">Observaciones</span>
 					<textarea class="form-control" id="observaciones" rows="4" placeholder="Agrega cualquier comentario que consideres relevante para la autorización de tus días" required></textarea>
@@ -214,6 +215,16 @@
 				$('#motivo :selected').each(function(){
 					motivo=$('#motivo').val();
 				});
+				$('#dias').empty();
+				if(motivo > 5){
+					limite=parseInt(motivo);
+					$('#file').prop('required',true);
+				}else{
+					limite=5;
+					$('#file').prop('required',false);
+				}
+				for (var i = 1; i <= limite; i++)
+					$('#dias').append(new Option(i,i,true,true));
 				if(motivo == "Otro"){
 					$('#otro_label').show('slow');
 					$('#especifique_label').show('slow');
@@ -253,6 +264,12 @@
 						autorizador = $('#autorizador').val();
 					});
 					formData.append('autorizador',autorizador);
+					m = $('#motivo option:selected').val();
+					if(m=='Otro')
+						tipo=3;
+					else
+						tipo=2;
+					formData.append('tipo',tipo);
 					motivo = $("#motivo option:selected").text();
 					if(motivo=='Otro')
 						motivo=$('#especifique').val();
@@ -264,7 +281,6 @@
 					formData.append('desde',$('#desde').val());
 					formData.append('hasta',$('#hasta').val());
 					formData.append('observaciones',$('#observaciones').val());
-					formData.append('tipo',2);
 				$.ajax({
 					url: '<?= base_url("servicio/registra_solicitud");?>',
 					type: 'post',

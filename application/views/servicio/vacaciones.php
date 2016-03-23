@@ -47,13 +47,13 @@
 					<tr>
 						<th>Días Disponibles</th>
 						<th>Días próximos a vencer</th>
-						<th>Fecha de próximo vencimiento</th>
+						<th>Fecha de vencimiento</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
 						<td style="cursor:default;text-align:center;"><?php if($yo->acumulados) echo$yo->disponibles + $yo->acumulados->dias_acumulados;else echo$yo->disponibles?></td>
-						<td style="cursor:default;text-align:center;"><?php if($yo->acumulados) echo $yo->acumulados->dias_uno;else echo 0;?></td>
+						<td style="cursor:default;text-align:center;"><?php if($yo->acumulados) echo $yo->acumulados->dias_uno+$yo->de_solicitud;else echo 0;?></td>
 						<td style="cursor:default;text-align:center;"><?php if($yo->acumulados) echo date_format(date_create($yo->acumulados->vencimiento_uno),'j-M-Y')?></td>
 					</tr>
 				</tbody>

@@ -162,7 +162,7 @@
 			</span>
 		  <?php endif; ?>
 	  </div>
-	</div>
+	</div><hr>
 	<div class="row" align="center">
 		<div class="col-md-12">
 			<button type="submit" class="btn btn-lg btn-primary btn-block" style="max-width:200px; text-align:center;">Actualizar</button>
@@ -254,17 +254,17 @@
 	  </div>
   </form>
   <div class="row" align="center" id="bitacora" style="display:none;">
-	<table class="table" align="center" data-toggle="table" data-hover="true" data-striped="true">
+	<table id="tbl" class="table" align="center" data-toggle="table" data-hover="true" data-striped="true">
 		<thead>
 			<tr>
-				<th data-halign="center">Tipo</th>
-				<th data-halign="center">Solicitud</th>
-				<th data-halign="center">Autorizador</th>
-				<th data-halign="center">Días</th>
-				<th data-halign="center">Desde</th>
-				<th data-halign="center">Observaciones</th>
-				<th data-halign="center">Razón</th>
-				<th data-halign="center">Estatus</th>
+				<th style="text-align:center;">Folio</th>
+				<th style="text-align:center;">Tipo</th>
+				<th style="text-align:center;">Fecha de Solicitud</th>
+				<th style="text-align:center;">Autorizador</th>
+				<th style="text-align:center;">Días</th>
+				<th style="text-align:center;">Desde</th>
+				<th style="text-align:center;">Hasta</th>
+				<th style="text-align:center;">Estatus</th>
 			</tr>
 		</thead>
 		<tbody data-link="row" class="rowlink">
@@ -278,28 +278,20 @@
 				}
 				switch ($solicitud->tipo) {
 				 	case 1: $tipo='VACACIONES';						break;
-					case 2:
-						$tipo='PERMISO DE AUSENCIA';
-						if($solicitud->estatus==3)
-							$tipo.=' CON GOCE';
-						break;
-					case 3:
-						$tipo='PERMISO DE AUSENCIA';
-						if($solicitud->estatus==3)
-							$tipo.=' SIN GOCE';
-						break;
+					case 2:	$tipo='PERMISO DE AUSENCIA CON GOCE';	break;
+					case 3:	$tipo='PERMISO DE AUSENCIA SIN GOCE';	break;
 					case 4: $tipo='VIÁTICOS Y GASTOS DE VIAJE';		break;
 					default: $tipo='';								break;
 				} ?>
-				<tr>
-					<td style="cursor:default;"><small><?= $tipo;?></small></td>
-					<td style="cursor:default;"><small><?= date('Y-m-d',strtotime($solicitud->fecha_solicitud));?></small></td>
-					<td style="cursor:default;"><small><?= $solicitud->nombre;?></small></td>
-					<td style="cursor:default;"><small><?= $solicitud->dias;?></small></td>
-					<td style="cursor:default;"><small><?= $solicitud->desde;?></small></td>
-					<td style="cursor:default;"><small><?= $solicitud->observaciones;?></small></td>
-					<td style="cursor:default;"><small><?= $razon;?></small></td>
-					<td style="cursor:default;"><small><?= $estatus;?></small></td>
+				<tr onmouseover="this.style.background=color;" onmouseout="this.style.background='transparent';">
+					<td align="center"><a href="<?= base_url("servicio/ver/$solicitud->id");?>"><small><?= $solicitud->id;?></small></a></td>
+					<td align="center"><small><?= $tipo;?></small></td>
+					<td align="center"><small><?= date('Y-m-d',strtotime($solicitud->fecha_solicitud));?></small></td>
+					<td align="center"><small><?= $solicitud->nombre;?></small></td>
+					<td align="center"><small><?= $solicitud->dias;?></small></td>
+					<td align="center"><small><?= $solicitud->desde;?></small></td>
+					<td align="center"><small><?= $solicitud->hasta;?></small></td>
+					<td align="center"><small><?= $estatus;?></small></td>
 				</tr>
 			<?php endforeach; ?>
 		</tbody>
@@ -312,6 +304,7 @@
   <script type="text/javascript">
 
 	$(document).ready(function() {
+		$('#tbl').DataTable({responsive: true,info: false,order: [[ 2, "desc" ]]});
 		$('.selectpicker').selectpicker();
 		$('#update').submit(function(event){
 			id = $('#id').val();

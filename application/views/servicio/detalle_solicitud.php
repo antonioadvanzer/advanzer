@@ -62,7 +62,7 @@
 				</div>
 				<br>
 				<div class="btn-group btn-group-lg" role="group" aria-label="..." style="float:right;">
-					<button type="submit" class="btn btn-primary" style="min-width:200px;text-align:center;">Confirmar</button>
+					<button type="submit" class="btn btn-primary" style="min-width:200px;text-align:center;">Confirmar Cancelación</button>
 					<button onclick="$('#razon').hide('slow');$('#update').show('slow');$('#estatus').val('');" type="reset" class="btn" style="min-width:200px;text-align:center;">Regresar</button>
 				</div>
 			</form>
@@ -75,7 +75,7 @@
 							<select class="selectpicker"style="text-align:center;" disabled>
 								<option value="" disabled selected>-- Selecciona al Colaborador --</option>
 								<?php foreach($colaboradores as $colaborador): ?>
-									<option value="<?= $colaborador->id;?>" <?php if($colaborador->id==$this->session->userdata('id'))echo"selected";?>><?= $colaborador->nombre;?></option>
+									<option value="<?= $colaborador->id;?>" <?php if($colaborador->id==$solicitud->colaborador)echo"selected";?>><?= $colaborador->nombre;?></option>
 								<?php endforeach; ?>
 							</select>
 						</div>
@@ -84,7 +84,7 @@
 							<select class="selectpicker" data-header="Selecciona al autorizador" style="text-align:center;" disabled>
 								<option value="" disabled selected>-- Selecciona al Jefe Directo / Líder --</option>
 								<?php foreach($colaboradores as $colaborador)
-									if($colaborador->id != $this->session->userdata('id')): ?>
+									if($colaborador->id != $solicitud->colaborador): ?>
 										<option value="<?= $colaborador->id;?>" <?php if($colaborador->id==$solicitud->autorizador)echo"selected";?>><?= $colaborador->nombre;?></option>
 									<?php endif; ?>
 							</select>
@@ -119,8 +119,8 @@
 										<?php endif; ?>
 										<span class="input-group-addon">Motivo</span>
 										<input value="<?=$solicitud->motivo;?>" type="text" class="form-control" readonly>
-										<span class="input-group-addon">Tipo de Permiso <?php if($solicitud->estatus!=3) echo "(por confirmar)";?></span>
-										<input type="text" class="form-control" value="<?php if($solicitud->tipo==2) echo"Justificado";else echo "Sin Justificar?>";?>" readonly>
+										<span class="input-group-addon">Tipo de Permiso</span>
+										<input type="text" class="form-control" value="<?php if($solicitud->tipo==2) echo"Con Goce de Sueldo";else echo "Sin Goce de Sueldo?>";?>" readonly>
 									</div><br>
 								<?php endif; ?>
 							<?php else: ?>
@@ -148,59 +148,83 @@
 							if($solicitud->tipo<=3): ?>
 								<div class="input-group">
 									<span class="input-group-addon required" style="min-width:260px">Observaciones</span>
-									<textarea class="form-control" readonly><?= $solicitud->observaciones;?></textarea>
+									<textarea class="form-control" rows="6" readonly><?= $solicitud->observaciones;?></textarea>
 								</div>
 								<br>
-							<?php endif;
-							if($solicitud->estatus != 0): ?>
-								<h3>Seguimiento a la Solicitud</h3>
-								<table class="table table-striped table-hover" style="width:90%">
-									<tbody>
-										<tr>
-											<th width="30%" style="text-align:right;">Autorización del Superior</th>
-											<td style="text-align:center;cursor:default;">
-												<?php if($solicitud->estatus==1): ?>
+							<?php endif; ?>
+							<h3>Autorizaciones</h3>
+							<table class="table table-striped table-hover" style="width:90%">
+								<thead>
+									<tr>
+										<th width="10%"></th>
+										<th width="45%" style="text-align:center;">Jefe Inmediato/Líder de Proyecto</th>
+										<th width="45%" style="text-align:center;">Capital Humano</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td></td>
+										<td style="text-align:center;cursor:text;">
+											<?php if($solicitud->estatus==1): ?>
+												<span class="glyphicon glyphicon-eye-open"></span> VALIDANDO
+											<?php elseif($solicitud->estatus==2 || $solicitud->auth_uno==1): ?>
+												<span class="glyphicon glyphicon-ok"></span> AUTORIZADO
+											<?php elseif($solicitud->estatus==4 && $solicitud->auth_uno==0): ?>
+												<span class="glyphicon glyphicon-remove"></span> RECHAZADO
+											<?php elseif($solicitud->motivo=="ENFERMEDAD"): ?>
+												<span class="glyphicon glyphicon-ok"></span> ENTERADO
+											<?php endif; ?>
+										</td>
+										<?php if($solicitud->tipo < 4): ?>
+											<td style="text-align:center;cursor:text;">
+												<?php if($solicitud->estatus==2): ?>
 													<span class="glyphicon glyphicon-eye-open"></span> VALIDANDO
-												<?php elseif($solicitud->estatus==2 || $solicitud->auth_uno==1): ?>
+												<?php elseif($solicitud->estatus==3 && $solicitud->auth_uno==1): ?>
 													<span class="glyphicon glyphicon-ok"></span> AUTORIZADO
-												<?php elseif($solicitud->estatus==4 && $solicitud->auth_uno==0): ?>
+												<?php elseif($solicitud->estatus==4 && $solicitud->auth_uno==1): ?>
 													<span class="glyphicon glyphicon-remove"></span> RECHAZADO
+												<?php elseif($solicitud->estatus==1): ?>
+													<span class="glyphicon glyphicon glyphicon-time"></span> PENDIENTE
+												<?php elseif($solicitud->motivo=="ENFERMEDAD"): ?>
+													<span class="glyphicon glyphicon-ok"></span> ENTERADO
 												<?php endif; ?>
 											</td>
-										</tr>
+										<?php endif;?>
+									</tr>
+									<?php if($solicitud->estatus==4): ?>
 										<tr>
-											<?php if($solicitud->tipo < 4): ?>
-												<th style="text-align:right;">Autorización de Capital Humano</th>
-												<td style="text-align:center;cursor:default;">
-													<?php if($solicitud->estatus==2): ?>
-														<span class="glyphicon glyphicon-eye-open"></span> VALIDANDO
-													<?php elseif($solicitud->estatus==3): ?>
-														<span class="glyphicon glyphicon-ok"></span> AUTORIZADO
-													<?php elseif($solicitud->estatus==4 && $solicitud->auth_uno==1): ?>
-														<span class="glyphicon glyphicon-remove"></span> RECHAZADO
-													<?php else: ?>
-														<span class="glyphicon glyphicon glyphicon-time"></span> PENDIENTE
-													<?php endif; ?>
-												</td>
-											<?php endif;?>
+											<td style="text-align:right;cursor:default;">Motivo</td>
+											<?php if($solicitud->auth_uno==0): ?>
+												<td style="text-align:center;cursor:text;"><?= $solicitud->razon;?></td>
+												<td></td>
+											<?php elseif($solicitud->auth_uno==1): ?>
+												<td></td>
+												<td style="text-align:center;cursor:text;"><?= $solicitud->razon;?></td>
+											<?php endif; ?>
 										</tr>
-										<?php if(in_array($solicitud->estatus,array(0,4))): ?>
-											<tr>
-												<th style="text-align:right;">Rechazo/Cancelación</th>
-												<td style="text-align:center;cursor:default;"><?= $solicitud->razon;?></td>
-											</tr>
-										<?php endif; ?>
-									</tbody>
-								</table>
-							<?php endif; ?>
-							<div class="col-md-3" align="center" style="float:right;">
-								<h5>&nbsp;</h5>
-								<div align="center" class="btn-group btn-group-lg" role="group" aria-label="...">
-									<?php if(($solicitud->tipo==4 && $solicitud->estatus!=3) || $solicitud->tipo!=4 && $solicitud->estatus!=4): ?>
-										<button onclick="$('#update').hide('slow');$('#razon').show('slow');$('#estatus').val(0);" type="button" class="btn" style="text-align:center;display:inline;">Cancelar</button>
+									<?php elseif($solicitud->estatus==0): ?>
+										<tr>
+											<td style="text-align:right;cursor:text;">Motivo Cancelación</td>
+											<td colspan="2" style="text-align:center;cursor:text;"><?= $solicitud->razon;?></td>
+										</tr>
 									<?php endif; ?>
-								</div>
-							</div>
+								</tbody>
+							</table>
+							<hr>
+							<?php 
+							$desde=new DateTime($solicitud->desde);
+							$hoy=new DateTime(date('Y-m-d'));
+							if($solicitud->estatus != 0)
+								if(($solicitud->tipo==4 && $solicitud->estatus!=3) || $solicitud->tipo!=4 && $solicitud->estatus!=4 && $desde->diff($hoy)->format('%r')): ?>
+									<div class="col-md-8">
+									<label style="float:left;color:red">Puedes CANCELAR tu solicitud de <?= $tipo;?> hasta un día antes de que inicie el período que solicitaste dando click en:</label>
+									</div>
+									<div class="col-md-4" align="center" style="float:right;">
+										<div align="center" class="btn-group btn-group-lg" role="group" aria-label="...">
+											<button onclick="$('#update').hide('slow');$('#razon').show('slow');$('#estatus').val(0);" type="button" class="btn btn-primary" style="text-align:center;display:inline;">Cancelar Solicitud</button>
+										</div>
+									</div>
+								<?php endif; ?>
 						</div>
 						<br>
 					</div>
