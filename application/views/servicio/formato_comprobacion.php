@@ -32,30 +32,23 @@
 				</select>
 			</div>
 			<div class="input-group">
-				<span class="input-group-addon">Autorizador</span>
-				<select class="selectpicker" data-header="Selecciona al autorizador" data-width="300px" data-live-search="true" 
-					style="max-width:300px;text-align:center;" id="autorizador" required>
-					<option value="" disabled selected>-- Selecciona al Jefe Directo / Líder --</option>
-					<?php foreach($colaboradores as $colaborador)
-						if($colaborador->id != $this->session->userdata('id')): ?>
-							<option value="<?= $colaborador->id;?>" <?php if($colaborador->id==$yo->jefe)echo"selected";?>><?= $colaborador->nombre;?></option>
-						<?php endif; ?>
-				</select>
+				<span class="input-group-addon required">Centro de Costo</span>
+				<input  type="text" class="form-control" id="centro_costo" value="">
 			</div>
 		</div>
-	</div>
+	</div><br>
 	<div class="row" id="registros" align="center">
 		<form id="comprobante" role="form" method="post" action="javascript:" class="form-signin" enctype="multipart/form-data"><div class="col-md-6">
 			<div class="panel panel-default">
 				<div class="panel-heading">Comprobante</div>
 				<div class="input-group">
-					<span class="input-group-addon">Factura</span>
+					<span class="input-group-addon required">Factura (<small>XML</small>)</span>
 					<input id="factura" type="file" name="factura"  accept="text/xml" onchange="leeXML(this.form);" class="form-control" style="text-align:center;">
 				</div>
 				<div class="input-group">
-					<span class="input-group-addon">Fecha</span>
+					<span class="input-group-addon required">Fecha</span>
 					<input type="text" class="form-control datepicker" style="text-align:center;background-color:white;" value="" readonly required name="fecha[]">
-					<span class="input-group-addon">Concepto</span>
+					<span class="input-group-addon required">Concepto</span>
 					<select id="concepto" class="form-control" required name="concepto[]" style="text-align:center;">
 						<option value="" disabled selected>-- Selecciona un Concepto --</option>
 						<option>Consumo</option>
@@ -71,15 +64,15 @@
 					</select>
 				</div>
 				<div class="input-group">
-					<span class="input-group-addon">Prestador del Servicio</span>
+					<span class="input-group-addon required">Prestador del Servicio</span>
 					<input type="text" class="form-control" id="prestador" value="" required name="prestador[]" style="text-align:center;">
 				</div>
 				<div class="input-group">
-					<span class="input-group-addon">Importe</span>
+					<span class="input-group-addon required">Importe</span>
 					<input type="text" class="form-control" id="importe" value="0" name="importe[]" required onchange="setTotal(this.form);sumarTotales();" style="text-align:center;">
-					<span class="input-group-addon">IVA</span>
+					<span class="input-group-addon required">IVA</span>
 					<input type="text" class="form-control" id="iva" value="0" name="iva[]" required onchange="setTotal(this.form);sumarTotales();" style="text-align:center;">
-					<span class="input-group-addon">Total</span>
+					<span class="input-group-addon required">Total</span>
 					<input type="text" class="form-control" id="total" value="0" name="total[]" readonly required style="text-align:center;background-color:white;cursor:default;">
 				</div>
 				<input id="agregar" onclick="agg(this.form);" type="button" class="btn btn-primary" style="text-align:center;display:inline;" value="+ Add">
@@ -219,13 +212,13 @@
 				<div class="panel panel-default">\
 					<div class="panel-heading">Comprobante</div>\
 					<div class="input-group">\
-						<span class="input-group-addon">Factura</span>\
+						<span class="input-group-addon required">Factura (<small>XML</small>)</span>\
 						<input id="factura" type="file" name="factura"  accept="text/xml" onchange="leeXML(this.form);" class="form-control" style="text-align:center;">\
 					</div>\
 					<div class="input-group">\
-						<span class="input-group-addon">Fecha</span>\
+						<span class="input-group-addon required">Fecha</span>\
 						<input type="text" class="form-control datepicker" style="text-align:center;background-color:white;" value="" readonly required name="fecha[]">\
-						<span class="input-group-addon">Concepto</span>\
+						<span class="input-group-addon required">Concepto</span>\
 						<select id="concepto" class="form-control" required name="concepto[]" style="text-align:center;">\
 							<option value="" disabled selected>-- Selecciona un Concepto --</option>\
 							<option>Consumo</option>\
@@ -241,15 +234,15 @@
 						</select>\
 					</div>\
 					<div class="input-group">\
-						<span class="input-group-addon">Prestador del Servicio</span>\
+						<span class="input-group-addon required">Prestador del Servicio</span>\
 						<input type="text" class="form-control" id="prestador" value="" required name="prestador[]" style="text-align:center;">\
 					</div>\
 					<div class="input-group">\
-						<span class="input-group-addon">Importe</span>\
+						<span class="input-group-addon required">Importe</span>\
 						<input type="text" class="form-control" id="importe" value="0" name="importe[]" required onchange="setTotal(this.form);sumarTotales();" style="text-align:center;">\
-						<span class="input-group-addon">IVA</span>\
+						<span class="input-group-addon required">IVA</span>\
 						<input type="text" class="form-control" id="iva" value="0" name="iva[]" required onchange="setTotal(this.form);sumarTotales();" style="text-align:center;">\
-						<span class="input-group-addon">Total</span>\
+						<span class="input-group-addon required">Total</span>\
 						<input type="text" class="form-control" id="total" value="0" name="total[]" readonly required style="text-align:center;background-color:white;cursor:default;">\
 					</div>\
 					<input id="agregar" onclick="agg(this.form);" type="button" class="btn btn-primary" style="text-align:center;display:inline;" value="+ Add">\
@@ -299,8 +292,9 @@
 					$('#centro_costo').focus();
 					return false;
 				}
+				flag=0;
 				$('form#comprobante').each(function() {
-					flag=0;
+					form=this;
 					if(this.elements['fecha[]'].value!='' && this.concepto.options[this.concepto.selectedIndex].value!='' && this.prestador.value!='' && this.importe.value!=0 && this.iva.value!=0){
 						flag++;
 						var formData = new FormData(this);
@@ -308,11 +302,11 @@
 							colaborador=$('#colaborador').val();
 						});
 						formData.append('colaborador',colaborador);
+						formData.append('autorizaddor','0');
 						formData.append('centro_costo',$('#centro_costo').val());
-						formData.append('diferencia',$('#diferencia').val());
-						console.log(formData);
+						formData.append('tipo',5);
 						$.ajax({
-							url: '<?= base_url("servicio/guardar_comprobante");?>',
+							url: '<?= base_url("servicio/registra_solicitud");?>',
 							type: 'post',
 							cache: false,
 							contentType: false,
@@ -323,15 +317,18 @@
 								console.log(data);
 								var returnedData = JSON.parse(data);
 								if(returnedData['msg']=='ok')
-									this.remove();
+									form.remove();
 							},
 							error: function(xhr) {
 								console.log(xhr.responseText);
 							}
 						});
 					}
-					alert(flag+' comprobantes se han turnado al área de finanzas para su validación y aceptación');
 				});
+				if(flag>0){
+					alert(flag+' Comprobantes se han turnado al área de finanzas para su validación y aceptación');
+					window.document.location='<?= base_url("solicitudes");?>';
+				}
 			});
 		});
 	</script>

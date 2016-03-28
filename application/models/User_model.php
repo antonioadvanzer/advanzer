@@ -29,12 +29,12 @@ class User_model extends CI_Model{
 			->join('Users U','U.id = S.colaborador');
 		$result = $this->db->get()->result();
 		foreach ($result as $solicitud) {
-			if($solicitud->tipo == 4):
+			if($solicitud->tipo == 4)
 				$solicitud->detalle = $this->db->where('solicitud',$solicitud->id)->get('Detalle_Viaticos')->first_row();
-			endif;
-			if($solicitud->tipo == 1):
+			if($solicitud->tipo == 1)
 				$solicitud->historial=$this->db->where("id != $solicitud->id and tipo=1 and (estatus=3 or (estatus !=3 and DATEDIFF(fecha_ultima_modificacion,CURDATE())<7))")->get('Solicitudes')->result();
-			endif;
+			if($solicitud->tipo == 5)
+				$solicitud->comprobantes = $this->db->where(array('solicitud'=>$solicitud->id,'estatus'=>1))->get('Comprobantes')->result();
 		}
 		return $result;
 	}

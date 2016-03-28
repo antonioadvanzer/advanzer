@@ -30,6 +30,7 @@
 	 	case 1: $tipo='VACACIONES';						break;
 	 	case 2:case 3: $tipo='PERMISO DE AUSENCIA';		break;
 	 	case 4: $tipo='VIÁTICOS Y GASTOS DE VIAJE';		break;
+		case 5: $tipo='COMPROBACIÓN DE GASTOS DE VIAJE';break;
 	 	default: $tipo='';								break;
 	endswitch; ?>
 <div class="jumbotron">
@@ -67,167 +68,214 @@
 				</div>
 			</form>
 			<form id="update" role="form" method="post" action="javascript:" class="form-signin">
-				<div class="row" align="center">
-					<div class="col-md-3"></div>
-					<div class="col-md-6">
-						<div class="input-group" style="display:<?php if($this->session->userdata('tipo')<4) echo"none";?>;">
-							<span class="input-group-addon">Colaborador</span>
-							<select class="selectpicker"style="text-align:center;" disabled>
-								<option value="" disabled selected>-- Selecciona al Colaborador --</option>
-								<?php foreach($colaboradores as $colaborador): ?>
-									<option value="<?= $colaborador->id;?>" <?php if($colaborador->id==$solicitud->colaborador)echo"selected";?>><?= $colaborador->nombre;?></option>
-								<?php endforeach; ?>
-							</select>
-						</div>
-						<div class="input-group">
-							<span class="input-group-addon required">Autorizador</span>
-							<select class="selectpicker" data-header="Selecciona al autorizador" style="text-align:center;" disabled>
-								<option value="" disabled selected>-- Selecciona al Jefe Directo / Líder --</option>
-								<?php foreach($colaboradores as $colaborador)
-									if($colaborador->id != $solicitud->colaborador): ?>
-										<option value="<?= $colaborador->id;?>" <?php if($colaborador->id==$solicitud->autorizador)echo"selected";?>><?= $colaborador->nombre;?></option>
-									<?php endif; ?>
-							</select>
+				<?php if($solicitud->tipo != 5): ?>
+					<div class="row" align="center">
+						<div class="col-md-3"></div>
+						<div class="col-md-6">
+							<div class="input-group" style="display:<?php if($this->session->userdata('tipo')<4) echo"none";?>;">
+								<span class="input-group-addon">Colaborador</span>
+								<select class="selectpicker"style="text-align:center;" disabled>
+									<option value="" disabled selected>-- Selecciona al Colaborador --</option>
+									<?php foreach($colaboradores as $colaborador): ?>
+										<option value="<?= $colaborador->id;?>" <?php if($colaborador->id==$solicitud->colaborador)echo"selected";?>><?= $colaborador->nombre;?></option>
+									<?php endforeach; ?>
+								</select>
+							</div>
+							<div class="input-group">
+								<span class="input-group-addon required">Autorizador</span>
+								<select class="selectpicker" data-header="Selecciona al autorizador" style="text-align:center;" disabled>
+									<option value="" disabled selected>-- Selecciona al Jefe Directo / Líder --</option>
+									<?php foreach($colaboradores as $colaborador)
+										if($colaborador->id != $solicitud->colaborador): ?>
+											<option value="<?= $colaborador->id;?>" <?php if($colaborador->id==$solicitud->autorizador)echo"selected";?>><?= $colaborador->nombre;?></option>
+										<?php endif; ?>
+								</select>
+							</div>
 						</div>
 					</div>
-				</div>
-				<hr>
+					<hr>
+				<?php endif;?>
 				<div class="row" align="center">
-					<div class="col-md-1"></div>
-					<div class="col-md-10">
-						<div id="generales">
-							<h3>Detalle de Solicitud</h3>
-							<div class="input-group">
-								<span class="input-group-addon">Días Solicitados</span>
-								<select class="form-control" style="cursor:default;" readonly>
-									<option><?= $solicitud->dias;?></option>
-								</select>
-								<span class="input-group-addon">Desde</span>
-								<input class="form-control" type="text" style="text-align:center;cursor:default" value="<?= $solicitud->desde;?>" readonly>
-								<span class="input-group-addon">Hasta</span>
-								<input class="form-control" type="text" style="text-align:center;cursor:default" 
-									value="<?= $solicitud->hasta;?>" readonly>
-							</div>
-							<br>
-							<?php if($solicitud->tipo < 4):
-								if($solicitud->tipo==2 || $solicitud->tipo==3):
-									$filename=base_url("assets/docs/permisos/permiso_$solicitud->id"); ?>
-									<div class="input-group">
-										<?php if(file_exists($filename)): ?>
-											<span class="input-group-addon">Comprbante</span>
-											<a href="<?= $filename;?>;?>" download><span class="glyphicon glyphicon-download-alt"></span> descargar</a>
-										<?php endif; ?>
-										<span class="input-group-addon">Motivo</span>
-										<input value="<?=$solicitud->motivo;?>" type="text" class="form-control" readonly>
-										<span class="input-group-addon">Tipo de Permiso</span>
-										<input type="text" class="form-control" value="<?php if($solicitud->tipo==2) echo"Con Goce de Sueldo";else echo "Sin Goce de Sueldo?>";?>" readonly>
-									</div><br>
-								<?php endif; ?>
-							<?php else: ?>
+					<?php if($solicitud->tipo != 5): ?>
+						<div class="col-md-1"></div>
+						<div class="col-md-10">
+							<div id="generales">
+								<h3>Detalle de Solicitud</h3>
 								<div class="input-group">
-									<span class="input-group-addon">Centro de Costo</span>
-									<input type="text" class="form-control" value="<?= $detalle->centro_costo;?>" readonly>
-									<span class="input-group-addon">Motivo del Viaje</span>
-									<input type="text" class="form-control" value="<?= $solicitud->motivo;?>" readonly>
-									<span class="input-group-addon">Viaje</span>
-									<input type="text" class="form-control" value="<?= $detalle->origen." - ".$detalle->destino;?>" readonly>
-									<span class="input-group-addon">Anticipo $</span>
-									<input class="form-control" style="max-width:100px" readonly value="<?= $detalle->anticipo;?>">
-								</div><br>
-								<div class="input-group">
-									<span class="input-group-addon">Conceptos Solicitados</span>
-									<ul type="square" align="left">
-										<?php foreach ($conceptos as $concepto) : ?>
-											<li style="width:33.33%;float:left;"><?= $concepto;?></li>
-										<?php endforeach; ?>
-									</ul>
-									<span class="input-group-addon">Vuelos</span>
-									<textarea style="min-height:110%" type="text" class="form-control" readonly><?= $vuelos;?></textarea>
-								</div><br>
-							<?php endif;
-							if($solicitud->tipo<=3): ?>
-								<div class="input-group">
-									<span class="input-group-addon required" style="min-width:260px">Observaciones</span>
-									<textarea class="form-control" rows="6" readonly><?= $solicitud->observaciones;?></textarea>
+									<span class="input-group-addon">Días Solicitados</span>
+									<select class="form-control" style="cursor:default;" readonly>
+										<option><?= $solicitud->dias;?></option>
+									</select>
+									<span class="input-group-addon">Desde</span>
+									<input class="form-control" type="text" style="text-align:center;cursor:default" value="<?= $solicitud->desde;?>" readonly>
+									<span class="input-group-addon">Hasta</span>
+									<input class="form-control" type="text" style="text-align:center;cursor:default" 
+										value="<?= $solicitud->hasta;?>" readonly>
 								</div>
 								<br>
-							<?php endif; ?>
-							<h3>Autorizaciones</h3>
-							<table class="table table-striped table-hover" style="width:90%">
-								<thead>
-									<tr>
-										<th width="10%"></th>
-										<th width="45%" style="text-align:center;">Jefe Inmediato/Líder de Proyecto</th>
-										<th width="45%" style="text-align:center;">Capital Humano</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td></td>
-										<td style="text-align:center;cursor:text;">
-											<?php if($solicitud->estatus==1): ?>
-												<span class="glyphicon glyphicon-eye-open"></span> VALIDANDO
-											<?php elseif($solicitud->estatus==2 || $solicitud->auth_uno==1): ?>
-												<span class="glyphicon glyphicon-ok"></span> AUTORIZADO
-											<?php elseif($solicitud->estatus==4 && $solicitud->auth_uno==0): ?>
-												<span class="glyphicon glyphicon-remove"></span> RECHAZADO
-											<?php elseif($solicitud->motivo=="ENFERMEDAD"): ?>
-												<span class="glyphicon glyphicon-ok"></span> ENTERADO
+								<?php if($solicitud->tipo < 4):
+									if($solicitud->tipo==2 || $solicitud->tipo==3):
+										$filename=base_url("assets/docs/permisos/permiso_$solicitud->id"); ?>
+										<div class="input-group">
+											<?php if(file_exists($filename)): ?>
+												<span class="input-group-addon">Comprbante</span>
+												<a href="<?= $filename;?>;?>" download><span class="glyphicon glyphicon-download-alt"></span> descargar</a>
 											<?php endif; ?>
-										</td>
-										<?php if($solicitud->tipo < 4): ?>
+											<span class="input-group-addon">Motivo</span>
+											<input value="<?=$solicitud->motivo;?>" type="text" class="form-control" readonly>
+											<span class="input-group-addon">Tipo de Permiso</span>
+											<input type="text" class="form-control" value="<?php if($solicitud->tipo==2) echo"Con Goce de Sueldo";else echo "Sin Goce de Sueldo?>";?>" readonly>
+										</div><br>
+									<?php endif; ?>
+								<?php elseif($solicitud->tipo==4): ?>
+									<div class="input-group">
+										<span class="input-group-addon">Centro de Costo</span>
+										<input type="text" class="form-control" value="<?= $detalle->centro_costo;?>" readonly>
+										<span class="input-group-addon">Motivo del Viaje</span>
+										<input type="text" class="form-control" value="<?= $solicitud->motivo;?>" readonly>
+										<span class="input-group-addon">Viaje</span>
+										<input type="text" class="form-control" value="<?= $detalle->origen." - ".$detalle->destino;?>" readonly>
+										<span class="input-group-addon">Anticipo $</span>
+										<input class="form-control" style="max-width:100px" readonly value="<?= $detalle->anticipo;?>">
+									</div><br>
+									<div class="input-group">
+										<span class="input-group-addon">Conceptos Solicitados</span>
+										<ul type="square" align="left">
+											<?php foreach ($conceptos as $concepto) : ?>
+												<li style="width:33.33%;float:left;"><?= $concepto;?></li>
+											<?php endforeach; ?>
+										</ul>
+										<span class="input-group-addon">Vuelos</span>
+										<textarea style="min-height:110%" type="text" class="form-control" readonly><?= $vuelos;?></textarea>
+									</div><br>
+								<?php endif;
+								if($solicitud->tipo<=3): ?>
+									<div class="input-group">
+										<span class="input-group-addon required" style="min-width:260px">Observaciones</span>
+										<textarea class="form-control" rows="6" readonly><?= $solicitud->observaciones;?></textarea>
+									</div>
+									<br>
+								<?php endif; ?>
+								<h3>Autorizaciones</h3>
+								<table class="table table-striped table-hover" style="width:90%">
+									<thead>
+										<tr>
+											<th width="10%"></th>
+											<th width="45%" style="text-align:center;">Jefe Inmediato/Líder de Proyecto</th>
+											<th width="45%" style="text-align:center;">Capital Humano</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td></td>
 											<td style="text-align:center;cursor:text;">
-												<?php if($solicitud->estatus==2): ?>
+												<?php if($solicitud->estatus==1): ?>
 													<span class="glyphicon glyphicon-eye-open"></span> VALIDANDO
-												<?php elseif($solicitud->estatus==3 && $solicitud->auth_uno==1): ?>
+												<?php elseif($solicitud->estatus==2 || $solicitud->auth_uno==1): ?>
 													<span class="glyphicon glyphicon-ok"></span> AUTORIZADO
-												<?php elseif($solicitud->estatus==4 && $solicitud->auth_uno==1): ?>
+												<?php elseif($solicitud->estatus==4 && $solicitud->auth_uno==0): ?>
 													<span class="glyphicon glyphicon-remove"></span> RECHAZADO
-												<?php elseif($solicitud->estatus==1): ?>
-													<span class="glyphicon glyphicon glyphicon-time"></span> PENDIENTE
 												<?php elseif($solicitud->motivo=="ENFERMEDAD"): ?>
 													<span class="glyphicon glyphicon-ok"></span> ENTERADO
 												<?php endif; ?>
 											</td>
-										<?php endif;?>
+											<?php if($solicitud->tipo < 4): ?>
+												<td style="text-align:center;cursor:text;">
+													<?php if($solicitud->estatus==2): ?>
+														<span class="glyphicon glyphicon-eye-open"></span> VALIDANDO
+													<?php elseif($solicitud->estatus==3 && $solicitud->auth_uno==1): ?>
+														<span class="glyphicon glyphicon-ok"></span> AUTORIZADO
+													<?php elseif($solicitud->estatus==4 && $solicitud->auth_uno==1): ?>
+														<span class="glyphicon glyphicon-remove"></span> RECHAZADO
+													<?php elseif($solicitud->estatus==1): ?>
+														<span class="glyphicon glyphicon glyphicon-time"></span> PENDIENTE
+													<?php elseif($solicitud->motivo=="ENFERMEDAD"): ?>
+														<span class="glyphicon glyphicon-ok"></span> ENTERADO
+													<?php endif; ?>
+												</td>
+											<?php endif;?>
+										</tr>
+										<?php if($solicitud->estatus==4): ?>
+											<tr>
+												<td style="text-align:right;cursor:default;">Motivo</td>
+												<?php if($solicitud->auth_uno==0): ?>
+													<td style="text-align:center;cursor:text;"><?= $solicitud->razon;?></td>
+													<td></td>
+												<?php elseif($solicitud->auth_uno==1): ?>
+													<td></td>
+													<td style="text-align:center;cursor:text;"><?= $solicitud->razon;?></td>
+												<?php endif; ?>
+											</tr>
+										<?php elseif($solicitud->estatus==0): ?>
+											<tr>
+												<td style="text-align:right;cursor:text;">Motivo Cancelación</td>
+												<td colspan="2" style="text-align:center;cursor:text;"><?= $solicitud->razon;?></td>
+											</tr>
+										<?php endif; ?>
+									</tbody>
+								</table>
+								<hr>
+								<?php 
+								$desde=new DateTime($solicitud->desde);
+								$hoy=new DateTime(date('Y-m-d'));
+								if($solicitud->estatus != 0 && $solicitud->colaborador == $this->session->userdata('id')):
+									if(($solicitud->tipo==4 && $solicitud->estatus!=3) || !in_array($solicitud->tipo,array(4,5)) && $solicitud->estatus!=4 && $desde->diff($hoy)->format('%r')): ?>
+										<div class="col-md-8">
+										<label style="float:left;color:red">Puedes CANCELAR tu solicitud de <?= $tipo;?> hasta un día antes de que inicie el período que solicitaste dando click en:</label>
+										</div>
+										<div class="col-md-4" align="center" style="float:right;">
+											<div align="center" class="btn-group btn-group-lg" role="group" aria-label="...">
+												<button onclick="$('#update').hide('slow');$('#razon').show('slow');$('#estatus').val(0);" type="button" class="btn btn-primary" style="text-align:center;display:inline;">Cancelar Solicitud</button>
+											</div>
+										</div>
+									<?php endif;
+								endif; ?>
+							</div>
+							<br>
+						</div>
+					<?php else: ?>
+						<div class="col-md-12">
+							<table class="table table-striped table-hover table-condensed">
+								<thead>
+									<tr>
+										<th style="text-align:center;">Factura</th>
+										<th style="text-align:center;">Centro de Costo</th>
+										<th style="text-align:center;">Fecha</th>
+										<th style="text-align:center;">Concepto</th>
+										<th style="text-align:center;">Prestador</th>
+										<th style="text-align:center;">Importe</th>
+										<th style="text-align:center;">Iva</th>
+										<th style="text-align:center;">Total</th>
+										<th style="text-align:center;">Estatus</th>
+										<th></th>
 									</tr>
-									<?php if($solicitud->estatus==4): ?>
+								</thead>
+								<tbody>
+									<?php foreach ($solicitud->comprobantes as $comprobante) : ?>
 										<tr>
-											<td style="text-align:right;cursor:default;">Motivo</td>
-											<?php if($solicitud->auth_uno==0): ?>
-												<td style="text-align:center;cursor:text;"><?= $solicitud->razon;?></td>
-												<td></td>
-											<?php elseif($solicitud->auth_uno==1): ?>
-												<td></td>
-												<td style="text-align:center;cursor:text;"><?= $solicitud->razon;?></td>
-											<?php endif; ?>
+											<td style="text-align:center;cursor:text;"><?php $filename=base_url("assets/docs/facturas/$comprobante->id.xml");
+											if(file_exists($filename)): ?>
+												<a href="<?= $filename;?>;?>" download><span class="glyphicon glyphicon-download-alt"></span> descargar</a>
+											<?php endif; ?></td>
+											<td style="text-align:center;cursor:text;"><?= $comprobante->centro_costo;?></td>
+											<td style="text-align:center;cursor:text;"><?= $comprobante->fecha;?></td>
+											<td style="text-align:center;cursor:text;"><?= $comprobante->concepto;?></td>
+											<td style="text-align:center;cursor:text;"><?= $comprobante->prestador;?></td>
+											<td style="text-align:center;cursor:text;"><?= $comprobante->importe;?></td>
+											<td style="text-align:center;cursor:text;"><?= $comprobante->iva;?></td>
+											<td style="text-align:center;cursor:text;"><?= $comprobante->total;?></td>
+											<td style="text-align:center;cursor:text;">
+												<?php if($solicitud->estatus==1): ?>VALIDANDO
+												<?php elseif($solicitud->estatus==2 || $solicitud->auth_uno==1): ?>AUTORIZADO
+												<?php elseif($solicitud->estatus==4 && $solicitud->auth_uno==0): ?>RECHAZADO
+												<?php endif; ?>
+											</td>
 										</tr>
-									<?php elseif($solicitud->estatus==0): ?>
-										<tr>
-											<td style="text-align:right;cursor:text;">Motivo Cancelación</td>
-											<td colspan="2" style="text-align:center;cursor:text;"><?= $solicitud->razon;?></td>
-										</tr>
-									<?php endif; ?>
+									<?php endforeach; ?>
 								</tbody>
 							</table>
-							<hr>
-							<?php 
-							$desde=new DateTime($solicitud->desde);
-							$hoy=new DateTime(date('Y-m-d'));
-							if($solicitud->estatus != 0)
-								if(($solicitud->tipo==4 && $solicitud->estatus!=3) || $solicitud->tipo!=4 && $solicitud->estatus!=4 && $desde->diff($hoy)->format('%r')): ?>
-									<div class="col-md-8">
-									<label style="float:left;color:red">Puedes CANCELAR tu solicitud de <?= $tipo;?> hasta un día antes de que inicie el período que solicitaste dando click en:</label>
-									</div>
-									<div class="col-md-4" align="center" style="float:right;">
-										<div align="center" class="btn-group btn-group-lg" role="group" aria-label="...">
-											<button onclick="$('#update').hide('slow');$('#razon').show('slow');$('#estatus').val(0);" type="button" class="btn btn-primary" style="text-align:center;display:inline;">Cancelar Solicitud</button>
-										</div>
-									</div>
-								<?php endif; ?>
 						</div>
-						<br>
-					</div>
+					<?php endif; ?>
 				</div>
 			</form>
 		</div>

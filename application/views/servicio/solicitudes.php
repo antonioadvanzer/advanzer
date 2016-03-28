@@ -75,6 +75,7 @@
 								 	case 1: $tipo='VACACIONES';						break;
 								 	case 2:case 3: $tipo='PERMISO DE AUSENCIA';		break;
 								 	case 4: $tipo='VIÁTICOS Y GASTOS DE VIAJE';		break;
+									case 5: $tipo='COMPROBACIÓN DE GASTOS DE VIAJE';break;
 								 	default: $tipo='';								break;
 								} ?>
 								<tr data-target="#collapse<?= $solicitud->id;?>" class="highlighted" data-toggle="collapse">
@@ -113,7 +114,7 @@
 												<h5 align="center">OBSERVACIONES</h5><br>
 												<p align="center"><?=$solicitud->observaciones; ?></p>
 											</div>
-										<?php else: ?>
+										<?php elseif($solicitud->tipo==4): ?>
 											<div class="col-md-2">
 												<h5 align="center">Centro de Costo</h5>
 												<p align="center"><?= $detalle->centro_costo;?></p>
@@ -144,25 +145,74 @@
 													<input class="form-control" style="background-color:white;float:left;" required value="" id="anticipo">
 												<?php endif; ?>
 											</div>
-										<?php endif; ?>
-										<div class="col-md-3" align="center" style="float:right;">
-											<h5>&nbsp;</h5>
-											<div align="center" class="btn-group btn-group-lg" role="group" aria-label="...">
-												<?php if($this->session->userdata('area')==4 || ($solicitud->tipo==4 && $solicitud->autorizador==$this->session->userdata('id'))): ?>
-													<button onclick="actualizar(<?= $solicitud->id;?>,3);" type="button" class="btn btn-primary" 
-														style="text-align:center;display:inline;">Autorizar</button>
-												<?php elseif($this->session->userdata('area')==9 && $solicitud->autorizador!=$this->session->userdata('id')): ?>
-													<button onclick="confirmar(<?= $solicitud->id;?>);" type="button" class="btn btn-primary" 
-														style="text-align:center;display:inline;">Confirmar</button>
-												<?php else: ?>
-													<button onclick="actualizar(<?= $solicitud->id;?>,2);" type="button" class="btn btn-primary" 
-														style="text-align:center;display:inline;">Autorizar</button>
-												<?php endif;
-												if($this->session->userdata('area')==4 || $solicitud->autorizador==$this->session->userdata('id')): ?>
-													<button onclick="$('#tbl').hide('slow');$('#razon').show('slow');$('#estatus').val(4);$('#solicitud').val(<?= $solicitud->id;?>);" type="button" class="btn" style="text-align:center;display:inline;">Rechazar</button>
-												<?php endif; ?>
+										<?php else:
+											foreach ($solicitud->comprobantes as $comprobante) : ?>
+												<div class="row">
+													<div class="col-md-1">
+														<h5 align="center">Factura</h5>
+														<p align="center"><?php $filename=base_url("assets/docs/facturas/$comprobante->id.xml");
+														if(file_exists($filename)): ?>
+															<a href="<?= $filename;?>;?>" download><span class="glyphicon glyphicon-download-alt"></span> descargar</a>
+														<?php endif; ?></p>
+													</div>
+													<div class="col-md-2">
+														<h5 align="center">Centro de Costo</h5>
+														<p align="center"><?= $comprobante->centro_costo;?></p>
+													</div>
+													<div class="col-md-1">
+														<h5 align="center">Fecha</h5>
+														<p align="center"><?= $comprobante->fecha;?></p>
+													</div>
+													<div class="col-md-1">
+														<h5 align="center">Concepto</h5>
+														<p align="center"><?= $comprobante->concepto;?></p>
+													</div>
+													<div class="col-md-2">
+														<h5 align="center">Prestador</h5>
+														<p align="center"><?= $comprobante->prestador;?></p>
+													</div>
+													<div class="col-md-1">
+														<h5 align="center">Importe</h5>
+														<p align="center"><?= $comprobante->importe;?></p>
+													</div>
+													<div class="col-md-1">
+														<h5 align="center">IVA</h5>
+														<p align="center"><?= $comprobante->iva;?></p>
+													</div>
+													<div class="col-md-1">
+														<h5 align="center">Total</h5>
+														<p align="center"><?= $comprobante->total;?></p>
+													</div>
+													<div class="col-md-1">
+														<h5 align="center">Respuesta</h5>
+														<div class="radio">
+															<label><input type="radio" name="respuesta" value="2">Aceptar</label>
+															<label><input type="radio" name="respuesta" value="3">Rechazar</label>
+														</div>
+													</div>
+												</div>
+											<?php endforeach;
+										endif; 
+										if($solicitud->tipo!=5):?>
+											<div class="col-md-3" align="center" style="float:right;">
+												<h5>&nbsp;</h5>
+												<div align="center" class="btn-group btn-group-lg" role="group" aria-label="...">
+													<?php if($this->session->userdata('area')==4 || ($solicitud->tipo==4 && $solicitud->autorizador==$this->session->userdata('id'))): ?>
+														<button onclick="actualizar(<?= $solicitud->id;?>,3);" type="button" class="btn btn-primary" 
+															style="text-align:center;display:inline;">Autorizar</button>
+													<?php elseif($this->session->userdata('area')==9 && $solicitud->autorizador!=$this->session->userdata('id')): ?>
+														<button onclick="confirmar(<?= $solicitud->id;?>);" type="button" class="btn btn-primary" 
+															style="text-align:center;display:inline;">Confirmar</button>
+													<?php else: ?>
+														<button onclick="actualizar(<?= $solicitud->id;?>,2);" type="button" class="btn btn-primary" 
+															style="text-align:center;display:inline;">Autorizar</button>
+													<?php endif;
+													if($this->session->userdata('area')==4 || $solicitud->autorizador==$this->session->userdata('id')): ?>
+														<button onclick="$('#tbl').hide('slow');$('#razon').show('slow');$('#estatus').val(4);$('#solicitud').val(<?= $solicitud->id;?>);" type="button" class="btn" style="text-align:center;display:inline;">Rechazar</button>
+													<?php endif; ?>
+												</div>
 											</div>
-										</div>
+										<?php endif; ?>
 									</small></td>
 								</tr>
 							<?php endforeach; ?>
@@ -206,6 +256,7 @@
 								 			$tipo.=' SIN JUSTIFICAR';
 								 		break;
 								 	case 4: $tipo='VIÁTICOS Y GASTOS DE VIAJE';		break;
+									case 5: $tipo='COMPROBACIÓN DE GASTOS DE VIAJE';break;
 								 	default: $tipo='';								break;
 								 } ?>
 								<tr onmouseover="this.style.background=color;" onmouseout="this.style.background='transparent';">

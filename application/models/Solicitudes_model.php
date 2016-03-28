@@ -19,9 +19,14 @@ class Solicitudes_model extends CI_Model{
 			$result->nombre_autorizador=$this->db->where('id',$result->autorizador)->get('Users')->first_row()->nombre;
 		else
 			$result->nombre_autorizador='ÁREA DE FINANZAS';
-		if($result->tipo == 4):
+		if($result->tipo == 4)
 			$result->detalle = $this->db->where('solicitud',$result->id)->get('Detalle_Viaticos')->first_row();
-		endif;
+		if($result->tipo == 5){
+			$result->comprobantes = $this->db->where('solicitud',$result->id)->get('Comprobantes')->result();
+			$res = $this->db->where('solicitud',$result->id)->get('Comprobantes');
+			if($res->num_rows()>0)
+				$result->centro_costo = $res->first_row()->centro_costo;
+		}
 		return $result;
 	}
 
@@ -69,7 +74,11 @@ class Solicitudes_model extends CI_Model{
 	}
 
 	function registra_solicitud($datos) {
-		$this->db->insert('Solicitudes',$datos);
+		$result=$this->db->where($datos)->where('estatus !=',3)->get('Solicitudes');
+		if($result->num_rows() == 1)
+			return $result->first_row()->id;
+		else
+			$this->db->insert('Solicitudes',$datos);
 		return $this->db->insert_id();
 	}
 
@@ -132,5 +141,10 @@ class Solicitudes_model extends CI_Model{
 
 	function getVacaciones() {
 		return $this->db->where(array('desde'=>'CURDATE()','estatus'=>3))->get('Vacaciones')->result();
+	}
+
+	function registra_comprobante($datos) {
+		$this->db->insert('Comprobantes',$datos);
+		return $this->db->insert_id();
 	}
 }
