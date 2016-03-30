@@ -12,10 +12,24 @@
 			<img src="<?= base_url('assets/images/loading.gif');?>"></div></div>
 	</div>
 	<div class="row">
-		<div class="col-md-12">
+		<div class="col-md-12" align="center">
+			<form id="justificacion" role="form" method="post" action="javascript:" class="form-signin" style="display:none">
+				<label style="color:red;border-color:red;border-radius:10px;border-style:dashed;">
+					Favor de especificar si existe alguna razón para no descontar los días al colaborador. Se enviarán a Capital Humano.
+				</label>
+				<div class="input-group">
+					<span class="input-group-addon" style="min-width:200px">Comentarios a Capital Humano</span>
+					<textarea class="form-control" id="comentarios" rows="4" placeholder="Comentarios"></textarea>
+				</div>
+				<br>
+				<div class="btn-group btn-group-lg" role="group" aria-label="..." style="float:right;">
+					<button type="submit" class="btn btn-primary" style="min-width:200px;text-align:center;">Confirmar</button>
+					<button onclick="$('#justificacion').hide('slow');$('#tbl').show('slow');$('#estatus').val('');" type="reset" class="btn" style="min-width:200px;text-align:center;">Regresar</button>
+				</div>
+			</form>
+			<input type="hidden" id="estatus" value="">
+			<input type="hidden" id="solicitud" value="">
 			<form id="razon" role="form" method="post" action="javascript:" class="form-signin" style="display:none">
-				<input type="hidden" id="estatus" value="">
-				<input type="hidden" id="solicitud" value="">
 				<div class="input-group">
 					<span class="input-group-addon" style="min-width:200px">Razón</span>
 					<textarea class="form-control" required id="razon_txt" rows="4" placeholder="Razón por la que se descarta"></textarea>
@@ -102,15 +116,21 @@
 														<a class="view-pdf" href="<?= $filename;?>"><span class="glyphicon glyphicon-eye-open"></span> Ver Comprobante</a></p>
 													</div>
 												<?php endif; ?>
-												<div class="col-md-2">
+												<div class="col-md-1">
 													<h5 align="center">MOTIVO</h5><br>
 													<p align="center"><?=$solicitud->motivo; ?></p>
 												</div>
 											<?php endif; ?>
-											<div class="col-md-6">
+											<div class="col-md-4">
 												<h5 align="center">OBSERVACIONES</h5><br>
 												<p align="center"><?=$solicitud->observaciones; ?></p>
 											</div>
+											<?php if($this->session->userdata('area')==4): ?>
+												<div class="col-md-3">
+													<h5 align="center">COMENTARIOS</h5><br>
+													<p align="center" style="color:red;"><?=$solicitud->razon; ?></p>
+												</div>
+											<?php endif; ?>
 										<?php elseif($solicitud->tipo==4): ?>
 											<div class="col-md-2">
 												<h5 align="center">Centro de Costo</h5>
@@ -190,7 +210,7 @@
 												</div>
 											<?php endforeach;
 										endif; 
-										if($solicitud->tipo!=5 && ($solicitud->estatus!=1 && $solicitud->autorizador!=$this->session->userdata('id'))):?>
+										if($solicitud->estatus<3 && $solicitud->tipo!=5 && $solicitud->tipo!=2 && ($solicitud->autorizador==$this->session->userdata('id') || ($this->session->userdata('area')==4 && $solicitud->estatus==2))):?>
 											<div class="col-md-3" align="center" style="float:right;">
 												<h5>&nbsp;</h5>
 												<div align="center" class="btn-group btn-group-lg" role="group" aria-label="...">
@@ -200,6 +220,10 @@
 													<?php elseif($this->session->userdata('area')==9 && $solicitud->autorizador!=$this->session->userdata('id')): ?>
 														<button onclick="confirmar(<?= $solicitud->id;?>);" type="button" class="btn btn-primary" 
 															style="text-align:center;display:inline;">Confirmar</button>
+													<?php elseif($solicitud->tipo==3): ?>
+														<button onclick="$('#tbl').hide('slow');$('#justificacion').show('slow');$('#estatus').val(2);$('#solicitud').val(<?= $solicitud->id;?>);" type="button" class="btn btn-primary" 
+															style="text-align:center;display:inline;">Autorizar</button>
+														
 													<?php else: ?>
 														<button onclick="actualizar(<?= $solicitud->id;?>,2);" type="button" class="btn btn-primary" 
 															style="text-align:center;display:inline;">Autorizar</button>
@@ -416,6 +440,49 @@
 					console.log(xhr.statusText);
 					$('#cargando').hide('slow');
 					$('#razon').show('slow');
+					$('#alert').prop('display',true).show('slow');
+					$('#msg').html('Error, intenta de nuevo o contacta al Administrador de la Aplicación');
+					setTimeout(function() {
+						$("#alert").fadeOut(1500);
+					},3000);
+				}
+			});
+
+			event.preventDefault();
+		});
+		$("#justificacion").submit(function(event) {
+			comentarios = $("#comentarios").val();
+			estatus = $("#estatus").val();
+			solicitud = $("#solicitud").val();
+			$.ajax({
+				url: '<?= base_url("servicio/autorizar_solicitud");?>',
+				type: 'post',
+				data: {'solicitud':solicitud,'estatus':estatus,'comentarios':comentarios},
+				beforeSend: function() {
+					$('#justificacion').hide('slow');
+					$('#cargando').show('slow');
+				},
+				success: function(data){
+					var returnedData = JSON.parse(data);
+					console.log(returnedData['msg']);
+					if(returnedData['msg']=="ok"){
+						alert('Se ha recibido su respuesta');
+						window.document.location.reload();
+					}else{
+						$('#comentarios').val("");
+						$('#cargando').hide('slow');
+						$('#tbl').show('slow');
+						$('#alert').prop('display',true).show('slow');
+						$('#msg').html(returnedData['msg']);
+						setTimeout(function() {
+							$("#alert").fadeOut(1500);
+						},3000);
+					}
+				},
+				error: function(xhr) {
+					console.log(xhr.statusText);
+					$('#cargando').hide('slow');
+					$('#justificacion').show('slow');
 					$('#alert').prop('display',true).show('slow');
 					$('#msg').html('Error, intenta de nuevo o contacta al Administrador de la Aplicación');
 					setTimeout(function() {

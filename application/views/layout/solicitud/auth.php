@@ -116,8 +116,7 @@
 			<p><b>Tipo: </b><?php 
 				switch($solicitud->tipo){
 					case 1: $tipo="VACACIONES";														break;
-					case 2: $tipo="PERMISO DE AUSENCIA CON GOCE DE SUELDO ($solicitud->motivo)";	break;
-					case 3: $tipo="PERMISO DE AUSENCIA SIN GOCE DE SUELDO ($solicitud->motivo)";	break;
+					case 3: $tipo="PERMISO DE AUSENCIA ($solicitud->motivo)";						break;
 					case 4: $tipo="VIÁTICOS Y GASTOS DE VIAJE ($solicitud->motivo)";				break;
 					default: $tipo="";																break;
 				}

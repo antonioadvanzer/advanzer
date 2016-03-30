@@ -355,6 +355,7 @@ class Servicio extends CI_Controller {
 		if($this->input->post('tipo'))
 			$datos['tipo']=$this->input->post('tipo');
 		$datos['estatus']=$this->input->post('estatus');
+		$datos['razon']=$this->input->post('comentarios');
 		$datos['auth_uno']=1;
 		$datos['usuario_modificacion']=$this->session->userdata('id');
 		$this->db->trans_begin();
