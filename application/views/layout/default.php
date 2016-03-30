@@ -13,6 +13,7 @@
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/jquery.dataTables.min.css');?>">
 	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/bootstrap-select.css');?>">
+	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/easy-modal.css');?>">
 	<script src="<?= base_url('assets/js/jquery.min.js');?>"></script>
 	<!--<script src="<?= base_url('assets/js/bootstrap-table.js');?>"></script>-->
 	<script src="<?= base_url('assets/js/docs.min.js');?>"></script>
@@ -28,6 +29,7 @@
 	<script src="<?= base_url('assets/js/bootstrap-select.js');?>"></script>
 	<script src="<?= base_url('assets/js/highcharts/highcharts.js');?>"></script>
 	<script src="<?= base_url('assets/js/circle-progress.js');?>"></script>
+	<script src="<?= base_url('assets/js/easy-modal.js');?>"></script>
 	<title><?=$title_for_layout?></title>
 	<style type="text/css">
 		body {
@@ -184,7 +186,7 @@
 								<?php endif;?>
 								<li><a href="<?= base_url('vacaciones');?>">Vacaciones</a></li>
 								<li><a href="<?= base_url('permiso');?>">Permisos de Ausencia</a></li>
-								<li><a href="<?= base_url('viaticos_gastos');?>">Viáticos y Gastos de Viaje</a></li>
+								<!--<li><a href="<?= base_url('viaticos_gastos');?>">Viáticos y Gastos de Viaje</a></li>-->
 							</ul>
 						</li>
 					</ul>

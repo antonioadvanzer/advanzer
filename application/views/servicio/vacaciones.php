@@ -52,9 +52,9 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td style="cursor:default;text-align:center;"><?php if($yo->acumulados) echo$yo->disponibles + $yo->acumulados->dias_acumulados;else echo$yo->disponibles?></td>
-						<td style="cursor:default;text-align:center;"><?php if($yo->acumulados) echo $yo->acumulados->dias_uno+$yo->de_solicitud;else echo 0;?></td>
-						<td style="cursor:default;text-align:center;"><?php if($yo->acumulados) echo date_format(date_create($yo->acumulados->vencimiento_uno),'j-M-Y')?></td>
+						<td style="cursor:default;text-align:center;"><?php $suma=0; if($yo->acumulados) echo$yo->disponibles + $yo->acumulados->dias_acumulados;else echo$yo->disponibles?></td>
+						<td style="cursor:default;text-align:center;"><?php if($yo->acumulados){$suma=$yo->acumulados->dias_uno+$yo->de_solicitud; if($suma>0)echo $suma;}else echo 0;?></td>
+						<td style="cursor:default;text-align:center;"><?php if($yo->acumulados) if($suma>0) echo date_format(date_create($yo->acumulados->vencimiento_uno),'j-M-Y')?></td>
 					</tr>
 				</tbody>
 			</table></p>

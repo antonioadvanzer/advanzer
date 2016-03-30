@@ -111,10 +111,9 @@
 		<div style="width:80%" class="container">
 			<?php 
 			switch($solicitud->tipo){
-				case 2:case 3: $tipo="PERMISO DE AUSENCIA ($solicitud->motivo)";		break;
+				case 2:case 3: $tipo="NOTIFICACIÓN DE AUSENCIA ($solicitud->motivo)";		break;
 			}?>
-			<p><?= $solicitud->nombre_solicita;?> ha registrado una solicitud de <?= $tipo;?> con Folio #<b><?=$solicitud->id;?></b> en la que solicitó <?=$solicitud->dias;?> días comprendido(s) entre <?= date_format(date_create($solicitud->desde),'D j F, Y');?> hasta el <?=date_format(date_create($solicitud->hasta),'D j F, Y');?> por motivo de: <b><?= $solicitud->observaciones;?></b></p>
-			<p>El comprobante adjunto a la solicitud lo puedes descargar dando click <a href="http://intranet.advanzer.com:3000/assets/docs/permisos/permiso_<?= $solicitud->id;?>" download>aquí</a></p>
+			<p><?= $solicitud->nombre_solicita;?> ha registrado una <?= $tipo;?> con Folio #<b><?=$solicitud->id;?></b> en la que solicitó <?=$solicitud->dias;?> días comprendido(s) entre <?= date_format(date_create($solicitud->desde),'D j F, Y');?> hasta el <?=date_format(date_create($solicitud->hasta),'D j F, Y');?> por motivo de: <b><?= $solicitud->observaciones;?></b></p>
 		</div>
 		<div class="col-md-12" align="center"><img width="100%" src="http://drive.google.com/uc?export=view&id=0B7vcCZhlhZiOOWNiNHJnZGhnaDA"></div>
 		<footer align="center">

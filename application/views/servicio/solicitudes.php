@@ -73,7 +73,8 @@
 								endif;
 								switch ($solicitud->tipo) {
 								 	case 1: $tipo='VACACIONES';						break;
-								 	case 2:case 3: $tipo='PERMISO DE AUSENCIA';		break;
+								 	case 2:	$tipo='NOTIFICACIÓN DE AUSENCIA';		break;
+								 	case 3:	$tipo='PERMISO DE AUSENCIA';			break;
 								 	case 4: $tipo='VIÁTICOS Y GASTOS DE VIAJE';		break;
 									case 5: $tipo='COMPROBACIÓN DE GASTOS DE VIAJE';break;
 								 	default: $tipo='';								break;
@@ -93,24 +94,20 @@
 										<?php if($solicitud->tipo < 4):
 											if($solicitud->tipo==2 || $solicitud->tipo==3):
 												$filename=base_url("assets/docs/permisos/permiso_$solicitud->id");
-												if(file_exists($filename)): ?>
+												$file_headers = @get_headers($filename);
+												if($file_headers[0] !== 'HTTP/1.0 404 Not Found'): ?>
 													<div class="col-md-2">
 														<h5 align="center">COMPROBANTE</h5><br>
-														<p align="center"><a href="<?= $filename;?>;?>" download><span class="glyphicon glyphicon-download-alt"></span> descargar</a></p>
+														<p align="center">
+														<a class="view-pdf" href="<?= $filename;?>"><span class="glyphicon glyphicon-eye-open"></span> Ver Comprobante</a></p>
 													</div>
 												<?php endif; ?>
 												<div class="col-md-2">
 													<h5 align="center">MOTIVO</h5><br>
 													<p align="center"><?=$solicitud->motivo; ?></p>
 												</div>
-												<?php if(!in_array($solicitud->motivo,array('MATRIMONIO','NACIMIENTO DE HIJOS','FALLECIMIENTO DE CÓNYUGE','FALLECIMIENTO DE HERMANOS','FALLECIMIENTO DE HIJOS','FALLECIMIENTO DE PADRES','FALLECIMIENTO DE PADRES POLÍTICOS'))): ?>
-													<div class="col-md-2" align="center">
-														<h5 align="center">TIPO DE PERMISO</h5><br>
-														<p align="center"><?php if($solicitud->tipo==2) echo"CON GOCE DE SUELDO"; else echo"SIN GOCE DE SUELDO";?></p>
-													</div>
-												<?php endif;
-											endif; ?>
-											<div class="col-md-4">
+											<?php endif; ?>
+											<div class="col-md-6">
 												<h5 align="center">OBSERVACIONES</h5><br>
 												<p align="center"><?=$solicitud->observaciones; ?></p>
 											</div>
@@ -186,14 +183,14 @@
 													<div class="col-md-1">
 														<h5 align="center">Respuesta</h5>
 														<div class="radio">
-															<label><input type="radio" name="respuesta" value="2">Aceptar</label>
-															<label><input type="radio" name="respuesta" value="3">Rechazar</label>
+															<label><input onclick="resp_comprobante(<?= $solicitud->id;?>,<?= $comprobante->id;?>,this.value);" type="radio" name="respuesta" value="2">Aceptar</label>
+															<label><input onclick="resp_comprobante(<?= $solicitud->id;?>,<?= $comprobante->id;?>,this.value);" type="radio" name="respuesta" value="3">Rechazar</label>
 														</div>
 													</div>
 												</div>
 											<?php endforeach;
 										endif; 
-										if($solicitud->tipo!=5):?>
+										if($solicitud->tipo!=5 && ($solicitud->estatus!=1 && $solicitud->autorizador!=$this->session->userdata('id'))):?>
 											<div class="col-md-3" align="center" style="float:right;">
 												<h5>&nbsp;</h5>
 												<div align="center" class="btn-group btn-group-lg" role="group" aria-label="...">
@@ -245,16 +242,8 @@
 								}
 								switch ($solicitud->tipo) {
 								 	case 1: $tipo='VACACIONES';						break;
-								 	case 2:
-								 		$tipo='PERMISO DE AUSENCIA';
-								 		if($solicitud->estatus==3)
-								 			$tipo.=' JUSTIFICADO';
-								 		break;
-								 	case 3:
-								 		$tipo='PERMISO DE AUSENCIA';
-								 		if($solicitud->estatus==3)
-								 			$tipo.=' SIN JUSTIFICAR';
-								 		break;
+								 	case 2:	$tipo='NOTIFICACIÓN DE AUSENCIA';		break;
+								 	case 3:	$tipo='PERMISO DE AUSENCIA';			break;
 								 	case 4: $tipo='VIÁTICOS Y GASTOS DE VIAJE';		break;
 									case 5: $tipo='COMPROBACIÓN DE GASTOS DE VIAJE';break;
 								 	default: $tipo='';								break;
@@ -289,6 +278,20 @@
 			</style>\
 		');
 
+		function resp_comprobante(solicitud,comprobante,valor){
+			console.log(solicitud,comprobante,valor);
+			$.ajax({
+				url: '<?= base_url("servicio/cambia_estatus_comprobante");?>',
+				type: 'post',
+				data: {'comprobante':comprobante,'estatus':valor,'solicitud':solicitud},
+				success: function(data){
+					console.log(data);
+				},
+				error: function(xhr) {
+					console.log(xhr.responseText);
+				}
+			});
+		}
 		function confirmar(solicitud) {
 			anticipo=$('#anticipo').val();
 			if(anticipo==''){

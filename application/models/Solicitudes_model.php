@@ -92,6 +92,17 @@ class Solicitudes_model extends CI_Model{
 		}
 	}
 
+	function update_comprobante($id,$datos) {
+		$result=$this->db->where('id',$id)->update('Comprobantes',$datos);
+		if($this->db->affected_rows()==1)
+			return true;
+		return false;
+	}
+
+	function getComprobantesPendientes($solicitud) {
+		return $this->db->where(array('solicitud'=>$solicitud,'estatus'=>1))->get('Comprobantes')->result();
+	}
+
 	function actualiza_dias_vacaciones($colaborador,$datos) {
 		$result = $this->db->where('colaborador',$colaborador)->get('Vacaciones');
 		if($result->num_rows() == 1)

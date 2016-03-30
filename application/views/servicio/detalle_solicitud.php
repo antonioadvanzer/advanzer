@@ -28,14 +28,15 @@
 	endif;
 	switch ($solicitud->tipo) :
 	 	case 1: $tipo='VACACIONES';						break;
-	 	case 2:case 3: $tipo='PERMISO DE AUSENCIA';		break;
+	 	case 2:	$tipo='NOTIFICACIÓN DE AUSENCIA';		break;
+	 	case 3:	$tipo='PERMISO DE AUSENCIA';			break;
 	 	case 4: $tipo='VIÁTICOS Y GASTOS DE VIAJE';		break;
 		case 5: $tipo='COMPROBACIÓN DE GASTOS DE VIAJE';break;
 	 	default: $tipo='';								break;
 	endswitch; ?>
 <div class="jumbotron">
 	<div class="container">
-		<h2 align="left"><b>Detalle de Solicitud - <?= $tipo;?></b></h2>
+		<h2 align="left"><b>Detalle de <?= $tipo;?></b></h2>
 	</div>
 </div>
 <div class="container">
@@ -123,8 +124,8 @@
 											<?php endif; ?>
 											<span class="input-group-addon">Motivo</span>
 											<input value="<?=$solicitud->motivo;?>" type="text" class="form-control" readonly>
-											<span class="input-group-addon">Tipo de Permiso</span>
-											<input type="text" class="form-control" value="<?php if($solicitud->tipo==2) echo"Con Goce de Sueldo";else echo "Sin Goce de Sueldo?>";?>" readonly>
+											<!--<span class="input-group-addon">Tipo de Permiso</span>
+											<input type="text" class="form-control" value="<?php if($solicitud->tipo==2) echo"Con Goce de Sueldo";else echo "Sin Goce de Sueldo?>";?>" readonly>-->
 										</div><br>
 									<?php endif; ?>
 								<?php elseif($solicitud->tipo==4): ?>
@@ -155,65 +156,74 @@
 										<textarea class="form-control" rows="6" readonly><?= $solicitud->observaciones;?></textarea>
 									</div>
 									<br>
-								<?php endif; ?>
-								<h3>Autorizaciones</h3>
-								<table class="table table-striped table-hover" style="width:90%">
-									<thead>
-										<tr>
-											<th width="10%"></th>
-											<th width="45%" style="text-align:center;">Jefe Inmediato/Líder de Proyecto</th>
-											<th width="45%" style="text-align:center;">Capital Humano</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<td></td>
-											<td style="text-align:center;cursor:text;">
-												<?php if($solicitud->estatus==1): ?>
-													<span class="glyphicon glyphicon-eye-open"></span> VALIDANDO
-												<?php elseif($solicitud->estatus==2 || $solicitud->auth_uno==1): ?>
-													<span class="glyphicon glyphicon-ok"></span> AUTORIZADO
-												<?php elseif($solicitud->estatus==4 && $solicitud->auth_uno==0): ?>
-													<span class="glyphicon glyphicon-remove"></span> RECHAZADO
-												<?php elseif($solicitud->motivo=="ENFERMEDAD"): ?>
-													<span class="glyphicon glyphicon-ok"></span> ENTERADO
-												<?php endif; ?>
-											</td>
-											<?php if($solicitud->tipo < 4): ?>
-												<td style="text-align:center;cursor:text;">
-													<?php if($solicitud->estatus==2): ?>
-														<span class="glyphicon glyphicon-eye-open"></span> VALIDANDO
-													<?php elseif($solicitud->estatus==3 && $solicitud->auth_uno==1): ?>
-														<span class="glyphicon glyphicon-ok"></span> AUTORIZADO
-													<?php elseif($solicitud->estatus==4 && $solicitud->auth_uno==1): ?>
-														<span class="glyphicon glyphicon-remove"></span> RECHAZADO
-													<?php elseif($solicitud->estatus==1): ?>
-														<span class="glyphicon glyphicon glyphicon-time"></span> PENDIENTE
-													<?php elseif($solicitud->motivo=="ENFERMEDAD"): ?>
-														<span class="glyphicon glyphicon-ok"></span> ENTERADO
-													<?php endif; ?>
-												</td>
-											<?php endif;?>
-										</tr>
-										<?php if($solicitud->estatus==4): ?>
-											<tr>
-												<td style="text-align:right;cursor:default;">Motivo</td>
-												<?php if($solicitud->auth_uno==0): ?>
-													<td style="text-align:center;cursor:text;"><?= $solicitud->razon;?></td>
+								<?php endif;
+								$filename=base_url("assets/docs/permisos/permiso_$solicitud->id");
+								$file_headers = @get_headers($filename);
+								if($file_headers[0] !== 'HTTP/1.0 404 Not Found'): ?>
+									<h3>Comprobante</h3>
+									<div class="col-md-12">
+										<a class="view-pdf" href="<?= $filename;?>"><span class="glyphicon glyphicon-eye-open"></span> Ver Comprobante</a></p>
+									</div>
+								<?php endif;
+								if(!in_array($solicitud->motivo,array("ENFERMEDAD","MATRIMONIO","NACIMIENTO DE HIJOS","FALLECIMIENTO DE CÓNYUGE","FALLECIMIENTO DE HERMANOS","FALLECIMIENTO DE HIJOS","FALLECIMIENTO DE PADRES","FALLECIMIENTO DE PADRES POLÍTICOS")))
+									if($solicitud->estatus!=0): ?>
+										<h3>Autorizaciones</h3>
+										<table class="table table-striped table-hover" style="width:90%">
+											<thead>
+												<tr>
+													<th width="10%"></th>
+													<th width="45%" style="text-align:center;">Jefe Inmediato/Líder de Proyecto</th>
+													<th width="45%" style="text-align:center;">Capital Humano</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
 													<td></td>
-												<?php elseif($solicitud->auth_uno==1): ?>
-													<td></td>
-													<td style="text-align:center;cursor:text;"><?= $solicitud->razon;?></td>
+													<td style="text-align:center;cursor:text;">
+														<?php if($solicitud->estatus==1): ?>
+															<span class="glyphicon glyphicon-eye-open"></span> VALIDANDO
+														<?php elseif($solicitud->estatus==2 || $solicitud->auth_uno==1): ?>
+															<span class="glyphicon glyphicon-ok"></span> AUTORIZADO
+														<?php elseif($solicitud->estatus==4 && $solicitud->auth_uno==0): ?>
+															<span class="glyphicon glyphicon-remove"></span> RECHAZADO
+														<?php elseif($solicitud->motivo=="ENFERMEDAD"): ?>
+															<span class="glyphicon glyphicon-ok"></span> ENTERADO
+														<?php endif; ?>
+													</td>
+													<?php if($solicitud->tipo < 4): ?>
+														<td style="text-align:center;cursor:text;">
+															<?php if($solicitud->estatus==2): ?>
+																<span class="glyphicon glyphicon-eye-open"></span> VALIDANDO
+															<?php elseif($solicitud->estatus==3 && $solicitud->auth_uno==1): ?>
+																<span class="glyphicon glyphicon-ok"></span> AUTORIZADO
+															<?php elseif($solicitud->estatus==4 && $solicitud->auth_uno==1): ?>
+																<span class="glyphicon glyphicon-remove"></span> RECHAZADO
+															<?php elseif($solicitud->estatus==1): ?>
+																<span class="glyphicon glyphicon glyphicon-time"></span> PENDIENTE
+															<?php elseif($solicitud->motivo=="ENFERMEDAD"): ?>
+																<span class="glyphicon glyphicon-ok"></span> ENTERADO
+															<?php endif; ?>
+														</td>
+													<?php endif;?>
+												</tr>
+												<?php if($solicitud->estatus==4): ?>
+													<tr>
+														<td style="text-align:right;cursor:default;">Motivo</td>
+														<?php if($solicitud->auth_uno==0): ?>
+															<td style="text-align:center;cursor:text;"><?= $solicitud->razon;?></td>
+															<td></td>
+														<?php elseif($solicitud->auth_uno==1): ?>
+															<td></td>
+															<td style="text-align:center;cursor:text;"><?= $solicitud->razon;?></td>
+														<?php endif; ?>
+													</tr>
 												<?php endif; ?>
-											</tr>
-										<?php elseif($solicitud->estatus==0): ?>
-											<tr>
-												<td style="text-align:right;cursor:text;">Motivo Cancelación</td>
-												<td colspan="2" style="text-align:center;cursor:text;"><?= $solicitud->razon;?></td>
-											</tr>
-										<?php endif; ?>
-									</tbody>
-								</table>
+											</tbody>
+										</table>
+									<?php else: ?>
+										<h3>Motivo Cancelación</h3>
+										<p><?= $solicitud->razon;?></p>
+									<?php endif;?>
 								<hr>
 								<?php 
 								$desde=new DateTime($solicitud->desde);
@@ -265,9 +275,9 @@
 											<td style="text-align:center;cursor:text;"><?= $comprobante->iva;?></td>
 											<td style="text-align:center;cursor:text;"><?= $comprobante->total;?></td>
 											<td style="text-align:center;cursor:text;">
-												<?php if($solicitud->estatus==1): ?>VALIDANDO
-												<?php elseif($solicitud->estatus==2 || $solicitud->auth_uno==1): ?>AUTORIZADO
-												<?php elseif($solicitud->estatus==4 && $solicitud->auth_uno==0): ?>RECHAZADO
+												<?php if($comprobante->estatus==1): ?>VALIDANDO
+												<?php elseif($comprobante->estatus==2): ?>ACEPTADO
+												<?php elseif($comprobante->estatus==3): ?>RECHAZADO
 												<?php endif; ?>
 											</td>
 										</tr>

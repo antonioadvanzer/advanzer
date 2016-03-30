@@ -36,8 +36,8 @@
 							}
 							switch ($solicitud->tipo) {
 								 	case 1: $tipo='VACACIONES';						break;
-								 	case 2:	$tipo='PERMISO DE AUSENCIA CON GOCE';	break;
-								 	case 3:	$tipo='PERMISO DE AUSENCIA SIN GOCE';	break;
+								 	case 2:	$tipo='NOTIFICACIÓN DE AUSENCIA';		break;
+	 								case 3:	$tipo='PERMISO DE AUSENCIA';			break;
 								 	case 4: $tipo='VIÁTICOS Y GASTOS DE VIAJE';		break;
 									case 5: $tipo='COMPROBACIÓN DE GASTOS DE VIAJE';break;
 								 	default: $tipo='';								break;

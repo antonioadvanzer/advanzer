@@ -162,6 +162,20 @@ class Servicio extends CI_Controller {
 		$this->layout->view('servicio/formato_vacaciones',$data);
 	}
 
+	public function cambia_estatus_comprobante() {
+		$solicitud = $this->input->post('solicitud');
+		$id = $this->input->post('comprobante');
+		$datos['estatus'] = $this->input->post('estatus');
+		if($this->solicitudes_model->update_comprobante($id,$datos)){
+			$response['msg']="ok";
+			$solicitud=$this->solicitudes_model->getSolicitudById($solicitud);
+			$pendientes=$this->solicitudes_model->getComprobantesPendientes($solicitud->id);
+			if(count($pendientes)==0)
+				$this->solicitudes_model->update_solicitud($solicitud->id,array('estatus'=>3));
+		}else
+			$response['msg']="Error";
+		echo json_encode($response);
+	}
 	public function getColabInfo() {
 		$tipo=$this->input->post('tipo');
 		$dias_disponibles=0;
@@ -244,7 +258,7 @@ class Servicio extends CI_Controller {
 			'fecha_solicitud'=>date('Y-m-d'),
 			'usuario_modificacion'=>$this->session->userdata('id')
 		);
-		if($datos['motivo'] == "ENFERMEDAD")
+		if(in_array($datos['motivo'],array("ENFERMEDAD","MATRIMONIO","NACIMIENTO DE HIJOS","FALLECIMIENTO DE CÓNYUGE","FALLECIMIENTO DE HERMANOS","FALLECIMIENTO DE HIJOS","FALLECIMIENTO DE PADRES","FALLECIMIENTO DE PADRES POLÍTICOS")))
 			$datos['estatus']=3;
 		$this->db->trans_begin();
 		$solicitud=$this->solicitudes_model->registra_solicitud($datos);
@@ -315,9 +329,9 @@ class Servicio extends CI_Controller {
 		else{
 			//enviar mail de aviso al autorizador
 			$data['solicitud']=$solicitud;
-			if($solicitud->motivo == "ENFERMEDAD"){
+			if(in_array($datos['motivo'],array("ENFERMEDAD","MATRIMONIO","NACIMIENTO DE HIJOS","FALLECIMIENTO DE CÓNYUGE","FALLECIMIENTO DE HERMANOS","FALLECIMIENTO DE HIJOS","FALLECIMIENTO DE PADRES","FALLECIMIENTO DE PADRES POLÍTICOS"))){
 				$destinatario=array($this->user_model->searchById($solicitud->autorizador)->email,'micaela.llano@advanzer.com');
-				$mensaje=$this->load->view("layout/solicitud/enfermedad",$data,true);
+				$mensaje=$this->load->view("layout/solicitud/notificacion",$data,true);
 			}elseif($solicitud->tipo==5){
 				$destinatario='viaticos@advanzer.com';
 				$mensaje=$this->load->view("layout/solicitud/comprobantes",$data,true);

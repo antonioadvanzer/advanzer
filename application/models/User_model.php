@@ -10,7 +10,7 @@ class User_model extends CI_Model{
 
 
 	function solicitudesByColaborador($colaborador,$flag=null) {
-		$this->db->select('S.*,U.nombre')->from('Solicitudes S')->join('Users U','U.id = S.autorizador','LEFT OUTER')->where("S.colaborador = $colaborador");
+		$this->db->select('S.*,U.nombre')->from('Solicitudes S')->join('Users U','U.id = S.autorizador','LEFT OUTER')->where("S.colaborador = $colaborador")->order_by('S.fecha_solicitud','desc');
 		$result = $this->db->get()->result();
 		foreach ($result as $solicitud)
 			if($solicitud->tipo == 4)
@@ -24,9 +24,9 @@ class User_model extends CI_Model{
 		elseif($this->session->userdata('area')==9)
 			$this->db->join('Detalle_Viaticos DV','DV.solicitud=S.id','LEFT OUTER')->where("(S.estatus=3 and S.tipo=4 and anticipo = 0) or (S.autorizador=$colaborador and S.estatus=1) or (S.tipo=5 and S.estatus=1)");
 		else
-			$this->db->where(array('S.autorizador'=>$colaborador,'S.estatus'=>1));
+			$this->db->where(array('S.autorizador'=>$colaborador,'S.desde >='=>date('Y-m-d')))->where_in('S.estatus',array(1,3));
 		$this->db->select('S.*,U.nombre')->from('Solicitudes S')
-			->join('Users U','U.id = S.colaborador');
+			->join('Users U','U.id = S.colaborador')->order_by('S.fecha_solicitud','desc');
 		$result = $this->db->get()->result();
 		foreach ($result as $solicitud) {
 			if($solicitud->tipo == 4)

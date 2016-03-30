@@ -91,7 +91,7 @@
 					<span class="input-group-addon required" id="especifique_label">Especifique</span>
 					<input class="form-control" id="especifique" value="" disabled style="background-color:white;">
 					<span class="input-group-addon required">Comprobante</span>
-					<input class="form-control" type="file" id="file" name="file" value="">
+					<input class="form-control" type="file" id="file" name="file" accept="application/pdf,image/*">
 				</div>
 				<br>
 				<div class="input-group">
@@ -229,13 +229,15 @@
 					$('#otro_label').show('slow');
 					$('#especifique_label').show('slow');
 					$('#especifique').prop({'disabled':false,'required':true}).show('slow');
-					$('#dias').val('');
+					$('#dias').val('').prop('disabled',false);
 				}else{
 					$('#especifique_label').hide('slow');
 					$('#especifique').prop({'disabled':true,'required':false}).hide('slow');
-					$('#dias').val(motivo);
+					$('#dias').val(motivo).prop('disabled',true);
 					$('#otro_label').hide('slow');
 				}
+				if(motivo==42)
+					$('#dias').val(1).prop('disabled',false);
 				calculaFechas();
 			});
 			
