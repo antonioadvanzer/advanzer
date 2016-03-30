@@ -11,6 +11,11 @@
 		<div class="col-md-12"><div id="cargando" style="display:none; color: green;">
 			<img src="<?= base_url('assets/images/loading.gif');?>"></div></div>
 	</div>
+	<div class="row" align="center">
+		<div class="col-md-6"><button class="btn btn-primary" onclick="location.href='<?= base_url("vacaciones");?>';"><big>Solicitar Vacaciones</big></button></div>
+		<div class="col-md-6"><button class="btn btn-primary" onclick="location.href='<?= base_url("permiso");?>';"><big>Solicitar Permiso de Ausencia</big></button></div>
+	</div>
+	<hr>
 	<div class="row">
 		<div class="col-md-12" align="center">
 			<form id="justificacion" role="form" method="post" action="javascript:" class="form-signin" style="display:none">
