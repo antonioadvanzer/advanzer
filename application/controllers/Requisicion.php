@@ -527,7 +527,7 @@ class Requisicion extends CI_Controller {
 			$objSheet->setCellValue('B1',$requisicion->id)
 			->setCellValue('B2',$requisicion->nombre_solicita)
 			->setCellValue('B4',$requisicion->fecha_solicitud)
-			->setCellValue('B5',$requisicion->nombre_posicion)
+			->setCellValue('B5',$requisicion->posicion)
 			->setCellValue('B6',$requisicion->expertise)
 			->setCellValue('B8',$requisicion->empresa)
 			->setCellValue('B9',$requisicion->domicilio_cte)
