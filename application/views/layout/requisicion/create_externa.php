@@ -110,17 +110,10 @@
 	<div class="container">
 		<div class="col-md-12" align="center"><img width="100%" src="http://drive.google.com/uc?export=view&id=0B7vcCZhlhZiONkE0ZU9qcVU5S3M"></div>
 		<div style="width:80%" class="container">
-			<h2>Se ha autorizado una nueva Requisición de Personal</h2>
+			<h2>Se ha registrado una nueva Requisición de Colocación Externa</h2>
 			<h4><b>Folio</b> #<b><?=$requisicion->id;?></b></h4>
 			<p><b>Solicita: </b><?= $requisicion->nombre_solicita;?></p>
-			<?php if($requisicion->autorizador != $requisicion->director): ?>
-				<p><b>Acepta: </b><?= $requisicion->nombre_director;?></p>
-			<?php endif; ?>
-			<p><b>Autoriza: </b><?= $requisicion->nombre_autorizador;?></p>
-			<?php if($requisicion->tipo_requisicion==1): ?>
-				<p><b>Vacante: </b><?="$requisicion->nombre_posicion - $requisicion->nombre_track"; ?></p>
-				<p><b>Área: </b><?=$requisicion->nombre_area;?></p>
-			<?php endif; ?>
+			<p><b>Empresa: </b><?= $requisicion->empresa; ?></p>
 			<p>Ingresa a <a href='http://intranet.advanzer.com:3000/requisicion/ver/<?= $requisicion->id;?>'>Portal Personal >> Servicios >> Requisiciones</a> para darle seguimiento a la solicitud</p>
 		</div>
 		<div class="col-md-12" align="center"><img width="100%" src="http://drive.google.com/uc?export=view&id=0B7vcCZhlhZiOOWNiNHJnZGhnaDA"></div>

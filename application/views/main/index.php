@@ -76,8 +76,8 @@
 								<?php if(count($auth_pendientes)+count($solicitudes_pendientes)): ?>
 									<li><a href="<?= base_url("solicitudes");?>">Solicitudes <span class="badge"><?php if($count=count($auth_pendientes)+ $cont>0) echo $count;?></span></a></li>
 								<?php endif;
-								if($requisiciones_pendientes): ?>
-									<li><a href="<?= base_url("requisicion");?>"><b>Requisiciones <span class="badge"><?= $requisiciones_pendientes?></span></b></a></li>
+								if(count($requisiciones_pendientes)+count($requisiciones)): ?>
+									<li><a href="<?= base_url("requisicion");?>"><b>Requisiciones <span class="badge"><?php if($count=count($requisiciones_pendientes)+ $cont>0) echo $count;?></span></b></a></li>
 								<?php endif;
 								if($evaluacion): ?>
 									<li><a href="<?= base_url("evaluar");?>">Feedback</a></li>

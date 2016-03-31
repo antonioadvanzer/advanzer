@@ -25,6 +25,7 @@ class Main extends CI_Controller {
     		if(in_array($solicitud->estatus,array(1,2)))
 				$cont++;
 		$data['cont']=$cont;
+    	$data['requisiciones'] = $this->requisicion_model->getByColaborador($this->session->userdata('id'));
     	$data['requisiciones_pendientes'] = $this->requisicion_model->getPendientesByColaborador($this->session->userdata('id'));
 		$this->layout->title('Advanzer - Inicio');
 		$this->layout->view('main/index', $data);
