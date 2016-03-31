@@ -20,7 +20,7 @@ class User_model extends CI_Model{
 
 	function solicitudes_pendientes($colaborador){
 		if($this->session->userdata('area') == 4)
-			$this->db->where("((S.tipo != 4 and S.estatus=2) or (S.autorizador=$colaborador and S.estatus=1))");
+			$this->db->where("((S.tipo != 4 and S.estatus=2) or (S.autorizador=$colaborador and S.estatus=1)) or (S.estatus=3 and desde='".date('Y-m-d')."')");
 		elseif($this->session->userdata('area')==9)
 			$this->db->join('Detalle_Viaticos DV','DV.solicitud=S.id','LEFT OUTER')->where("(S.estatus=3 and S.tipo=4 and anticipo = 0) or (S.autorizador=$colaborador and S.estatus=1) or (S.tipo=5 and S.estatus=1)");
 		else

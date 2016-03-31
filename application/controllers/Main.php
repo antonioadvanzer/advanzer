@@ -21,7 +21,7 @@ class Main extends CI_Controller {
     	$data['auth_pendientes'] = $this->user_model->solicitudes_pendientes($this->session->userdata('id'));
     	$cont=0;
     	foreach ($data['auth_pendientes'] as $solicitud)
-    		if(!in_array($solicitud->estatus,array(0,3,4)))
+    		if(!in_array($solicitud->estatus,array(0,3,4)) || $solicitud->desde == (String)date('Y-m-d'))
     			$cont++;
     	$data['solicitudes_pendientes'] = $this->user_model->solicitudesByColaborador($this->session->userdata('id'));
     	$data['cont_pendientes']=$cont;
