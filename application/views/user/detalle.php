@@ -285,7 +285,7 @@
 					default: $tipo='';								break;
 				} ?>
 				<tr onmouseover="this.style.background=color;" onmouseout="this.style.background='transparent';">
-					<td align="center"><a href="<?= base_url("servicio/ver/$solicitud->id");?>"><small><?= $solicitud->id;?></small></a></td>
+					<td align="center"><a class="view-pdf" href="<?= base_url("servicio/ver/$solicitud->id");?>"><small><?= $solicitud->id;?></small></a></td>
 					<td align="center"><small><?= $tipo;?></small></td>
 					<td align="center"><small><?= date('Y-m-d',strtotime($solicitud->fecha_solicitud));?></small></td>
 					<td align="center"><small><?= $solicitud->nombre;?></small></td>

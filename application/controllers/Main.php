@@ -19,7 +19,17 @@ class Main extends CI_Controller {
     	$data['colaborador'] = $this->user_model->searchById($this->session->userdata('id'));
     	$data['evaluacion'] = $this->evaluacion_model->getEvaluacionAnual();
     	$data['auth_pendientes'] = $this->user_model->solicitudes_pendientes($this->session->userdata('id'));
+    	$cont=0;
+    	foreach ($data['auth_pendientes'] as $solicitud)
+    		if(!in_array($solicitud->estatus,array(0,3,4)))
+    			$cont++;
     	$data['solicitudes_pendientes'] = $this->user_model->solicitudesByColaborador($this->session->userdata('id'));
+    	$data['cont_pendientes']=$cont;
+    	$cont=0;
+    	foreach ($data['solicitudes_pendientes'] as $solicitud)
+    		if(in_array($solicitud->estatus,array(1,2)))
+    			$cont++;
+    	$data['cont_solicitudes']=$cont;
     	$cont=0;
 		foreach ($data['solicitudes_pendientes'] as $solicitud)
     		if(in_array($solicitud->estatus,array(1,2)))

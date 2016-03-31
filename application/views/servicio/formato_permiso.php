@@ -90,7 +90,7 @@
 					</select>
 					<span class="input-group-addon required" id="especifique_label">Especifique</span>
 					<input class="form-control" id="especifique" value="" disabled style="background-color:white;">
-					<span class="input-group-addon required">Comprobante</span>
+					<span class="input-group-addon required">Comprobante <small style="color:red;">(Archivo en pdf o imágen)</small></span>
 					<input class="form-control" type="file" id="file" name="file" accept="application/pdf,image/*">
 				</div>
 				<br>

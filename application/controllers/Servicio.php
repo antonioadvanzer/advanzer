@@ -31,14 +31,17 @@ class Servicio extends CI_Controller {
 			default: $tipo='';								break;
 		endswitch;
 		$data['tipo']=$tipo;
-		$this->layout->title('Advanzer - Historial de Solicitudes');
-		$this->layout->view('servicio/historial_solicitud',$data);
+		$this->load->view('servicio/historial_solicitud',$data);
 	}
 	public function ver($solicitud) {
 		$data['solicitud']=$this->solicitudes_model->getSolicitudById($solicitud);
 		$data['colaboradores']=$this->user_model->getAll();
-		$this->layout->title('Advanzer - Detalle de Solicitud');
-		$this->layout->view('servicio/detalle_solicitud',$data);
+		$this->load->view('servicio/detalle_solicitud',$data);
+	}
+	public function resolver($solicitud) {
+		$data['solicitud']=$this->solicitudes_model->getSolicitudById($solicitud);
+		$data['colaboradores']=$this->user_model->getAll();
+		$this->load->view('servicio/resolver',$data);
 	}
 	public function formato_comprobacion() {
 		$data=array();
@@ -90,12 +93,18 @@ class Servicio extends CI_Controller {
 		$this->layout->view('servicio/formato_permiso',$data);
 	}
 	public function solicitudes() {
-		$data['solicitudes'] = $this->user_model->solicitudes_pendientes($this->session->userdata('id'));
 		$data['propias'] = $this->user_model->solicitudesByColaborador($this->session->userdata('id'));
-		if(count($data['solicitudes']) + count($data['propias']) == 0)
+		if(count($data['propias']) == 0)
 			redirect();
 		$this->layout->title('Advanzer - Solicitudes');
 		$this->layout->view('servicio/solicitudes',$data);
+	}
+	public function solicitudes_pendientes() {
+		$data['solicitudes'] = $this->user_model->solicitudes_pendientes($this->session->userdata('id'));
+		if(count($data['solicitudes']) == 0)
+			redirect();
+		$this->layout->title('Advanzer - Solicitudes');
+		$this->layout->view('servicio/solicitudes_pendientes',$data);
 	}
 	public function vacaciones() {
 		$data=array();
@@ -289,10 +298,9 @@ class Servicio extends CI_Controller {
 			);
 			$this->solicitudes_model->update_detalle_viaticos($solicitud->id,$data);
 		endif;
-		if(($datos['tipo']==2) && !empty($_FILES)):
-			$ext = explode(".", $_FILES['file']['name']);
+		if(in_array($datos['tipo'],array(2,3)) && !empty($_FILES)):
 			$config['upload_path'] = './assets/docs/permisos/';
-			$config['file_name'] = 'permiso_'.$solicitud->id.'.'.end($ext);
+			$config['file_name'] = 'permiso_'.$solicitud->id;
 			$config['overwrite'] = TRUE;
 			$config['allowed_types'] = '*';
 			$this->load->library('upload', $config);
@@ -352,8 +360,6 @@ class Servicio extends CI_Controller {
 	}
 	public function autorizar_solicitud() {
 		$id = $this->input->post('solicitud');
-		if($this->input->post('tipo'))
-			$datos['tipo']=$this->input->post('tipo');
 		$datos['estatus']=$this->input->post('estatus');
 		$datos['razon']=$this->input->post('comentarios');
 		$datos['auth_uno']=1;

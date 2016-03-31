@@ -147,11 +147,11 @@
 <body>
 	<div class="jumbotron">
 		<div class="container">
-			<h2 align="left"><b>Detalle de <?= $tipo;?></b></h2>
+			<h2 align="left"><b>Resolución de <?= $tipo;?></b></h2>
+			<h3>Folio #<b><?= $solicitud->id;?></b></h3>
 		</div>
 	</div>
 	<div class="container">
-		<div align="center"><a style="cursor:pointer;" onclick="window.history.back();">&laquo;Regresar</a></div>
 		<div align="center" id="alert" style="display:none">
 			<div class="alert alert-danger" role="alert" style="max-width:400px;">
 				<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
@@ -166,6 +166,21 @@
 		</div>
 		<div class="row">
 			<div class="col-md-12">
+				<form id="justificacion" role="form" method="post" action="javascript:" class="form-signin" style="display:none">
+					<label style="color:red;border-color:red;border-radius:10px;border-style:dashed;">
+						Favor de especificar si existe alguna razón para no descontar los días al colaborador. Se enviarán a Capital Humano.
+					</label>
+					<div class="input-group">
+						<span class="input-group-addon" style="min-width:200px">Comentarios a Capital Humano</span>
+						<textarea class="form-control" id="comentarios" rows="4" placeholder="Comentarios"></textarea>
+					</div>
+					<br>
+					<div class="btn-group btn-group-lg" role="group" aria-label="..." style="float:right;">
+						<button type="submit" class="btn btn-primary" style="min-width:200px;text-align:center;">Confirmar</button>
+						<button onclick="$('#justificacion').hide('slow');$('#tbl').show('slow');$('#estatus').val('');" type="reset" class="btn" style="min-width:200px;text-align:center;">Regresar</button>
+					</div>
+				</form>
+				<input type="hidden" id="estatus" value="">
 				<input type="hidden" id="solicitud" value="<?= $solicitud->id;?>">
 				<form id="razon" role="form" method="post" action="javascript:" class="form-signin" style="display:none">
 					<input type="hidden" id="estatus" value="">
@@ -336,7 +351,30 @@
 											<p><?= $solicitud->razon;?></p>
 										<?php endif;?>
 									<hr>
-									<?php 
+									<?php if($solicitud->estatus<3 && $solicitud->tipo!=5 && $solicitud->tipo!=2 && (($solicitud->autorizador==$this->session->userdata('id') && $solicitud->estatus==1) || ($this->session->userdata('area')==4 && $solicitud->estatus==2))):?>
+										<div class="col-md-12" align="center" style="float:right;">
+											<h5>&nbsp;</h5>
+											<div align="center" class="btn-group btn-group-lg" role="group" aria-label="...">
+												<?php if($this->session->userdata('area')==4 || ($solicitud->tipo==4 && $solicitud->autorizador==$this->session->userdata('id'))): ?>
+													<button onclick="console.log('hola');actualizar(<?= $solicitud->id;?>,3);" type="button" class="btn btn-primary" 
+														style="text-align:center;display:inline;">Autorizar</button>
+												<?php elseif($this->session->userdata('area')==9 && $solicitud->autorizador!=$this->session->userdata('id')): ?>
+													<button onclick="confirmar(<?= $solicitud->id;?>);" type="button" class="btn btn-primary" 
+														style="text-align:center;display:inline;">Confirmar</button>
+												<?php elseif($solicitud->tipo==3): ?>
+													<button onclick="$('#update').hide('slow');$('#justificacion').show('slow');$('#estatus').val(2);$('#solicitud').val(<?= $solicitud->id;?>);" type="button" class="btn btn-primary" 
+														style="text-align:center;display:inline;">Autorizar</button>
+													
+												<?php else: ?>
+													<button onclick="actualizar(<?= $solicitud->id;?>,2);" type="button" class="btn btn-primary" 
+														style="text-align:center;display:inline;">Autorizar</button>
+												<?php endif;
+												if($this->session->userdata('area')==4 || $solicitud->autorizador==$this->session->userdata('id')): ?>
+													<button onclick="$('#update').hide('slow');$('#razon').show('slow');$('#estatus').val(4);$('#solicitud').val(<?= $solicitud->id;?>);" type="button" class="btn" style="text-align:center;display:inline;">Rechazar</button>
+												<?php endif; ?>
+											</div>
+										</div>
+									<?php endif;
 									$desde=new DateTime($solicitud->desde);
 									$hoy=new DateTime(date('Y-m-d'));
 									if($solicitud->estatus != 0 && $solicitud->colaborador == $this->session->userdata('id')):
@@ -401,53 +439,194 @@
 				</form>
 			</div>
 		</div>
-		<script>
-			$("#razon").submit(function(event) {
-				razon = $("#razon_txt").val();
-				estatus = $("#estatus").val();
-				solicitud = $("#solicitud").val();
-				if(!confirm("¿Seguro que deseas cancelar la solicitud?"))
-					return false;
-				$.ajax({
-					url: '<?= base_url("servicio/rechazar_solicitud");?>',
-					type: 'post',
-					data: {'solicitud':solicitud,'estatus':estatus,'razon':razon},
-					beforeSend: function() {
-						$('#razon').hide('slow');
-						$('#cargando').show('slow');
-					},
-					success: function(data){
-						var returnedData = JSON.parse(data);
-						console.log(returnedData['msg']);
-						if(returnedData['msg']=="ok"){
-							alert('Se ha recibido su respuesta');
-							window.document.location.reload();
-						}else{
-							$('#razon_txt').val("");
-							$('#cargando').hide('slow');
-							$('#tbl').show('slow');
-							$('#alert').prop('display',true).show('slow');
-							$('#msg').html(returnedData['msg']);
-							setTimeout(function() {
-								$("#alert").fadeOut(1500);
-							},3000);
-						}
-					},
-					error: function(xhr) {
-						console.log(xhr.statusText);
-						$('#cargando').hide('slow');
-						$('#razon').show('slow');
-						$('#alert').prop('display',true).show('slow');
-						$('#msg').html('Error, intenta de nuevo o contacta al Administrador de la Aplicación');
-						setTimeout(function() {
-							$("#alert").fadeOut(1500);
-						},3000);
-					}
-				});
-
-				event.preventDefault();
-			});
-		</script>
 	</div> <!-- /container -->
 </body>
+<script>
+	function resp_comprobante(solicitud,comprobante,valor){
+		console.log(solicitud,comprobante,valor);
+		$.ajax({
+			url: '<?= base_url("servicio/cambia_estatus_comprobante");?>',
+			type: 'post',
+			data: {'comprobante':comprobante,'estatus':valor,'solicitud':solicitud},
+			success: function(data){
+				console.log(data);
+			},
+			error: function(xhr) {
+				console.log(xhr.responseText);
+			}
+		});
+	}
+	function confirmar(solicitud) {
+		anticipo=$('#anticipo').val();
+		if(anticipo==''){
+			alert('Especifica el anticipo');
+			$('#anticipo').focus();
+			return false;
+		}
+		if(!confirm('¿Notificar el anticipo de $'+anticipo+'?'))
+			return false;
+		$.ajax({
+			url: '<?= base_url("servicio/confirmar_anticipo");?>',
+			type: 'post',
+			data: {'solicitud':solicitud,'anticipo':anticipo},
+			beforeSend: function() {
+				$('#update').hide('slow');
+				$('#cargando').show('slow');
+			},
+			success: function(data){
+				console.log(data);
+				var returnedData = JSON.parse(data);
+				if(returnedData['msg']=="ok"){
+					alert('Se ha notificado el anticipo');
+					parent.location.reload();
+				}else{
+					$('#cargando').hide('slow');
+					$('#update').show('slow');
+					$('#alert').prop('display',true).show('slow');
+					$('#msg').html(returnedData['msg']);
+					setTimeout(function() {
+						$("#alert").fadeOut(1500);
+					},3000);
+				}
+			},
+			error: function(xhr) {
+				console.log(xhr);
+				$('#cargando').hide('slow');
+				$('#tbl').show('slow');
+				$('#alert').prop('display',true).show('slow');
+				$('#msg').html('Error, intenta de nuevo o contacta al Administrador de la Aplicación');
+				setTimeout(function() {
+					$("#alert").fadeOut(1500);
+				},3000);
+			}
+		});
+	}
+	function actualizar(solicitud,estatus) {
+		if(!confirm('¿Seguro que desea autorizar la solicitud?'))
+			return false;
+		$.ajax({
+			url: '<?= base_url("servicio/autorizar_solicitud");?>',
+			type: 'post',
+			data: {'solicitud':solicitud,'estatus':estatus},
+			beforeSend: function() {
+				$('#update').hide('slow');
+				$('#cargando').show('slow');
+			},
+			success: function(data){
+				console.log(data);
+				var returnedData = JSON.parse(data);
+				if(returnedData['msg']=="ok"){
+					alert('Se ha recibido su respuesta');
+					parent.location.reload();
+				}else{
+					$('#cargando').hide('slow');
+					$('#update').show('slow');
+					$('#alert').prop('display',true).show('slow');
+					$('#msg').html(returnedData['msg']);
+					setTimeout(function() {
+						$("#alert").fadeOut(1500);
+					},3000);
+				}
+			},
+			error: function(xhr) {
+				console.log(xhr);
+				$('#cargando').hide('slow');
+				$('#tbl').show('slow');
+				$('#alert').prop('display',true).show('slow');
+				$('#msg').html('Error, intenta de nuevo o contacta al Administrador de la Aplicación');
+				setTimeout(function() {
+					$("#alert").fadeOut(1500);
+				},3000);
+			}
+		});
+	}
+	$("#razon").submit(function(event) {
+		razon = $("#razon_txt").val();
+		estatus = $("#estatus").val();
+		solicitud = $("#solicitud").val();
+		if(!confirm("¿Seguro que desea rechazar la solicitud?"))
+			return false;
+		$.ajax({
+			url: '<?= base_url("servicio/rechazar_solicitud");?>',
+			type: 'post',
+			data: {'solicitud':solicitud,'estatus':estatus,'razon':razon},
+			beforeSend: function() {
+				$('#razon').hide('slow');
+				$('#cargando').show('slow');
+			},
+			success: function(data){
+				var returnedData = JSON.parse(data);
+				console.log(returnedData['msg']);
+				if(returnedData['msg']=="ok"){
+					alert('Se ha recibido su respuesta');
+					parent.location.reload();
+				}else{
+					$('#razon_txt').val("");
+					$('#cargando').hide('slow');
+					$('#tbl').show('slow');
+					$('#alert').prop('display',true).show('slow');
+					$('#msg').html(returnedData['msg']);
+					setTimeout(function() {
+						$("#alert").fadeOut(1500);
+					},3000);
+				}
+			},
+			error: function(xhr) {
+				console.log(xhr.statusText);
+				$('#cargando').hide('slow');
+				$('#razon').show('slow');
+				$('#alert').prop('display',true).show('slow');
+				$('#msg').html('Error, intenta de nuevo o contacta al Administrador de la Aplicación');
+				setTimeout(function() {
+					$("#alert").fadeOut(1500);
+				},3000);
+			}
+		});
+
+		event.preventDefault();
+	});
+	$("#justificacion").submit(function(event) {
+		comentarios = $("#comentarios").val();
+		estatus = $("#estatus").val();
+		solicitud = $("#solicitud").val();
+		$.ajax({
+			url: '<?= base_url("servicio/autorizar_solicitud");?>',
+			type: 'post',
+			data: {'solicitud':solicitud,'estatus':estatus,'comentarios':comentarios},
+			beforeSend: function() {
+				$('#justificacion').hide('slow');
+				$('#cargando').show('slow');
+			},
+			success: function(data){
+				var returnedData = JSON.parse(data);
+				console.log(returnedData['msg']);
+				if(returnedData['msg']=="ok"){
+					alert('Se ha recibido su respuesta');
+					parent.location.reload();
+				}else{
+					$('#comentarios').val("");
+					$('#cargando').hide('slow');
+					$('#tbl').show('slow');
+					$('#alert').prop('display',true).show('slow');
+					$('#msg').html(returnedData['msg']);
+					setTimeout(function() {
+						$("#alert").fadeOut(1500);
+					},3000);
+				}
+			},
+			error: function(xhr) {
+				console.log(xhr.statusText);
+				$('#cargando').hide('slow');
+				$('#justificacion').show('slow');
+				$('#alert').prop('display',true).show('slow');
+				$('#msg').html('Error, intenta de nuevo o contacta al Administrador de la Aplicación');
+				setTimeout(function() {
+					$("#alert").fadeOut(1500);
+				},3000);
+			}
+		});
+
+		event.preventDefault();
+	});
+</script>
 </html>

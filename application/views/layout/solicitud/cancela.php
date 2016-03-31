@@ -112,10 +112,11 @@
 			<?php 
 			switch($solicitud->tipo){
 				case 1: $tipo="VACACIONES";											break;
-				case 2:case 3: $tipo="PERMISO DE AUSENCIA ($solicitud->motivo)";	break;
+				case 2: $tipo="NOTIFICACION DE AUSENCIA ($solicitud->motivo)";		break;
+				case 3: $tipo="PERMISO DE AUSENCIA ($solicitud->motivo)";			break;
 				default: $tipo="";													break;
 			}?>
-			<p><?= $solicitud->nombre_solicita;?> ha cancelado una solicitud de <?= $tipo;?> que ya haz autorizado con Folio #<b><?=$solicitud->id;?></b> en la que solicitó <?=$solicitud->dias;?> días comprendido(s) entre <?= date_format(date_create($solicitud->desde),'D j F, Y');?> hasta el <?=date_format(date_create($solicitud->hasta),'D j F, Y');?> por motivo de: <b><?= $solicitud->razon;?></b></p>
+			<p>Se ha cancelado una solicitud de <?= $tipo;?> que ya haz autorizado con Folio #<b><?=$solicitud->id;?></b> en la que solicitó <?=$solicitud->dias;?> días comprendido(s) entre <?= date_format(date_create($solicitud->desde),'D j F, Y');?> hasta el <?=date_format(date_create($solicitud->hasta),'D j F, Y');?> por motivo de: <b><?= $solicitud->razon;?></b></p>
 		</div>
 		<div class="col-md-12" align="center"><img width="100%" src="http://drive.google.com/uc?export=view&id=0B7vcCZhlhZiOOWNiNHJnZGhnaDA"></div>
 		<footer align="center">
