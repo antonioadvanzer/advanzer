@@ -127,7 +127,7 @@
 						data['contratacion'] = $('#contratacion').val();
 					});
 					data['costo_maximo_cliente'] = $('#costo_maximo_cliente').val();
-					data['tipo'] = 2;
+					data['tipo_requisicion'] = 2;
 				$.ajax({
 					url: '<?= base_url("requisicion/guardar");?>',
 					type: 'post',

@@ -69,7 +69,7 @@ class Requisicion extends CI_Controller {
 	//abc
 	public function guardar(){
 		$this->valida_sesion();
-		if($this->input->post('tipo'))
+		if($this->input->post('tipo_requisicion'))
 			$datos = array(
 				'director'=>$this->input->post('director_area'),
 				'autorizador'=>$this->input->post('autorizador'),
@@ -85,7 +85,7 @@ class Requisicion extends CI_Controller {
 				'expertise'=>$this->input->post('expertise'),
 				'contratacion'=>$this->input->post('contratacion'),
 				'costo_cliente'=>$this->input->post('costo_maximo_cliente'),
-				'tipo_requisicion'=>$this->input->post('tipo'),
+				'tipo_requisicion'=>$this->input->post('tipo_requisicion'),
 				'solicita'=>$this->session->userdata('id')
 			);
 		else
