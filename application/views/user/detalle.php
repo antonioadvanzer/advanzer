@@ -18,6 +18,60 @@
   	<div class="col-md-12"><div id="cargando" style="display:none; color: green;">
   		<img src="<?= base_url('assets/images/loading.gif');?>"></div></div>
   </div>
+  <nav class="navbar">
+		<div class="navbar-collapse" aria-expanded="true">
+			<ul class="nav navbar-nav">
+				<?php if($user->estatus == 1): ?>
+					<li onclick="$('#update_foto').hide('slow');$('#update').hide('slow');$('#recision').show('slow');"><a href="#">Dar de baja al colaborador</a></li>
+					<li onclick="$('#update_foto').hide('slow');$('#update').hide('slow');$('#historial').show('slow');"><a href="#">Historial de desempeño</a></li>
+				<?php elseif($user->estatus == 0): ?>
+					<li onclick="$('#update_foto').hide('slow');$('#update').hide('slow');$('#rehab').show('slow');"><a href="#">Rehabilitar al colaborador</a></li>
+				<?php endif;
+				if(isset($user->bitacora)): ?>
+					<li onclick="$('#update_foto').hide('slow');$('#update').hide('slow');$('#bitacora').show('slow');"><a href="#">Historial de Vacaciones/Permisos</a></li>
+				<?php endif; ?>
+				<li onclick="$('#update_foto').hide('slow');$('#update').hide('slow');$('#vacaciones').show('slow');"><a href="#">Consultar días de Vacaciones</a></li>
+			</ul>
+		</div>
+	</nav>
+	<hr>
+	<form id="vacaciones" style="display:none" role="form" method="post" action="javascript:" class="form-signin">
+	  <div class="row" align="center">
+	  	<div class="col-md-12">
+	  		<div class="form-group">
+			  <table class="table" style="width:60%">
+			  	<thead>
+			  		<tr>
+			  			<th></th>
+			  			<th>Días</th>
+			  			<th>Fecha de Vencimiento</th>
+			  		</tr>
+			  	</thead>
+			  	<tbody>
+			  		<tr>
+			  			<th>Próximo Vencimiento</th>
+			  			<td><input class="form-control" type="text" value="<?= $user->vacaciones->dias_uno;?>" id="diasUno"></td>
+			  			<td><input style="background-color:white" class="form-control" type="text" value="<?= $user->vacaciones->vencimiento_uno;?>" id="vencimientoUno" readonly></td>
+			  		</tr>
+			  		<tr>
+			  			<th>Recién Generadas</th>
+			  			<td><input class="form-control" type="text" value="<?= $user->vacaciones->dias_dos;?>" id="diasDos"></td>
+			  			<td><input style="background-color:white" class="form-control" type="text" value="<?= $user->vacaciones->vencimiento_dos;?>" id="vencimientoDos" readonly></td>
+			  		</tr>
+			  	</tbody>
+			  </table>
+			</div>
+		</div>
+		<div class="col-md-12" align="center">
+			<button type="submit" class="btn btn-lg btn-primary" style="text-align:center">Guardar</button>
+		</div>
+		<div class="col-md-12">
+			<span style="float:right;"><label 
+			  	onclick="$('#vacaciones').hide('slow');$('#update_foto').show('slow');$('#update').show('slow');" style="cursor:pointer;">
+			  	Cancelar</label></span>
+		</div>
+	  </div>
+	</form>
   <div class="row" align="center">
   	<form id="update_foto" role="form" method="post" enctype="multipart/form-data" action="<?= base_url('user/upload_photo');?>" class="form-signin">
 		<input type="hidden" id="id" name="id" value="<?= $user->id;?>">
@@ -139,30 +193,7 @@
 		</div>
 	  </div>
 	</div>
-	<div class="row" align="center">
-	  <div class="col-md-12">
-		  <?php if($user->estatus == 1): ?>
-		  	<span style="float:right;">
-		  		<label onclick="$('#update_foto').hide('slow');$('#update').hide('slow');$('#recision').
-		  			show('slow');" style="cursor:pointer;">Dar de baja al colaborador</label>
-		  	</span>
-		  	<span style="float:left;">
-		  		<label onclick="$('#update_foto').hide('slow');$('#update').hide('slow');$('#historial').
-		  			show('slow');" style="cursor:pointer;">Historial de desempeño</label>
-		  	</span>
-		  <?php elseif($user->estatus == 0): ?>
-		  	<span style="float:right;">
-		  		<label onclick="$('#update_foto').hide('slow');$('#update').hide('slow');$('#rehab').
-		  			show('slow');" style="cursor:pointer;">Rehabilitar al colaborador</label>
-		  	</span>
-		  <?php endif; ?>
-		  <?php if(isset($user->bitacora)): ?>
-			<span>
-				<label onclick="$('#update_foto').hide('slow');$('#update').hide('slow');$('#bitacora').show('slow');" style="cursor:pointer;">Historial de Vacaciones/Permisos</label>
-			</span>
-		  <?php endif; ?>
-	  </div>
-	</div><hr>
+	<hr>
 	<div class="row" align="center">
 		<div class="col-md-12">
 			<button type="submit" class="btn btn-lg btn-primary btn-block" style="max-width:200px; text-align:center;">Actualizar</button>
@@ -508,6 +539,51 @@
 			event.preventDefault();
 		});
 
+		$('#vacaciones').submit(function(event){
+			id = $('#id').val();
+			diasUno = $('#diasUno').val();
+			diasDos = $('#diasDos').val();
+			vencimientoUno = $('#vencimientoUno').val();
+			vencimientoDos = $('#vencimientoDos').val();
+			$.ajax({
+				url: '<?= base_url("user/actualiza_vacaciones");?>',
+				type: 'post',
+				async: true,
+				data: {'id':id,'diasUno':diasUno,'diasDos':diasDos,'vencimientoUno':vencimientoUno,'vencimientoDos':vencimientoDos},
+				beforeSend: function() {
+					$('#vacaciones').hide('slow');
+					$('#cargando').show('slow');
+				},
+				success: function(data){
+					var returnedData = JSON.parse(data);
+					console.log(returnedData['msg']);
+					if(returnedData['msg']=="ok")
+						window.document.location='<?= base_url("administrar_usuarios");?>';
+					else{
+						$('#cargando').hide('slow');
+						$('#vacaciones').show('slow');
+						$('#alert').prop('display',true).show('slow');
+						$('#msg').html(returnedData['msg']);
+						setTimeout(function() {
+							$("#alert").fadeOut(1500);
+						},3000);
+					}
+				},
+				error: function(xhr) {
+					console.log(xhr);
+					$('#cargando').hide('slow');
+					$('#vacaciones').show('slow');
+					$('#alert').prop('display',true).show('slow');
+					$('#msg').html('Error, intenta de nuevo o contacta al Administrador de la Aplicación');
+					setTimeout(function() {
+						$("#alert").fadeOut(1500);
+					},3000);
+				}
+			});
+
+			event.preventDefault();
+		});
+
 		$("#anio_historial").change(function() {
 			$("#anio_historial option:selected").each(function() {
 				anio = $('#anio_historial').val();
@@ -556,6 +632,12 @@
 		$('#baja').datepicker({
 			dateFormat: 'yy-mm-dd',
 			maxDate: today
+		});
+		$('#vencimientoUno').datepicker({
+			dateFormat: 'yy-mm-dd'
+		});
+		$('#vencimientoDos').datepicker({
+			dateFormat: 'yy-mm-dd'
 		});
 	});
   </script>

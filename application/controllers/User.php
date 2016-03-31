@@ -67,6 +67,22 @@ class User extends CI_Controller {
         }
     }
 
+    public function actualiza_vacaciones() {
+        $this->valida_acceso();
+        $array=array(
+            'dias_uno' => $this->input->post('diasUno'),
+            'dias_dos' => $this->input->post('diasDos'),
+            'vencimiento_uno' => $this->input->post('vencimientoUno'),
+            'vencimiento_dos' => $this->input->post('vencimientoDos')
+        );
+        $id=$this->input->post('id');
+        if($this->user_model->actualiza_vacaciones($id,$array))
+            $response['msg'] = "ok";
+        else
+            $response['msg'] = "Error al actualizar usuario. Intenta nuevamente";
+        echo json_encode($response);
+    }
+
     public function update() {
         $this->valida_acceso();
         $array=array(

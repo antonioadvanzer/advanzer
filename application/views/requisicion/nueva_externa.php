@@ -48,11 +48,11 @@
 					<span class="input-group-addon">Contacto</span>
 					<input type="text" id="contacto" class="form-control" required>
 					<span class="input-group-addon">Teléfono</span>
-					<input type="text" id="telefono_contacto" class="form-control" required>
+					<input type="text" id="telefono_contacto" pattern="[0-9]+" class="form-control" required>
 				</div><br>
 				<div class="input-group">
 					<span class="input-group-addon">Celular</span>
-					<input type="text" id="celular_contacto" class="form-control" required>
+					<input type="text" id="celular_contacto" class="form-control" pattern="[0-9]+" required>
 					<span class="input-group-addon">Email</span>
 					<input type="email" class="form-control" value="" id="email_contacto" required>
 				</div><br>
@@ -78,7 +78,7 @@
 						<option>DURACIÓN DEL PROYECTO</option>
 					</select>
 					<span class="input-group-addon">Tarifa Mensual del Cliente</span>
-					<input class="form-control" value="" id="costo_maximo_cliente"pattern="[0-9]+" title="Introduce un número entero">
+					<input class="form-control" value="" id="costo_maximo_cliente" pattern="[0-9]+" title="Introduce un número entero">
 					<span class="input-group-addon">más IVA</span>
 				</div><br>
 			</div>

@@ -92,7 +92,6 @@
 									<?php endif; ?>
 									<li onclick="alert('La sección está en construcción.');"><a href="#">Mi plan de Capacitación</a></li>
 								<?php endif; ?>
-								<li><a target="_blank" href="http://capitalhumano.advanzer.com">Portal de Capital Humano</a></li>
 							</ul>
 						</div>
 					</nav>

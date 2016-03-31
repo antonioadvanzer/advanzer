@@ -56,39 +56,37 @@
 					<div class="input-group">
 						<span class="input-group-addon">Fecha de Solicitud</span>
 						<input data-provide="datepicker" data-date-format="yyyy-mm-dd" class="form-control" type="text" id="solicitud" 
-							style="text-align:center;background-color:white" value="<?= $requisicion->fecha_solicitud;?>" 
-							disabled required>
+							style="text-align:center;background-color:white" value="<?= $requisicion->fecha_solicitud;?>" required <?php if($this->session->userdata('area')==4 || !in_array($requisicion->estatus,array(2,4))) echo "disabled";?>>
 						<span class="input-group-addon">Fecha Estimada de Ingreso</span>
 						<input data-provide="datepicker" data-date-format="yyyy-mm-dd" class="form-control" type="text" id="fecha_estimada" 
-							style="text-align:center;background-color:white" value="<?= $requisicion->fecha_estimada;?>" 
-							disabled required>
+							style="text-align:center;background-color:white" value="<?= $requisicion->fecha_estimada;?>" required <?php if($this->session->userdata('area')==4 || !in_array($requisicion->estatus,array(2,4))) echo "disabled";?>>
 					</div>
 					<br>
 					<label>Información del Cliente</label>
 					<div class="input-group">
 						<span class="input-group-addon">Empresa</span>
-						<input type="text" id="empresa" class="form-control" style="text-align:center;background-color:white" value="<?= $requisicion->empresa;?>" readonly>
+						<input type="text" id="empresa" class="form-control" style="text-align:center;background-color:white" value="<?= $requisicion->empresa;?>" <?php if($this->session->userdata('area')==4 || !in_array($requisicion->estatus,array(2,4))) echo "disabled";?>>
 						<span class="input-group-addon">Dirección</span>
-						<input type="text" id="domicilio_cte" class="form-control" style="text-align:center;background-color:white" value="<?= $requisicion->domicilio_cte;?>" readonly>
+						<input type="text" id="domicilio_cte" class="form-control" style="text-align:center;background-color:white" value="<?= $requisicion->domicilio_cte;?>" <?php if($this->session->userdata('area')==4 || !in_array($requisicion->estatus,array(2,4))) echo "disabled";?>>
 					</div><br>
 					<div class="input-group">
 						<span class="input-group-addon">Contacto</span>
-						<input type="text" id="contacto" class="form-control" style="text-align:center;background-color:white" value="<?= $requisicion->contacto;?>" readonly>
+						<input type="text" id="contacto" class="form-control" style="text-align:center;background-color:white" value="<?= $requisicion->contacto;?>" <?php if($this->session->userdata('area')==4 || !in_array($requisicion->estatus,array(2,4))) echo "disabled";?>>
 						<span class="input-group-addon">Teléfono</span>
-						<input type="text" id="telefono_contacto" class="form-control" style="text-align:center;background-color:white" value="<?= $requisicion->telefono_contacto;?>" readonly>
+						<input type="text" id="telefono_contacto" class="form-control" style="text-align:center;background-color:white" value="<?= $requisicion->telefono_contacto;?>" <?php if($this->session->userdata('area')==4 || !in_array($requisicion->estatus,array(2,4))) echo "disabled";?>>
 					</div><br>
 					<div class="input-group">
 						<span class="input-group-addon">Celular</span>
-						<input type="text" id="celular_contacto" class="form-control" style="text-align:center;background-color:white" value="<?= $requisicion->celular_contacto;?>" readonly>
+						<input type="text" id="celular_contacto" class="form-control" style="text-align:center;background-color:white" value="<?= $requisicion->celular_contacto;?>" <?php if($this->session->userdata('area')==4 || !in_array($requisicion->estatus,array(2,4))) echo "disabled";?>>
 						<span class="input-group-addon">Email</span>
-						<input type="email" class="form-control" id="email_contacto" style="text-align:center;background-color:white" value="<?= $requisicion->email_contacto;?>" readonly>
+						<input type="email" class="form-control" id="email_contacto" style="text-align:center;background-color:white" value="<?= $requisicion->email_contacto;?>" <?php if($this->session->userdata('area')==4 || !in_array($requisicion->estatus,array(2,4))) echo "disabled";?>>
 					</div><br>
 					<label>Datos de la Posición</label>
 					<div class="input-group">
 						<span class="input-group-addon">Posición Solicitada</span>
-						<input class="form-control" id="posicion" style="text-align:center;background-color:white" value="<?= $requisicion->posicion;?>" readonly>
+						<input class="form-control" id="posicion" style="text-align:center;background-color:white" value="<?= $requisicion->posicion;?>" <?php if($this->session->userdata('area')==4 || !in_array($requisicion->estatus,array(2,4))) echo "disabled";?>>
 						<span class="input-group-addon">Nivel de Expertise</span>
-						<select id="expertise" class="form-control" style="background-color:white;" disabled>
+						<select id="expertise" class="form-control" style="background-color:white;" <?php if($this->session->userdata('area')==4 || !in_array($requisicion->estatus,array(2,4))) echo "disabled";?>>
 							<option <?php if($requisicion->expertise=="JUNIOR") echo"selected";?>>JUNIOR</option>
 							<option <?php if($requisicion->expertise=="SENIOR") echo"selected";?>>SENIOR</option>
 							<option <?php if($requisicion->expertise=="GERENTE") echo"selected";?>>GERENTE</option>
@@ -96,7 +94,7 @@
 					</div><br>
 					<div class="input-group">
 						<span class="input-group-addon">Duración de la Asignación</span>
-						<select id="contratacion" class="form-control" style="background-color:white;" disabled>
+						<select id="contratacion" class="form-control" style="background-color:white;" <?php if($this->session->userdata('area')==4 || !in_array($requisicion->estatus,array(2,4))) echo "disabled";?>>
 							<option <?php if($requisicion->contratacion == 'INDETERMINADO') echo "selected";?>>INDETERMINADO</option>
 							<option <?php if($requisicion->contratacion == '3 MESES') echo "selected";?>>3 MESES</option>
 							<option <?php if($requisicion->contratacion == '6 MESES') echo "selected";?>>6 MESES</option>
@@ -105,17 +103,19 @@
 							<option <?php if($requisicion->contratacion == 'DURACIÓN DEL PROYECTO') echo "selected";?>>DURACIÓN DEL PROYECTO</option>
 						</select>
 						<span class="input-group-addon">Tarifa Mensual del Cliente</span>
-						<input class="form-control" value="<?= $requisicion->costo_cliente;?>" id="costo_maximo_cliente" style="background-color:white;" readonly>
+						<input class="form-control" value="<?= $requisicion->costo_cliente;?>" id="costo_maximo_cliente" style="background-color:white;" <?php if($this->session->userdata('area')==4 || !in_array($requisicion->estatus,array(2,4))) echo "disabled";?>>
 						<span class="input-group-addon">más IVA</span>
 					</div><br>
-					<h2>Propuesta Advanzer/Entuizer</h2>
-					<div class="input-group">
-						<span class="input-group-addon">Tarifa Mensual Advanzer/Entuizer</span>
-						<input class="form-control" value="<?php if($requisicion->costo) echo$requisicion->costo;?>" id="costo_maximo" pattern="[0-9]+" placeholder="Número entero" title="Introduce un número entero" required <?php if($this->session->userdata('id')!=2)echo"readonly";?>>
-						<span class="input-group-addon">más IVA</span>
-					</div><br>
-					<?php if(($requisicion->solicita == $this->session->userdata('id') || $this->session->userdata('area')==4) && !in_array($requisicion->estatus,array(0,1))): ?>
-					<h2>Detalle de la Requisición</h2>
+					<?php if($this->session->userdata('id')==2 || !in_array($requisicion->estatus,array(1,4))): ?>
+						<h2>Propuesta Advanzer/Entuizer</h2>
+						<div class="input-group">
+							<span class="input-group-addon">Tarifa Mensual Advanzer/Entuizer</span>
+							<input class="form-control" value="<?php if($requisicion->costo) echo$requisicion->costo;?>" id="costo_maximo" pattern="[0-9]+" placeholder="Número entero" title="Introduce un número entero" required <?php if($this->session->userdata('id')!=2)echo"readonly";?>>
+							<span class="input-group-addon">más IVA</span>
+						</div><br>
+					<?php endif;
+					if(in_array($requisicion->estatus,array(2,3)) && ($requisicion->solicita == $this->session->userdata('id') || $this->session->userdata('area')==4) && !in_array($requisicion->estatus,array(0,1))): ?>
+						<h2>Detalle de la Requisición</h2>
 						<div class="input-group">
 							<span class="input-group-addon">Residencia</span>
 							<select id="residencia" class="form-control" <?php if($this->session->userdata('area')==4 || $requisicion->estatus != 2) echo "disabled";?>>
@@ -266,6 +266,7 @@
 	</div>
 	<script>
 		$(document).ready(function() {
+			check_edit_mode();
 			$('#solicitud').datepicker({
 				dateFormat: 'yy-mm-dd'
 			});
@@ -288,6 +289,7 @@
 					data={};
 					data['id']=$('#id').val();
 					data['costo'] = $('#costo_maximo').val();
+					data['costo_maximo_cliente']=$('#costo_maximo_cliente').val();
 					data['solicitud'] = $('#solicitud').val();
 					data['fecha_estimada'] = $('#fecha_estimada').val();
 					data['empresa'] = $('#empresa').val();
@@ -300,7 +302,7 @@
 					$("#residencia option:selected").each(function() {
 						data['residencia'] = $('#residencia').val();
 					});
-					if(residencia=="")
+					if(data['residencia']=="")
 						data['residencia']=$('#residencia_otro').val();
 					data['lugar_trabajo'] = $('#lugar_trabajo').val();
 					data['entrevista'] = $('#entrevista').val();
@@ -741,10 +743,12 @@
 				usuario=<?= $this->session->userdata('id');?>;
 				solicita=<?= $requisicion->solicita;?>;
 				estatus=<?= $requisicion->estatus;?>;
-				if(estatus != 4 || usuario != solicita){
+				if(estatus != 4 && usuario != solicita){
 					$("#update :input:not(button)").attr("disabled", true).css({'background-color':'white','cursor':'default'});
 					$("#update button").attr("disabled", false).css('cursor','pointer');
 				}
+				if(usuario=='2')
+					$('#costo_maximo').attr("disabled", false).css({'background-color':'white','cursor':'text'});
 			}
 		});
 	</script>

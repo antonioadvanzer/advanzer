@@ -171,6 +171,7 @@ class Requisicion extends CI_Controller {
 			'proyecto'=>$this->input->post('proyecto'),
 			'clave'=>$this->input->post('clave'),
 			'costo'=>$this->input->post('costo'),
+			'costo_cliente'=>$this->input->post('costo_maximo_cliente'),
 			'residencia'=>$this->input->post('residencia'),
 			'lugar_trabajo'=>$this->input->post('lugar_trabajo'),
 			'domicilio_cte'=>$this->input->post('domicilio_cte'),
@@ -205,15 +206,18 @@ class Requisicion extends CI_Controller {
 		$id=$this->input->post('id');
 		$requisicion=$this->requisicion_model->getById($id);
 		if($requisicion->tipo_requisicion==2)
-			$datos['estatus']=3;
+			if($requisicion->estatus==2)
+				$datos['estatus']=3;
 		$requisicion = $this->requisicion_model->update($id,$datos);
 		if(isset($requisicion)){
 			$requisicion = $this->requisicion_model->getById($requisicion);
 			$data['requisicion']=$requisicion;
 			switch ($requisicion->estatus) {
 				case 1:
-					$destinatario=$this->user_model->searchById($requisicion->director)->email;
-					$mensaje=$this->load->view("layout/requisicion/create",$data,true);
+					if($requisicion->tipo_requisicion==1)
+						$mensaje=$this->load->view("layout/requisicion/create",$data,true);
+					else
+						$mensaje=$this->load->view("layout/requisicion/create_externa",$data,true);
 					break;
 				case 2:
 					$destinatario=$this->user_model->searchById($requisicion->autorizador)->email;

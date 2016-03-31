@@ -128,6 +128,7 @@ class User_model extends CI_Model{
 		(($res->num_rows()) > 0) ? $result->nombre_jefe = $res->first_row()->nombre :$result->nombre_jefe="";
 		$result->historial = $this->getHistorialById($result->id);
 		$result->bitacora = $this->solicitudesByColaborador($result->id,true);
+		$result->vacaciones=$this->db->where('colaborador',$result->id)->get('vacaciones')->first_row();
 		return $result;
 	}
 
@@ -150,6 +151,20 @@ class User_model extends CI_Model{
 	function update($id,$datos) {
 		$this->db->where('id',$id);
 		$this->db->update('Users',$datos);
+		if($this->db->affected_rows() == 1)
+			return TRUE;
+		else
+			return FALSE;
+	}
+
+	function actualiza_vacaciones($id,$datos) {
+		$result=$this->db->where('colaborador',$id)->get('vacaciones');
+		if($result->num_rows()==1)
+			$this->db->where('id',$result->first_row()->id)->update('Vacaciones',$datos);
+		else{
+			$array['colaborador']=$id;
+			$this->db->insert('Vacaciones',$array);
+		}
 		if($this->db->affected_rows() == 1)
 			return TRUE;
 		else
