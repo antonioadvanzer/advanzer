@@ -419,7 +419,7 @@ class Requisicion extends CI_Controller {
 		$this->email->clear(TRUE);
 
 		$this->email->from('notificaciones.ch@advanzer.com','Requisición de Personal - Portal Personal');
-		$this->email->to('jesus.salas@advanzer.com');
+		$this->email->to('antonio.baez@advanzer.com');
 		$this->email->subject('Aviso de Requisición');
 		$this->email->message($mensaje);
 
