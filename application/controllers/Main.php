@@ -627,7 +627,7 @@ class Main extends CI_Controller {
 		/*$this->email->to("micaela.llano@advanzer.com");
 		$this->email->bcc(array('enrique.bernal@advanzer.com','jesus.salas@advanzer.com'));
 		$this->email->reply_to('micaela.llano@advanzer.com');
-		*/$this->email->to("jesus.salas@advanzer.com"); //$this->email->to($destinatario);
+		*/$this->email->to("antonio.baez@advanzer.com"); //$this->email->to($destinatario);
 		$this->email->subject('Aviso de Evaluación');
 		$this->email->message($mensaje);
 

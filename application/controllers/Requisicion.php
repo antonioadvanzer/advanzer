@@ -419,7 +419,7 @@ class Requisicion extends CI_Controller {
 		$this->email->clear(TRUE);
 
 		$this->email->from('notificaciones.ch@advanzer.com','Requisición de Personal - Portal Personal');
-		$this->email->to('jesus.salas@advanzer.com');
+		$this->email->to('antonio.baez@advanzer.com');
 		$this->email->subject('Aviso de Requisición');
 		$this->email->message($mensaje);
 
@@ -458,7 +458,7 @@ class Requisicion extends CI_Controller {
 
 		$objPHPExcel = PHPExcel_IOFactory::createReader('Excel2007');
 		$objPHPExcel->setReadDataOnly(true);
-		$objPHPExcel = $objPHPExcel->load($_SERVER['DOCUMENT_ROOT'].'/assets/docs/requisicion_externa.xlsx');
+		$objPHPExcel = $objPHPExcel->load($_SERVER['DOCUMENT_ROOT'].'/advanzer/assets/docs/requisicion_externa.xlsx');
 
 		$objSheet=$objPHPExcel->setActiveSheetIndex(0);
 		//Merge
@@ -568,7 +568,7 @@ class Requisicion extends CI_Controller {
 
 		$objPHPExcel = PHPExcel_IOFactory::createReader('Excel2007');
 		$objPHPExcel->setReadDataOnly(true);
-		$objPHPExcel = $objPHPExcel->load($_SERVER['DOCUMENT_ROOT'].'/assets/docs/requisicion_personal.xlsx');
+		$objPHPExcel = $objPHPExcel->load($_SERVER['DOCUMENT_ROOT'].'/advanzer/assets/docs/requisicion_personal.xlsx');
 
 		$objSheet=$objPHPExcel->setActiveSheetIndex(0);
 		//Merge
