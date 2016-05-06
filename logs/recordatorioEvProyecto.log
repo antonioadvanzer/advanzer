@@ -1,0 +1,324 @@
+2015-11-14 01:20:01 - Succesfully executed with no activity.
+
+2015-11-15 01:20:01 - Succesfully executed with no activity.
+
+2015-11-16 01:20:01 - Succesfully executed with no activity.
+
+2015-11-17 01:20:02 - Succesfully executed with no activity.
+
+2015-11-18 01:20:01 - Succesfully executed with no activity.
+
+2015-11-19 01:20:02 - Succesfully executed with no activity.
+
+2015-11-20 01:20:01 - Succesfully executed with no activity.
+
+2015-11-21 01:20:02 - Succesfully executed with no activity.
+
+2015-11-22 01:20:01 - Succesfully executed with no activity.
+
+2015-11-23 01:20:02 - Succesfully executed with no activity.
+
+2015-11-24 01:20:01 - Succesfully executed with no activity.
+
+2015-11-25 01:20:01 - Succesfully executed with no activity.
+
+2015-11-26 01:20:02 - Succesfully executed with no activity.
+
+2015-11-27 01:20:01 - Succesfully executed with no activity.
+
+2015-11-28 01:20:02 - Succesfully executed with no activity.
+
+2015-11-29 01:20:01 - Succesfully executed with no activity.
+
+2015-11-30 01:20:01 - Succesfully executed with no activity.
+
+2015-12-01 01:20:02 - Succesfully executed with no activity.
+
+2015-12-02 01:20:02 - Succesfully executed with no activity.
+
+2015-12-03 01:20:01 - Succesfully executed with no activity.
+
+2015-12-04 01:20:01 - Succesfully executed with no activity.
+
+2015-12-05 01:20:02 - Succesfully executed with no activity.
+
+2015-12-06 01:20:01 - Succesfully executed with no activity.
+
+2015-12-07 01:20:01 - Succesfully executed with no activity.
+
+2015-12-08 01:20:02 - Succesfully executed with no activity.
+
+2015-12-09 01:20:01 - Succesfully executed with no activity.
+
+2015-12-10 01:20:01 - Succesfully executed with no activity.
+
+
+<div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Notice</p>
+<p>Message:  Trying to get property of non-object</p>
+<p>Filename: controllers/Main.php</p>
+<p>Line Number: 505</p>
+
+
+	<p>Backtrace:</p>
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/pruebas/advanzer/application/controllers/Main.php<br />
+			Line: 505<br />
+			Function: _error_handler			</p>
+
+		
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/pruebas/advanzer/index.php<br />
+			Line: 292<br />
+			Function: require_once			</p>
+
+		
+	
+
+</div>2015-12-11 01:20:03 - Succesfully executed with activity:
+Evaluation: 'Proyecto Anual' with id: 2
+	Mail sent to project leader
+
+
+
+
+<div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Notice</p>
+<p>Message:  Trying to get property of non-object</p>
+<p>Filename: controllers/Main.php</p>
+<p>Line Number: 505</p>
+
+
+	<p>Backtrace:</p>
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/pruebas/advanzer/application/controllers/Main.php<br />
+			Line: 505<br />
+			Function: _error_handler			</p>
+
+		
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/pruebas/advanzer/index.php<br />
+			Line: 292<br />
+			Function: require_once			</p>
+
+		
+	
+
+</div>2015-12-12 01:20:03 - Succesfully executed with activity:
+Evaluation: 'Proyecto Anual' with id: 2
+	Mail sent to project leader
+
+
+
+
+<div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Notice</p>
+<p>Message:  Trying to get property of non-object</p>
+<p>Filename: controllers/Main.php</p>
+<p>Line Number: 505</p>
+
+
+	<p>Backtrace:</p>
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/pruebas/advanzer/application/controllers/Main.php<br />
+			Line: 505<br />
+			Function: _error_handler			</p>
+
+		
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/pruebas/advanzer/index.php<br />
+			Line: 292<br />
+			Function: require_once			</p>
+
+		
+	
+
+</div>2015-12-13 01:20:03 - Succesfully executed with activity:
+Evaluation: 'Proyecto Anual' with id: 2
+	Mail sent to project leader
+
+
+
+
+<div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Notice</p>
+<p>Message:  Trying to get property of non-object</p>
+<p>Filename: controllers/Main.php</p>
+<p>Line Number: 505</p>
+
+
+	<p>Backtrace:</p>
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/pruebas/advanzer/application/controllers/Main.php<br />
+			Line: 505<br />
+			Function: _error_handler			</p>
+
+		
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/pruebas/advanzer/index.php<br />
+			Line: 292<br />
+			Function: require_once			</p>
+
+		
+	
+
+</div>2015-12-15 01:20:03 - Succesfully executed with activity:
+Evaluation: 'Proyecto Anual' with id: 2
+	Mail sent to project leader
+
+
+
+
+<div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Notice</p>
+<p>Message:  Trying to get property of non-object</p>
+<p>Filename: controllers/Main.php</p>
+<p>Line Number: 505</p>
+
+
+	<p>Backtrace:</p>
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/pruebas/advanzer/application/controllers/Main.php<br />
+			Line: 505<br />
+			Function: _error_handler			</p>
+
+		
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/pruebas/advanzer/index.php<br />
+			Line: 292<br />
+			Function: require_once			</p>
+
+		
+	
+
+</div>2015-12-16 01:20:03 - Succesfully executed with activity:
+Evaluation: 'Proyecto Anual' with id: 2
+	Mail sent to project leader
+
+
+
+
+<div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Notice</p>
+<p>Message:  Trying to get property of non-object</p>
+<p>Filename: controllers/Main.php</p>
+<p>Line Number: 505</p>
+
+
+	<p>Backtrace:</p>
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/pruebas/advanzer/application/controllers/Main.php<br />
+			Line: 505<br />
+			Function: _error_handler			</p>
+
+		
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/pruebas/advanzer/index.php<br />
+			Line: 292<br />
+			Function: require_once			</p>
+
+		
+	
+
+</div>2015-12-17 01:20:03 - Succesfully executed with activity:
+Evaluation: 'Proyecto Anual' with id: 2
+	Mail sent to project leader
+
+
+
+2015-12-18 01:20:01 - Succesfully executed with no activity.
+
+2015-12-21 01:20:02 - Succesfully executed with no activity.
+
+2015-12-22 01:20:01 - Succesfully executed with no activity.
+
