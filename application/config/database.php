@@ -64,9 +64,9 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'localhost',
-	'username' => 'root',
-	'password' => 'root',
+	'hostname' => '192.168.0.103',
+	'username' => 'advanzer_ch',
+	'password' => 'advanzer_ch',
 	'database' => 'advanzer_ch_pruebas',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
