@@ -40,7 +40,7 @@ class Requisicion_model extends CI_Model{
 		endif;
 		
 		// Determinate requisisiones status
-		if($status!="null"):
+		if($status!="all"):
 			$this->db->where('R.estatus',$status);
 		endif;
 				
