@@ -24,7 +24,7 @@ class Requisicion_model extends CI_Model{
 		return $result;
 	}
 
-	function getRequisiciones($colaborador,$flag) {
+	function getRequisiciones($colaborador,$flag,$status) {
 		$this->db->select('R.*,T.nombre track,P.nombre posicion,A.nombre area,U.nombre solicitante')
 			->join('Tracks T','T.id = R.track','LEFT OUTER')->join('Posiciones P','P.id = R.posicion','LEFT OUTER')->join('Areas A','A.id = R.area','LEFT OUTER')
 			->join('Users U','U.id = R.solicita');
@@ -39,6 +39,11 @@ class Requisicion_model extends CI_Model{
 				$this->db->or_where('R.director',$colaborador->id);
 		endif;
 		
+		// Determinate requisisiones status
+		if($status!="null"):
+			$this->db->where('R.estatus',$status);
+		endif;
+				
 		return $this->db->get('Requisiciones R')->result();
 	}
 

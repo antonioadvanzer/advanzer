@@ -24,7 +24,12 @@ class Requisicion extends CI_Controller {
 		$this->valida_sesion();
 		$colaborador=$this->user_model->searchById($this->session->userdata('id'));
 		$data=array();
-		$data['requisiciones']=$this->requisicion_model->getRequisiciones($colaborador,$flag);
+		
+		// get data form url 
+		//var_dump($this->input->get("status"));exit;
+		$status =  $this->input->get("status");
+		
+		$data['requisiciones']=$this->requisicion_model->getRequisiciones($colaborador,$flag,$status);
 		$this->layout->title('Advanzer - Requisiciones');
 		$this->layout->view('requisicion/index',$data);
 	}

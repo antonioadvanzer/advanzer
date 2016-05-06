@@ -139,7 +139,20 @@
 												<?php //endif; ?>
 											<?php endif; 
 											if($this->session->userdata('tipo') > 3 || $this->session->userdata('area')==4): ?>
-												<li><a href="<?= base_url('requisiciones');?>">Todas las Requisiciones</a></li>
+												<li class="dropdown-submenu">
+                                                    <a href="#" tabindex="-1">Requisiciones</a>
+                                                    <ul class="dropdown-menu">
+                                                        <li class=""><a href="<?= base_url('requisiciones');?>">Todas las Requisiciones</a></li>
+                                                        <li class=""><a href="<?= base_url('requisiciones')."/?status=1";?>">Enviadas</a></li>
+                                                        <li class=""><a href="<?= base_url('requisiciones')."/?status=2";?>">Aceptadas</a></li>
+                                                        <li class=""><a href="<?= base_url('requisiciones')."/?status=1";?>">Autorizadas</a></li>
+                                                        <li class=""><a href="<?= base_url('requisiciones')."/?status=4";?>">Rechazadas</a>
+                                                        </li>
+                                                        <li class=""><a href="<?= base_url('requisiciones')."/?status=0";?>">Canceladas</a></li>
+                                                        <li class=""><a href="<?= base_url('requisiciones')."/?status=6";?>">Cerradas</a></li>
+                                                        <li class=""><a href="<?= base_url('requisiciones')."/?status=7";?>">Stand By</a></li>
+                                                    </ul>
+                                                </li>
 												<li><a href="<?= base_url('admin_solicitudes');?>">Todas las Solicitudes</a></li>
 												<?php if($this->session->userdata('tipo') > 3): ?>
 													<li><a href="<?= base_url('evaluacion');?>">Evaluaciones</a></li>
@@ -175,7 +188,7 @@
 								Servicios<span class="caret"></span></a>
 							<ul class="dropdown-menu">
 								<?php if($this->session->userdata('tipo') >= 3 || $this->session->userdata('posicion') <= 5):?>
-									<li><a href="<?= base_url('requisicion');?>">Requisiciones</a></li>
+                                    <li><a href="<?= base_url('requisicion');?>">Requisiciones</a></li>
 								<?php endif;?>
 									<li><a href="<?= base_url('evaluar');?>">Feedback</a></li>
 								<?php if(in_array($this->session->userdata('tipo'), array(1,2,5,6))): ?>
