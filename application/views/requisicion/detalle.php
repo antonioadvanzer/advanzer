@@ -260,28 +260,30 @@
 				<?php if(!in_array($requisicion->estatus,array(0,5,6))): ?>
 					<div class="col-md-10">
 						<div class="btn-group btn-group-lg" role="group" aria-label="...">
-							<?php if($this->session->userdata('tipo') >= 3 && $this->session->userdata('area')==4)
-								if($requisicion->estatus == 3 || $requisicion->estatus==7): ?>
-									<button id="realizada" type="button" class="btn btn-primary" style="min-width:200px;text-align:center;display:inline;">Completada</button>
-									<button id="sin_completar" type="button" class="btn" style="min-width:200px;text-align:center;display:inline;">Cerrar sin completar</button>
+							<?php if($this->session->userdata('tipo') >= 3 && $this->session->userdata('area')==4): ?>
+								<button id="exportar" type="button" class="btn btn-primary" style="min-width:180px;text-align:center;display:inline;">Exportar XLS</button>
+								<?php if($requisicion->estatus == 3 || $requisicion->estatus==7): ?>
+									<button id="realizada" type="button" class="btn btn-primary" style="min-width:180px;text-align:center;display:inline;">Completada</button>
+									<button id="sin_completar" type="button" class="btn" style="min-width:180px;text-align:center;display:inline;">Cerrar sin completar</button>
 								<?php endif;
+							endif;
 							if($requisicion->autorizador == $this->session->userdata('id') && $requisicion->autorizador != $requisicion->solicita): ?>
-								<button id="autorizar" type="button" class="btn btn-primary" style="min-width:200px;text-align:center;display:inline;">Autorizar</button>
+								<button id="autorizar" type="button" class="btn btn-primary" style="min-width:180px;text-align:center;display:inline;">Autorizar</button>
 							<?php elseif($requisicion->director == $this->session->userdata('id') && $requisicion->director != $requisicion->solicita): ?>
-								<button id="aceptar" type="button" class="btn btn-primary" style="min-width:200px;text-align:center;display:inline;">Aceptar</button>
+								<button id="aceptar" type="button" class="btn btn-primary" style="min-width:180px;text-align:center;display:inline;">Aceptar</button>
 							<?php elseif($requisicion->estatus==3): ?>
-								<button id="stand_by" type="button" class="btn btn-primary" style="min-width:200px;text-align:center;display:inline;">Stand By</button>
+								<button id="stand_by" type="button" class="btn btn-primary" style="min-width:180px;text-align:center;display:inline;">Stand By</button>
 							<?php elseif($requisicion->estatus==7): ?>
-								<button id="reactivar" type="button" class="btn btn-primary" style="min-width:200px;text-align:center;display:inline;">Reactivar</button>
+								<button id="reactivar" type="button" class="btn btn-primary" style="min-width:180px;text-align:center;display:inline;">Reactivar</button>
 							<?php endif;
 							if($requisicion->solicita == $this->session->userdata('id')):
 								if($requisicion->estatus == 4): ?>
-									<button type="submit" class="btn btn-primary" style="min-width:200px;text-align:center;display:inline;">Actualizar</button>
+									<button type="submit" class="btn btn-primary" style="min-width:180px;text-align:center;display:inline;">Actualizar</button>
 								<?php endif; ?>
-								<button id="cancelar" type="button" class="btn" style="min-width:200px;text-align:center;display:inline;">Cancelar</button>
 							<?php elseif(in_array($requisicion->estatus,array(1,2)) && in_array($this->session->userdata('id'), array($requisicion->director,$requisicion->autorizador))): ?>
-								<button id="rechazar" type="button" class="btn" style="min-width:200px;text-align:center;display:inline;">Rechazar</button>
+								<button id="rechazar" type="button" class="btn" style="min-width:180px;text-align:center;display:inline;">Rechazar</button>
 							<?php endif; ?>
+							<button id="cancelar" type="button" class="btn" style="min-width:180px;text-align:center;display:inline;">Cancelar</button>
 						</div>
 					</div>
 				<?php endif; ?>
@@ -697,6 +699,11 @@
 				event.preventDefault();
 			});
 
+			$('#exportar').click(function() {
+				id = $("#id").val();
+				location.href='<?= base_url("requisicion/exportar");?>/'+id;
+			});
+
 			$("#realizada").click(function() {
 				if(!confirm('¿Seguro(a) que desea cerrar la requisición?'))
 					return false;
@@ -835,7 +842,7 @@
 				solicita=<?= $requisicion->solicita;?>;
 				estatus=<?= $requisicion->estatus;?>;
 				if(estatus != 4 || usuario != solicita){
-					$("#update :input:not(button)").attr("disabled", true).css('background-color','white');
+					$("#update :input:not(button)").attr("disabled", true).css({'background-color':'white','cursor':'default'});
 					$("#update button").attr("disabled", false).css('cursor','pointer');
 				}
 			}

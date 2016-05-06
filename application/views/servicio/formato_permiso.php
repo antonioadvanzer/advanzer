@@ -23,29 +23,29 @@
 		<div class="col-md-12"><div id="cargando" style="display:none; color: green;">
 			<img src="<?= base_url('assets/images/loading.gif');?>"></div></div>
 	</div>
-	<input id="id" type="hidden" value="">
-	<input id="un_anio" type="hidden" value="">
-	<form id="update" role="form" method="post" action="javascript:" class="form-signin">
+	<form id="update" role="form" method="post" action="javascript:" class="form-signin" enctype="multipart/form-data">
 		<div class="row" align="center">
-			<div class="col-md-2"></div>
-			<div class="col-md-8">
-				<div class="input-group">
+			<div class="col-md-4"></div>
+			<div class="col-md-4">
+				<div class="input-group" style="display:<?php if($this->session->userdata('tipo')<4) echo"none";?>;">
 					<span class="input-group-addon">Colaborador</span>
 					<select class="selectpicker" data-header="Selecciona al Colaborador" data-width="300px" data-live-search="true" 
-						id="colaborador" required <?php if($this->session->userdata('tipo')<4) echo"disabled";?>>
+						style="max-width:300px;text-align:center;" id="colaborador" required>
 						<option value="" disabled selected>-- Selecciona al Colaborador --</option>
 						<?php foreach($colaboradores as $colaborador): ?>
 							<option value="<?= $colaborador->id;?>" <?php if($colaborador->id==$this->session->userdata('id'))echo"selected";?>><?= $colaborador->nombre;?></option>
 						<?php endforeach; ?>
 					</select>
-					<span class="input-group-addon">Jefe Directo / Líder</span>
+				</div>
+				<div class="input-group">
+					<span class="input-group-addon required">Autorizador</span>
 					<select class="selectpicker" data-header="Selecciona al autorizador" data-width="300px" data-live-search="true" 
 						style="max-width:300px;text-align:center;" id="autorizador" required>
 						<option value="" disabled selected>-- Selecciona al Jefe Directo / Líder --</option>
 						<?php foreach($colaboradores as $colaborador)
 							if($colaborador->id != $this->session->userdata('id')): ?>
 								<option value="<?= $colaborador->id;?>" <?php if($colaborador->id==$yo->jefe)echo"selected";?>><?= $colaborador->nombre;?></option>
-						<?php endif; ?>
+							<?php endif; ?>
 					</select>
 				</div>
 			</div>
@@ -54,7 +54,6 @@
 		<div class="row" align="center">
 			<div class="col-md-3"></div>
 			<div class="col-md-6">
-				<label>DATOS</label>
 				<div class="input-group">
 					<span class="input-group-addon"># Nómina</span>
 					<input class="form-control" style="max-width:100px;text-align:center;cursor:default;background-color:white" value="" id="d_nomina" disabled>
@@ -64,55 +63,61 @@
 				<br>
 				<div class="input-group">
 					<span class="input-group-addon">Fecha de Ingreso</span>
-					<input class="form-control" style="max-width:300px;ttext-align:center;cursor:default;background-color:white" value="" id="d_ingreso" disabled>
+					<input class="form-control" style="max-width:150px;ttext-align:center;cursor:default;background-color:white" value="" id="d_ingreso" disabled>
 					<span class="input-group-addon">Antigüedad</span>
-					<input class="form-control" style="max-width:300px;ttext-align:center;cursor:default;background-color:white" value="" id="d_antiguo" disabled>
+					<input class="form-control" style="max-width:350px;ttext-align:center;cursor:default;background-color:white" value="" id="d_antiguo" disabled>
 				</div>
 			</div>
 		</div>
 		<hr>
 		<div class="row" align="center">
-			<div class="col-md-2"></div>
-			<div class="col-md-8">
-				<br>
+			<div class="col-md-1"></div>
+			<div class="col-md-10">
+				<h3>Detalle de Solicitud</h3>
 				<div class="input-group">
-					<span class="input-group-addon">Motivo</span>
+					<span class="input-group-addon required">Motivo</span>
 					<select class="form-control" id="motivo" required>
 						<option value="" selected disabled>-- Selecciona el motivo --</option>
-						<option value="2">Matrimonio</option>
-						<option value="5">Nacimiento de Hijos</option>
-						<option value="2">Fallecimiento de Cónyuge</option>
-						<option value="2">Fallecimiento de Hermanos</option>
-						<option value="3">Fallecimiento de Hijos</option>
-						<option value="3">Fallecimiento de Padres</option>
-						<option value="2">Fallecimiento de Padres Políticos</option>
+						<option value="2">MATRIMONIO</option>
+						<option value="5">NACIMIENTO DE HIJOS</option>
+						<option value="2">FALLECIMIENTO DE CÓNYUGE</option>
+						<option value="2">FALLECIMIENTO DE HERMANOS</option>
+						<option value="3">FALLECIMIENTO DE HIJOS</option>
+						<option value="3">FALLECIMIENTO DE PADRES</option>
+						<option value="2">FALLECIMIENTO DE PADRES POLÍTICOS</option>
+						<option value="42">ENFERMEDAD</option>
 						<option>Otro</option>
 					</select>
-					<span class="input-group-addon">Especifique</span>
-					<input class="form-control" style="min-width:350px;cursor:default;background-color: #fff" id="especifique" value="" disabled>
+					<span class="input-group-addon required" id="especifique_label">Especifique</span>
+					<input class="form-control" id="especifique" value="" disabled style="background-color:white;">
+					<span class="input-group-addon required">Comprobante <small style="color:red;">(Archivo en pdf o imágen)</small></span>
+					<input class="form-control" type="file" id="file" name="file" accept="application/pdf,image/*">
 				</div>
 				<br>
-				<label>DETALLE SOLICITUD</label>
 				<div class="input-group">
-					<span class="input-group-addon">Días</span>
-					<input class="form-control" style="text-align:center;background-color:white;cursor:default" required value="1" id="dias"
-						placeholder="# días" onkeyup="calculaFechas();">
-					<span class="input-group-addon">Desde</span>
+					<span class="input-group-addon required">Días a Solicitar</span>
+					<select class="form-control" id="dias" onchange="calculaFechas();" required>
+						<option value="" selected disabled>-- Elegir --</option>
+						<option>1</option>
+						<option>2</option>
+						<option>3</option>
+						<option>4</option>
+						<option>5</option>
+					</select>
+					<span class="input-group-addon required">Desde</span>
 					<input class="form-control" type="text" id="desde" style="text-align:center;background-color:white;cursor:default" 
-						value="<?= date('Y-m-d');?>" required>
-					<span class="input-group-addon">Hasta</span>
+						value="<?= date('Y-m-d');?>" required readonly>
+					<span class="input-group-addon required">Hasta</span>
 					<input class="form-control" type="text" id="hasta" style="text-align:center;background-color:white;cursor:default" 
 						value="" readonly required>
 				</div>
 				<br>
+				<p style="width:80%;border-radius:10px;border-color:red;border-style:dotted;color:red;display:none" id="otro_label"><small>Favor de redactar el detalle de tu ausencia en el campo <i>Observaciones</i> para facilitar la resolución de la solicitud</small></p>
 				<div class="input-group">
-					<span class="input-group-addon" style="min-width:260px">Observaciones</span>
-					<textarea class="form-control" id="observaciones" rows="4" placeholder="Observaciones" required></textarea>
+					<span class="input-group-addon required" style="min-width:260px">Observaciones</span>
+					<textarea class="form-control" id="observaciones" rows="4" placeholder="Agrega cualquier comentario que consideres relevante para la autorización de tus días" required></textarea>
 				</div>
 				<br>
-				<div id="auth" style="display:none;">
-					<h2>Si tu solicitud se excede de la política de Vacaciones, se turnará al área de Capital Humano para validación final una vez que tu Jefe/Líder haya autorizado la misma</h2>
-				</div>
 				<br>
 			</div>
 		</div>
@@ -121,12 +126,18 @@
 			<div class="col-md-8">
 				<div class="btn-group btn-group-lg" role="group" aria-label="...">
 					<button id="solicitar" type="submit" class="btn btn-primary" style="min-width:200px;text-align:center;display:inline;">Solicitar</button>
-					<!--<button id="cancelar" type="button" class="btn" style="min-width:200px;text-align:center;display:none;">Cancelar</button>-->
 				</div>
 			</div>
 		</div>
 	</form>
 	<script>
+		document.write('\
+			<style>\
+				.required {\
+					background: '+color+'\
+				}\
+			</style>\
+		');
 		function getColaborador() {
 			$('#colaborador :selected').each(function(){
 				colaborador=$('#colaborador').val();
@@ -143,7 +154,7 @@
 						$('#d_ingreso').val(returnedData['fecha_ingreso']);
 						$('#d_antiguo').val(returnedData['diff']['y']+' años, '+returnedData['diff']['m']+' meses');
 						$('#autorizador').val(returnedData['jefe']).selectpicker('refresh');
-						$('#dias').val('1');
+						$('#dias').val('');
 						$('#desde').val('<?= date("Y-m-d");?>');
 						calculaFechas();
 						$('#observaciones').val('');
@@ -156,17 +167,16 @@
 		}
 		function calculaFechas() {
 			patron = /^\d*$/;
-			dias=parseInt($('#dias').val());
+			$('#dias :selected').each(function(){
+				dias=$('#dias').val();
+			})
+			dias=parseInt(dias);
 			if(dias > 0){
 				inicio=$('#desde').val();
 				hasta=sumaFecha(dias,inicio);
 				$('#hasta').val(hasta);
 			}else
 				$('#hasta').val('');
-			if(dias > $('#motivo option:selected').val())
-				$('#un_anio').val(1);
-			else
-				$('#un_anio').val('');
 		}
 		sumaFecha = function(d, fecha){
 			var Fecha = new Date();
@@ -205,13 +215,30 @@
 				$('#motivo :selected').each(function(){
 					motivo=$('#motivo').val();
 				});
-				if(motivo == "Otro")
-					$('#especifique').prop('disabled',false);
-				else{
-					$('#especifique').prop('disabled',true);
-					$('#dias').val(motivo);
-					calculaFechas();
+				$('#dias').empty();
+				if(motivo > 5){
+					limite=parseInt(motivo);
+					$('#file').prop('required',true);
+				}else{
+					limite=5;
+					$('#file').prop('required',false);
 				}
+				for (var i = 1; i <= limite; i++)
+					$('#dias').append(new Option(i,i,true,true));
+				if(motivo == "Otro"){
+					$('#otro_label').show('slow');
+					$('#especifique_label').show('slow');
+					$('#especifique').prop({'disabled':false,'required':true}).show('slow');
+					$('#dias').val('').prop('disabled',false);
+				}else{
+					$('#especifique_label').hide('slow');
+					$('#especifique').prop({'disabled':true,'required':false}).hide('slow');
+					$('#dias').val(motivo).prop('disabled',true);
+					$('#otro_label').hide('slow');
+				}
+				if(motivo==42)
+					$('#dias').val(1).prop('disabled',false);
+				calculaFechas();
 			});
 			
 			$("#desde").change(function() {
@@ -230,23 +257,40 @@
 				if(!confirm('¿Seguro que desea enviar la solicitud?'))
 					return false;
 				//get form values
+					var formData = new FormData($('#update')[0]);
 					$("#colaborador option:selected").each(function() {
 						colaborador = $('#colaborador').val();
 					});
+					formData.append('colaborador',colaborador);
 					$("#autorizador option:selected").each(function() {
 						autorizador = $('#autorizador').val();
 					});
+					formData.append('autorizador',autorizador);
+					m = $('#motivo option:selected').val();
+					if(m=='Otro')
+						tipo=3;
+					else
+						tipo=2;
+					formData.append('tipo',tipo);
 					motivo = $("#motivo option:selected").text();
 					if(motivo=='Otro')
 						motivo=$('#especifique').val();
-					dias = $('#dias').val();
-					desde = $('#desde').val();
-					hasta = $('#hasta').val();
-					observaciones = $('#observaciones').val();
+					formData.append('motivo',String(motivo));
+					$('#dias :selected').each(function(){
+						dias=$('#dias').val();
+					})
+					formData.append('dias',dias);
+					formData.append('desde',$('#desde').val());
+					formData.append('hasta',$('#hasta').val());
+					formData.append('observaciones',$('#observaciones').val());
 				$.ajax({
 					url: '<?= base_url("servicio/registra_solicitud");?>',
 					type: 'post',
-					data: {'colaborador':colaborador,'autorizador':autorizador,'motivo':motivo,'dias':dias,'desde':desde,'hasta':hasta,'observaciones':observaciones,'tipo':2},
+					cache: false,
+					contentType: false,
+					processData: false,
+					resetForm: true,
+					data: formData,
 					beforeSend: function() {
 						$('#update').hide('slow');
 						$('#cargando').show('slow');
@@ -254,9 +298,10 @@
 					success: function(data){
 						var returnedData = JSON.parse(data);
 						console.log(returnedData['msg']);
-						if(returnedData['msg']=="ok")
+						if(returnedData['msg']=="ok"){
+							alert('Se ha enviado la solicitud');
 							window.document.location='<?= base_url("solicitudes");?>';
-						else{
+						}else{
 							$('#cargando').hide('slow');
 							$('#update').show('slow');
 							$('#alert').prop('display',true).show('slow');

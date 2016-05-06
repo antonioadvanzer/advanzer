@@ -114,17 +114,18 @@
 			<h4><b>Folio</b> #<b><?=$solicitud->id;?></b></h4>
 			<p><b>Solicita: </b><?= $solicitud->nombre_solicita;?></p>
 			<p><b>Autoriza: </b><?= $solicitud->nombre_autorizador;?></p>
+			<p><b>Días: </b><?=$solicitud->dias;?></p>
 			<p><b>Tipo: </b><?php 
 				switch($solicitud->tipo){
 					case 1: $tipo="VACACIONES";											break;
-					case 2: $tipo="PERMISO DE AUSENCIA ($solicitud->motivo)";			break;
-					case 4: $tipo="VIÁTICOS Y GASTOS DE VIAJE";							break;
+					case 3: $tipo="PERMISO DE AUSENCIA ($solicitud->motivo)";			break;
+					case 4: $tipo="VIÁTICOS Y GASTOS DE VIAJE ($solicitud->motivo)";	break;
 					default: $tipo="";													break;
 				}
 			echo $tipo; ?></p>
 			<p><b>Desde: </b><?=$solicitud->desde;?></p>
 			<p><b>Hasta: </b><?=$solicitud->hasta;?></p>
-			<p>Ingresa a <a href='http://localhost/advanzer/solicitudes'>Portal Personal >> Solicitudes</a> para darle seguimiento a la solicitud</p>
+			<p>Ingresa a <a href='http://intranet.advanzer.com:3000/solicitudes'>Portal Personal >> Solicitudes</a> para darle seguimiento a la solicitud</p>
 		</div>
 		<div class="col-md-12" align="center"><img width="100%" src="http://drive.google.com/uc?export=view&id=0B7vcCZhlhZiOOWNiNHJnZGhnaDA"></div>
 		<footer align="center">

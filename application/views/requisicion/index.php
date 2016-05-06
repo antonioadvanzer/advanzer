@@ -13,7 +13,7 @@
 		</div>
 	</div>
 	<div>
-		<label style="cursor:pointer" onclick="location.href='<?= base_url('requisicion/nueva/');?>'">
+		<label style="cursor:pointer" onclick="location.href='<?= base_url('requisicion/choose/');?>'">
 			<span class="glyphicon glyphicon-plus"></span>Nueva Requisición</label>
 	</div>
 	<div class="row" align="center">
@@ -41,8 +41,9 @@
 						if($this->session->userdata('id') == $requisicion->solicita 
 							|| $this->session->userdata('tipo') >=4 
 							|| ($requisicion->director == $this->session->userdata('id') && $requisicion->estatus == 1)
-							|| ($requisicion->autorizador == $this->session->userdata('id') && $requisicion->estatus == 2)
+							|| ($requisicion->autorizador == $this->session->userdata('id') && $requisicion->estatus == 2 && $requisicion->tipo_requisicion==1)
 							|| ($this->session->userdata('tipo') == 3 && $this->session->userdata('area') == 4)
+							|| ($requisicion->tipo==2 && $requisicion->estatus==1 &&$requisicion->autorizador==$this->session->userdata('id'))
 						): 
 							switch ($requisicion->estatus) {
 								case 1:
@@ -67,16 +68,18 @@
 									$estatus="STAND BY";
 									break;
 							}
-							if($requisicion->empresa == 1)
+							if($requisicion->empresa == '1')
 								$empresa="Advanzer";
-							else
+							elseif($requisicion->empresa == '0')
 								$empresa="Entuizer";
+							else
+								$empresa=$requisicion->empresa;
 							?>
-							<tr>
-								<td><small><a style="text-decoration:none" href='<?= base_url("requisicion/ver/$requisicion->id");?>'><?= $requisicion->id;?></a></small></td>
+							<tr onmouseover="this.style.background=color;" onmouseout="this.style.background='transparent';">
+								<td><small><a style="text-decoration:none" href='<?php if($requisicion->tipo_requisicion==1) echo base_url("requisicion/ver/$requisicion->id"); else echo base_url("requisicion/ver/$requisicion->id");?>'><?= $requisicion->id;?></a></small></td>
 								<td><small><?= $requisicion->fecha_solicitud;?></small></td>
 								<td><small><?= $requisicion->solicitante;?></small></td>
-								<td><small><?= "$requisicion->proyecto";?></small></td>
+								<td><small><?= $requisicion->proyecto;?></small></td>
 								<td><small><?= $requisicion->track;?></small></td>
 								<td><small><?= $requisicion->posicion;?></small></td>
 								<td><small><?= $requisicion->area;?></small></td>

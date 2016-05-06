@@ -73,6 +73,7 @@ $route['vacaciones'] = 'servicio/vacaciones';
 $route['admin_solicitudes'] = 'main/solicitudes';
 $route['solicitar_vacaciones'] = 'servicio/formato_vacaciones';
 $route['solicitudes'] = 'servicio/solicitudes';
+$route['solicitudes_pendientes'] = 'servicio/solicitudes_pendientes';
 $route['permiso'] = 'servicio/permiso';
 $route['solicitar_permiso'] = 'servicio/formato_permiso';
 $route['viaticos_gastos'] = 'servicio/viaticos_gastos';

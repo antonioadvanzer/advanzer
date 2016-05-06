@@ -17,17 +17,16 @@ class Requisicion_model extends CI_Model{
 	}
 
 	function getById($id) {
-		$this->db->select('R.*,A.nombre nombre_area,P.nombre nombre_posicion,T.nombre nombre_track,U.nombre nombre_solicita')->join('Areas A','A.id = R.area')
-			->join('Posiciones P','P.id = R.posicion')->join('Tracks T','T.id = R.track')->join('Users U','U.id = R.solicita');
+		$this->db->select('R.*,A.nombre nombre_area,P.nombre nombre_posicion,T.nombre nombre_track,U.nombre nombre_solicita')->join('Areas A','A.id = R.area','LEFT OUTER')->join('Posiciones P','P.id = R.posicion','LEFT OUTER')->join('Tracks T','T.id = R.track','LEFT OUTER')->join('Users U','U.id = R.solicita');
 		$result=$this->db->where('R.id',$id)->get('Requisiciones R')->first_row();
 		$result->nombre_director=$this->db->where('id',$result->director)->get('Users')->first_row()->nombre;
 		$result->nombre_autorizador=$this->db->where('id',$result->autorizador)->get('Users')->first_row()->nombre;
 		return $result;
 	}
 
-	function getRequisiciones($colaborador,$flag) {
+	function getRequisiciones($colaborador,$flag,$status) {
 		$this->db->select('R.*,T.nombre track,P.nombre posicion,A.nombre area,U.nombre solicitante')
-			->join('Tracks T','T.id = R.track')->join('Posiciones P','P.id = R.posicion')->join('Areas A','A.id = R.area')
+			->join('Tracks T','T.id = R.track','LEFT OUTER')->join('Posiciones P','P.id = R.posicion','LEFT OUTER')->join('Areas A','A.id = R.area','LEFT OUTER')
 			->join('Users U','U.id = R.solicita');
 		if(!$flag):
 			if($colaborador->tipo < 3)
@@ -40,6 +39,11 @@ class Requisicion_model extends CI_Model{
 				$this->db->or_where('R.director',$colaborador->id);
 		endif;
 		
+		// Determinate requisisiones status
+		if($status!="null"):
+			$this->db->where('R.estatus',$status);
+		endif;
+				
 		return $this->db->get('Requisiciones R')->result();
 	}
 
@@ -47,9 +51,13 @@ class Requisicion_model extends CI_Model{
 		$datos['usuario_modificacion']=$this->session->userdata('id');
 		$this->db->where('id',$id)->update('Requisiciones',$datos);
 		if($this->db->affected_rows() == 1)
-			return true;
+			return $id;
 		else
 			return false;
+	}
+
+	function getByColaborador($colaborador) {
+		return $this->db->where('solicita',$colaborador)->get('Requisiciones')->result();
 	}
 
 	function getPendientesByColaborador($colaborador) {

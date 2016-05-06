@@ -8,40 +8,45 @@ class User_model extends CI_Model{
 		parent::__construct();
 	}
 
-	function solicitudesByColaborador($colaborador) {
-		$this->db->select('S.*,U.nombre')->from('Solicitudes S')
-			->join('Users U','U.id = S.autorizador')
-			->where('S.colaborador',$colaborador);
+
+	function solicitudesByColaborador($colaborador,$flag=null) {
+		$this->db->select('S.*,U.nombre')->from('Solicitudes S')->join('Users U','U.id = S.autorizador','LEFT OUTER')->where("S.colaborador = $colaborador")->order_by('S.fecha_solicitud','desc');
 		$result = $this->db->get()->result();
-		foreach ($result as $solicitud) {
-			if($solicitud->tipo == 4):
+		foreach ($result as $solicitud)
+			if($solicitud->tipo == 4)
 				$solicitud->detalle = $this->db->where('solicitud',$solicitud->id)->get('Detalle_Viaticos')->first_row();
-			endif;
-		}
 		return $result;
 	}
 
 	function solicitudes_pendientes($colaborador){
 		if($this->session->userdata('area') == 4)
-			$this->db->where("((S.estatus=2 and S.auth_ch=1) or (S.autorizador=$colaborador and S.estatus=1))");
+			$this->db->where("((S.tipo != 4 and S.estatus=2) or (S.autorizador=$colaborador and S.estatus=1)) or (S.estatus=3 and desde='".date('Y-m-d')."')");
+		elseif($this->session->userdata('area')==9)
+			$this->db->join('Detalle_Viaticos DV','DV.solicitud=S.id','LEFT OUTER')->where("(S.estatus=3 and S.tipo=4 and anticipo = 0) or (S.autorizador=$colaborador and S.estatus=1) or (S.tipo=5 and S.estatus=1)");
 		else
-			$this->db->where(array('S.autorizador'=>$colaborador,'S.estatus'=>1));
+			$this->db->where('S.autorizador',$colaborador);
 		$this->db->select('S.*,U.nombre')->from('Solicitudes S')
-			->join('Users U','U.id = S.colaborador');
+			->join('Users U','U.id = S.colaborador')->order_by('S.fecha_solicitud','desc');
 		$result = $this->db->get()->result();
 		foreach ($result as $solicitud) {
-			if($solicitud->tipo == 4):
+			if($solicitud->tipo == 4)
 				$solicitud->detalle = $this->db->where('solicitud',$solicitud->id)->get('Detalle_Viaticos')->first_row();
-			endif;
+			if($solicitud->tipo == 1)
+				$solicitud->historial=$this->db->where("id != $solicitud->id and tipo=1 and (estatus=3 or (estatus !=3 and DATEDIFF(fecha_ultima_modificacion,CURDATE())<7))")->get('Solicitudes')->result();
+			if($solicitud->tipo == 5)
+				$solicitud->comprobantes = $this->db->where(array('solicitud'=>$solicitud->id,'estatus'=>1))->get('Comprobantes')->result();
 		}
 		return $result;
 	}
 
 	function getSolicitudes(){
-		$result=$this->db->select('Sv.id,Sv.dias,Sv.desde,Sv.hasta,Sv.regresa,Sv.fecha_solicitud,Sv.observaciones,U.nombre,Sv.tipo,Sv.autorizador,Sv.estatus,Sv.razon')
+		$result=$this->db->select('Sv.*,U.nombre')
 			->from('Solicitudes Sv')->join('Users U','U.id = Sv.colaborador')->get()->result();
 		foreach ($result as $solicitud) :
-			$solicitud->autorizador=$this->db->where('id',$solicitud->autorizador)->get('Users')->first_row()->nombre;
+			if($solicitud->autorizador)
+				$solicitud->autorizador=$this->db->where('id',$solicitud->autorizador)->get('Users')->first_row()->nombre;
+			else
+				$solicitud->autorizador='ÁREA DE FINANZAS';
 		endforeach;
 		return $result;
 	}
@@ -94,7 +99,7 @@ class User_model extends CI_Model{
 
 	function getPagination($flag) {
 		$this->db->select('U.id,U.nomina,U.categoria,U.plaza,U.nombre,U.email,U.foto,U.empresa,U.estatus,A.nombre area,
-			T.nombre track,P.nombre posicion');
+			T.nombre track,P.nombre posicion,U.fecha_ingreso');
 		$this->db->join('Areas A','U.area = A.id','LEFT OUTER');
 		$this->db->join('Posicion_Track PT','PT.id = U.posicion_track','LEFT OUTER');
 		$this->db->join('Tracks T','PT.track = T.id','LEFT OUTER');
@@ -112,8 +117,7 @@ class User_model extends CI_Model{
 	}
 
 	function searchById($id) {
-		$this->db->select('U.id,U.email,U.nombre,U.foto,U.empresa,U.estatus,U.categoria,U.nomina,U.area,U.plaza,A.nombre nombre_area,U.tipo,U.jefe,
-			U.fecha_ingreso,P.id posicion, T.id track,P.nivel nivel_posicion,T.nombre nombre_track,P.nombre nombre_posicion,U.fecha_ingreso');
+		$this->db->select('U.*,A.nombre nombre_area,P.id posicion,T.id track,P.nivel nivel_posicion,T.nombre nombre_track,P.nombre nombre_posicion');
 		$this->db->join('Posicion_Track PT','PT.id = U.posicion_track','LEFT OUTER');
 		$this->db->join('Posiciones P','P.id = PT.posicion','LEFT OUTER');
 		$this->db->join('Tracks T','T.id = PT.track','LEFT OUTER');
@@ -123,6 +127,8 @@ class User_model extends CI_Model{
 		$res = $this->db->select('nombre')->where('id',$result->jefe)->get('Users');
 		(($res->num_rows()) > 0) ? $result->nombre_jefe = $res->first_row()->nombre :$result->nombre_jefe="";
 		$result->historial = $this->getHistorialById($result->id);
+		$result->bitacora = $this->solicitudesByColaborador($result->id,true);
+		$result->vacaciones=$this->db->where('colaborador',$result->id)->get('Vacaciones')->first_row();
 		return $result;
 	}
 
@@ -145,6 +151,20 @@ class User_model extends CI_Model{
 	function update($id,$datos) {
 		$this->db->where('id',$id);
 		$this->db->update('Users',$datos);
+		if($this->db->affected_rows() == 1)
+			return TRUE;
+		else
+			return FALSE;
+	}
+
+	function actualiza_vacaciones($id,$datos) {
+		$result=$this->db->where('colaborador',$id)->get('Vacaciones');
+		if($result->num_rows()==1)
+			$this->db->where('id',$result->first_row()->id)->update('Vacaciones',$datos);
+		else{
+			$array['colaborador']=$id;
+			$this->db->insert('Vacaciones',$array);
+		}
 		if($this->db->affected_rows() == 1)
 			return TRUE;
 		else

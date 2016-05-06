@@ -117,10 +117,11 @@
 				<p><b>Acepta: </b><?= $requisicion->nombre_director;?></p>
 			<?php endif; ?>
 			<p><b>Autoriza: </b><?= $requisicion->nombre_autorizador;?></p>
-			<p><b>Vacante: </b><?="$requisicion->nombre_posicion - $requisicion->nombre_track"; ?></p>
-			<p><b>Área: </b><?=$requisicion->nombre_area;?></p>
+			<?php if($requisicion->tipo_requisicion==1): ?>
+				<p><b>Vacante: </b><?="$requisicion->nombre_posicion - $requisicion->nombre_track"; ?></p>
+				<p><b>Área: </b><?=$requisicion->nombre_area;?></p>
+			<?php endif; ?>
 			<p>Ingresa a <a href='http://intranet.advanzer.com:3000/requisicion/ver/<?= $requisicion->id;?>'>Portal Personal >> Servicios >> Requisiciones</a> para darle seguimiento a la solicitud</p>
-			<p>Descarga <a target="_blank" href="http://intranet.advanzer.com:3000/assets/docs/requisicion_<?= $requisicion->id;?>.xlsx">aquí</a> el detalle en formato XLS</p>
 		</div>
 		<div class="col-md-12" align="center"><img width="100%" src="http://drive.google.com/uc?export=view&id=0B7vcCZhlhZiOOWNiNHJnZGhnaDA"></div>
 		<footer align="center">

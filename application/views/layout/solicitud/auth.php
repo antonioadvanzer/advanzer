@@ -112,16 +112,21 @@
 		<div style="width:80%" class="container">
 			<h2>Se ha autorizado tu Solicitud</h2>
 			<h4><b>Folio</b> #<b><?=$solicitud->id;?></b></h4>
+			<p><b>Días: </b><?=$solicitud->dias;?></p>
 			<p><b>Tipo: </b><?php 
 				switch($solicitud->tipo){
-					case 1: $tipo="VACACIONES";										break;
-					case 2: $tipo="PERMISO DE AUSENCIA ($solicitud->motivo)";		break;
-					case 4: $tipo="VIÁTICOS Y GASTOS DE VIAJE";						break;
-					default: $tipo="";												break;
+					case 1: $tipo="VACACIONES";														break;
+					case 3: $tipo="PERMISO DE AUSENCIA ($solicitud->motivo)";						break;
+					case 4: $tipo="VIÁTICOS Y GASTOS DE VIAJE ($solicitud->motivo)";				break;
+					default: $tipo="";																break;
 				}
 			echo $tipo; ?></p>
-			<p><b>Desde: </b><?=$solicitud->desde;?></p>
-			<p><b>Hasta: </b><?=$solicitud->hasta;?></p>
+			<?php if($solicitud->tipo==4): ?>
+				<p>En breve se te confirmará el depósito del anticipo.</p>
+			<?php else: ?>
+				<p><b>Desde: </b><?=$solicitud->desde;?></p>
+				<p><b>Hasta: </b><?=$solicitud->hasta;?></p>
+			<?php endif; ?>
 		</div>
 		<div class="col-md-12" align="center"><img width="100%" src="http://drive.google.com/uc?export=view&id=0B7vcCZhlhZiOOWNiNHJnZGhnaDA"></div>
 		<footer align="center">

@@ -24,21 +24,34 @@ class Requisicion extends CI_Controller {
 		$this->valida_sesion();
 		$colaborador=$this->user_model->searchById($this->session->userdata('id'));
 		$data=array();
-		$data['requisiciones']=$this->requisicion_model->getRequisiciones($colaborador,$flag);
+		
+		// get data form url 
+		//var_dump($this->input->get("status"));exit;
+		$status =  $this->input->get("status");
+		
+		$data['requisiciones']=$this->requisicion_model->getRequisiciones($colaborador,$flag,$status);
 		$this->layout->title('Advanzer - Requisiciones');
 		$this->layout->view('requisicion/index',$data);
 	}
 	public function ver($id){
 		$this->valida_sesion();
+		$this->layout->title('Advanzer - Detalle Requisición');
 		$data=array();
 		$data['requisicion'] = $this->requisicion_model->getById($id);
-		$data['areas'] = $this->area_model->getAll();
-		$data['tracks'] = $this->track_model->getAll();
-		$data['posiciones'] = $this->posicion_model->getByTrack($data['requisicion']->track);
-		$data['directores'] = $this->user_model->getDirectores();		
-		$data['colaboradores'] = $this->user_model->getPagination(1);
-		$this->layout->title('Advanzer - Detalle Requisición');
-		$this->layout->view('requisicion/detalle',$data);
+		if($data['requisicion']->tipo_requisicion==1):
+			$data['areas'] = $this->area_model->getAll();
+			$data['tracks'] = $this->track_model->getAll();
+			$data['posiciones'] = $this->posicion_model->getByTrack($data['requisicion']->track);
+			$data['directores'] = $this->user_model->getDirectores();		
+			$data['colaboradores'] = $this->user_model->getPagination(1);
+			$this->layout->view('requisicion/detalle',$data);
+		else:
+			$this->layout->view('requisicion/detalle_externa',$data);
+		endif;
+	}
+	public function choose(){
+		$this->layout->title('Advanzer - Elegir Requisición');
+		$this->layout->view('requisicion/choose');
 	}
 	public function nueva(){
 		$this->valida_sesion();
@@ -50,45 +63,71 @@ class Requisicion extends CI_Controller {
 		$this->layout->title('Advanzer - Requisición de Personal');
 		$this->layout->view('requisicion/nueva',$data);
 	}
+	public function nueva_externa() {
+		$this->valida_sesion();
+		$data=array();
+		$this->layout->title('Advanzer - Requisición de Personal - Colocación Externa');
+		$this->layout->view('requisicion/nueva_externa',$data);
+	}
 
 	//función guardar --guardar los datos enviados por POST a la Base de Datos
 	//abc
 	public function guardar(){
 		$this->valida_sesion();
-		$datos = array(
-			'director'=>$this->input->post('director_area'),
-			'autorizador'=>$this->input->post('autorizador'),
-			'fecha_solicitud'=>$this->input->post('solicitud'),
-			'fecha_estimada'=>$this->input->post('fecha_estimada'),
-			'area'=>$this->input->post('area'),
-			'track'=>$this->input->post('track'),
-			'posicion'=>$this->input->post('posicion'),
-			'empresa'=>$this->input->post('empresa'),
-			'tipo'=>$this->input->post('tipo'),
-			'sustituye_a'=>$this->input->post('sustituye_a'),
-			'proyecto'=>$this->input->post('proyecto'),
-			'clave'=>$this->input->post('clave'),
-			'costo'=>$this->input->post('costo'),
-			'residencia'=>$this->input->post('residencia'),
-			'lugar_trabajo'=>$this->input->post('lugar_trabajo'),
-			'domicilio_cte'=>$this->input->post('domicilio_cte'),
-			'contratacion'=>$this->input->post('contratacion'),
-			'entrevista'=>$this->input->post('entrevista'),
-			'disp_viajar'=>$this->input->post('disp_viajar'),
-			'edad_uno'=>$this->input->post('edad_uno'),
-			'edad_dos'=>$this->input->post('edad_dos'),
-			'sexo'=>$this->input->post('sexo'),
-			'nivel'=>$this->input->post('nivel'),
-			'carrera'=>$this->input->post('carrera'),
-			'ingles_hablado'=>$this->input->post('ingles_hablado'),
-			'ingles_lectura'=>$this->input->post('ingles_lectura'),
-			'ingles_escritura'=>$this->input->post('ingles_escritura'),
-			'experiencia'=>$this->input->post('experiencia'),
-			'habilidades'=>$this->input->post('habilidades'),
-			'funciones'=>$this->input->post('funciones'),
-			'observaciones'=>$this->input->post('observaciones'),
-			'solicita'=>$this->session->userdata('id')
-		);
+		if($this->input->post('tipo_requisicion'))
+			$datos = array(
+				'director'=>$this->input->post('director_area'),
+				'autorizador'=>$this->input->post('autorizador'),
+				'fecha_solicitud'=>$this->input->post('solicitud'),
+				'fecha_estimada'=>$this->input->post('fecha_estimada'),
+				'empresa'=>$this->input->post('empresa'),
+				'domicilio_cte'=>$this->input->post('domicilio_cte'),
+				'contacto'=>$this->input->post('contacto'),
+				'telefono_contacto'=>$this->input->post('telefono_contacto'),
+				'celular_contacto'=>$this->input->post('celular_contacto'),
+				'email_contacto'=>$this->input->post('email_contacto'),
+				'posicion'=>$this->input->post('posicion'),
+				'expertise'=>$this->input->post('expertise'),
+				'contratacion'=>$this->input->post('contratacion'),
+				'costo_cliente'=>$this->input->post('costo_maximo_cliente'),
+				'tipo_requisicion'=>$this->input->post('tipo_requisicion'),
+				'solicita'=>$this->session->userdata('id')
+			);
+		else
+			$datos = array(
+				'director'=>$this->input->post('director_area'),
+				'autorizador'=>$this->input->post('autorizador'),
+				'fecha_solicitud'=>$this->input->post('solicitud'),
+				'fecha_estimada'=>$this->input->post('fecha_estimada'),
+				'area'=>$this->input->post('area'),
+				'track'=>$this->input->post('track'),
+				'posicion'=>$this->input->post('posicion'),
+				'empresa'=>$this->input->post('empresa'),
+				'tipo'=>$this->input->post('tipo'),
+				'sustituye_a'=>$this->input->post('sustituye_a'),
+				'proyecto'=>$this->input->post('proyecto'),
+				'clave'=>$this->input->post('clave'),
+				'costo'=>$this->input->post('costo'),
+				'residencia'=>$this->input->post('residencia'),
+				'lugar_trabajo'=>$this->input->post('lugar_trabajo'),
+				'domicilio_cte'=>$this->input->post('domicilio_cte'),
+				'contratacion'=>$this->input->post('contratacion'),
+				'entrevista'=>$this->input->post('entrevista'),
+				'disp_viajar'=>$this->input->post('disp_viajar'),
+				'edad_uno'=>$this->input->post('edad_uno'),
+				'edad_dos'=>$this->input->post('edad_dos'),
+				'sexo'=>$this->input->post('sexo'),
+				'nivel'=>$this->input->post('nivel'),
+				'carrera'=>$this->input->post('carrera'),
+				'ingles_hablado'=>$this->input->post('ingles_hablado'),
+				'ingles_lectura'=>$this->input->post('ingles_lectura'),
+				'ingles_escritura'=>$this->input->post('ingles_escritura'),
+				'experiencia'=>$this->input->post('experiencia'),
+				'habilidades'=>$this->input->post('habilidades'),
+				'funciones'=>$this->input->post('funciones'),
+				'observaciones'=>$this->input->post('observaciones'),
+				'solicita'=>$this->session->userdata('id')
+			);
 		if($datos['director'] == $this->session->userdata('id'))
 			$datos['estatus']=2;
 		if($datos['autorizador'] == $this->session->userdata('id'))
@@ -99,7 +138,10 @@ class Requisicion extends CI_Controller {
 			switch ($requisicion->estatus) {
 				case 1:
 					$destinatario=$this->user_model->searchById($requisicion->director)->email;
-					$mensaje=$this->load->view("layout/requisicion/create",$data,true);
+					if($requisicion->tipo_requisicion==1)
+						$mensaje=$this->load->view("layout/requisicion/create",$data,true);
+					else
+						$mensaje=$this->load->view("layout/requisicion/create_externa",$data,true);
 					break;
 				case 2:
 					$destinatario=$this->user_model->searchById($requisicion->autorizador)->email;
@@ -123,8 +165,6 @@ class Requisicion extends CI_Controller {
 	public function update(){
 		$this->valida_sesion();
 		$datos = array(
-			'director'=>$this->input->post('director_area'),
-			'autorizador'=>$this->input->post('autorizador'),
 			'fecha_solicitud'=>$this->input->post('solicitud'),
 			'fecha_estimada'=>$this->input->post('fecha_estimada'),
 			'area'=>$this->input->post('area'),
@@ -136,6 +176,7 @@ class Requisicion extends CI_Controller {
 			'proyecto'=>$this->input->post('proyecto'),
 			'clave'=>$this->input->post('clave'),
 			'costo'=>$this->input->post('costo'),
+			'costo_cliente'=>$this->input->post('costo_maximo_cliente'),
 			'residencia'=>$this->input->post('residencia'),
 			'lugar_trabajo'=>$this->input->post('lugar_trabajo'),
 			'domicilio_cte'=>$this->input->post('domicilio_cte'),
@@ -157,18 +198,31 @@ class Requisicion extends CI_Controller {
 			'estatus'=>1,
 			'razon'=>''
 		);
+		if($this->input->post('director_area')){
+			$datos['director']=$this->input->post('director_area');
+			if($datos['director'] == $this->session->userdata('id'))
+				$datos['estatus']=2;
+		}
+		if($this->input->post('autorizador')){
+			$datos['autorizador']=$this->input->post('autorizador');
+			if($datos['autorizador'] == $this->session->userdata('id'))
+				$datos['estatus']=3;
+		}
 		$id=$this->input->post('id');
-		if($datos['director'] == $this->session->userdata('id'))
-			$datos['estatus']=2;
-		if($datos['autorizador'] == $this->session->userdata('id'))
-			$datos['estatus']=3;
-		if($requisicion = $this->requisicion_model->update($id,$datos)){
+		$requisicion=$this->requisicion_model->getById($id);
+		if($requisicion->tipo_requisicion==2)
+			if($requisicion->estatus==2)
+				$datos['estatus']=3;
+		$requisicion = $this->requisicion_model->update($id,$datos);
+		if(isset($requisicion)){
 			$requisicion = $this->requisicion_model->getById($requisicion);
 			$data['requisicion']=$requisicion;
 			switch ($requisicion->estatus) {
 				case 1:
-					$destinatario=$this->user_model->searchById($requisicion->director)->email;
-					$mensaje=$this->load->view("layout/requisicion/create",$data,true);
+					if($requisicion->tipo_requisicion==1)
+						$mensaje=$this->load->view("layout/requisicion/create",$data,true);
+					else
+						$mensaje=$this->load->view("layout/requisicion/create_externa",$data,true);
 					break;
 				case 2:
 					$destinatario=$this->user_model->searchById($requisicion->autorizador)->email;
@@ -212,6 +266,45 @@ class Requisicion extends CI_Controller {
 		echo json_encode($response);
 	}
 
+	public function set_costo(){
+		$this->valida_sesion();
+		$datos['estatus']=$this->input->post('estatus');
+		$datos['costo']=$this->input->post('costo');
+		$id=$this->input->post('id');
+		if($this->requisicion_model->update($id,$datos)){
+			$requisicion=$this->requisicion_model->getById($id);
+			switch ($datos['estatus']) {
+				case '2': //para autorizador
+					$destinatario=$this->user_model->searchById($requisicion->solicita)->email;
+					$data['requisicion']=$requisicion;
+					$mensaje=$this->load->view("layout/requisicion/auth",$data,true);
+					break;
+				case '3': //para capital humano
+					$destinatario='perla.valdez@advanzer.com';
+					$data['requisicion']=$requisicion;
+					$mensaje=$this->load->view("layout/requisicion/rh",$data,true);
+					break;
+				case '7': //stand by
+					if($requisicion->usuario_modificacion == $requisicion->solicita) //el mismo solicitante cambió a stand by
+						$destinatario='perla.valdez@advanzer.com';
+					else
+						$destinatario=$this->user_model->searchById($requisicion->solicita)->email;
+					$data['requisicion']=$requisicion;
+					$mensaje=$this->load->view("layout/requisicion/stand_by",$data,true);
+				default: # code...
+					break;
+			}
+			if(!$this->sendMail($destinatario,$mensaje))
+				$response['msg']="ok";
+			else
+				$response['msg']="No se pudo enviar correo de notificación";
+			$response['msg']="ok";
+		}else
+			$response['msg']="Ha habido un error al actualizar la requisicion";
+
+		echo json_encode($response);
+	}
+
 	public function ch_estatus(){
 		$this->valida_sesion();
 		$datos['estatus']=$this->input->post('estatus');
@@ -227,7 +320,6 @@ class Requisicion extends CI_Controller {
 				case '3': //para capital humano
 					$destinatario='perla.valdez@advanzer.com';
 					$data['requisicion']=$requisicion;
-					$this->genera_excel($requisicion);
 					$mensaje=$this->load->view("layout/requisicion/rh",$data,true);
 					break;
 				case '7': //stand by
@@ -332,7 +424,7 @@ class Requisicion extends CI_Controller {
 		$this->email->clear(TRUE);
 
 		$this->email->from('notificaciones.ch@advanzer.com','Requisición de Personal - Portal Personal');
-		$this->email->to('jesus.salas@advanzer.com');
+		$this->email->to('antonio.baez@advanzer.com');
 		$this->email->subject('Aviso de Requisición');
 		$this->email->message($mensaje);
 
@@ -358,108 +450,246 @@ class Requisicion extends CI_Controller {
 			endif;
 		endforeach;
 	}
+	public function exportar($requisicion){
+		$requisicion = $this->requisicion_model->getById($requisicion);
+		if($requisicion->tipo_requisicion==1)
+			$this->genera_excel($requisicion);
+		else
+			$this->genera_excel_externa($requisicion);
+	}
+
+	private function genera_excel_externa($requisicion) {
+		$this->load->library('excel');
+
+		$objPHPExcel = PHPExcel_IOFactory::createReader('Excel2007');
+		$objPHPExcel->setReadDataOnly(true);
+		$objPHPExcel = $objPHPExcel->load($_SERVER['DOCUMENT_ROOT'].'/advanzer/assets/docs/requisicion_externa.xlsx');
+
+		$objSheet=$objPHPExcel->setActiveSheetIndex(0);
+		//Merge
+			$objSheet->mergeCells('C1:G1');
+			$objSheet->mergeCells('B2:G2');
+			$objSheet->mergeCells('A3:G3');
+			$objSheet->mergeCells('B4:G4');
+			$objSheet->mergeCells('B5:G5');
+			$objSheet->mergeCells('B6:G6');
+			$objSheet->mergeCells('A7:G7');
+			$objSheet->mergeCells('B8:G8');
+			$objSheet->mergeCells('B9:G9');
+			$objSheet->mergeCells('B10:G10');
+			$objSheet->mergeCells('B11:G11');
+			$objSheet->mergeCells('B12:G12');
+			$objSheet->mergeCells('A13:G13');
+			$objSheet->mergeCells('B14:G14');
+			$objSheet->mergeCells('A15:G15');
+			$objSheet->mergeCells('B16:G16');
+			$objSheet->mergeCells('A17:G17');
+			$objSheet->mergeCells('B18:G18');
+			$objSheet->mergeCells('B19:G19');
+			$objSheet->mergeCells('A20:G20');
+			$objSheet->mergeCells('A21:G21');
+			$objSheet->mergeCells('B22:G22');
+			$objSheet->mergeCells('B23:G23');
+			$objSheet->mergeCells('B24:G24');
+			$objSheet->mergeCells('B25:G25');
+			$objSheet->mergeCells('B26:G26');
+			$objSheet->mergeCells('B27:G27');
+			$objSheet->mergeCells('A28:G28');
+			$objSheet->mergeCells('B29:G29');
+			$objSheet->mergeCells('B30:G30');
+			$objSheet->mergeCells('B31:G31');
+			$objSheet->mergeCells('B32:G32');
+			$objSheet->mergeCells('A33:G33');
+			$objSheet->mergeCells('B34:G34');
+		//Style head
+			$objSheet->getStyle('A1:G34')->getAlignment()->setWrapText(true);
+			$objSheet->getStyle('A1:G34')->getFont()->setName('Arial')->setSize(8);
+			$objSheet->getStyle('A1:A34')->getFont()->setBold(true);
+			$objSheet->getColumnDimension('A')->setWidth(15);
+			$objSheet->getColumnDimension('B')->setWidth(14.1);
+			$objSheet->getColumnDimension('C')->setWidth(14.4);
+			$objSheet->getStyle('E2')->getFont()->setBold(true);
+			$objSheet->getStyle('A1:G34')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+			$objSheet->getStyle('A1:G34')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+			$objSheet->getStyle('C1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+			$objSheet->getStyle('A1:G34')->getFill('')->applyFromArray(array('type'=>PHPExcel_Style_Fill::FILL_SOLID, 'startcolor'=>array('rgb'=>'FFFFFF')));
+			$objSheet->getStyle('A1:A34')->getFill('')->applyFromArray(array('type'=>PHPExcel_Style_Fill::FILL_SOLID, 'startcolor'=>array('rgb'=>'C0C0C0')));
+			$objSheet->getStyle('A3')->getFill('')->applyFromArray(array('type'=>PHPExcel_Style_Fill::FILL_SOLID, 'startcolor'=>array('rgb'=>'969696')));
+			$objSheet->getStyle('A3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			$objSheet->getStyle('A7')->getFill('')->applyFromArray(array('type'=>PHPExcel_Style_Fill::FILL_SOLID, 'startcolor'=>array('rgb'=>'969696')));
+			$objSheet->getStyle('A7')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			$objSheet->getStyle('A13')->getFill('')->applyFromArray(array('type'=>PHPExcel_Style_Fill::FILL_SOLID, 'startcolor'=>array('rgb'=>'969696')));
+			$objSheet->getStyle('A13')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			$objSheet->getStyle('A15')->getFill('')->applyFromArray(array('type'=>PHPExcel_Style_Fill::FILL_SOLID, 'startcolor'=>array('rgb'=>'969696')));
+			$objSheet->getStyle('A15')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			$objSheet->getStyle('A17')->getFill('')->applyFromArray(array('type'=>PHPExcel_Style_Fill::FILL_SOLID, 'startcolor'=>array('rgb'=>'969696')));
+			$objSheet->getStyle('A17')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			$objSheet->getStyle('A20:A21')->getFill('')->applyFromArray(array('type'=>PHPExcel_Style_Fill::FILL_SOLID, 'startcolor'=>array('rgb'=>'969696')));
+			$objSheet->getStyle('A20:A21')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			$objSheet->getStyle('A28')->getFill('')->applyFromArray(array('type'=>PHPExcel_Style_Fill::FILL_SOLID, 'startcolor'=>array('rgb'=>'969696')));
+			$objSheet->getStyle('A28')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			$objSheet->getStyle('A33')->getFill('')->applyFromArray(array('type'=>PHPExcel_Style_Fill::FILL_SOLID, 'startcolor'=>array('rgb'=>'969696')));
+			$objSheet->getStyle('A33')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			$objSheet->getRowDimension(2)->setRowHeight(-1);
+			$objSheet->getStyle('A1:G34')->getBorders()->getAllBorders()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+		// write
+			$objSheet->setCellValue('B1',$requisicion->id)
+			->setCellValue('B2',$requisicion->nombre_solicita)
+			->setCellValue('B4',$requisicion->fecha_solicitud)
+			->setCellValue('B5',$requisicion->posicion)
+			->setCellValue('B6',$requisicion->expertise)
+			->setCellValue('B8',$requisicion->empresa)
+			->setCellValue('B9',$requisicion->domicilio_cte)
+			->setCellValue('B10',$requisicion->contacto)
+			->setCellValue('B11',$requisicion->telefono_contacto. ' - '.$requisicion->celular_contacto)
+			->setCellValue('B12',$requisicion->email_contacto)
+			->setCellValue('B14',$requisicion->costo)
+			->setCellValue('B16',$requisicion->contratacion)
+			->setCellValue('B18',$requisicion->lugar_trabajo)
+			->setCellValue('B19',$requisicion->fecha_estimada)
+			->setCellValue('B22',$requisicion->nivel.' -'.$requisicion->carrera)
+			->setCellValue('B23',$requisicion->sexo)
+			->setCellValue('B24',$requisicion->edad_uno.' - '.$requisicion->edad_dos)
+			->setCellValue('B25',"Hablado: $requisicion->ingles_hablado. Escrito: $requisicion->ingles_escritura. Leído: $requisicion->ingles_lectura")
+			->setCellValue('B26',$requisicion->disp_viajar)
+			->setCellValue('B27',$requisicion->residencia)
+			->setCellValue('B29',$requisicion->experiencia)
+			->setCellValue('B30',$requisicion->habilidades)
+			->setCellValue('B31',$requisicion->funciones)
+			->setCellValue('B32',$requisicion->observaciones)
+			->setCellValue('B34',$requisicion->entrevista);
+		$file_name = "requisicion_".$requisicion->id.".xlsx";
+		header('Content-Type: application/vnd.ms-excel');
+		header('Content-Disposition: attachment;filename="'.$file_name.'"');
+		header('Cache-Control: max-age=0');		
+
+		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+
+		$objWriter->save('php://output');
+	}
 
 	private function genera_excel($requisicion) {
 		$this->load->library('excel');
 
-		$objPHPExcel = new PHPExcel();
-		$objPHPExcel->getProperties()->setCreator("Portal Personal - Requisiciones - Advanzer de México")
-			->setLastModifiedBy("Portal Personal")
-			->setTitle("Detalle de Requisición Autorizada")
-			->setSubject("Detalle de Requisición Autorizada")
-			->setDescription("Detallado de la captura de una nueva requisición de personal");
-		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+		$objPHPExcel = PHPExcel_IOFactory::createReader('Excel2007');
+		$objPHPExcel->setReadDataOnly(true);
+		$objPHPExcel = $objPHPExcel->load($_SERVER['DOCUMENT_ROOT'].'/advanzer/assets/docs/requisicion_personal.xlsx');
 
+		$objSheet=$objPHPExcel->setActiveSheetIndex(0);
+		//Merge
+			$objSheet->mergeCells('C1:G1');
+			$objSheet->mergeCells('B2:G2');
+			$objSheet->mergeCells('A3:G3');
+			$objSheet->mergeCells('B4:G4');
+			$objSheet->mergeCells('B5:G5');
+			$objSheet->mergeCells('B6:G6');
+			$objSheet->mergeCells('A7:G7');
+			$objSheet->mergeCells('B8:G8');
+			$objSheet->mergeCells('B9:G9');
+			$objSheet->mergeCells('B10:G10');
+			$objSheet->mergeCells('B11:G11');
+			$objSheet->mergeCells('B12:G12');
+			$objSheet->mergeCells('A13:G13');
+			$objSheet->mergeCells('B14:G14');
+			$objSheet->mergeCells('A15:G15');
+			$objSheet->mergeCells('B16:G16');
+			$objSheet->mergeCells('A17:G17');
+			$objSheet->mergeCells('B18:G18');
+			$objSheet->mergeCells('B19:G19');
+			$objSheet->mergeCells('A20:G20');
+			$objSheet->mergeCells('A21:G21');
+			$objSheet->mergeCells('B22:G22');
+			$objSheet->mergeCells('B23:G23');
+			$objSheet->mergeCells('B24:G24');
+			$objSheet->mergeCells('B25:G25');
+			$objSheet->mergeCells('B26:G26');
+			$objSheet->mergeCells('B27:G27');
+			$objSheet->mergeCells('A28:G28');
+			$objSheet->mergeCells('B29:G29');
+			$objSheet->mergeCells('B30:G30');
+			$objSheet->mergeCells('B31:G31');
+			$objSheet->mergeCells('B32:G32');
+			$objSheet->mergeCells('A33:G33');
+			$objSheet->mergeCells('B34:G34');
+			
 		//Style head
-			$objSheet = $objPHPExcel->getActiveSheet(0);
-			$objSheet->setTitle('Detalle Requisición');
-			$objSheet->getStyle('A1:AD1')->getFont()->setBold(true)->setName('Verdana')->setSize(10)->getColor()->setRGB('FFFFFF');
-			$objSheet->getStyle('A1:AD1')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-			$objSheet->getStyle('A1:AD1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-			$objSheet->getStyle('A1:AD1')->getFill('')->applyFromArray(array('type'=>PHPExcel_Style_Fill::FILL_SOLID, 'startcolor'=>array('rgb'=>'000A75')));
-			$objSheet->getRowDimension(1)->setRowHeight(30);
+			$objSheet->getStyle('A1:G34')->getAlignment()->setWrapText(true);
+			$objSheet->getStyle('A1:G34')->getFont()->setName('Arial')->setSize(8);
+			$objSheet->getStyle('A1:A34')->getFont()->setBold(true);
+			$objSheet->getColumnDimension('A')->setWidth(15);
+			$objSheet->getColumnDimension('B')->setWidth(14.1);
+			$objSheet->getColumnDimension('C')->setWidth(14.4);
+			$objSheet->getStyle('E2')->getFont()->setBold(true);
+			$objSheet->getStyle('A1:G34')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+			$objSheet->getStyle('A1:G34')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+			$objSheet->getStyle('C1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+			$objSheet->getStyle('A1:G34')->getFill('')->applyFromArray(array('type'=>PHPExcel_Style_Fill::FILL_SOLID, 'startcolor'=>array('rgb'=>'FFFFFF')));
+			$objSheet->getStyle('A1:A34')->getFill('')->applyFromArray(array('type'=>PHPExcel_Style_Fill::FILL_SOLID, 'startcolor'=>array('rgb'=>'C0C0C0')));
+			$objSheet->getStyle('A3')->getFill('')->applyFromArray(array('type'=>PHPExcel_Style_Fill::FILL_SOLID, 'startcolor'=>array('rgb'=>'969696')));
+			$objSheet->getStyle('A3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			$objSheet->getStyle('A7')->getFill('')->applyFromArray(array('type'=>PHPExcel_Style_Fill::FILL_SOLID, 'startcolor'=>array('rgb'=>'969696')));
+			$objSheet->getStyle('A7')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			$objSheet->getStyle('A13')->getFill('')->applyFromArray(array('type'=>PHPExcel_Style_Fill::FILL_SOLID, 'startcolor'=>array('rgb'=>'969696')));
+			$objSheet->getStyle('A13')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			$objSheet->getStyle('A15')->getFill('')->applyFromArray(array('type'=>PHPExcel_Style_Fill::FILL_SOLID, 'startcolor'=>array('rgb'=>'969696')));
+			$objSheet->getStyle('A15')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			$objSheet->getStyle('A17')->getFill('')->applyFromArray(array('type'=>PHPExcel_Style_Fill::FILL_SOLID, 'startcolor'=>array('rgb'=>'969696')));
+			$objSheet->getStyle('A17')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			$objSheet->getStyle('A20:A21')->getFill('')->applyFromArray(array('type'=>PHPExcel_Style_Fill::FILL_SOLID, 'startcolor'=>array('rgb'=>'969696')));
+			$objSheet->getStyle('A20:A21')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			$objSheet->getStyle('A28')->getFill('')->applyFromArray(array('type'=>PHPExcel_Style_Fill::FILL_SOLID, 'startcolor'=>array('rgb'=>'969696')));
+			$objSheet->getStyle('A28')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			$objSheet->getStyle('A33')->getFill('')->applyFromArray(array('type'=>PHPExcel_Style_Fill::FILL_SOLID, 'startcolor'=>array('rgb'=>'969696')));
+			$objSheet->getStyle('A33')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			$objSheet->getRowDimension(2)->setRowHeight(-1);
+			$objSheet->getStyle('A1:G34')->getBorders()->getAllBorders()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 
-		// write header
-			$objSheet->getCell('A1')->setValue('FOLIO.');
-			$objSheet->getCell('B1')->setValue('FECHA SOLICITUD');
-			$objSheet->getCell('C1')->setValue('SOLICITA');
-			$objSheet->getCell('D1')->setValue('ACEPTA');
-			$objSheet->getCell('E1')->setValue('AUTORIZA');
-			$objSheet->getCell('F1')->setValue('FECHA ESTIMADA DE INGRESO');
-			$objSheet->getCell('G1')->setValue('ÁREA');
-			$objSheet->getCell('H1')->setValue('TRACK');
-			$objSheet->getCell('I1')->setValue('POSICIÓN');
-			$objSheet->getCell('J1')->setValue('EMPRESA');
-			$objSheet->getCell('K1')->setValue('TIPO');
-			$objSheet->getCell('L1')->setValue('SUSTITUYE A');
-			$objSheet->getCell('M1')->setValue('PROYECTO');
-			$objSheet->getCell('N1')->setValue('CVE PROYECTO');
-			$objSheet->getCell('O1')->setValue('COSTO');
-			$objSheet->getCell('P1')->setValue('RESIDENCIA');
-			$objSheet->getCell('Q1')->setValue('LUGAR DE TRABAJO');
-			$objSheet->getCell('R1')->setValue('DOMICILIO DEL CLIENTE');
-			$objSheet->getCell('S1')->setValue('TIEMPO DE CONTRATACIÓN');
-			$objSheet->getCell('T1')->setValue('QUIEN ENTREVISTA');
-			$objSheet->getCell('U1')->setValue('DISP PARA VIAJAR');
-			$objSheet->getCell('V1')->setValue('RANGO DE EDAD');
-			$objSheet->getCell('W1')->setValue('SEXO');
-			$objSheet->getCell('X1')->setValue('NIVEL DE ESTUDIOS');
-			$objSheet->getCell('Y1')->setValue('CARRERA');
-			$objSheet->getCell('Z1')->setValue('NIVEL DE INGLÉS');
-			$objSheet->getCell('AA1')->setValue('EXPERIENCIA/CONOCIMIENTOS');
-			$objSheet->getCell('AB1')->setValue('CARACTERÍSTICAS HABILIDADES');
-			$objSheet->getCell('AC1')->setValue('FUNCIONES');
-			$objSheet->getCell('AD1')->setValue('OBSERVACIONES');
-
-		//write content
-			if($requisicion->empresa==1)
+		// write
+			if($requisicion->empresa=='1')
 				$empresa="ADVANZER";
-			else
+			elseif($requisicion->empresa=='2')
 				$empresa="ENTUIZER";
+			else
+				$empresa=$requisicion->empresa;
 			if($requisicion->tipo==1)
 				$tipo='Posición Nueva';
 			else
 				$tipo='Sustitución';
-			$objSheet->getCell('A2')->setValue($requisicion->id);
-			$objSheet->getCell('B2')->setValue($requisicion->fecha_solicitud);
-			$objSheet->getCell('C2')->setValue($requisicion->nombre_solicita);
-			$objSheet->getCell('D2')->setValue($requisicion->nombre_director);
-			$objSheet->getCell('E2')->setValue($requisicion->nombre_autorizador);
-			$objSheet->getCell('F2')->setValue($requisicion->fecha_estimada);
-			$objSheet->getCell('G2')->setValue($requisicion->nombre_area);
-			$objSheet->getCell('H2')->setValue($requisicion->nombre_track);
-			$objSheet->getCell('I2')->setValue($requisicion->nombre_posicion);
-			$objSheet->getCell('J2')->setValue($empresa);
-			$objSheet->getCell('K2')->setValue($tipo);
-			$objSheet->getCell('L2')->setValue($requisicion->sustituye_a);
-			$objSheet->getCell('M2')->setValue($requisicion->proyecto);
-			$objSheet->getCell('N2')->setValue($requisicion->clave);
-			$objSheet->getCell('O2')->setValue($requisicion->costo);
-			$objSheet->getCell('P2')->setValue($requisicion->residencia);
-			$objSheet->getCell('Q2')->setValue($requisicion->lugar_trabajo);
-			$objSheet->getCell('R2')->setValue($requisicion->domicilio_cte);
-			$objSheet->getCell('S2')->setValue($requisicion->contratacion);
-			$objSheet->getCell('T2')->setValue($requisicion->entrevista);
-			$objSheet->getCell('U2')->setValue($requisicion->disp_viajar);
-			$objSheet->getCell('V2')->setValue($requisicion->edad_uno.' - '.$requisicion->edad_dos);
-			$objSheet->getCell('W2')->setValue($requisicion->sexo);
-			$objSheet->getCell('X2')->setValue($requisicion->nivel);
-			$objSheet->getCell('Y2')->setValue($requisicion->carrera);
-			$objSheet->getCell('Z2')->setValue("Hablado: $requisicion->ingles_hablado\nEscrito: $requisicion->ingles_escritura\nLEÍDO: $requisicion->ingles_lectura");
-			$objSheet->getCell('AA2')->setValue($requisicion->experiencia);
-			$objSheet->getCell('AB2')->setValue($requisicion->habilidades);
-			$objSheet->getCell('AC2')->setValue($requisicion->funciones);
-			$objSheet->getCell('AD2')->setValue($requisicion->observaciones);
-			$objSheet->getStyle('A2:AD2')->getAlignment()->setWrapText(true);
-			$objSheet->getRowDimension(2)->setRowHeight(-1);
 
-		//style content
-			$objSheet->getStyle('B2')->getNumberFormat()->setFormatCode('yyyy-mm-dd');
-			$objSheet->getStyle('F2')->getNumberFormat()->setFormatCode('yyyy-mm-dd');
+			$objSheet->setCellValue('B1',$requisicion->id)
+			->setCellValue('B2',$requisicion->nombre_solicita)
+			->setCellValue('B4',$requisicion->fecha_solicitud)
+			->setCellValue('B5',$requisicion->nombre_posicion)
+			->setCellValue('B6',1)
+			->setCellValue('B8',$empresa)
+			->setCellValue('B9',$requisicion->nombre_area)
+			->setCellValue('B10',$requisicion->proyecto.' / '.$requisicion->clave)
+			->setCellValue('B11',$tipo)
+			->setCellValue('B12',$requisicion->sustituye_a)
+			->setCellValue('B14',$requisicion->costo)
+			->setCellValue('B16',$requisicion->contratacion)
+			->setCellValue('B18',"$requisicion->lugar_trabajo\n$requisicion->domicilio_cte")
+			->setCellValue('B19',$requisicion->fecha_estimada)
+			->setCellValue('B22',$requisicion->nivel.' -'.$requisicion->carrera)
+			->setCellValue('B23',$requisicion->sexo)
+			->setCellValue('B24',$requisicion->edad_uno.' - '.$requisicion->edad_dos)
+			->setCellValue('B25',"Hablado: $requisicion->ingles_hablado. Escrito: $requisicion->ingles_escritura. Leído: $requisicion->ingles_lectura")
+			->setCellValue('B26',$requisicion->disp_viajar)
+			->setCellValue('B27',$requisicion->residencia)
+			->setCellValue('B29',$requisicion->experiencia)
+			->setCellValue('B30',$requisicion->habilidades)
+			->setCellValue('B31',$requisicion->funciones)
+			->setCellValue('B32',$requisicion->observaciones)
+			->setCellValue('B34',$requisicion->entrevista);
 
 		$file_name = "requisicion_".$requisicion->id.".xlsx";
+		header('Content-Type: application/vnd.ms-excel');
+		header('Content-Disposition: attachment;filename="'.$file_name.'"');
+		header('Cache-Control: max-age=0');		
 
-		$objWriter->save(getcwd()."/assets/docs/$file_name");
+		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+
+		$objWriter->save('php://output');
 
 	}
 }
