@@ -20,7 +20,7 @@ class Requisicion extends CI_Controller {
 	}
 
 	//basicas
-	public function index($flag=false){
+	public function index(){
 		$this->valida_sesion();
 		$colaborador=$this->user_model->searchById($this->session->userdata('id'));
 		$data=array();
@@ -28,11 +28,53 @@ class Requisicion extends CI_Controller {
 		// get data form url 
 		//var_dump($this->input->get("status"));exit;
 		$status =  $this->input->get("status");
+		//echo $flag;exit;
+		//var_dump($colaborador->id);exit;
+		//echo $colaborador->nivel_posicion;exit;
+		//echo $colaborador->tipo;exit;
+		//echo $colaborador->area; exit;
 		
-		$data['requisiciones']=$this->requisicion_model->getRequisiciones($colaborador,$flag,$status);
+		$option = 0;
+		
+		// Evaluamos primero el puesto despues el area, y al final los permisos
+		if(($colaborador->nivel_posicion <= 5) && ($status == "own")){
+			$option = 1;
+		}elseif(($colaborador->area == 4) && ($status == "all")){
+			$option = 2;
+		}elseif(((($tipo = $colaborador->tipo) == 5) || ($tipo == 3)) && ($status == "own")){
+			$option = 1;
+		}elseif(((($tipo = $colaborador->tipo) == 5) || ($tipo == 4)) && ($status == "all")){
+			$option = 2;
+		}else{
+			
+		}
+		
+		// Dependiendo del caso presentado se elige una funcion, si no tiene permisos se regresa a la vista principal
+		switch($option){
+			case 0:
+				redirect('/', 'refresh');
+			break;
+			case 1:
+				$data['requisiciones']=$this->requisicion_model->getOwnRequisiciones($colaborador);
+			break;
+			case 2:
+				$data['requisiciones']=$this->requisicion_model->getRequisiciones($status);
+			break;
+		}
+		
+		/*if(($status == "own" && $option) || (true)):
+			$data['requisiciones']=$this->requisicion_model->getOwnRequisiciones($colaborador);
+		elseif($status == "all" || $status == 0 || $status == 1 || $status == 2 || $status == 3 || $status == 4 || $status == 5 || $status == 6 || $status == 7):
+			$data['requisiciones']=$this->requisicion_model->getRequisiciones($status);
+		endif;*/
+		
+		
+		
 		$this->layout->title('Advanzer - Requisiciones');
 		$this->layout->view('requisicion/index',$data);
 	}
+
+	
 	public function ver($id){
 		$this->valida_sesion();
 		$this->layout->title('Advanzer - Detalle Requisición');

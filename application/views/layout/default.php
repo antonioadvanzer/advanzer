@@ -188,7 +188,8 @@
 								Servicios<span class="caret"></span></a>
 							<ul class="dropdown-menu">
 								<?php if($this->session->userdata('tipo') >= 3 || $this->session->userdata('posicion') <= 5):?>
-                                    <li><a href="<?= base_url('requisicion');?>">Requisiciones</a></li>
+                                    <!--<li><a href="<?= base_url('requisicion');?>">Requisiciones</a></li>-->
+                                    <li class=""><a href="<?= base_url('requisiciones')."/?status=own";?>">Requisiciones</a></li>
 								<?php endif;?>
 									<li><a href="<?= base_url('evaluar');?>">Feedback</a></li>
 								<?php if(in_array($this->session->userdata('tipo'), array(1,2,5,6))): ?>

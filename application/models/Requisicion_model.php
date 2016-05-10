@@ -24,11 +24,11 @@ class Requisicion_model extends CI_Model{
 		return $result;
 	}
 
-	function getRequisiciones($colaborador,$flag,$status) {
+	function getRequisiciones($status) {
 		$this->db->select('R.*,T.nombre track,P.nombre posicion,A.nombre area,U.nombre solicitante')
 			->join('Tracks T','T.id = R.track','LEFT OUTER')->join('Posiciones P','P.id = R.posicion','LEFT OUTER')->join('Areas A','A.id = R.area','LEFT OUTER')
 			->join('Users U','U.id = R.solicita');
-		if(!$flag):
+		/*if(!$flag):
 			if($colaborador->tipo < 3)
 				$this->db->where(array('R.solicita'=>$colaborador->id,'fecha_solicitud <='=>date('Y-m-d')));
 			elseif($colaborador->tipo == 3 && $colaborador->area==4)
@@ -37,13 +37,42 @@ class Requisicion_model extends CI_Model{
 				$this->db->or_where('R.autorizador',$colaborador->id);
 			elseif($colaborador->nivel_posicion <= 3)
 				$this->db->or_where('R.director',$colaborador->id);
-		endif;
+		endif;*/
 		
-		// Determinate requisisiones status
+		// Determinate requisiciones status
 		if($status!="all"):
 			$this->db->where('R.estatus',$status);
 		endif;
 				
+		return $this->db->get('Requisiciones R')->result();
+	}
+	
+	function getOwnRequisiciones($colaborador){
+		
+		$this->db->select('R.*,T.nombre track,P.nombre posicion,A.nombre area,U.nombre solicitante')
+			->join('Tracks T','T.id = R.track','LEFT OUTER')->join('Posiciones P','P.id = R.posicion','LEFT OUTER')->join('Areas A','A.id = R.area','LEFT OUTER')
+			->join('Users U','U.id = R.solicita');
+
+			/*if($colaborador->tipo < 3)
+				$this->db->where(array('R.solicita'=>$colaborador->id,'fecha_solicitud <='=>date('Y-m-d')));
+			elseif($colaborador->tipo == 3 && $colaborador->area==4)
+				$this->db->where('R.estatus',3);
+			if(in_array($colaborador->id, array(1,2,51)))
+				$this->db->or_where('R.autorizador',$colaborador->id);
+			elseif($colaborador->nivel_posicion <= 3)
+				$this->db->or_where('R.director',$colaborador->id);*/
+				
+		$this->db->where(array('R.solicita'=>$colaborador->id,'fecha_solicitud <='=>date('Y-m-d')));
+		
+		$this->db->or_where('R.director',$colaborador->id);		
+		$this->db->where('R.estatus',1);
+		
+		$this->db->or_where('R.autorizador',$colaborador->id);		
+		$this->db->where('R.estatus',2);
+		
+		//$this->db->or_where('R.autorizador',$colaborador->id);		
+		//$this->db->where('R.estatus',2);
+		
 		return $this->db->get('Requisiciones R')->result();
 	}
 

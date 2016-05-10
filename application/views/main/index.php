@@ -80,7 +80,7 @@
 									<li><a href="<?= base_url("solicitudes_pendientes");?>">Solicitudes Recibidas <span class="badge"><?php if($cont_pendientes>0) echo $cont_pendientes;?></span></a></li>
 								<?php endif;
 								if($requisiciones_pendientes+count($requisiciones)): $count=count($requisiciones) + $requisiciones_pendientes; ?>
-									<li><a href="<?= base_url("requisicion");?>"><b>Requisiciones <span class="badge"><?php if($count>0) echo $count;?></span></b></a></li>
+									<li><a href="<?= base_url('requisiciones')."/?status=own";?>"><b>Requisiciones <span class="badge"><?php if($count>0) echo $count;?></span></b></a></li>
 								<?php endif;
 								if($evaluacion): ?>
 									<li><a href="<?= base_url("evaluar");?>">Feedback</a></li>
