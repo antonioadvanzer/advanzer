@@ -25,6 +25,8 @@ class Requisicion extends CI_Controller {
 		$colaborador=$this->user_model->searchById($this->session->userdata('id'));
 		$data=array();
 		
+		$this->updateRequisicionExpire();
+		
 		// get data form url 
 		//var_dump($this->input->get("status"));exit;
 		$status =  $this->input->get("status");
@@ -36,14 +38,14 @@ class Requisicion extends CI_Controller {
 		
 		$option = 0;
 		
-		// Evaluamos primero el puesto despues el area, y al final los permisos
+		// Evaluamos primero el puesto despues el area, y al final los permisos especiales (tipo de acceso)
 		if(($colaborador->nivel_posicion <= 5) && ($status == "own")){
 			$option = 1;
 		}elseif(($colaborador->area == 4) && ($status == "all")){
 			$option = 2;
 		}elseif(((($tipo = $colaborador->tipo) == 5) || ($tipo == 3)) && ($status == "own")){
 			$option = 1;
-		}elseif(((($tipo = $colaborador->tipo) == 5) || ($tipo == 4)) && ($status == "all")){
+		}elseif(((($tipo = $colaborador->tipo) == 5) || ($tipo == 4)) && ($status == "all" || $status == 0 || $status == 1 || $status == 2 || $status == 3 || $status == 4 || $status == 5 || $status == 6 || $status == 7)){
 			$option = 2;
 		}else{
 			
@@ -55,37 +57,95 @@ class Requisicion extends CI_Controller {
 				redirect('/', 'refresh');
 			break;
 			case 1:
-				$data['requisiciones']=$this->requisicion_model->getOwnRequisiciones($colaborador);
+				$data['requisiciones']=$this->requisicion_model->getOwnRequisiciones($colaborador->id);
 			break;
 			case 2:
-				$data['requisiciones']=$this->requisicion_model->getRequisiciones($status);
+				if($status == 0){
+					$data['requisiciones'] = array_merge($this->requisicion_model->getRequisiciones($status),$this->requisicion_model->getRequisiciones(5));
+				}else{
+					$data['requisiciones'] = $this->requisicion_model->getRequisiciones($status);
+				}
 			break;
 		}
 		
+		//echo count($data['requisiciones']);exit;
 		/*if(($status == "own" && $option) || (true)):
 			$data['requisiciones']=$this->requisicion_model->getOwnRequisiciones($colaborador);
 		elseif($status == "all" || $status == 0 || $status == 1 || $status == 2 || $status == 3 || $status == 4 || $status == 5 || $status == 6 || $status == 7):
 			$data['requisiciones']=$this->requisicion_model->getRequisiciones($status);
 		endif;*/
 		
-		
+		$data['pr'] = in_array($colaborador->tipo,array(5,3)) || ($colaborador->posicion <=5);
 		
 		$this->layout->title('Advanzer - Requisiciones');
 		$this->layout->view('requisicion/index',$data);
 	}
-
+	
+	// Verificar las requisiciones actuales, en general
+	private function updateRequisicionExpire(){
+		$this->requisicion_model->expireRequisicion(2);
+	}
 	
 	public function ver($id){
 		$this->valida_sesion();
 		$this->layout->title('Advanzer - Detalle Requisición');
 		$data=array();
 		$data['requisicion'] = $this->requisicion_model->getById($id);
+		
+		// Necesary to get info about position, area and permission
+		$colaborador=$this->user_model->searchById($this->session->userdata('id'));
+		
 		if($data['requisicion']->tipo_requisicion==1):
 			$data['areas'] = $this->area_model->getAll();
 			$data['tracks'] = $this->track_model->getAll();
 			$data['posiciones'] = $this->posicion_model->getByTrack($data['requisicion']->track);
 			$data['directores'] = $this->user_model->getDirectores();		
 			$data['colaboradores'] = $this->user_model->getPagination(1);
+			
+			// Set permission to use tools
+			/*if(($data['requisicion']->estatus == 0) && ( $data['requisicion']->solicita == $colaborador->id)){	
+			}*/
+			$tools = array();
+			
+			if((($rs = $data['requisicion']->estatus) == 1) && ( $data['requisicion']->solicita == $colaborador->id)){
+				$tools[] = 4;
+				$tools[] = 5;
+			}elseif(($data['requisicion']->estatus == 2) && ( $data['requisicion']->solicita == $colaborador->id)){
+				$tools[] = 4;
+				$tools[] = 5;
+			}elseif(($data['requisicion']->estatus == 3) && ( $data['requisicion']->solicita == $colaborador->id)){
+				$tools[] = 4;
+				$tools[] = 5;
+				$tools[] = 7;
+				$tools[] = 9;
+			}elseif(($data['requisicion']->estatus == 5) && ( $data['requisicion']->solicita == $colaborador->id)){
+				$tools[] = 6;
+			}elseif(($data['requisicion']->estatus == 7) && ( $data['requisicion']->solicita == $colaborador->id)){
+				$tools[] = 8;
+			}elseif((($data['requisicion']->estatus == 1) || ($data['requisicion']->estatus == 2)) && (($data['requisicion']->director == $colaborador->id) && ($data['requisicion']->autorizador == $colaborador->id))){
+				$tools[] = 2;
+				$tools[] = 3;
+				$tools[] = 5;
+			}elseif(($data['requisicion']->estatus == 1) && ( $data['requisicion']->director == $colaborador->id)){
+				$tools[] = 1;
+				$tools[] = 2;
+				$tools[] = 4;
+				$tools[] = 5;
+			}elseif(($data['requisicion']->estatus == 1) && ( $data['requisicion']->autorizador == $colaborador->id)){
+				$tools[] = 2;
+				$tools[] = 3;
+				$tools[] = 5;
+			}elseif(($data['requisicion']->estatus == 2) && ( $data['requisicion']->autorizador == $colaborador->id)){
+				$tools[] = 2;
+				$tools[] = 3;
+				$tools[] = 5;
+			}elseif(((($colaborador->tipo == 4) || ($colaborador->tipo == 5)) || ($colaborador->area == 4)) && (($rs != 0) && ($rs != 4) && ($rs != 5) && ($rs != 6) && ($rs != 7) )){
+				$tools[] = 4;
+				$tools[] = 5;
+			}
+			
+			$data['tools'] = $tools;
+			
 			$this->layout->view('requisicion/detalle',$data);
 		else:
 			$this->layout->view('requisicion/detalle_externa',$data);
@@ -240,23 +300,26 @@ class Requisicion extends CI_Controller {
 			'estatus'=>1,
 			'razon'=>''
 		);
-		if($this->input->post('director_area')){
+		/*if($this->input->post('director_area')){
 			$datos['director']=$this->input->post('director_area');
 			if($datos['director'] == $this->session->userdata('id'))
 				$datos['estatus']=2;
-		}
-		if($this->input->post('autorizador')){
+		}*/
+		/*if($this->input->post('autorizador')){
 			$datos['autorizador']=$this->input->post('autorizador');
 			if($datos['autorizador'] == $this->session->userdata('id'))
 				$datos['estatus']=3;
-		}
+		}*/
+		
 		$id=$this->input->post('id');
 		$requisicion=$this->requisicion_model->getById($id);
-		if($requisicion->tipo_requisicion==2)
+		
+		/*if($requisicion->tipo_requisicion==2)
 			if($requisicion->estatus==2)
-				$datos['estatus']=3;
+				$datos['estatus']=3;*/
+				
 		$requisicion = $this->requisicion_model->update($id,$datos);
-		if(isset($requisicion)){
+		/*if(isset($requisicion)){
 			$requisicion = $this->requisicion_model->getById($requisicion);
 			$data['requisicion']=$requisicion;
 			switch ($requisicion->estatus) {
@@ -280,9 +343,72 @@ class Requisicion extends CI_Controller {
 			else
 				$response['msg']="No se pudo enviar correo de notificación";
 		}else
-			$response['msg']="Ha habido un error al actualizar la requisicion";
+			$response['msg']="Ha habido un error al actualizar la requisicion";*/
 
 		echo json_encode($response);
+	}
+
+	public function reactivate_update(){
+		
+		$this->valida_sesion();
+		$datos = array(
+			'id' => $this->input->post('id'),
+			'fecha_solicitud'=>$this->input->post('solicitud'),
+			'fecha_estimada'=>$this->input->post('fecha_estimada'),
+			'area'=>$this->input->post('area'),
+			'track'=>$this->input->post('track'),
+			'posicion'=>$this->input->post('posicion'),
+			'empresa'=>$this->input->post('empresa'),
+			'tipo'=>$this->input->post('tipo'),
+			'sustituye_a'=>$this->input->post('sustituye_a'),
+			'proyecto'=>$this->input->post('proyecto'),
+			'clave'=>$this->input->post('clave'),
+			'costo'=>$this->input->post('costo'),
+			'costo_cliente'=>$this->input->post('costo_maximo_cliente'),
+			'residencia'=>$this->input->post('residencia'),
+			'lugar_trabajo'=>$this->input->post('lugar_trabajo'),
+			'domicilio_cte'=>$this->input->post('domicilio_cte'),
+			'contratacion'=>$this->input->post('contratacion'),
+			'entrevista'=>$this->input->post('entrevista'),
+			'disp_viajar'=>$this->input->post('disp_viajar'),
+			'edad_uno'=>$this->input->post('edad_uno'),
+			'edad_dos'=>$this->input->post('edad_dos'),
+			'sexo'=>$this->input->post('sexo'),
+			'nivel'=>$this->input->post('nivel'),
+			'carrera'=>$this->input->post('carrera'),
+			'ingles_hablado'=>$this->input->post('ingles_hablado'),
+			'ingles_lectura'=>$this->input->post('ingles_lectura'),
+			'ingles_escritura'=>$this->input->post('ingles_escritura'),
+			'experiencia'=>$this->input->post('experiencia'),
+			'habilidades'=>$this->input->post('habilidades'),
+			'funciones'=>$this->input->post('funciones'),
+			'observaciones'=>$this->input->post('observaciones'),
+			'estatus'=>1,
+			//'razon'=>''
+		);
+		
+		$id=$this->input->post('id');
+		$requisicion=$this->requisicion_model->getById($id);
+
+		$response['msg'] = "null";
+
+		if($this->requisicion_model->update($id,$datos)){
+			
+			$data['requisicion'] = $requisicion;
+			
+			$destinatario=$this->user_model->searchById($requisicion->director)->email;
+			$mensaje=$this->load->view("layout/requisicion/create",$data,true);
+			
+			if(!$this->sendMail($destinatario,$mensaje)){
+				$response['msg']="ok";
+			}
+			
+		}
+		
+		//echo $destinatario;
+		
+		echo json_encode($response);
+		
 	}
 
 	public function react(){
@@ -307,7 +433,20 @@ class Requisicion extends CI_Controller {
 
 		echo json_encode($response);
 	}
-
+	
+	// Cuando una requisición esta en Stand By esta regresara a Completada
+	public function reanudar(){
+		$this->valida_sesion();
+		$id=$this->input->post('id');
+		$datos['estatus'] = 3;
+		if($this->requisicion_model->update($id,$datos)){
+			$response['msg'] = "ok";
+		}else{
+			$response['msg']="Ha habido un error al reanudar la requisicion";
+		}
+		echo json_encode($response);
+	}
+	
 	public function set_costo(){
 		$this->valida_sesion();
 		$datos['estatus']=$this->input->post('estatus');
@@ -384,39 +523,75 @@ class Requisicion extends CI_Controller {
 
 		echo json_encode($response);
 	}
-
-	public function rechazar(){
+	
+	// Si la requisición esta autorizada esta se turnara a Stand By
+	public function pausar(){
+		
 		$this->valida_sesion();
+		$datos['estatus'] = 7;
+		$id=$this->input->post('id');
+		
+		if($this->requisicion_model->update($id,$datos)){
+			$response['msg']="ok";
+		}else{
+			$response['msg']="Ha habido un error al turnar a Stand By la requisición";
+		}
+		
+		echo json_encode($response);	
+	}
+	
+	// Se gestiona la requisicion rechazada o cancelada (en ambos casos no se podra reactivar), si es declinada se podra reactivar solo una vez mas
+	public function rechazar_cancelar(){
+		$this->valida_sesion();
+
+		// Obtención de la requisicion en proceso actual
+		$requisicion=$this->requisicion_model->getById($id = $this->input->post('id'));
+		//echo ($requisicion->razon == "") ? 5 : $this->input->post('estatus'); 
+		
+		// Recuperamos el valor de el estado de la requisición
+		$status_actual = $this->input->post('estatus');
+		
+		if(($requisicion->razon == "")){
+			$status_actual = 5;
+		}
+		
 		$datos=array(
-			'estatus'=>$this->input->post('estatus'),
+			// Si es la primer vez que se cancela, se guarda de manera que se pueda reactivar de nuevo
+			'estatus'=>$status_actual,
 			'razon'=>$this->input->post('razon')
 		);
-		$id=$this->input->post('id');
-		$requisicion=$this->requisicion_model->getById($id);
+						
 		if($requisicion->estatus==2)
 			$data['quien']='AUTORIZADOR';
 		else
 			$data['quien']='DIRECTOR DE ÁREA';
+		
 		if($this->requisicion_model->update($id,$datos)){
+			
 			$requisicion=$this->requisicion_model->getById($id);
-			switch ($datos['estatus']) {
-				case '4': //para solicitante correcciones
-					$destinatario=$this->user_model->searchById($requisicion->solicita)->email;
+			$destinatario=$this->user_model->searchById($requisicion->solicita)->email;
+			$mensaje = "";
+			
+			switch ($status_actual) {
+				
+				case '0':case '5': // Aviso de cancelación
+					//$destinatario=$this->user_model->searchById($requisicion->solicita)->email;
+					$data['requisicion']=$requisicion;
+					$mensaje=$this->load->view("layout/requisicion/cancelled",$data,true);
+				break;
+					
+				case '4': // Aviso de rechazo
+					//$destinatario=$this->user_model->searchById($requisicion->solicita)->email;
 					$data['requisicion']=$requisicion;
 					$mensaje=$this->load->view("layout/requisicion/correct",$data,true);
-					break;
-				case '5': //para solicitante de no autorizada
+				break;
+					
+				//para solicitante de no autorizada
+				/*case '5': 
 					$destinatario=$this->user_model->searchById($requisicion->solicita)->email;
 					$data['requisicion']=$requisicion;
 					$mensaje=$this->load->view("layout/requisicion/no_auth",$data,true);
-					break;
-				case '0': //para solicitante de cancelación
-					$destinatario=$this->user_model->searchById($requisicion->solicita)->email;
-					$data['requisicion']=$requisicion;
-					$mensaje=$this->load->view("layout/requisicion/cancelled",$data,true);
-					break;
-				default:
-					break;
+					break;*/
 			}
 			if(!$this->sendMail($destinatario,$mensaje))
 				$response['msg']="ok";
@@ -466,6 +641,7 @@ class Requisicion extends CI_Controller {
 		$this->email->clear(TRUE);
 
 		$this->email->from('notificaciones.ch@advanzer.com','Requisición de Personal - Portal Personal');
+		//$this->email->to($destinatario);
 		$this->email->to('antonio.baez@advanzer.com');
 		$this->email->subject('Aviso de Requisición');
 		$this->email->message($mensaje);
@@ -505,7 +681,7 @@ class Requisicion extends CI_Controller {
 
 		$objPHPExcel = PHPExcel_IOFactory::createReader('Excel2007');
 		$objPHPExcel->setReadDataOnly(true);
-		$objPHPExcel = $objPHPExcel->load($_SERVER['DOCUMENT_ROOT'].'/advanzer/assets/docs/requisicion_externa.xlsx');
+		$objPHPExcel = $objPHPExcel->load($_SERVER['DOCUMENT_ROOT'].'/assets/docs/requisicion_externa.xlsx');
 
 		$objSheet=$objPHPExcel->setActiveSheetIndex(0);
 		//Merge
@@ -615,7 +791,7 @@ class Requisicion extends CI_Controller {
 
 		$objPHPExcel = PHPExcel_IOFactory::createReader('Excel2007');
 		$objPHPExcel->setReadDataOnly(true);
-		$objPHPExcel = $objPHPExcel->load($_SERVER['DOCUMENT_ROOT'].'/advanzer/assets/docs/requisicion_personal.xlsx');
+		$objPHPExcel = $objPHPExcel->load($_SERVER['DOCUMENT_ROOT'].'/assets/docs/requisicion_personal.xlsx');
 
 		$objSheet=$objPHPExcel->setActiveSheetIndex(0);
 		//Merge

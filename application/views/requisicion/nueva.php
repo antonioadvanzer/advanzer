@@ -231,7 +231,7 @@
 			<div class="col-md-2"></div>
 			<div class="col-md-8">
 				<div class="btn-group btn-group-lg" role="group" aria-label="...">
-					<button type="submit" class="btn btn-primary" style="min-width:200px;text-align:center;display:inline;">Guardar</button>
+					<button type="submit" class="btn btn-primary" style="min-width:200px;text-align:center;display:inline;">Enviar</button>
 					<button onclick="window.history.back();" type="button" class="btn" style="min-width:200px;text-align:center;display:inline;">Cancelar</button>
 				</div>
 			</div>

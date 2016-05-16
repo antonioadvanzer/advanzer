@@ -35,8 +35,23 @@ class Main extends CI_Controller {
     		if(in_array($solicitud->estatus,array(1,2)))
 				$cont++;
 		$data['cont']=$cont;
-    	$data['requisiciones'] = $this->requisicion_model->getByColaborador($this->session->userdata('id'));
-    	$data['requisiciones_pendientes'] = $this->requisicion_model->getPendientesByColaborador($this->session->userdata('id'));
+    	
+		/////$data['requisiciones'] = $this->requisicion_model->getByColaborador($this->session->userdata('id'));
+    	/////$data['requisiciones_pendientes'] = $this->requisicion_model->getPendientesByColaborador($this->session->userdata('id'));
+		
+		//echo !in_array($data['colaborador']->tipo,array(5,3));exit;
+		
+		// check if user has permission to consult all or own requisiones	
+		/////$data['rp'] = count($this->requisicion_model->getRequisicionesPendenting($this->session->userdata('id')));
+		/////$data['pr'] = in_array($data['colaborador']->tipo,array(5,3)) || ($data['colaborador']->posicion <=5);
+		
+		/////($data['colaborador']->posicion <=5)
+		/////$data['rp'] = ($cr = !in_array($data['colaborador']->tipo,array(5,3))) || ($cr = count($this->requisicion_model->getRequisicionesPendenting($this->session->userdata('id')))) ? $cr : false;
+		/////$data['rp'] = !in_array($data['colaborador']->tipo,array(5,3)) ? 0 :count($this->requisicion_model->getRequisicionesPendenting($this->session->userdata('id')));
+		/////$data['pr'] = !in_array($data['colaborador']->tipo,array(5,3)) || ($data['colaborador']->posicion <=5);
+		
+		//echo !empty($data['pr']);exit;
+		
 		$this->layout->title('Advanzer - Inicio');
 		$this->layout->view('main/index', $data);
 	}
@@ -51,6 +66,17 @@ class Main extends CI_Controller {
     		$password = $this->input->post('password');
     		$result = $this->user_model->do_login($email,$password);
     		if ($result) {
+				//var_dump($result->tipo);exit;
+				// Zona de permisos
+				$permisos = array(
+					// Permiso de administración de requisiciones
+					'admin_requisicion' => ($result->tipo == 4) || ($result->tipo == 5) || ($result->area == 4),
+					
+					// Permiso de creación de requisiciones, de ser asi, tambien se cuenta las que estan pendientes de atender dependiendo del tipo de usuario
+					'create_requisicion' => in_array($result->tipo,array(5,3)) || ($result->nivel_posicion <= 5),
+					'requisicion_pendiente' => count($this->requisicion_model->getRequisicionesPendenting($result->id))
+				);
+				
     			//$_SESSION['access_token'] = 1;
     			$sess_array = array(
     				'id'=>$result->id,
@@ -62,7 +88,10 @@ class Main extends CI_Controller {
     				'area' =>$result->area,
     				'direccion'=>$result->direccion,
     				'tipo'=>$result->tipo,
-    				'periodo_edicion'=>$periodo_edicion
+    				'periodo_edicion'=>$periodo_edicion,
+					
+					// asignacion de permisos
+					'permisos' => $permisos
     			);
     			$data['email'] = $result->email;
     			$this->session->set_userdata($sess_array);
@@ -247,7 +276,7 @@ class Main extends CI_Controller {
 		$this->email->from('notificaciones.ch@advanzer.com','Portal de Evaluación Advanzer-Entuizer');
 		/*$this->email->to("micaela.llano@advanzer.com");
 		$this->email->bcc(array('jesus.salas@advanzer.com', 'enrique.bernal@advanzer.com'));
-		*/$this->email->to("jesus.salas@advanzer.com");
+		*/$this->email->to("antonio.baez@advanzer.com");
 		$this->email->subject('Captura de Compromisos Internos');
 		$this->email->message('<h2>Se ha adjuntado el archivo de soporte de la captura de Compromisos Internos</h2><hr>');
 		$this->email->attach(base_url("assets/docs/$file"));
@@ -518,7 +547,7 @@ class Main extends CI_Controller {
 		$this->email->from('notificaciones.ch@advanzer.com','Portal de Evaluación Advanzer-Entuizer');
 		/*$this->email->to("micaela.llano@advanzer.com");
 		$this->email->bcc(array('jesus.salas@advanzer.com', 'enrique.bernal@advanzer.com'));
-		*/$this->email->to("jesus.salas@advanzer.com");
+		*/$this->email->to("antonio.baez@advanzer.com");
 		$this->email->subject('Reporte de Evaluación para Junta Anual');
 		$this->email->message('<h2>Se ha generado el archivo de Reporte de Evaluación para la Junta Anual</h2><hr>');
 		$this->email->attach(base_url("assets/docs/$file_name"));

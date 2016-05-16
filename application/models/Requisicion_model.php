@@ -47,7 +47,7 @@ class Requisicion_model extends CI_Model{
 		return $this->db->get('Requisiciones R')->result();
 	}
 	
-	function getOwnRequisiciones($colaborador){
+	function getOwnRequisiciones($id){
 		
 		$this->db->select('R.*,T.nombre track,P.nombre posicion,A.nombre area,U.nombre solicitante')
 			->join('Tracks T','T.id = R.track','LEFT OUTER')->join('Posiciones P','P.id = R.posicion','LEFT OUTER')->join('Areas A','A.id = R.area','LEFT OUTER')
@@ -62,16 +62,16 @@ class Requisicion_model extends CI_Model{
 			elseif($colaborador->nivel_posicion <= 3)
 				$this->db->or_where('R.director',$colaborador->id);*/
 				
-		$this->db->where(array('R.solicita'=>$colaborador->id,'fecha_solicitud <='=>date('Y-m-d')));
+		//$this->db->where(array('R.solicita'=>( $uc = $colaborador->id),'fecha_solicitud <='=>date('Y-m-d')));
 		
-		$this->db->or_where('R.director',$colaborador->id);		
+		$this->db->where("((R.solicita=".$id.") or (R.director=".$id." and R.estatus=1) or (R.autorizador=".$id." and R.estatus=2)) or ((R.director=".$id." and R.autorizador=".$id.") and (R.estatus=1 or R.estatus=2))");
+		//$this->db->where('(solicita='.$id.') or (director='.$id.' and estatus=1) or (autorizador='.$id.' and estatus=2)')->get('Requisiciones')->result();
+		
+		/*$this->db->or_where('R.director',$colaborador->id);		
 		$this->db->where('R.estatus',1);
 		
 		$this->db->or_where('R.autorizador',$colaborador->id);		
-		$this->db->where('R.estatus',2);
-		
-		//$this->db->or_where('R.autorizador',$colaborador->id);		
-		//$this->db->where('R.estatus',2);
+		$this->db->where('R.estatus',2);*/				
 		
 		return $this->db->get('Requisiciones R')->result();
 	}
@@ -85,7 +85,25 @@ class Requisicion_model extends CI_Model{
 			return false;
 	}
 
-	function getByColaborador($colaborador) {
+	// Esta funcion evalua todas la requisiciones y cancela todas las que tines un timpo limite de existencias
+	function expireRequisicion($time){
+		
+		/*$fecha="2016-05-14 00:00:00";
+		$segundos= strtotime('now') - strtotime($fecha);
+		$diferencia_dias=intval($segundos/60/60/24);*/
+		
+		$datos['estatus'] = 0;
+		$datos['razon'] = "Requisición fuera del rango de espera";
+		$this->db->where("((datediff(now(),fecha_solicitud))>".$time.") and ((estatus=1) or (estatus=2)) and (razon!='')")->update('Requisiciones',$datos);
+		$datos['estatus'] = 5;
+		$datos['razon'] = "Requisición fuera del rango de espera";
+		echo $this->db->where("((datediff(now(),fecha_solicitud))>".$time.") and ((estatus=1) or (estatus=2)) and (razon='')")->update('Requisiciones',$datos);
+				
+		//echo date('now');
+		exit;
+	}
+
+	/*function getByColaborador($colaborador) {
 		return $this->db->where('solicita',$colaborador)->get('Requisiciones')->result();
 	}
 
@@ -95,5 +113,12 @@ class Requisicion_model extends CI_Model{
 			$extra=" or estatus in(3,7)";
 		$this->db->where("(director=$colaborador and estatus=1) or (autorizador=$colaborador and estatus=2)$extra");
 		return $this->db->get('Requisiciones')->num_rows();
+	}*/
+	
+	function getRequisicionesPendenting($id){
+		// pendinte re revisar y corregir
+		return $this->db->where('((solicita='.$id.') or (director='.$id.' and estatus=1) or (autorizador='.$id.' and estatus=2)) or ((director='.$id.' and autorizador='.$id.') and (estatus=1 or estatus=2))')->get('Requisiciones')->result();
+		
 	}
+	
 }

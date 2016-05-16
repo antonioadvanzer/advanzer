@@ -138,7 +138,11 @@
 													<li><a href="<?= base_url('objetivo/asignar_pesos');?>">Responsabilidades Por Área</a></li>
 												<?php //endif; ?>
 											<?php endif; 
-											if($this->session->userdata('tipo') > 3 || $this->session->userdata('area')==4): ?>
+											//if($this->session->userdata('tipo') > 3 || $this->session->userdata('area')==4): 
+                                            
+                                            //echo $this->session->userdata('permisos')[];exit;
+                                            if($this->session->userdata('permisos')['admin_requisicion']):
+                                            ?>
 												<li class="dropdown-submenu">
                                                     <a href="#" tabindex="-1">Requisiciones</a>
                                                     <ul class="dropdown-menu">
@@ -187,8 +191,11 @@
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
 								Servicios<span class="caret"></span></a>
 							<ul class="dropdown-menu">
-								<?php if($this->session->userdata('tipo') >= 3 || $this->session->userdata('posicion') <= 5):?>
-                                    <!--<li><a href="<?= base_url('requisicion');?>">Requisiciones</a></li>-->
+								<?php //if($this->session->userdata('tipo') >= 3 || $this->session->userdata('posicion') <= 5):
+                                        
+                                if($this->session->userdata('permisos')['create_requisicion']):
+                                ?>
+                                    <!--<li><a href="<?=  base_url('requisicion');?>">Requisiciones</a></li>-->
                                     <li class=""><a href="<?= base_url('requisiciones')."/?status=own";?>">Requisiciones</a></li>
 								<?php endif;?>
 									<li><a href="<?= base_url('evaluar');?>">Feedback</a></li>

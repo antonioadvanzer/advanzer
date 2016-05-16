@@ -257,36 +257,98 @@
 			</div>
 			<div class="row" align="right">
 				<div class="col-md-1"></div>
-				<?php if(!in_array($requisicion->estatus,array(0,5,6))): ?>
-					<div class="col-md-10">
+				<?php 
+                
+                echo '<div class="col-md-10">
+						<div class="btn-group btn-group-lg" role="group" aria-label="...">';
+                
+                # Set tools for each type user
+                foreach($tools as $t){
+                    switch($t){
+                        case 1:
+                          ?>
+                            <button id="aceptar" type="button" class="btn btn-primary" style="min-width:180px;text-align:center;display:inline;">Aceptar</button>
+                            <?php  
+                        break;
+                        case 2:
+                          ?>
+                            <button id="rechazar" type="button" class="btn" style="min-width:180px;text-align:center;display:inline;">Rechazar</button>
+                            <?php  
+                        break;
+                        case 3:
+                          ?>
+                            <button id="autorizar" type="button" class="btn btn-primary" style="min-width:180px;text-align:center;display:inline;">Autorizar</button>
+                            <?php  
+                        break;
+                        case 4:
+                          ?>
+                            <button id="exportar" type="button" class="btn btn-primary" style="min-width:180px;text-align:center;display:inline;">Exportar XLS</button>
+                            <?php  
+                        break;
+                        case 5:
+                          ?>
+                            <button id="cancelar" type="button" class="btn" style="min-width:180px;text-align:center;display:inline;">Cancelar</button>
+                            <?php  
+                        break;
+                        case 6:
+                          ?>
+                            <button id="ractivate_update" type="button" class="btn btn-primary" style="min-width:180px;text-align:center;display:inline;">Reactivar</button>
+                            <?php  
+                        break;
+                        case 7:
+                          ?>
+                            <button id="stand_by" type="button" class="btn btn-primary" style="min-width:180px;text-align:center;display:inline;">Stand By</button>
+                            <?php  
+                        break;
+                        case 8:
+                          ?>
+                            <button id="reanudar" type="button" class="btn btn-primary" style="min-width:180px;text-align:center;display:inline;">Reanudar</button>
+                            <?php  
+                        break;
+                        case 9:
+                          ?>
+                            <button id="realizada" type="button" class="btn btn-primary" style="min-width:180px;text-align:center;display:inline;">Completada</button>
+                            <?php  
+                        break;
+                    }
+                }
+                
+                echo '</div>
+					</div>';
+                
+                //if(!in_array($requisicion->estatus,array(0,5,6))):
+                //if(!in_array($requisicion->estatus,array(0,6))): 
+                
+                ?>
+					<!--<div class="col-md-10">
 						<div class="btn-group btn-group-lg" role="group" aria-label="...">
-							<?php if($this->session->userdata('tipo') >= 3 && $this->session->userdata('area')==4): ?>
+							<?php //if($this->session->userdata('tipo') >= 3 && $this->session->userdata('area')==4): ?>
 								<button id="exportar" type="button" class="btn btn-primary" style="min-width:180px;text-align:center;display:inline;">Exportar XLS</button>
-								<?php if($requisicion->estatus == 3 || $requisicion->estatus==7): ?>
+								<?php //if($requisicion->estatus == 3 || $requisicion->estatus==7): ?>
 									<button id="realizada" type="button" class="btn btn-primary" style="min-width:180px;text-align:center;display:inline;">Completada</button>
 									<button id="sin_completar" type="button" class="btn" style="min-width:180px;text-align:center;display:inline;">Cerrar sin completar</button>
-								<?php endif;
-							endif;
-							if($requisicion->autorizador == $this->session->userdata('id') && $requisicion->autorizador != $requisicion->solicita): ?>
+								<?php// endif;
+							//endif;
+							//if($requisicion->autorizador == $this->session->userdata('id') && $requisicion->autorizador != $requisicion->solicita): ?>
 								<button id="autorizar" type="button" class="btn btn-primary" style="min-width:180px;text-align:center;display:inline;">Autorizar</button>
-							<?php elseif($requisicion->director == $this->session->userdata('id') && $requisicion->director != $requisicion->solicita): ?>
+							<?php //elseif($requisicion->director == $this->session->userdata('id') && $requisicion->director != $requisicion->solicita): ?>
 								<button id="aceptar" type="button" class="btn btn-primary" style="min-width:180px;text-align:center;display:inline;">Aceptar</button>
-							<?php elseif($requisicion->estatus==3): ?>
+							<?php //elseif($requisicion->estatus==3): ?>
 								<button id="stand_by" type="button" class="btn btn-primary" style="min-width:180px;text-align:center;display:inline;">Stand By</button>
-							<?php elseif($requisicion->estatus==7): ?>
-								<button id="reactivar" type="button" class="btn btn-primary" style="min-width:180px;text-align:center;display:inline;">Reactivar</button>
-							<?php endif;
-							if($requisicion->solicita == $this->session->userdata('id')):
-								if($requisicion->estatus == 4): ?>
+							<?php //elseif($requisicion->estatus==7): ?>
+								<button id="reanudar" type="button" class="btn btn-primary" style="min-width:180px;text-align:center;display:inline;">Reanudar</button>
+							<?php //endif;
+							//if($requisicion->solicita == $this->session->userdata('id')):
+								//if($requisicion->estatus == 4): ?>
 									<button type="submit" class="btn btn-primary" style="min-width:180px;text-align:center;display:inline;">Actualizar</button>
-								<?php endif; ?>
-							<?php elseif(in_array($requisicion->estatus,array(1,2)) && in_array($this->session->userdata('id'), array($requisicion->director,$requisicion->autorizador))): ?>
+								<?php //endif; ?>
+							<?php //elseif(in_array($requisicion->estatus,array(1,2)) && in_array($this->session->userdata('id'), array($requisicion->director,$requisicion->autorizador))): ?>
 								<button id="rechazar" type="button" class="btn" style="min-width:180px;text-align:center;display:inline;">Rechazar</button>
-							<?php endif; ?>
+							<?php //endif; ?>
 							<button id="cancelar" type="button" class="btn" style="min-width:180px;text-align:center;display:inline;">Cancelar</button>
 						</div>
-					</div>
-				<?php endif; ?>
+					</div>-->
+				<?php //endif; ?>
 			</div>
 		</form>
 	</div>
@@ -357,7 +419,7 @@
 				check_director();
 			});
 
-			$("#update").submit(function(event){
+			$("#ractivate_update").click(function(event){
 				if(!confirm('¿Seguro que desea reenviar la requisición?'))
 					return false;
 				//get form values
@@ -437,18 +499,18 @@
 					data['funciones'] = $('#funciones').val();
 					data['observaciones'] = $('#observaciones').val();
 				$.ajax({
-					url: '<?= base_url("requisicion/update");?>',
+					url: '<?= base_url("requisicion/reactivate_update");?>',
 					type: 'post',
 					data: data,
 					beforeSend: function() {
 						$('#update').hide('slow');
 						$('#cargando').show('slow');
 					},
-					success: function(data){
+					success: function(data){//alert(data);
 						var returnedData = JSON.parse(data);
 						console.log(returnedData['msg']);
 						if(returnedData['msg']=="ok"){
-							alert('Se ha actualizado y enviado al director de área');
+							alert('Se ha reactivado y enviado al director de área');
 							window.document.location='<?= base_url("requisicion");?>';
 						}else{
 							$('#cargando').hide('slow');
@@ -562,16 +624,18 @@
 				$('#razon').show('slow');
 				$('#accion').val("rechazar");
 			});
+            
 			$("#cancelar").click(function() {
 				$('#update').hide('slow');
 				$('#razon').show('slow');
 				$('#accion').val("cancelar");
 			});
-			$("#sin_completar").click(function() {
+            
+			/*$("#sin_completar").click(function() {
 				$('#update').hide('slow');
 				$('#razon').show('slow');
 				$('#accion').val("sin_completar");
-			});
+			});*/
 
 			$("#razon").submit(function(event) {
 				razon = $("#razon_txt").val();
@@ -579,12 +643,12 @@
 				id = $("#id").val();
 				autorizador=<?= $requisicion->autorizador;?>;
 				if(accion == "rechazar"){
-					if(!confirm("¿Seguro que desea enviar los comentarios de la requisición?"))
+					if(!confirm("¿Seguro que desea rechazar la requisición?"))
 						return false;
 					estatus=4;
 					alerta="Se ha enviado notificación al solicitante";
 					$.ajax({
-						url: '<?= base_url("requisicion/rechazar");?>',
+						url: '<?= base_url("requisicion/rechazar_cancelar");?>',
 						type: 'post',
 						data: {'id':id,'estatus':estatus,'razon':razon},
 						beforeSend: function() {
@@ -622,14 +686,14 @@
 					if(!confirm("¿Seguro que desea cancelar la requisición?"))
 						return false;
 					$.ajax({
-						url: '<?= base_url("requisicion/rechazar");?>',
+						url: '<?= base_url("requisicion/rechazar_cancelar");?>',
 						type: 'post',
 						data: {'id':id,'estatus':0,'razon':razon},
 						beforeSend: function() {
 							$('#razon').hide('slow');
 							$('#cargando').show('slow');
 						},
-						success: function(data){
+						success: function(data){//alert(data);
 							var returnedData = JSON.parse(data);
 							if(returnedData['msg']=="ok"){
 								alert("Se ha cancelado la requisición");
@@ -656,7 +720,7 @@
 							},3000);
 						}
 					});
-				}else if(accion == "sin_completar"){
+				}/*else if(accion == "sin_completar"){
 					if(!confirm("¿Seguro que desea cerrar la requisición?"))
 						return false;
 					$.ajax({
@@ -694,11 +758,52 @@
 							},3000);
 						}
 					});
-				}
+				}*/
 
 				event.preventDefault();
 			});
-
+            
+            $("#reactivar").click(function() {
+				if(!confirm('¿Seguro(a) que desea reanudar la requisición?'))
+					return false;
+				id = $("#id").val();
+				$.ajax({
+					url: '<?= base_url("requisicion/react");?>',
+					type: 'post',
+					data: {'id':id,'estatus':1},
+					beforeSend: function() {
+						$('#update').hide('slow');
+						$('#cargando').show('slow');
+					},
+					success: function(data){
+						var returnedData = JSON.parse(data);
+						console.log(returnedData);
+						if(returnedData['msg']=="ok"){
+							alert("Se ha reactivado la requisición");
+							window.document.location='<?= base_url("requisiciones");?>';
+						}else{
+							$('#cargando').hide('slow');
+							$('#update').show('slow');
+							$('#alert').prop('display',true).show('slow');
+							$('#msg').html(returnedData['msg']);
+							setTimeout(function() {
+								$("#alert").fadeOut(1500);
+							},3000);
+						}
+					},
+					error: function(xhr) {
+						console.log(xhr.statusText);
+						$('#cargando').hide('slow');
+						$('#update').show('slow');
+						$('#alert').prop('display',true).show('slow');
+						$('#msg').html('Error, intenta de nuevo o contacta al Administrador de la Aplicación');
+						setTimeout(function() {
+							$("#alert").fadeOut(1500);
+						},3000);
+					}
+				});
+			});
+            
 			$('#exportar').click(function() {
 				id = $("#id").val();
 				location.href='<?= base_url("requisicion/exportar");?>/'+id;
@@ -751,7 +856,7 @@
 					return false;
 				id = $("#id").val();
 				$.ajax({
-					url: '<?= base_url("requisicion/ch_estatus");?>',
+					url: '<?= base_url("requisicion/pausar");?>',
 					type: 'post',
 					data: {'id':id,'estatus':7},
 					beforeSend: function() {
@@ -787,12 +892,12 @@
 				});
 			});
 			
-			$("#reactivar").click(function() {
-				if(!confirm('¿Seguro(a) que desea reactivar la requisición?'))
+			$("#reanudar").click(function() {
+				if(!confirm('¿Seguro(a) que desea reanudar la requisición?'))
 					return false;
 				id = $("#id").val();
 				$.ajax({
-					url: '<?= base_url("requisicion/react");?>',
+					url: '<?= base_url("requisicion/reanudar");?>',
 					type: 'post',
 					data: {'id':id,'estatus':3},
 					beforeSend: function() {
@@ -803,8 +908,8 @@
 						var returnedData = JSON.parse(data);
 						console.log(returnedData);
 						if(returnedData['msg']=="ok"){
-							alert("Se ha reactivado la requisición");
-							window.document.location='<?= base_url("requisicion");?>';
+							alert("Se ha reanudando la requisición");
+							window.document.location='<?= base_url("requisiciones");?>';
 						}else{
 							$('#cargando').hide('slow');
 							$('#update').show('slow');
@@ -838,10 +943,13 @@
 					$('#autorizador').prop('disabled',false);
 			}
 			function check_edit_mode(){
+                // pendiete de corregir
 				usuario=<?= $this->session->userdata('id');?>;
 				solicita=<?= $requisicion->solicita;?>;
 				estatus=<?= $requisicion->estatus;?>;
-				if(estatus != 4 || usuario != solicita){
+				//if(estatus != 4 || usuario != solicita){
+                //alert(usuario+" "+solicita);
+                if((estatus != 5) && (usuario == solicita)){
 					$("#update :input:not(button)").attr("disabled", true).css({'background-color':'white','cursor':'default'});
 					$("#update button").attr("disabled", false).css('cursor','pointer');
 				}

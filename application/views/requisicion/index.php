@@ -37,16 +37,19 @@
 					</tr>
 				</thead>
 				<tbody data-link="row" class="rowlink">
-					<?php foreach ($requisiciones as $requisicion)
-						if($this->session->userdata('id') == $requisicion->solicita 
+					<?php foreach ($requisiciones as $requisicion){
+						/*if($this->session->userdata('id') == $requisicion->solicita 
 							|| $this->session->userdata('tipo') >=4 
 							|| ($requisicion->director == $this->session->userdata('id') && $requisicion->estatus == 1)
 							|| ($requisicion->autorizador == $this->session->userdata('id') && $requisicion->estatus == 2 && $requisicion->tipo_requisicion==1)
 							|| ($this->session->userdata('tipo') == 3 && $this->session->userdata('area') == 4)
-							|| ($requisicion->tipo==2 && $requisicion->estatus==1 &&$requisicion->autorizador==$this->session->userdata('id'))
-						): 
+							|| ($requisicion->tipo==2 && $requisicion->estatus==1 &&$requisicion->autorizador==$this->session->userdata('id'))true
+						): */
 							switch ($requisicion->estatus) {
-								case 1:
+								case 0:
+									$estatus="CANCELADA";
+									break;
+                                case 1:
 									$estatus="ENVIADA";
 									break;
 								case 2:
@@ -58,14 +61,14 @@
 								case 4:
 									$estatus="RECHAZADA";
 									break;
-								case 0:
-									$estatus="CANCELADA";
-									break;
 								case 6:
 									$estatus="CERRADA";
 									break;
 								case 7:
 									$estatus="STAND BY";
+									break;
+                                    case 5:
+									$estatus="CANCELADA";
 									break;
 							}
 							if($requisicion->empresa == '1')
@@ -86,7 +89,7 @@
 								<td><small><?= $empresa;?></small></td>
 								<td><small><?= $estatus;?></small></td>
 							</tr>
-						<?php endif; ?>
+						<?php }//endif; ?>
 				</tbody>
 			</table>
 		</div>
