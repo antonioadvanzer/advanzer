@@ -97,10 +97,10 @@ class Requisicion_model extends CI_Model{
 		$this->db->where("((datediff(now(),fecha_solicitud))>".$time.") and ((estatus=1) or (estatus=2)) and (razon!='')")->update('Requisiciones',$datos);
 		$datos['estatus'] = 5;
 		$datos['razon'] = "Requisición fuera del rango de espera";
-		echo $this->db->where("((datediff(now(),fecha_solicitud))>".$time.") and ((estatus=1) or (estatus=2)) and (razon='')")->update('Requisiciones',$datos);
+		$this->db->where("((datediff(now(),fecha_solicitud))>".$time.") and ((estatus=1) or (estatus=2)) and (razon='')")->update('Requisiciones',$datos);
 				
 		//echo date('now');
-		exit;
+		
 	}
 
 	/*function getByColaborador($colaborador) {
