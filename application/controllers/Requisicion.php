@@ -25,6 +25,7 @@ class Requisicion extends CI_Controller {
 		$colaborador=$this->user_model->searchById($this->session->userdata('id'));
 		$data=array();
 		
+		// actualizamos las requisiciones que han espirado
 		$this->updateRequisicionExpire();
 		
 		// get data form url 
@@ -39,17 +40,17 @@ class Requisicion extends CI_Controller {
 		$option = 0;
 		
 		// Evaluamos primero el puesto despues el area, y al final los permisos especiales (tipo de acceso)
-		if(($colaborador->nivel_posicion <= 5) && ($status == "own")){
+		if((($colaborador->nivel_posicion <= 5) || ($colaborador->tipo == 3) || ($colaborador->tipo == 4)) && ($status == "own")){
 			$option = 1;
-		}elseif(($colaborador->area == 4) && ($status == "all")){
+		}elseif((($colaborador->tipo == 4) && ($colaborador->area == 4)) && ($status == "all" || $status == 0 || $status == 1 || $status == 2 || $status == 3 || $status == 4 || $status == 5 || $status == 6 || $status == 7)){
 			$option = 2;
-		}elseif(((($tipo = $colaborador->tipo) == 5) || ($tipo == 3)) && ($status == "own")){
+		}/*elseif(((($tipo = $colaborador->tipo) == 5) || ($tipo == 3)) && ($status == "own")){
 			$option = 1;
 		}elseif(((($tipo = $colaborador->tipo) == 5) || ($tipo == 4)) && ($status == "all" || $status == 0 || $status == 1 || $status == 2 || $status == 3 || $status == 4 || $status == 5 || $status == 6 || $status == 7)){
 			$option = 2;
 		}else{
 			
-		}
+		}*/
 		
 		// Dependiendo del caso presentado se elige una funcion, si no tiene permisos se regresa a la vista principal
 		switch($option){
@@ -75,6 +76,11 @@ class Requisicion extends CI_Controller {
 			$data['requisiciones']=$this->requisicion_model->getRequisiciones($status);
 		endif;*/
 		
+		// Recargamos las requisiciones pendientes
+		$permisos = $this->session->userdata('permisos');
+		$permisos['requisicion_pendiente'] = count($this->requisicion_model->getRequisicionesPendenting($this->session->userdata('id')));
+		$this->session->set_userdata('permisos', $permisos);
+		
 		$data['pr'] = in_array($colaborador->tipo,array(5,3)) || ($colaborador->posicion <=5);
 		
 		$this->layout->title('Advanzer - Requisiciones');
@@ -83,7 +89,7 @@ class Requisicion extends CI_Controller {
 	
 	// Verificar las requisiciones actuales, en general
 	private function updateRequisicionExpire(){
-		$this->requisicion_model->expireRequisicion(2);
+		$this->requisicion_model->expireRequisicion(30);
 	}
 	
 	public function ver($id){
@@ -103,48 +109,137 @@ class Requisicion extends CI_Controller {
 			$data['colaboradores'] = $this->user_model->getPagination(1);
 			
 			// Set permission to use tools
-			/*if(($data['requisicion']->estatus == 0) && ( $data['requisicion']->solicita == $colaborador->id)){	
-			}*/
+
 			$tools = array();
 			
-			if((($rs = $data['requisicion']->estatus) == 1) && ( $data['requisicion']->solicita == $colaborador->id)){
-				$tools[] = 4;
-				$tools[] = 5;
-			}elseif(($data['requisicion']->estatus == 2) && ( $data['requisicion']->solicita == $colaborador->id)){
-				$tools[] = 4;
-				$tools[] = 5;
-			}elseif(($data['requisicion']->estatus == 3) && ( $data['requisicion']->solicita == $colaborador->id)){
+			$rs = $data['requisicion']->estatus;
+			$ct = $colaborador->tipo;
+			$ca = $colaborador->area;
+			$solicitante = $data['requisicion']->solicita;
+			$director = $data['requisicion']->director;
+			$autorizador = $data['requisicion']->autorizador;
+			
+			if((($ct == 4) && ($ca == 4)) && ($rs == 3) && ( $solicitante == $colaborador->id)){
+				
 				$tools[] = 4;
 				$tools[] = 5;
 				$tools[] = 7;
 				$tools[] = 9;
-			}elseif(($data['requisicion']->estatus == 5) && ( $data['requisicion']->solicita == $colaborador->id)){
-				$tools[] = 6;
-			}elseif(($data['requisicion']->estatus == 7) && ( $data['requisicion']->solicita == $colaborador->id)){
+				
+				$this->requisicion_model->setAlert($id,0);
+				
+			}elseif((($ct == 4) && ($ca == 4)) && ($rs == 7) && ( $solicitante == $colaborador->id)){
+				
+				$tools[] = 4;
+				$tools[] = 5;
 				$tools[] = 8;
-			}elseif((($data['requisicion']->estatus == 1) || ($data['requisicion']->estatus == 2)) && (($data['requisicion']->director == $colaborador->id) && ($data['requisicion']->autorizador == $colaborador->id))){
+				
+				$this->requisicion_model->setAlert($id,0);
+				
+			}elseif((($ct == 4) && ($ca == 4)) && ($rs == 8) && ( $solicitante == $colaborador->id)){
+				
+				$tools[] = 4;
+				$tools[] = 5;
+				$tools[] = 10;
+				
+				$this->requisicion_model->setAlert($id,0);
+				
+			}elseif((($ct == 4) && ($ca == 4)) && ($rs == 3)){
+			
+				$tools[] = 4;
+				$tools[] = 5;
+				$tools[] = 7;
+				$tools[] = 9;
+			
+			}elseif((($ct == 4) && ($ca == 4)) &&  ($rs == 7)){
+			
+				$tools[] = 4;
+				$tools[] = 5;
+				$tools[] = 8;
+			
+			}elseif((($ct == 4) && ($ca == 4)) &&  ($rs == 8)){
+			
+				$tools[] = 4;
+				$tools[] = 5;
+				//$tools[] = 10;
+			
+			}elseif(($rs == 0) && ( $solicitante == $colaborador->id)){	
+			
+				// Cambiar a "visto" la Requisición si esta se ha leido
+				$this->requisicion_model->setAlert($id,0);
+			
+			}elseif(($rs == 1) && ( $solicitante == $colaborador->id)){
+			
+				$tools[] = 4;
+				$tools[] = 5;
+			
+			}elseif(($rs == 2) && ( $solicitante == $colaborador->id)){
+			
+				$tools[] = 4;
+				$tools[] = 5;
+			
+			}elseif(($rs == 3) && ( $solicitante == $colaborador->id)){
+			
+				$tools[] = 4;
+				$tools[] = 5;
+				//$tools[] = 7;
+				//$tools[] = 9;
+				
+				// Cambiar a "visto" la Requisición si esta se ha leido
+				$this->requisicion_model->setAlert($id,0);
+				
+			}elseif(($rs == 4) && ( $solicitante == $colaborador->id)){
+			
+				// Cambiar a "visto" la Requisición si esta se ha leido
+				$this->requisicion_model->setAlert($id,0);
+				
+			}elseif(($rs == 5) && ( $solicitante == $colaborador->id)){
+				
+				$tools[] = 6;
+				
+				$this->requisicion_model->setAlert($id,0);
+				
+			}/*elseif(($data['requisicion']->estatus == 7) && ( $data['requisicion']->solicita == $colaborador->id)){
+				$tools[] = 8;
+			}*/elseif((($rs == 1) || ($rs == 2)) && (($director == $colaborador->id) && ($autorizador == $colaborador->id))){
+				
 				$tools[] = 2;
 				$tools[] = 3;
 				$tools[] = 5;
-			}elseif(($data['requisicion']->estatus == 1) && ( $data['requisicion']->director == $colaborador->id)){
+				
+				$this->requisicion_model->setAlert($id,0);
+				
+			}elseif(($rs == 1) && ( $director == $colaborador->id)){
+				
 				$tools[] = 1;
 				$tools[] = 2;
 				$tools[] = 4;
 				$tools[] = 5;
-			}elseif(($data['requisicion']->estatus == 1) && ( $data['requisicion']->autorizador == $colaborador->id)){
+				
+				$this->requisicion_model->setAlert($id,0);
+				
+			}elseif(($rs == 2) && ( $autorizador == $colaborador->id)){
+				
 				$tools[] = 2;
 				$tools[] = 3;
 				$tools[] = 5;
-			}elseif(($data['requisicion']->estatus == 2) && ( $data['requisicion']->autorizador == $colaborador->id)){
+				
+				$this->requisicion_model->setAlert($id,0);
+				
+			}/*elseif(($rs == 2) && ( $data['requisicion']->autorizador == $colaborador->id)){
+			
 				$tools[] = 2;
 				$tools[] = 3;
 				$tools[] = 5;
-			}elseif(((($colaborador->tipo == 4) || ($colaborador->tipo == 5)) || ($colaborador->area == 4)) && (($rs != 0) && ($rs != 4) && ($rs != 5) && ($rs != 6) && ($rs != 7) )){
+				
+				$this->requisicion_model->setAlert($id,0);
+			
+			}elseif(((($colaborador->tipo == 4)) || ($colaborador->area == 4)) && (($rs != 0) && ($rs != 4) && ($rs != 5) && ($rs != 6) && ($rs != 7) )){
 				$tools[] = 4;
 				$tools[] = 5;
-			}
+			}*/
 			
-			$data['tools'] = $tools;
+			$data['tools'] = $tools;			
 			
 			$this->layout->view('requisicion/detalle',$data);
 		else:
@@ -165,6 +260,7 @@ class Requisicion extends CI_Controller {
 		$this->layout->title('Advanzer - Requisición de Personal');
 		$this->layout->view('requisicion/nueva',$data);
 	}
+	
 	public function nueva_externa() {
 		$this->valida_sesion();
 		$data=array();
@@ -176,7 +272,7 @@ class Requisicion extends CI_Controller {
 	//abc
 	public function guardar(){
 		$this->valida_sesion();
-		if($this->input->post('tipo_requisicion'))
+		if($this->input->post('tipo_requisicion')){
 			$datos = array(
 				'director'=>$this->input->post('director_area'),
 				'autorizador'=>$this->input->post('autorizador'),
@@ -195,7 +291,7 @@ class Requisicion extends CI_Controller {
 				'tipo_requisicion'=>$this->input->post('tipo_requisicion'),
 				'solicita'=>$this->session->userdata('id')
 			);
-		else
+		}else{
 			$datos = array(
 				'director'=>$this->input->post('director_area'),
 				'autorizador'=>$this->input->post('autorizador'),
@@ -230,34 +326,80 @@ class Requisicion extends CI_Controller {
 				'observaciones'=>$this->input->post('observaciones'),
 				'solicita'=>$this->session->userdata('id')
 			);
-		if($datos['director'] == $this->session->userdata('id'))
-			$datos['estatus']=2;
-		if($datos['autorizador'] == $this->session->userdata('id'))
+		}
+		
+		// comprobamos si el solicitante es el director o el autorizador
+		if($datos['autorizador'] == $this->session->userdata('id')){
 			$datos['estatus']=3;
+		}elseif($datos['director'] == $this->session->userdata('id')){
+			$datos['estatus']=2;
+		}	
+			
 		if($requisicion = $this->requisicion_model->guardar($datos)){
+			
 			$requisicion = $this->requisicion_model->getById($requisicion);
 			$data['requisicion']=$requisicion;
+			
+			// Id de la requisición
+			$id = $requisicion->id;
+			
 			switch ($requisicion->estatus) {
+				
+				// 
 				case 1:
-					$destinatario=$this->user_model->searchById($requisicion->director)->email;
-					if($requisicion->tipo_requisicion==1)
-						$mensaje=$this->load->view("layout/requisicion/create",$data,true);
-					else
-						$mensaje=$this->load->view("layout/requisicion/create_externa",$data,true);
-					break;
+				
+					$destinatario1 = $this->user_model->searchById($requisicion->director)->email;
+					
+					if($requisicion->tipo_requisicion == 1){
+						$mensaje1 = $this->load->view("layout/requisicion/create",$data,true);
+					}else{
+						$mensaje1 =$this->load->view("layout/requisicion/create_externa",$data,true);
+					}
+					
+					// Alerta de nueva requisición para ser aceptada
+					$this->requisicion_model->setAlert($id,1);
+					
+				break;
+				
 				case 2:
-					$destinatario=$this->user_model->searchById($requisicion->autorizador)->email;
-					$mensaje=$this->load->view("layout/requisicion/auth",$data,true);
-					break;
+				
+					$destinatario1 = $this->user_model->searchById($requisicion->autorizador)->email;
+					$mensaje1 = $this->load->view("layout/requisicion/auth",$data,true);
+					
+					// Alerta de nueva requisición para ser autorizada
+					$this->requisicion_model->setAlert($id,1);
+				
+				break;
+				
 				case 3:
-					$destinatario='perla.valdezadvanzer.com';
-					$mensaje=$this->load->view("layout/requisicion/rh",$data,true);
-					break;
+					
+					// Alerta de nueva requisición para ser atendida
+					$this->requisicion_model->setAlert($id,1);
+					
+					//$destinatario='perla.valdezadvanzer.com';
+					## harcodeado, por el momento, no existen atributos para diferenciar a la unica persona que recibira el correo
+					$destinatario1 = 'perla.valdez@advanzer.com';					
+					
+					$mensaje1 = $this->load->view("layout/requisicion/rh",$data,true);
+					
+					$destinatario2 = $this->user_model->searchById($requisicion->solicita)->email;
+					$mensaje2 = $this->load->view("layout/requisicion/aut",$data,true);
+					
+					
+					$this->sendMail($destinatario2,$mensaje2);
+				
+				break;
 			}
-			if(!$this->sendMail($destinatario,$mensaje))
+			
+			/*if(!$this->sendMail($destinatario1,$mensaje1))
 				$response['msg']="ok";
 			else
-				$response['msg']="No se pudo enviar correo de notificación";
+				$response['msg']="No se pudo enviar correo de notificación";*/
+			
+			$this->sendMail($destinatario1,$mensaje1);	
+				
+			$response['msg']="ok";
+			
 		}else
 			$response['msg']="Ha habido un error al agregar la requisición";
 
@@ -348,6 +490,7 @@ class Requisicion extends CI_Controller {
 		echo json_encode($response);
 	}
 
+	// Permite reactivar una requisicion que esta acelada, modificando sus datos
 	public function reactivate_update(){
 		
 		$this->valida_sesion();
@@ -399,9 +542,11 @@ class Requisicion extends CI_Controller {
 			$destinatario=$this->user_model->searchById($requisicion->director)->email;
 			$mensaje=$this->load->view("layout/requisicion/create",$data,true);
 			
-			if(!$this->sendMail($destinatario,$mensaje)){
+			/*if(!$this->sendMail($destinatario,$mensaje)){
 				$response['msg']="ok";
-			}
+			}*/
+			
+			$response['msg']="ok";
 			
 		}
 		
@@ -464,6 +609,10 @@ class Requisicion extends CI_Controller {
 					$destinatario='perla.valdez@advanzer.com';
 					$data['requisicion']=$requisicion;
 					$mensaje=$this->load->view("layout/requisicion/rh",$data,true);
+					
+					$destinatarioC = $this->user_model->searchById($requisicion->solicita)->email;
+					$mensajeC = $this->load->view("layout/requisicion/aut",$data,true);
+					
 					break;
 				case '7': //stand by
 					if($requisicion->usuario_modificacion == $requisicion->solicita) //el mismo solicitante cambió a stand by
@@ -475,10 +624,12 @@ class Requisicion extends CI_Controller {
 				default: # code...
 					break;
 			}
-			if(!$this->sendMail($destinatario,$mensaje))
+			if(!$this->sendMail($destinatario,$mensaje)){
+				$this->sendMail($destinatarioC,$mensajeC);
 				$response['msg']="ok";
-			else
+			}else{
 				$response['msg']="No se pudo enviar correo de notificación";
+			}
 			$response['msg']="ok";
 		}else
 			$response['msg']="Ha habido un error al actualizar la requisicion";
@@ -493,16 +644,23 @@ class Requisicion extends CI_Controller {
 		if($this->requisicion_model->update($id,$datos)){
 			$requisicion=$this->requisicion_model->getById($id);
 			switch ($datos['estatus']) {
+				
 				case '2': //para autorizador
 					$destinatario=$this->user_model->searchById($requisicion->autorizador)->email;
 					$data['requisicion']=$requisicion;
 					$mensaje=$this->load->view("layout/requisicion/auth",$data,true);
-					break;
+					$this->requisicion_model->setAlert($id,1);
+				break;
+				
 				case '3': //para capital humano
+					
 					$destinatario='perla.valdez@advanzer.com';
 					$data['requisicion']=$requisicion;
 					$mensaje=$this->load->view("layout/requisicion/rh",$data,true);
-					break;
+					$this->requisicion_model->setAlert($id,1);
+				
+				break;
+				
 				case '7': //stand by
 					if($requisicion->usuario_modificacion == $requisicion->solicita) //el mismo solicitante cambió a stand by
 						$destinatario='perla.valdez@advanzer.com';
@@ -533,6 +691,9 @@ class Requisicion extends CI_Controller {
 		
 		if($this->requisicion_model->update($id,$datos)){
 			$response['msg']="ok";
+			
+			// Send Mail to User
+			
 		}else{
 			$response['msg']="Ha habido un error al turnar a Stand By la requisición";
 		}
@@ -551,7 +712,8 @@ class Requisicion extends CI_Controller {
 		// Recuperamos el valor de el estado de la requisición
 		$status_actual = $this->input->post('estatus');
 		
-		if(($requisicion->razon == "")){
+		// Comprobamos que es la primera vez que se elimina
+		if(($requisicion->razon == "") && ($status_actual != 4)){
 			$status_actual = 5;
 		}
 		
@@ -572,18 +734,22 @@ class Requisicion extends CI_Controller {
 			$destinatario=$this->user_model->searchById($requisicion->solicita)->email;
 			$mensaje = "";
 			
+			$this->requisicion_model->setAlert($id,1);
+			
 			switch ($status_actual) {
 				
 				case '0':case '5': // Aviso de cancelación
 					//$destinatario=$this->user_model->searchById($requisicion->solicita)->email;
 					$data['requisicion']=$requisicion;
 					$mensaje=$this->load->view("layout/requisicion/cancelled",$data,true);
+					$this->requisicion_model->setAlert($id,1);
 				break;
 					
 				case '4': // Aviso de rechazo
 					//$destinatario=$this->user_model->searchById($requisicion->solicita)->email;
 					$data['requisicion']=$requisicion;
 					$mensaje=$this->load->view("layout/requisicion/correct",$data,true);
+					$this->requisicion_model->setAlert($id,1);
 				break;
 					
 				//para solicitante de no autorizada
@@ -602,14 +768,43 @@ class Requisicion extends CI_Controller {
 
 		echo json_encode($response);
 	}
+	
+	// La requisición esta siendo atendida
+	public function atender(){
+		
+		$this->valida_sesion();
+		$datos['estatus'] = 8;
+		$id=$this->input->post('id');
+		$requisicion=$this->requisicion_model->getById($id);
+		
+		if($this->requisicion_model->update($id,$datos)){
+		
+			$destinatario=$this->user_model->searchById($requisicion->solicita)->email;
+			$data['requisicion']=$requisicion;
+			$mensaje=$this->load->view("layout/requisicion/process",$data,true);
+			
+			if(!$this->sendMail($destinatario,$mensaje))
+				$response['msg']="ok";
+			else
+				$response['msg']="No se pudo enviar correo de notificación";
+		
+		}else
+			$response['msg']="Ha habido un error al atender la requisicion";
 
+		echo json_encode($response);
+	}
+
+	// Se completa la requisicion, es decir, que la vacante se ha cubierto
 	public function cerrar(){
+		
 		$this->valida_sesion();
 		$datos['estatus']=$this->input->post('estatus');
 		$datos['razon']=$this->input->post('razon');
 		$id=$this->input->post('id');
 		$requisicion=$this->requisicion_model->getById($id);
+		
 		if($this->requisicion_model->update($id,$datos)){
+		
 			$destinatario=$this->user_model->searchById($requisicion->solicita)->email;
 			$data['requisicion']=$requisicion;
 			$mensaje=$this->load->view("layout/requisicion/closed",$data,true);
@@ -617,6 +812,7 @@ class Requisicion extends CI_Controller {
 				$response['msg']="ok";
 			else
 				$response['msg']="No se pudo enviar correo de notificación";
+		
 		}else
 			$response['msg']="Ha habido un error al cerrar la requisicion";
 

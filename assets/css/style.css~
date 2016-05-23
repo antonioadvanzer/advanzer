@@ -123,8 +123,8 @@ div.iframe{
 .modalDialog > div > div.title {
 
 	background: -moz-linear-gradient(#A2E828, #fff);
-	background: -webkit-linear-gradient(#A2E828, #fff);
-	background: -o-linear-gradient(#A2E828, #fff);
+	background: -webkit-linear-gradient(#A2E828, #999);
+	background: -o-linear-gradient(#A2E828, #999);
 }
 
 .close {

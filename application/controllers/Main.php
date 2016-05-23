@@ -70,10 +70,10 @@ class Main extends CI_Controller {
 				// Zona de permisos
 				$permisos = array(
 					// Permiso de administración de requisiciones
-					'admin_requisicion' => ($result->tipo == 4) || ($result->tipo == 5) || ($result->area == 4),
+					'administrator' =>  ($result->area == 4) && ($result->tipo == 4),
 					
 					// Permiso de creación de requisiciones, de ser asi, tambien se cuenta las que estan pendientes de atender dependiendo del tipo de usuario
-					'create_requisicion' => in_array($result->tipo,array(5,3)) || ($result->nivel_posicion <= 5),
+					'create_requisicion' => in_array($result->tipo,array(4,3)) || ($result->nivel_posicion <= 5),
 					'requisicion_pendiente' => count($this->requisicion_model->getRequisicionesPendenting($result->id))
 				);
 				

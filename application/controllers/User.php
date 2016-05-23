@@ -29,11 +29,14 @@ class User extends CI_Controller {
     		$data['err_msg'] = $err_msg;
     	if (!empty($msg))
     		$data['msg'] = $msg;
-    	$data['user'] = $this->user_model->searchById($id);
+    	
+        $data['user'] = $this->user_model->searchById($id);
         $data['tracks'] = $this->track_model->getAll();
     	$data['areas'] = $this->area_model->getAll();
         $data['posiciones'] = $this->posicion_model->getByTrack($this->user_model->getTrackByUser($id));
         $data['jefes'] = $this->user_model->getJefes($id);
+        $data['tipo_acceso'] = $this->user_model->getPermisos($data['user']->area);
+
     	$this->layout->title('Capital Humano - Detalle Perfil');
     	$this->layout->view('user/detalle',$data);
     }
@@ -127,6 +130,8 @@ class User extends CI_Controller {
         $data['posiciones'] = $this->posicion_model->getAll();
     	$data['areas'] = $this->area_model->getAll();
         $data['jefes'] = $this->user_model->getAll();
+        $data['tipo_acceso'] = $this->user_model->getAllPermisos();
+        
     	$this->layout->title('Capital Humano - Nuevo Perfil');
     	$this->layout->view('user/nuevo',$data);
     }

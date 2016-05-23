@@ -21,7 +21,14 @@ class Requisicion_model extends CI_Model{
 		$result=$this->db->where('R.id',$id)->get('Requisiciones R')->first_row();
 		$result->nombre_director=$this->db->where('id',$result->director)->get('Users')->first_row()->nombre;
 		$result->nombre_autorizador=$this->db->where('id',$result->autorizador)->get('Users')->first_row()->nombre;
+		
 		return $result;
+	}
+	
+	// To set alert if user ever seen this Requisición
+	function setAlert($id,$alert){
+		$datos['alerta'] = $alert;
+		$this->db->where('id',$id)->update('Requisiciones',$datos);
 	}
 
 	function getRequisiciones($status) {
@@ -73,6 +80,8 @@ class Requisicion_model extends CI_Model{
 		$this->db->or_where('R.autorizador',$colaborador->id);		
 		$this->db->where('R.estatus',2);*/				
 		
+		//$this->db->order_by("fecha_solicitud", "desc");
+		
 		return $this->db->get('Requisiciones R')->result();
 	}
 
@@ -116,8 +125,8 @@ class Requisicion_model extends CI_Model{
 	}*/
 	
 	function getRequisicionesPendenting($id){
-		// pendinte re revisar y corregir
-		return $this->db->where('((solicita='.$id.') or (director='.$id.' and estatus=1) or (autorizador='.$id.' and estatus=2)) or ((director='.$id.' and autorizador='.$id.') and (estatus=1 or estatus=2))')->get('Requisiciones')->result();
+		//
+		return $this->db->where('((solicita='.$id.' and alerta=1 and (estatus=3 or estatus=4 or estatus=5 or estatus=8 or estatus=0)) or (director='.$id.' and estatus=1 and alerta=1) or (autorizador='.$id.' and estatus=2 and alerta=1)) or ((director='.$id.' and autorizador='.$id.') and (estatus=1 or estatus=2) and alerta=1)')->get('Requisiciones')->result();
 		
 	}
 	

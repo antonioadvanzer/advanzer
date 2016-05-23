@@ -272,6 +272,26 @@ class User_model extends CI_Model{
 	function getHistorialByIdAnio($id,$anio) {
 		return $this->db->where(array('colaborador'=>$id,'anio'=>$anio))->get('Historial')->first_row();
 	}
+	
+	// Get access type for diferents areas
+	function getPermisos($area){
+		
+		/*SELECT p.access, p.nombre AS CapitalHumano
+		FROM `Permisos_Area` AS pa
+		INNER JOIN Permisos AS p ON pa.permiso = p.id
+		WHERE pa.area =4*/
+		
+		// Busqueda de permisos por area
+		return $this->db->where(array('pa.area'=>$area))->from('Permisos_Area pa')
+					->join('Permisos p','pa.permiso=p.id')->get()->result();
+	}
+
+	// Get access type for diferents areas
+	function getAllPermisos(){
+		
+		// pendiente
+		return $this->db->from('Permisos ')->get()->result();
+	}
 
 	function logout($id,$email) {
 		$descripcion = "cerró sesión: $email";

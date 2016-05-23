@@ -401,7 +401,7 @@
 						$('#update').hide('slow');
 						$('#cargando').show('slow');
 					},
-					success: function(data){
+					success: function(data){//alert(data);
 						var returnedData = JSON.parse(data);
 						if(returnedData['msg']=="ok"){
 							alert('Se ha enviado para autorización');

@@ -25,7 +25,18 @@
 			<div class="row" align="center">
 				<div class="col-md-2"></div>
 				<div class="col-md-8">
-					<br>
+					<br>                    
+                        
+                        <input id="razon" type="hidden" value="<?= $requisicion->razon;?>">
+                    
+                        <div id="alert1" class="alert alert-warning">
+                          Podrá ser reactivada una vez mas.
+                        </div>
+
+                        <div id="alert2" class="alert alert-danger">
+                          Esta requisición no podrá ser reactivada.
+                        </div>
+                    
 					<div class="input-group">
 						<span class="input-group-addon">Razón</span>
 						<textarea class="form-control" required id="razon_txt" rows="4" placeholder="Razón por la que se descarta"></textarea>
@@ -307,7 +318,12 @@
                         break;
                         case 9:
                           ?>
-                            <button id="realizada" type="button" class="btn btn-primary" style="min-width:180px;text-align:center;display:inline;">Completada</button>
+                            <button id="atender" type="button" class="btn btn-primary" style="min-width:180px;text-align:center;display:inline;">Atender</button>
+                            <?php  
+                        break;    
+                        case 10:
+                          ?>
+                            <button id="realizada" type="button" class="btn btn-primary" style="min-width:180px;text-align:center;display:inline;">Completar</button>
                             <?php  
                         break;
                     }
@@ -320,6 +336,21 @@
                 //if(!in_array($requisicion->estatus,array(0,6))): 
                 
                 ?>
+                
+                <!--<a href="#openModal">Open Modal</a>-->
+
+                <div id="openModal" class="modalDialog">
+                    <div>
+                        <div id="title" class="title" align="center"><h2>Titulo</h2></div>
+                        <a title="Close" onclick="window.history.back();" class="close">X</a>
+                        <div id="body" class="body" align="center">
+
+                            
+
+                        </div>
+                    </div>
+                </div>
+                
 					<!--<div class="col-md-10">
 						<div class="btn-group btn-group-lg" role="group" aria-label="...">
 							<?php //if($this->session->userdata('tipo') >= 3 && $this->session->userdata('area')==4): ?>
@@ -353,77 +384,418 @@
 		</form>
 	</div>
 	<script>
-		$(document).ready(function() {
-			check_director();
-			check_edit_mode();
-			$('#solicitud').datepicker({
-				dateFormat: 'yy-mm-dd'
-			});
-			$('#fecha_estimada').datepicker({
-				dateFormat: 'yy-mm-dd'
-			});
-			$("#residencia").change(function() {
-				$("#residencia option:selected").each(function() {
-					residencia = $('#residencia').val();
-				});
-				if(residencia!="")
-					$('#residencia_otro').prop({'required':false,'disabled':true}).val('');
-				else
-					$('#residencia_otro').prop({'required':true,'disabled':false}).val('');
-			});
-			$("#tipo").change(function() {
-				$("#tipo option:selected").each(function() {
-					tipo = $('#tipo').val();
-				});
-				if(tipo==1)
-					$('#sustituye_a').prop({'required':false,'disabled':true}).val('');
-				else
-					$('#sustituye_a').prop({'required':true,'disabled':false}).val('');
-			});
-			$("#costo").change(function() {
-				$("#costo option:selected").each(function() {
-					costo = $('#costo').val();
-				});
-				if(costo!='DEFINIR')
-					$('#costo_maximo').prop({'required':false,'disabled':true}).val('');
-				else
-					$('#costo_maximo').prop({'required':true,'disabled':false}).val('');
-			});
-			$("#lugar_trabajo").change(function() {
-				$("#lugar_trabajo option:selected").each(function() {
-					lugar_trabajo = $('#lugar_trabajo').val();
-				});
-				if(lugar_trabajo!='OFICINAS DEL CLIENTE' && lugar_trabajo!='AMBOS')
-					$('#domicilio_cte').prop({'required':false,'disabled':true}).val('');
-				else
-					$('#domicilio_cte').prop({'required':true,'disabled':false}).val('');
-			});
-			$("#track").change(function() {
-				$("#track option:selected").each(function() {
-					track = $('#track').val();
-				});
+        
+        function modalWindow(option){
+            
+            // Set atributes for modal window
+            switch(option){
+                
+                    // Confirmar si desea autorizar
+                    case "autorizar":
+                        
+                        document.getElementById("title").innerHTML = '<h2>Atención</h2>'
+                        document.getElementById("body").innerHTML = '<p>¿Seguro que desea autorizar la requisición?</p>'
+                                        +'<a type="button" class="btn btn-primary" href="#procesando" onclick="autorizar();">Aceptar</a>&nbsp; &nbsp; '
+                                        +'<a type="button" class="btn btn-primary" onclick="window.history.back();">Cancelar</a>';
+                        window.document.location = "#openModal";
+                    
+                    break;
+                    
+                    case "confirm_autorizacion":
+                    
+                        document.getElementById("title").innerHTML = '<h2>Aviso</h2>'
+                        document.getElementById("body").innerHTML = '<p>Se ha autorizado la requisición y se ha notificado a Capital Humano</p>'
+                                        +'<a type="button" class="btn btn-primary" onclick="confirm_autorizacion();">Aceptar</a>';
+                        window.document.location = "#openModal";
+                    
+                    break;
+                    
+                    // Confirmar si desea aceptar
+                    case "aceptar":
+                        
+                        document.getElementById("title").innerHTML = '<h2>Atención</h2>'
+                        document.getElementById("body").innerHTML = '<p>¿Aceptar y enviar al autorizador final?</p>'
+                                        +'<a type="button" class="btn btn-primary" href="#procesando" onclick="aceptar();">Aceptar</a>&nbsp; &nbsp; '
+                                        +'<a type="button" class="btn btn-primary" onclick="window.history.back();">Cancelar</a>';
+                        window.document.location = "#openModal";
+                    
+                    break;
+                    
+                    case "confirm_aceptacion":
+                    
+                        document.getElementById("title").innerHTML = '<h2>Aviso</h2>'
+                        document.getElementById("body").innerHTML = '<p>Se ha aceptado la requisición y se ha notificado al autorizador</p>'
+                                        +'<a type="button" class="btn btn-primary" onclick="confirm_aceptacion();">Aceptar</a>';
+                        window.document.location = "#openModal";
+                    
+                    break;
+                    
+                    // Confirmar si desea rechazar
+                    case "rechazar":
+                    
+                        document.getElementById("title").innerHTML = '<h2>Atención</h2>'
+                        document.getElementById("body").innerHTML = '<p>¿Seguro que desea rechazar la requisición?</p>'
+                                        +'<a type="button" class="btn btn-primary" href="#procesando" onclick="rechazar();">Aceptar</a>&nbsp; &nbsp; '
+                                        +'<a type="button" class="btn btn-primary" onclick="window.history.back();">Cancelar</a>';
+                        window.document.location = "#openModal";
+                    
+                    break;
+                    
+                    case "confirm_rechazar":
+                    
+                        document.getElementById("title").innerHTML = '<h2>Aviso</h2>'
+                        document.getElementById("body").innerHTML = '<p>Se ha enviado notificación al solicitante</p>'
+                                        +'<a type="button" class="btn btn-primary" onclick="confirm_rechazar();">Aceptar</a>';
+                        window.document.location = "#openModal";
+                    
+                    break;
+                    
+                    // Confirmar si desea cancelar
+                    case "cancelar":
+                    
+                        document.getElementById("title").innerHTML = '<h2>Atención</h2>'
+                        document.getElementById("body").innerHTML = '<p>¿Seguro que desea cancelar la requisición?</p>'
+                                        +'<a type="button" class="btn btn-primary" href="#procesando" onclick="cancelar();">Aceptar</a>&nbsp; &nbsp; '
+                                        +'<a type="button" class="btn btn-primary" onclick="window.history.back();">Cancelar</a>';
+                        window.document.location = "#openModal";
+                    
+                    break;
+                    
+                    case "confirm_cancelar":
+                    
+                        document.getElementById("title").innerHTML = '<h2>Aviso</h2>'
+                        document.getElementById("body").innerHTML = '<p>Se ha cancelado la requisición</p>'
+                                        +'<a type="button" class="btn btn-primary" onclick="confirm_cancelar();">Aceptar</a>';
+                        window.document.location = "#openModal";
+                    
+                    break;
+                    
+                    // Confirmar si desea reactivar
+                    case "reactivate_update":
+                        
+                        document.getElementById("title").innerHTML = '<h2>Atención</h2>'
+                        document.getElementById("body").innerHTML = '<p>¿Seguro que desea reenviar la requisición?</p>'
+                                        +'<a type="button" class="btn btn-primary" href="#procesando" onclick="reactivate_update();">Aceptar</a>&nbsp; &nbsp; '
+                                        +'<a type="button" class="btn btn-primary" onclick="window.history.back();">Cancelar</a>';
+                        window.document.location = "#openModal";
+                    
+                    break;
+                    
+                    case "confirm_reactivate_update":
+                        //alert("aaa");
+                        //window.document.location = "#close";
+                        document.getElementById("title").innerHTML = '<h2>Aviso</h2>'
+                        document.getElementById("body").innerHTML = '<p>Se ha reactivado y enviado al director de área</p>'
+                                        +'<a type="button" class="btn btn-primary" onclick="confirm_reactivate_update();">Aceptar</a>';
+                        window.document.location = "#openModal";
+                    
+                    break;
+                    
+                    // Confirmar si desea pausar
+                    case "pausar":
+                        
+                        document.getElementById("title").innerHTML = '<h2>Atención</h2>'
+                        document.getElementById("body").innerHTML = '<p>¿Seguro(a) que desea turnar la requisición a Stand By?</p>'
+                                        +'<a type="button" class="btn btn-primary" href="#procesando" onclick="pausar();">Aceptar</a>&nbsp; &nbsp; '
+                                        +'<a type="button" class="btn btn-primary" onclick="window.history.back();">Cancelar</a>';
+                        window.document.location = "#openModal";
+                    
+                    break;
+                    
+                    case "confirm_pausar":
+                    
+                        document.getElementById("title").innerHTML = '<h2>Aviso</h2>'
+                        document.getElementById("body").innerHTML = '<p>Se ha turnado la requisición a Stand By</p>'
+                                        +'<a type="button" class="btn btn-primary" onclick="confirm_pausar();">Aceptar</a>';
+                        window.document.location = "#openModal";
+                    
+                    break;
+                    
+                    // Confirmar si desea reanudar
+                    case "reanudar":
+                        
+                        document.getElementById("title").innerHTML = '<h2>Atención</h2>'
+                        document.getElementById("body").innerHTML = '<p>¿Seguro(a) que desea reanudar la requisición?</p>'
+                                        +'<a type="button" class="btn btn-primary" href="#procesando" onclick="reanudar();">Aceptar</a>&nbsp; &nbsp; '
+                                        +'<a type="button" class="btn btn-primary" onclick="window.history.back();">Cancelar</a>';
+                        window.document.location = "#openModal";
+                    
+                    break;
+                    
+                    case "confirm_reanudar":
+                    
+                        document.getElementById("title").innerHTML = '<h2>Aviso</h2>'
+                        document.getElementById("body").innerHTML = '<p>Se ha reanudado la requisición</p>'
+                                        +'<a type="button" class="btn btn-primary" onclick="confirm_reanudar();">Aceptar</a>';
+                        window.document.location = "#openModal";
+                    
+                    break;
+                    
+                    // Confirmar si desea atender
+                    case "atender":
+                        
+                        document.getElementById("title").innerHTML = '<h2>Atención</h2>'
+                        document.getElementById("body").innerHTML = '<p>¿Seguro(a) que desea atender la requisición?</p>'
+                                        +'<a type="button" class="btn btn-primary" href="#procesando" onclick="atender();">Aceptar</a>&nbsp; &nbsp; '
+                                        +'<a type="button" class="btn btn-primary" onclick="window.history.back();">Cancelar</a>';
+                        window.document.location = "#openModal";
+                    
+                    break;
+                    
+                    case "confirm_atender":
+                    
+                        document.getElementById("title").innerHTML = '<h2>Aviso</h2>'
+                        document.getElementById("body").innerHTML = '<p>La requisición está siendo atendida</p>'
+                                        +'<a type="button" class="btn btn-primary" onclick="confirm_atender();">Aceptar</a>';
+                        window.document.location = "#openModal";
+                    
+                    break;
+                    
+                    // Confirmar si desea cerrar
+                    case "completar":
+                        
+                        document.getElementById("title").innerHTML = '<h2>Atención</h2>'
+                        document.getElementById("body").innerHTML = '<p>¿Seguro(a) que desea cerrar la requisición?</p>'
+                                        +'<a type="button" class="btn btn-primary" href="#procesando" onclick="completar();">Aceptar</a>&nbsp; &nbsp; '
+                                        +'<a type="button" class="btn btn-primary" onclick="window.history.back();">Cancelar</a>';
+                        window.document.location = "#openModal";
+                    
+                    break;
+                    
+                    case "confirm_completar":
+                    
+                        document.getElementById("title").innerHTML = '<h2>Aviso</h2>'
+                        document.getElementById("body").innerHTML = '<p>Se ha cerrado la requisició\n ¿Desea registrar al usuario ahora?</p>'
+                                        +'<a type="button" class="btn btn-primary" onclick="confirm_completar(1);">Si</a>'
+                                        +'<a type="button" class="btn btn-primary" onclick="confirm_completar(2);">No</a>';
+                        window.document.location = "#openModal";
+                    
+                    break;
+                }
+            }
+        
+            // Se autoriza la requisición
+            function autorizar(){
+                
+                id = $('#id').val();
 				$.ajax({
-					url: '<?= base_url("user/load_posiciones");?>',
+					url: '<?= base_url("requisicion/ch_estatus");?>',
 					type: 'post',
-					data: {'track':track},
+					data: {'id':id,'estatus':3},
+					beforeSend: function() {
+						$('#update').hide('slow');
+						$('#cargando').show('slow');
+					},
 					success: function(data){
-						$("#posicion").html(data);
+						var returnedData = JSON.parse(data);
+						console.log(returnedData['msg']);
+						if(returnedData['msg']=="ok"){
+							//alert('Se ha autorizado la requisición y se ha notificado a Capital Humano');
+							//window.document.location='<?= base_url("requisicion");?>';
+                            
+                            $('#update').show('slow');
+                            $('#cargando').hide('slow');
+
+                            // Si ha sido exitoso la autorización, se confirmara
+                            window.modalWindow("confirm_autorizacion");
+                            
+						}else{
+							$('#cargando').hide('slow');
+							$('#update').show('slow');
+							$('#alert').prop('display',true).show('slow');
+							$('#msg').html(returnedData['msg']);
+							setTimeout(function() {
+								$("#alert").fadeOut(1500);
+							},3000);
+						}
 					},
 					error: function(xhr) {
-						console.log(xhr);
+						console.log(xhr.statusText);
+						$('#cargando').hide('slow');
+						$('#update').show('slow');
+						$('#alert').prop('display',true).show('slow');
+						$('#msg').html('Error, intenta de nuevo o contacta al Administrador de la Aplicación');
+						setTimeout(function() {
+							$("#alert").fadeOut(1500);
+						},3000);
 					}
 				});
-			});
+                
+            }
+        
+            function confirm_autorizacion(){
+            //alert('Se ha reactivado y enviado al director de área');
+            window.document.location='<?= base_url("main");?>';
+            }
+            
+            // Se acepta la requisición por parte del director del area
+            function aceptar(){
+                id = $('#id').val();
+				$.ajax({
+					url: '<?= base_url("requisicion/ch_estatus");?>',
+					type: 'post',
+					data: {'id':id,'estatus':2},
+					beforeSend: function() {
+						$('#update').hide('slow');
+						$('#cargando').show('slow');
+					},
+					success: function(data){
+						var returnedData = JSON.parse(data);
+						console.log(returnedData['msg']);
+						if(returnedData['msg']=="ok"){
+							/*alert('Se ha aceptado la requisición y se ha notificado al autorizador');
+							window.document.location='<?= base_url("requisicion");?>';*/                 
+                            
+                            $('#update').show('slow');
+                            $('#cargando').hide('slow');
 
-			$("#director_area").change(function() {
-				check_director();
-			});
+                            window.modalWindow("confirm_aceptacion");
+                            
+                        }else{
+							$('#cargando').hide('slow');
+							$('#update').show('slow');
+							$('#alert').prop('display',true).show('slow');
+							$('#msg').html(returnedData['msg']);
+							setTimeout(function() {
+								$("#alert").fadeOut(1500);
+							},3000);
+						}
+					},
+					error: function(xhr) {
+						console.log(xhr.statusText);
+						$('#cargando').hide('slow');
+						$('#update').show('slow');
+						$('#alert').prop('display',true).show('slow');
+						$('#msg').html('Error, intenta de nuevo o contacta al Administrador de la Aplicación');
+						setTimeout(function() {
+							$("#alert").fadeOut(1500);
+						},3000);
+					}
+				});
+            }
+        
+            function confirm_aceptacion(){
 
-			$("#ractivate_update").click(function(event){
-				if(!confirm('¿Seguro que desea reenviar la requisición?'))
-					return false;
-				//get form values
-					data={};
+                window.document.location='<?= base_url("main");?>';
+            
+            }
+            
+            // Se rechaza la requisición
+            function rechazar(){
+                                                
+                razon = $("#razon_txt").val();
+				accion = $("#accion").val();
+				id = $("#id").val();
+				autorizador=<?= $requisicion->autorizador;?>;
+
+                estatus=4;
+                //alerta="Se ha enviado notificación al solicitante";
+                $.ajax({
+                    url: '<?= base_url("requisicion/rechazar_cancelar");?>',
+                    type: 'post',
+                    data: {'id':id,'estatus':estatus,'razon':razon},
+                    beforeSend: function() {
+                        $('#razon').hide('slow');
+                        $('#cargando').show('slow');
+                    },
+                    success: function(data){
+                        var returnedData = JSON.parse(data);
+                        if(returnedData['msg']=="ok"){
+                            /*alert(alerta);
+                            window.document.location='<?= base_url("requisicion");?>';*/
+                            
+                            $('#update').show('slow');
+                            $('#cargando').hide('slow');
+
+                            window.modalWindow("confirm_rechazar");
+                            
+                        }else{
+                            $('#razon_txt').val("");
+                            $('#cargando').hide('slow');
+                            $('#update').show('slow');
+                            $('#alert').prop('display',true).show('slow');
+                            $('#msg').html(returnedData['msg']);
+                            setTimeout(function() {
+                                $("#alert").fadeOut(1500);
+                            },3000);
+                        }
+                    },
+                    error: function(xhr) {
+                        console.log(xhr.statusText);
+                        $('#cargando').hide('slow');
+                        $('#razon').show('slow');
+                        $('#alert').prop('display',true).show('slow');
+                        $('#msg').html('Error, intenta de nuevo o contacta al Administrador de la Aplicación');
+                        setTimeout(function() {
+                            $("#alert").fadeOut(1500);
+                        },3000);
+                    }
+                });
+            }
+        
+            function confirm_rechazar(){
+                window.document.location='<?= base_url("main");?>';
+            }
+            
+            // Se cancela la requisición
+            function cancelar(){           
+                
+                razon = $("#razon_txt").val();
+				accion = $("#accion").val();
+				id = $("#id").val();
+				autorizador=<?= $requisicion->autorizador;?>;
+            
+                $.ajax({
+						url: '<?= base_url("requisicion/rechazar_cancelar");?>',
+						type: 'post',
+						data: {'id':id,'estatus':0,'razon':razon},
+						beforeSend: function() {
+							$('#razon').hide('slow');
+							$('#cargando').show('slow');
+						},
+						success: function(data){//alert(data);
+							var returnedData = JSON.parse(data);
+							if(returnedData['msg']=="ok"){
+                                
+								/*alert("Se ha cancelado la requisición");
+								window.document.location='<?= base_url("requisicion");?>';*/
+                                
+                                $('#update').show('slow');
+                                $('#cargando').hide('slow');
+
+                                window.modalWindow("confirm_cancelar");
+                                
+							}else{
+								$('#razon_txt').val("");
+								$('#cargando').hide('slow');
+								$('#update').show('slow');
+								$('#alert').prop('display',true).show('slow');
+								$('#msg').html(returnedData['msg']);
+								setTimeout(function() {
+									$("#alert").fadeOut(1500);
+								},3000);
+							}
+						},
+						error: function(xhr) {
+							console.log(xhr.statusText);
+							$('#cargando').hide('slow');
+							$('#razon').show('slow');
+							$('#alert').prop('display',true).show('slow');
+							$('#msg').html('Error, intenta de nuevo o contacta al Administrador de la Aplicación');
+							setTimeout(function() {
+								$("#alert").fadeOut(1500);
+							},3000);
+						}
+					});
+            }
+        
+            function confirm_cancelar(){
+                 window.document.location='<?= base_url("main");?>';
+            }
+            
+            //Reactivamos la requisición
+            function reactivate_update(){
+                data={};
 					data['id']=$('#id').val();
 					$("#director_area option:selected").each(function() {
 						data['director_area'] = $('#director_area').val();
@@ -510,8 +882,71 @@
 						var returnedData = JSON.parse(data);
 						console.log(returnedData['msg']);
 						if(returnedData['msg']=="ok"){
-							alert('Se ha reactivado y enviado al director de área');
-							window.document.location='<?= base_url("requisicion");?>';
+                            
+                            $('#update').show('slow');
+                            $('#cargando').hide('slow');
+							
+                            //alert('Se ha reactivado y enviado al director de área');
+							/*window.document.location='<?= base_url("requisicion");?>';*/
+                            //window.document.location = "#close";
+                            // Si ha sido exitoso la activación, se confirmara
+                            window.modalWindow("confirm_reactivate_update");
+						
+                        }else{
+							$('#cargando').hide('slow');
+							$('#update').show('slow');
+							$('#alert').prop('display',true).show('slow');
+							$('#msg').html(returnedData['msg']);
+							setTimeout(function() {
+								$("#alert").fadeOut(1500);
+							},3000);
+						}
+					},
+					error: function(xhr) {
+						console.log(xhr.statusText);
+						$('#cargando').hide('slow');
+						$('#update').show('slow');
+						$('#alert').prop('display',true).show('slow');
+						$('#msg').html('Error, intenta de nuevo o contacta al Administrador de la Aplicación');
+						setTimeout(function() {
+							$("#alert").fadeOut(1500);
+						},3000);
+					}
+				});
+            }
+        
+            function confirm_reactivate_update(){
+                //alert('Se ha reactivado y enviado al director de área');
+                window.document.location='<?= base_url("main");?>';
+            }
+            
+            // Se turna a Stant By
+            function pausar(){
+                
+                /*if(!confirm('¿Seguro(a) que desea turnar la requisición a Stand By?'))
+					return false;*/
+				id = $("#id").val();
+				$.ajax({
+					url: '<?= base_url("requisicion/pausar");?>',
+					type: 'post',
+					data: {'id':id,'estatus':7},
+					beforeSend: function() {
+						$('#update').hide('slow');
+						$('#cargando').show('slow');
+					},
+					success: function(data){
+						var returnedData = JSON.parse(data);
+						console.log(returnedData);
+						if(returnedData['msg']=="ok"){
+							
+                            /*alert("Se ha turnado la requisición a Stand By");
+							window.document.location='<?= base_url("requisicion");?>';*/
+                            
+                            $('#update').show('slow');
+                            $('#cargando').hide('slow');
+
+                            window.modalWindow("confirm_pausar");
+                            
 						}else{
 							$('#cargando').hide('slow');
 							$('#update').show('slow');
@@ -533,12 +968,383 @@
 						},3000);
 					}
 				});
+                
+            }
+        
+            function confirm_pausar(){
+                window.document.location='<?= base_url("main");?>';
+            }
+        
+            function reanudar(){
+                
+                /*if(!confirm('¿Seguro(a) que desea reanudar la requisición?'))
+					return false;*/
+                
+				id = $("#id").val();
+				$.ajax({
+					url: '<?= base_url("requisicion/reanudar");?>',
+					type: 'post',
+					data: {'id':id,'estatus':3},
+					beforeSend: function() {
+						$('#update').hide('slow');
+						$('#cargando').show('slow');
+					},
+					success: function(data){
+						var returnedData = JSON.parse(data);
+						console.log(returnedData);
+						if(returnedData['msg']=="ok"){
+							
+                            /*alert("Se ha reanudando la requisición");
+							window.document.location='<?= base_url("requisiciones");?>';*/
+                            
+                            $('#update').show('slow');
+                            $('#cargando').hide('slow');
 
-				event.preventDefault();
+                            window.modalWindow("confirm_reanudar");
+                            
+						}else{
+							$('#cargando').hide('slow');
+							$('#update').show('slow');
+							$('#alert').prop('display',true).show('slow');
+							$('#msg').html(returnedData['msg']);
+							setTimeout(function() {
+								$("#alert").fadeOut(1500);
+							},3000);
+						}
+					},
+					error: function(xhr) {
+						console.log(xhr.statusText);
+						$('#cargando').hide('slow');
+						$('#update').show('slow');
+						$('#alert').prop('display',true).show('slow');
+						$('#msg').html('Error, intenta de nuevo o contacta al Administrador de la Aplicación');
+						setTimeout(function() {
+							$("#alert").fadeOut(1500);
+						},3000);
+					}
+				});
+            }
+        
+            function confirm_reanudar(){
+                window.document.location='<?= base_url("main");?>';
+            }
+            
+            function atender(){
+                
+                /*if(!confirm('¿Seguro(a) que desea atender la requisición?'))
+					return false;*/
+                
+				id = $("#id").val();
+
+				$.ajax({
+					url: '<?= base_url("requisicion/atender");?>',
+					type: 'post',
+					data: {'id':id,'estatus':6},
+					beforeSend: function() {
+						$('#update').hide('slow');
+						$('#cargando').show('slow');
+					},
+					success: function(data){
+						var returnedData = JSON.parse(data);
+						console.log(returnedData);
+						if(returnedData['msg']=="ok"){
+							
+                            /*alert("La requisición está siendo atendida");
+                            window.document.location='<?= base_url("requisiciones");?>';*/
+                            
+                            $('#update').show('slow');
+                            $('#cargando').hide('slow');
+
+                            window.modalWindow("confirm_atender");
+                            
+						}else{
+							$('#cargando').hide('slow');
+							$('#update').show('slow');
+							$('#alert').prop('display',true).show('slow');
+							$('#msg').html(returnedData['msg']);
+							setTimeout(function() {
+								$("#alert").fadeOut(1500);
+							},3000);
+						}
+					},
+					error: function(xhr) {
+						console.log(xhr.statusText);
+						$('#cargando').hide('slow');
+						$('#update').show('slow');
+						$('#alert').prop('display',true).show('slow');
+						$('#msg').html('Error, intenta de nuevo o contacta al Administrador de la Aplicación');
+						setTimeout(function() {
+							$("#alert").fadeOut(1500);
+						},3000);
+					}
+				});
+                
+            }
+        
+            function confirm_atender(){
+                window.document.location='<?= base_url("main");?>';
+            }
+        
+            // Se cierra la requisición
+            function completar(){
+                
+                /*if(!confirm('¿Seguro(a) que desea cerrar la requisición?'))
+					return false;*/
+                
+				id = $("#id").val();
+
+				$.ajax({
+					url: '<?= base_url("requisicion/cerrar");?>',
+					type: 'post',
+					data: {'id':id,'estatus':6},
+					beforeSend: function() {
+						$('#update').hide('slow');
+						$('#cargando').show('slow');
+					},
+					success: function(data){
+						var returnedData = JSON.parse(data);
+						console.log(returnedData);
+						if(returnedData['msg']=="ok"){
+							
+                            /*alert("Se ha cerrado la requisición");
+							window.document.location='<?= base_url("user/nuevo");?>/'+id;*/
+                            
+                            $('#update').show('slow');
+                            $('#cargando').hide('slow');
+
+                            window.modalWindow("confirm_completar");
+                            
+						}else{
+							$('#cargando').hide('slow');
+							$('#update').show('slow');
+							$('#alert').prop('display',true).show('slow');
+							$('#msg').html(returnedData['msg']);
+							setTimeout(function() {
+								$("#alert").fadeOut(1500);
+							},3000);
+						}
+					},
+					error: function(xhr) {
+						console.log(xhr.statusText);
+						$('#cargando').hide('slow');
+						$('#update').show('slow');
+						$('#alert').prop('display',true).show('slow');
+						$('#msg').html('Error, intenta de nuevo o contacta al Administrador de la Aplicación');
+						setTimeout(function() {
+							$("#alert").fadeOut(1500);
+						},3000);
+					}
+				});
+            }
+        
+            function confirm_completar(op){
+                switch(op){
+                 
+                    case 1:    
+                    window.document.location='<?= base_url("user/nuevo");?>';
+                    break;
+                        
+                    case 2:    
+                    window.document.location='<?= base_url("main");?>';
+                    break;
+                }
+            }
+        
+		$(document).ready(function() {
+            
+            $('#alert2').hide('slow');
+            $('#alert1').hide('slow');
+			
+            check_director();
+			check_edit_mode();
+			$('#solicitud').datepicker({
+				dateFormat: 'yy-mm-dd'
+			});
+			$('#fecha_estimada').datepicker({
+				dateFormat: 'yy-mm-dd'
+			});
+			$("#residencia").change(function() {
+				$("#residencia option:selected").each(function() {
+					residencia = $('#residencia').val();
+				});
+				if(residencia!="")
+					$('#residencia_otro').prop({'required':false,'disabled':true}).val('');
+				else
+					$('#residencia_otro').prop({'required':true,'disabled':false}).val('');
+			});
+			$("#tipo").change(function() {
+				$("#tipo option:selected").each(function() {
+					tipo = $('#tipo').val();
+				});
+				if(tipo==1)
+					$('#sustituye_a').prop({'required':false,'disabled':true}).val('');
+				else
+					$('#sustituye_a').prop({'required':true,'disabled':false}).val('');
+			});
+			$("#costo").change(function() {
+				$("#costo option:selected").each(function() {
+					costo = $('#costo').val();
+				});
+				if(costo!='DEFINIR')
+					$('#costo_maximo').prop({'required':false,'disabled':true}).val('');
+				else
+					$('#costo_maximo').prop({'required':true,'disabled':false}).val('');
+			});
+			$("#lugar_trabajo").change(function() {
+				$("#lugar_trabajo option:selected").each(function() {
+					lugar_trabajo = $('#lugar_trabajo').val();
+				});
+				if(lugar_trabajo!='OFICINAS DEL CLIENTE' && lugar_trabajo!='AMBOS')
+					$('#domicilio_cte').prop({'required':false,'disabled':true}).val('');
+				else
+					$('#domicilio_cte').prop({'required':true,'disabled':false}).val('');
+			});
+			$("#track").change(function() {
+				$("#track option:selected").each(function() {
+					track = $('#track').val();
+				});
+				$.ajax({
+					url: '<?= base_url("user/load_posiciones");?>',
+					type: 'post',
+					data: {'track':track},
+					success: function(data){
+						$("#posicion").html(data);
+					},
+					error: function(xhr) {
+						console.log(xhr);
+					}
+				});
+			});
+
+			$("#director_area").change(function() {
+				check_director();
+			});
+
+			$("#ractivate_update").click(function(event){
+                modalWindow("reactivate_update");
+                
+				/*if(!confirm('¿Seguro que desea reenviar la requisición?'))
+					return false;
+				//get form values
+					data={};
+					data['id']=$('#id').val();
+					$("#director_area option:selected").each(function() {
+						data['director_area'] = $('#director_area').val();
+					});
+					$("#autorizador option:selected").each(function() {
+						data['autorizador'] = $('#autorizador').val();
+					});
+					data['solicitud'] = $('#solicitud').val();
+					data['fecha_estimada'] = $('#fecha_estimada').val();
+					$("#area option:selected").each(function() {
+						data['area'] = $('#area').val();
+					});
+					$("#track option:selected").each(function() {
+						data['track'] = $('#track').val();
+					});
+					$("#posicion option:selected").each(function() {
+						data['posicion'] = $('#posicion').val();
+					});
+					$("#empresa option:selected").each(function() {
+						data['empresa'] = $('#empresa').val();
+					});
+					$("#tipo option:selected").each(function() {
+						data['tipo'] = $('#tipo').val();
+					});
+					data['sustituye_a'] = $('#sustituye_a').val();
+					data['proyecto'] = $('#proyecto').val();
+					data['clave'] = $('#clave').val();
+					$("#costo option:selected").each(function() {
+						data['costo'] = $('#costo').val();
+					});
+					if(data['costo']=='DEFINIR')
+						data['costo']=$('#costo_maximo').val();
+					$("#residencia option:selected").each(function() {
+						data['residencia'] = $('#residencia').val();
+					});
+					if(residencia=="")
+						data['residencia']=$('#residencia_otro').val();
+					$("#lugar_trabajo option:selected").each(function() {
+						data['lugar_trabajo'] = $('#lugar_trabajo').val();
+					});
+					data['domicilio_cte'] = $('#domicilio_cte').val();
+					$("#contratacion option:selected").each(function() {
+						data['contratacion'] = $('#contratacion').val();
+					});
+					data['entrevista'] = $('#entrevista').val();
+					$("#disp_viajar option:selected").each(function() {
+						data['disp_viajar'] = $('#disp_viajar').val();
+					});
+					$("#edad_uno option:selected").each(function() {
+						data['edad_uno'] = $('#edad_uno').val();
+					});
+					$("#edad_dos option:selected").each(function() {
+						data['edad_dos'] = $('#edad_dos').val();
+					});
+					$("#sexo option:selected").each(function() {
+						data['sexo'] = $('#sexo').val();
+					});
+					$("#nivel option:selected").each(function() {
+						data['nivel'] = $('#nivel').val();
+					});
+					data['carrera'] = $('#carrera').val();
+					$("#ingles_hablado option:selected").each(function() {
+						data['ingles_hablado'] = $('#ingles_hablado').val();
+					});
+					$("#ingles_lectura option:selected").each(function() {
+						data['ingles_lectura'] = $('#ingles_lectura').val();
+					});
+					$("#ingles_escritura option:selected").each(function() {
+						data['ingles_escritura'] = $('#ingles_escritura').val();
+					});
+					data['experiencia'] = $('#experiencia').val();
+					data['habilidades'] = $('#habilidades').val();
+					data['funciones'] = $('#funciones').val();
+					data['observaciones'] = $('#observaciones').val();
+				$.ajax({
+					url: '',
+					type: 'post',
+					data: data,
+					beforeSend: function() {
+						$('#update').hide('slow');
+						$('#cargando').show('slow');
+					},
+					success: function(data){//alert(data);
+						var returnedData = JSON.parse(data);
+						console.log(returnedData['msg']);
+						if(returnedData['msg']=="ok"){
+							alert('Se ha reactivado y enviado al director de área');
+							window.document.location='';
+						}else{
+							$('#cargando').hide('slow');
+							$('#update').show('slow');
+							$('#alert').prop('display',true).show('slow');
+							$('#msg').html(returnedData['msg']);
+							setTimeout(function() {
+								$("#alert").fadeOut(1500);
+							},3000);
+						}
+					},
+					error: function(xhr) {
+						console.log(xhr.statusText);
+						$('#cargando').hide('slow');
+						$('#update').show('slow');
+						$('#alert').prop('display',true).show('slow');
+						$('#msg').html('Error, intenta de nuevo o contacta al Administrador de la Aplicación');
+						setTimeout(function() {
+							$("#alert").fadeOut(1500);
+						},3000);
+					}
+				});*/
+
+				//event.preventDefault();
 			});
 
 			$("#autorizar").click(function() {
-				if(!confirm('¿Seguro que desea autorizar la requisición?'))
+                
+                modalWindow("autorizar");
+                
+				/*if(!confirm('¿Seguro que desea autorizar la requisición?'))
 					return false;
 				id = $('#id').val();
 				$.ajax({
@@ -575,11 +1381,14 @@
 							$("#alert").fadeOut(1500);
 						},3000);
 					}
-				});
+				});*/
 			});
 
 			$("#aceptar").click(function() {
-				if(!confirm('¿Aceptar y Enviar al autorizador final?'))
+				
+                modalWindow("aceptar");
+                
+                /*if(!confirm('¿Aceptar y Enviar al autorizador final?'))
 					return false;
 				id = $('#id').val();
 				$.ajax({
@@ -616,7 +1425,7 @@
 							$("#alert").fadeOut(1500);
 						},3000);
 					}
-				});
+				});*/
 			});
 
 			$("#rechazar").click(function() {
@@ -629,6 +1438,16 @@
 				$('#update').hide('slow');
 				$('#razon').show('slow');
 				$('#accion').val("cancelar");
+                
+                razon= $('input#razon').val();
+                
+                if(razon == ""){
+                    $('#alert2').hide('slow');
+                    $('#alert1').show('slow');
+                }else{
+                    $('#alert1').hide('slow');
+                    $('#alert2').show('slow');
+                }
 			});
             
 			/*$("#sin_completar").click(function() {
@@ -638,12 +1457,21 @@
 			});*/
 
 			$("#razon").submit(function(event) {
-				razon = $("#razon_txt").val();
+				
+                razon = $("#razon_txt").val();
 				accion = $("#accion").val();
 				id = $("#id").val();
 				autorizador=<?= $requisicion->autorizador;?>;
-				if(accion == "rechazar"){
-					if(!confirm("¿Seguro que desea rechazar la requisición?"))
+				
+                if(accion == "rechazar"){
+			
+                    $('#update').show('slow');
+				    $('#razon').hide('slow');
+				    //$('#accion').val("rechazar");
+                    
+                    modalWindow("rechazar");
+                    
+                    /*if(!confirm("¿Seguro que desea rechazar la requisición?"))
 						return false;
 					estatus=4;
 					alerta="Se ha enviado notificación al solicitante";
@@ -681,9 +1509,17 @@
 								$("#alert").fadeOut(1500);
 							},3000);
 						}
-					});
+					});*/
+                    
 				}else if(accion == "cancelar"){
-					if(!confirm("¿Seguro que desea cancelar la requisición?"))
+					
+                    $('#update').show('slow');
+				    $('#razon').hide('slow');
+				    //$('#accion').val("rechazar");
+                    
+                    modalWindow("cancelar");
+                    
+                    /*if(!confirm("¿Seguro que desea cancelar la requisición?"))
 						return false;
 					$.ajax({
 						url: '<?= base_url("requisicion/rechazar_cancelar");?>',
@@ -719,7 +1555,8 @@
 								$("#alert").fadeOut(1500);
 							},3000);
 						}
-					});
+					});*/
+                    
 				}/*else if(accion == "sin_completar"){
 					if(!confirm("¿Seguro que desea cerrar la requisición?"))
 						return false;
@@ -764,7 +1601,10 @@
 			});
             
             $("#reactivar").click(function() {
-				if(!confirm('¿Seguro(a) que desea reanudar la requisición?'))
+                
+                //modalWindow("reactivar");
+				
+                if(!confirm('¿Seguro(a) que desea reanudar la requisición?'))
 					return false;
 				id = $("#id").val();
 				$.ajax({
@@ -802,20 +1642,23 @@
 						},3000);
 					}
 				});
+                
 			});
             
 			$('#exportar').click(function() {
 				id = $("#id").val();
 				location.href='<?= base_url("requisicion/exportar");?>/'+id;
 			});
-
-			$("#realizada").click(function() {
-				if(!confirm('¿Seguro(a) que desea cerrar la requisición?'))
+            
+            $("#atender").click(function() {
+				
+                modalWindow("atender");
+                /*if(!confirm('¿Seguro(a) que desea atender la requisición?'))
 					return false;
 				id = $("#id").val();
 
 				$.ajax({
-					url: '<?= base_url("requisicion/cerrar");?>',
+					url: '<?= base_url("requisicion/atender");?>',
 					type: 'post',
 					data: {'id':id,'estatus':6},
 					beforeSend: function() {
@@ -826,8 +1669,8 @@
 						var returnedData = JSON.parse(data);
 						console.log(returnedData);
 						if(returnedData['msg']=="ok"){
-							alert("Se ha cerrado la requisición");
-							window.document.location='<?= base_url("user/nuevo");?>/'+id;
+							alert("La requisición está siendo atendida");
+                            window.document.location='<?= base_url("requisiciones");?>';
 						}else{
 							$('#cargando').hide('slow');
 							$('#update').show('slow');
@@ -848,11 +1691,61 @@
 							$("#alert").fadeOut(1500);
 						},3000);
 					}
-				});
+				});*/
+			});
+            
+			$("#realizada").click(function() {
+				
+                modalWindow("completar");
+                
+                /*if(!confirm('¿Seguro(a) que desea cerrar la requisición?'))
+					return false;
+				id = $("#id").val();
+
+				$.ajax({
+					url: '<?= base_url("requisicion/cerrar");?>',
+					type: 'post',
+					data: {'id':id,'estatus':6},
+					beforeSend: function() {
+						$('#update').hide('slow');
+						$('#cargando').show('slow');
+					},
+					success: function(data){
+						var returnedData = JSON.parse(data);
+						console.log(returnedData);
+						if(returnedData['msg']=="ok"){
+							
+                            alert("Se ha cerrado la requisición");
+							window.document.location='<?= base_url("user/nuevo");?>/'+id;
+                            
+						}else{
+							$('#cargando').hide('slow');
+							$('#update').show('slow');
+							$('#alert').prop('display',true).show('slow');
+							$('#msg').html(returnedData['msg']);
+							setTimeout(function() {
+								$("#alert").fadeOut(1500);
+							},3000);
+						}
+					},
+					error: function(xhr) {
+						console.log(xhr.statusText);
+						$('#cargando').hide('slow');
+						$('#update').show('slow');
+						$('#alert').prop('display',true).show('slow');
+						$('#msg').html('Error, intenta de nuevo o contacta al Administrador de la Aplicación');
+						setTimeout(function() {
+							$("#alert").fadeOut(1500);
+						},3000);
+					}
+				});*/
 			});
 
 			$("#stand_by").click(function() {
-				if(!confirm('¿Seguro(a) que desea turnar la requisición a Stand By?'))
+				
+                modalWindow("pausar");
+                
+                /*if(!confirm('¿Seguro(a) que desea turnar la requisición a Stand By?'))
 					return false;
 				id = $("#id").val();
 				$.ajax({
@@ -889,11 +1782,14 @@
 							$("#alert").fadeOut(1500);
 						},3000);
 					}
-				});
+				});*/
 			});
 			
 			$("#reanudar").click(function() {
-				if(!confirm('¿Seguro(a) que desea reanudar la requisición?'))
+				
+                modalWindow("reanudar");
+                
+                /*if(!confirm('¿Seguro(a) que desea reanudar la requisición?'))
 					return false;
 				id = $("#id").val();
 				$.ajax({
@@ -930,7 +1826,7 @@
 							$("#alert").fadeOut(1500);
 						},3000);
 					}
-				});
+				});*/
 			});
 			
 			function check_director(){
@@ -949,7 +1845,7 @@
 				estatus=<?= $requisicion->estatus;?>;
 				//if(estatus != 4 || usuario != solicita){
                 //alert(usuario+" "+solicita);
-                if((estatus != 5) && (usuario == solicita)){
+                if( ((estatus != 5) && (usuario == solicita)) || ((estatus != 2)) ){
 					$("#update :input:not(button)").attr("disabled", true).css({'background-color':'white','cursor':'default'});
 					$("#update button").attr("disabled", false).css('cursor','pointer');
 				}

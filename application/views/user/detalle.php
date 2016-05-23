@@ -182,13 +182,24 @@
 		<div class="form-group">
 			<label for="tipo">Tipo de Acceso:</label>
 			<select class="form-control" style="max-width:300px; text-align:center;" id="tipo">
-				<option value="0" <?php if($user->tipo == 0) echo "selected"; ?>>Colaborador</option>
+				<!--<option value="0" <?php if($user->tipo == 0) echo "selected"; ?>>Colaborador</option>
 				<option value="1" <?php if($user->tipo == 1) echo "selected"; ?>>Capturista (Gastos de Viaje)</option>
 				<option value="2" <?php if($user->tipo == 2) echo "selected"; ?>>Capturista (Harvest)</option>
 				<option value="3" <?php if($user->tipo == 3) echo "selected"; ?>>Requisiciones</option>
 				<option value="4" <?php if($user->tipo == 4) echo "selected"; ?>>Administrador</option>
 				<option value="5" <?php if($user->tipo == 5) echo "selected"; ?>>Requisiciones y Administrador</option>
-				<option value="6" <?php if($user->tipo == 6) echo "selected"; ?>>Soporte Técnico</option>
+				<option value="6" <?php if($user->tipo == 6) echo "selected"; ?>>Soporte Técnico</option>-->
+                
+                <?php 
+                    foreach($tipo_acceso as $tp){
+                ?>
+                    
+                        <option value="<?php echo $tp->access; ?>" <?php if($user->tipo == $tp->access) echo "selected"; ?>><?php echo $tp->nombre; ?></option>
+                        
+                <?php
+                    }
+                
+                ?>
 			</select>
 		</div>
 	  </div>

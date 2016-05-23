@@ -126,7 +126,10 @@
 			<?php if($this->session->userdata('id') != ""): ?>
 				<div id="navbar" class="navbar-collapse collapse" aria-expanded="false">
 					<ul class="nav navbar-nav">
-						<?php if(in_array($this->session->userdata('tipo'), array(4,5,6)) || $this->session->userdata('posicion') <= 3 || $this->session->userdata('area') == 4): ?>
+						<?php //if(in_array($this->session->userdata('tipo'), array(4,5,6)) || $this->session->userdata('posicion') <= 3 || $this->session->userdata('area') == 4): 
+                        
+                            if($this->session->userdata('permisos')['administrator']):
+                        ?>
 							<li class="dropdown">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
 									Administración<span class="caret"></span></a>
@@ -141,7 +144,7 @@
 											//if($this->session->userdata('tipo') > 3 || $this->session->userdata('area')==4): 
                                             
                                             //echo $this->session->userdata('permisos')[];exit;
-                                            if($this->session->userdata('permisos')['admin_requisicion']):
+                                            //if($this->session->userdata('permisos')['admin_requisicion']):
                                             ?>
 												<li class="dropdown-submenu">
                                                     <a href="#" tabindex="-1">Requisiciones</a>
@@ -158,15 +161,15 @@
                                                     </ul>
                                                 </li>
 												<li><a href="<?= base_url('admin_solicitudes');?>">Todas las Solicitudes</a></li>
-												<?php if($this->session->userdata('tipo') > 3): ?>
+												<?php //if($this->session->userdata('tipo') > 3): ?>
 													<li><a href="<?= base_url('evaluacion');?>">Evaluaciones</a></li>
 													<li><a href="<?= base_url('evaluacion/por_evaluador');?>">Evaluaciones por Evaluador</a></li>
 													<li><a href="<?= base_url('evaluacion/pendientes');?>">Evaluaciones Pendientes de Enviar</a></li>
-												<?php endif;
-											endif; ?>
+												<?php //endif;
+											//endif; ?>
 										</ul>
 									</li>
-									<?php if(in_array($this->session->userdata('tipo'), array(4,5,6))): ?>
+									<?php //if(in_array($this->session->userdata('tipo'), array(4,5,6))): ?>
 										<li role="separator" class="divider"></li>
 										<li class="dropdown-submenu"><a tabindex="-1" href="#">ABC</a>
 											<ul class="dropdown-menu">
@@ -183,7 +186,7 @@
 												<li><a href="<?= base_url('evaluaciones');?>">Evaluación de Desempeño</a></li>
 											</ul>
 										</li>
-									<?php endif; ?>
+									<?php //endif; ?>
 								</ul>
 							</li>
 						<?php endif; ?>
