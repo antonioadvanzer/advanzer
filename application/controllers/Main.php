@@ -52,6 +52,12 @@ class Main extends CI_Controller {
 		
 		//echo !empty($data['pr']);exit;
 		
+		// Recargamos las requisiciones pendientes
+		$permisos = $this->session->userdata('permisos');
+		$permisos['requisicion_pendiente'] = count($this->requisicion_model->getRequisicionesPendenting($this->session->userdata('id')));
+		$this->session->set_userdata('permisos', $permisos);
+		
+		
 		$this->layout->title('Advanzer - Inicio');
 		$this->layout->view('main/index', $data);
 	}

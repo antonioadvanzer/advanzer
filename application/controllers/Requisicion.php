@@ -75,12 +75,7 @@ class Requisicion extends CI_Controller {
 		elseif($status == "all" || $status == 0 || $status == 1 || $status == 2 || $status == 3 || $status == 4 || $status == 5 || $status == 6 || $status == 7):
 			$data['requisiciones']=$this->requisicion_model->getRequisiciones($status);
 		endif;*/
-		
-		// Recargamos las requisiciones pendientes
-		$permisos = $this->session->userdata('permisos');
-		$permisos['requisicion_pendiente'] = count($this->requisicion_model->getRequisicionesPendenting($this->session->userdata('id')));
-		$this->session->set_userdata('permisos', $permisos);
-		
+						
 		$data['pr'] = in_array($colaborador->tipo,array(5,3)) || ($colaborador->posicion <=5);
 		
 		$this->layout->title('Advanzer - Requisiciones');
@@ -238,6 +233,11 @@ class Requisicion extends CI_Controller {
 				$tools[] = 4;
 				$tools[] = 5;
 			}*/
+			
+			// Recargamos las requisiciones pendientes
+			$permisos = $this->session->userdata('permisos');
+			$permisos['requisicion_pendiente'] = count($this->requisicion_model->getRequisicionesPendenting($this->session->userdata('id')));
+			$this->session->set_userdata('permisos', $permisos);
 			
 			$data['tools'] = $tools;			
 			
