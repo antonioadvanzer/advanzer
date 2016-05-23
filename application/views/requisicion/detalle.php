@@ -97,7 +97,7 @@
 							style="text-align:center;background-color:white" value="<?= $requisicion->fecha_aceptacion;?>" 
 							readonly required>
                         
-                        <?php } if($requisicion->estatus == 3){ ?>
+                        <?php } if(($requisicion->estatus == 3) || ($requisicion->estatus == 6) || ($requisicion->estatus == 7) || ($requisicion->estatus == 8)){ ?>
                         
                         <span class="input-group-addon">Fecha de aceptaci&oacute;n</span>
 						<input data-provide="datepicker" data-date-format="yyyy-mm-dd" class="form-control" type="text" id="fecha_estimada" 
