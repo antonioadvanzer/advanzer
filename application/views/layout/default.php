@@ -156,6 +156,7 @@
                                                         <li class=""><a href="<?= base_url('requisiciones')."/?status=4";?>">Rechazadas</a>
                                                         </li>
                                                         <li class=""><a href="<?= base_url('requisiciones')."/?status=0";?>">Canceladas</a></li>
+                                                        <li class=""><a href="<?= base_url('requisiciones')."/?status=8";?>">En Proceso</a></li>
                                                         <li class=""><a href="<?= base_url('requisiciones')."/?status=6";?>">Cerradas</a></li>
                                                         <li class=""><a href="<?= base_url('requisiciones')."/?status=7";?>">Stand By</a></li>
                                                     </ul>

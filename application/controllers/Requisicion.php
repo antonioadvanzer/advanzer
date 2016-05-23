@@ -42,7 +42,7 @@ class Requisicion extends CI_Controller {
 		// Evaluamos primero el puesto despues el area, y al final los permisos especiales (tipo de acceso)
 		if((($colaborador->nivel_posicion <= 5) || ($colaborador->tipo == 3) || ($colaborador->tipo == 4)) && ($status == "own")){
 			$option = 1;
-		}elseif((($colaborador->tipo == 4) && ($colaborador->area == 4)) && ($status == "all" || $status == 0 || $status == 1 || $status == 2 || $status == 3 || $status == 4 || $status == 5 || $status == 6 || $status == 7)){
+		}elseif((($colaborador->tipo == 4) && ($colaborador->area == 4)) && ($status == "all" || $status == 0 || $status == 1 || $status == 2 || $status == 3 || $status == 4 || $status == 5 || $status == 6 || $status == 7 || $status == 8)){
 			$option = 2;
 		}/*elseif(((($tipo = $colaborador->tipo) == 5) || ($tipo == 3)) && ($status == "own")){
 			$option = 1;
@@ -161,7 +161,7 @@ class Requisicion extends CI_Controller {
 			
 				$tools[] = 4;
 				$tools[] = 5;
-				//$tools[] = 10;
+				$tools[] = 10;
 			
 			}elseif(($rs == 0) && ( $solicitante == $colaborador->id)){	
 			
@@ -546,6 +546,8 @@ class Requisicion extends CI_Controller {
 				$response['msg']="ok";
 			}*/
 			
+			$this->sendMail($destinatario,$mensaje);
+			
 			$response['msg']="ok";
 			
 		}
@@ -690,9 +692,21 @@ class Requisicion extends CI_Controller {
 		$id=$this->input->post('id');
 		
 		if($this->requisicion_model->update($id,$datos)){
-			$response['msg']="ok";
 			
-			// Send Mail to User
+			$requisicion = $this->requisicion_model->getById($id);
+			
+			if($requisicion->usuario_modificacion == $requisicion->solicita){ //el mismo solicitante cambió a stand by
+				$destinatario='perla.valdez@advanzer.com';
+			}else{
+				$destinatario=$this->user_model->searchById($requisicion->solicita)->email;
+			}
+			
+			$data['requisicion']=$requisicion;
+			$mensaje=$this->load->view("layout/requisicion/stand_by",$data,true);
+
+			$this->sendMail($destinatario,$mensaje);
+				
+			$response['msg']="ok";
 			
 		}else{
 			$response['msg']="Ha habido un error al turnar a Stand By la requisición";

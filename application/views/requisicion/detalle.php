@@ -343,9 +343,7 @@
                     <div>
                         <div id="title" class="title" align="center"><h2>Titulo</h2></div>
                         <a title="Close" onclick="window.history.back();" class="close">X</a>
-                        <div id="body" class="body" align="center">
-
-                            
+                        <div id="body" class="body" align="center">  
 
                         </div>
                     </div>

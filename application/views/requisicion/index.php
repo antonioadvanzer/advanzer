@@ -123,6 +123,7 @@
 
 	<script>
 		$(document).ready(function() {
-			$('#tbl').DataTable({responsive: true,info: false,paging: false,order: [[ 1, "desc" ]]});
+			//$('#tbl').DataTable({responsive: true,info: false,paging: false,order: [[ 1, "desc" ]]});
+            $('#tbl').DataTable({responsive: true,info: false,paging: false});
 	} );
 	</script>

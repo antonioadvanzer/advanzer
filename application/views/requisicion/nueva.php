@@ -2,9 +2,9 @@
 <div class="jumbotron">
 	<div class="container">
 		<h2>Requisición de Personal</h2>
-		<ul>
+		<!--<ul>
 			<li>Sea claro en sus necesidades, esto facilitará la labor en la búsqueda del candidato que cubra de la mejor manera su requerimiento.</li>
-		</ul>
+		</ul>-->
 	</div>
 </div>
 <div class="container">
@@ -236,8 +236,172 @@
 				</div>
 			</div>
 		</div>
+        
+        <div id="openModal" class="modalDialog">
+            <div>
+                <div id="title" class="title" align="center"><h2>Titulo</h2></div>
+                <a title="Close" onclick="window.history.back();" class="close">X</a>
+                <div id="body" class="body" align="center">  
+
+                </div>
+            </div>
+        </div>
+        
 	</form>
 	<script>
+        
+        function modalWindow(option){
+            
+            switch(option){
+                    
+                    case "enviar":
+                        
+                        document.getElementById("title").innerHTML = '<h2>Atención</h2>'
+                        document.getElementById("body").innerHTML = '<p>¿Seguro que desea enviar la requisición?</p>'
+                                        +'<a type="button" class="btn btn-primary" href="#procesando" onclick="enviar();">Aceptar</a>&nbsp; &nbsp; '
+                                        +'<a type="button" class="btn btn-primary" onclick="window.history.back();">Cancelar</a>';
+                        window.document.location = "#openModal";
+                    
+                    break;
+                    
+                    case "confirm_enviar":
+                    
+                        document.getElementById("title").innerHTML = '<h2>Aviso</h2>'
+                        document.getElementById("body").innerHTML = '<p>Se ha enviado para autorización</p>'
+                                        +'<a type="button" class="btn btn-primary" onclick="confirm_enviar();">Aceptar</a>';
+                        window.document.location = "#openModal";
+                    
+                    break;
+            }
+            
+        }
+        
+        function enviar(){
+            /*if(!confirm('¿Seguro que desea enviar la requisición?'))
+					return false;*/
+				//get form values
+					data={};
+					$("#director_area option:selected").each(function() {
+						data['director_area'] = $('#director_area').val();
+					});
+					$("#autorizador option:selected").each(function() {
+						data['autorizador'] = $('#autorizador').val();
+					});
+					data['solicitud'] = $('#solicitud').val();
+					data['fecha_estimada'] = $('#fecha_estimada').val();
+					$("#area option:selected").each(function() {
+						data['area'] = $('#area').val();
+					});
+					$("#track option:selected").each(function() {
+						data['track'] = $('#track').val();
+					});
+					$("#posicion option:selected").each(function() {
+						data['posicion'] = $('#posicion').val();
+					});
+					$("#empresa option:selected").each(function() {
+						data['empresa'] = $('#empresa').val();
+					});
+					$("#tipo option:selected").each(function() {
+						data['tipo'] = $('#tipo').val();
+					});
+					data['sustituye_a'] = $('#sustituye_a').val();
+					data['proyecto'] = $('#proyecto').val();
+					data['clave'] = $('#clave').val();
+					$("#costo option:selected").each(function() {
+						data['costo'] = $('#costo').val();
+					});
+					if(data['costo']=='DEFINIR')
+						data['costo']=$('#costo_maximo').val();
+					$("#residencia option:selected").each(function() {
+						data['residencia'] = $('#residencia').val();
+					});
+					if(residencia=="")
+						data['residencia']=$('#residencia_otro').val();
+					$("#lugar_trabajo option:selected").each(function() {
+						data['lugar_trabajo'] = $('#lugar_trabajo').val();
+					});
+					data['domicilio_cte'] = $('#domicilio_cte').val();
+					$("#contratacion option:selected").each(function() {
+						data['contratacion'] = $('#contratacion').val();
+					});
+					data['entrevista'] = $('#entrevista').val();
+					$("#disp_viajar option:selected").each(function() {
+						data['disp_viajar'] = $('#disp_viajar').val();
+					});
+					$("#edad_uno option:selected").each(function() {
+						data['edad_uno'] = $('#edad_uno').val();
+					});
+					$("#edad_dos option:selected").each(function() {
+						data['edad_dos'] = $('#edad_dos').val();
+					});
+					$("#sexo option:selected").each(function() {
+						data['sexo'] = $('#sexo').val();
+					});
+					$("#nivel option:selected").each(function() {
+						data['nivel'] = $('#nivel').val();
+					});
+					data['carrera'] = $('#carrera').val();
+					$("#ingles_hablado option:selected").each(function() {
+						data['ingles_hablado'] = $('#ingles_hablado').val();
+					});
+					$("#ingles_lectura option:selected").each(function() {
+						data['ingles_lectura'] = $('#ingles_lectura').val();
+					});
+					$("#ingles_escritura option:selected").each(function() {
+						data['ingles_escritura'] = $('#ingles_escritura').val();
+					});
+					data['experiencia'] = $('#experiencia').val();
+					data['habilidades'] = $('#habilidades').val();
+					data['funciones'] = $('#funciones').val();
+					data['observaciones'] = $('#observaciones').val();
+				
+            $.ajax({
+					url: '<?= base_url("requisicion/guardar");?>',
+					type: 'post',
+					data: data,
+					beforeSend: function() {
+						$('#update').hide('slow');
+						$('#cargando').show('slow');
+					},
+					success: function(data){//alert(data);
+						var returnedData = JSON.parse(data);
+						if(returnedData['msg']=="ok"){
+							
+                            /*alert('Se ha enviado para autorización');
+							window.document.location='<?= base_url("requisicion");?>';*/
+						
+                            $('#update').show('slow');
+                            $('#cargando').hide('slow');
+                            
+                            window.modalWindow("confirm_enviar");    
+                            
+                        }else{
+							$('#cargando').hide('slow');
+							$('#update').show('slow');
+							$('#alert').prop('display',true).show('slow');
+							$('#msg').html(returnedData['msg']);
+							setTimeout(function() {
+								$("#alert").fadeOut(1500);
+							},3000);
+						}
+					},
+					error: function(xhr) {
+						console.log(xhr.responseText);
+						$('#cargando').hide('slow');
+						$('#update').show('slow');
+						$('#alert').prop('display',true).show('slow');
+						$('#msg').html('Error, intenta de nuevo o contacta al Administrador de la Aplicación');
+						setTimeout(function() {
+							$("#alert").fadeOut(1500);
+						},3000);
+					}
+				});
+        }
+        
+        function confirm_enviar(){           
+            window.document.location='<?= base_url("main");?>';
+        }
+        
 		$(document).ready(function() {
 			//changes
 				$('#solicitud').datepicker({
@@ -316,7 +480,10 @@
 
 			$("#update").submit(function(event){
 				event.preventDefault();
-				if(!confirm('¿Seguro que desea enviar la requisición?'))
+				
+                modalWindow("enviar");
+                
+                /*if(!confirm('¿Seguro que desea enviar la requisición?'))
 					return false;
 				//get form values
 					data={};
@@ -426,7 +593,7 @@
 							$("#alert").fadeOut(1500);
 						},3000);
 					}
-				});
+				});*/
 			});
 		});
 	</script>

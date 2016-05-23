@@ -80,7 +80,7 @@ class Requisicion_model extends CI_Model{
 		$this->db->or_where('R.autorizador',$colaborador->id);		
 		$this->db->where('R.estatus',2);*/				
 		
-		//$this->db->order_by("fecha_solicitud", "desc");
+		$this->db->order_by("fecha_solicitud", "desc");
 		
 		return $this->db->get('Requisiciones R')->result();
 	}
@@ -94,7 +94,7 @@ class Requisicion_model extends CI_Model{
 			return false;
 	}
 
-	// Esta funcion evalua todas la requisiciones y cancela todas las que tines un timpo limite de existencias
+	// Esta funcion evalua todas la requisiciones y cancela todas las que tienen un tiempo limite de existencias
 	function expireRequisicion($time){
 		
 		/*$fecha="2016-05-14 00:00:00";
