@@ -28,7 +28,7 @@
 					<br>                    
                         
                         <input id="razon" type="hidden" value="<?= $requisicion->razon;?>">
-                    
+                        
                         <div id="alert1" class="alert alert-warning">
                           Podrá ser reactivada una vez mas.
                         </div>
@@ -85,8 +85,35 @@
 						<input data-provide="datepicker" data-date-format="yyyy-mm-dd" class="form-control" type="text" id="fecha_estimada" 
 							style="text-align:center;background-color:white" value="<?= $requisicion->fecha_estimada;?>" 
 							readonly required>
-					</div>
-					<br>
+                    </div>
+                    <br>
+                    <?php if($this->session->userdata('permisos')['administrator']): ?>
+                    <div class="input-group">
+                        
+                        <?php if($requisicion->estatus == 2){?>
+                        
+                        <span class="input-group-addon">Fecha de aceptaci&oacute;n</span>
+						<input data-provide="datepicker" data-date-format="yyyy-mm-dd" class="form-control" type="text" id="fecha_estimada" 
+							style="text-align:center;background-color:white" value="<?= $requisicion->fecha_aceptacion;?>" 
+							readonly required>
+                        
+                        <?php } if($requisicion->estatus == 3){ ?>
+                        
+                        <span class="input-group-addon">Fecha de aceptaci&oacute;n</span>
+						<input data-provide="datepicker" data-date-format="yyyy-mm-dd" class="form-control" type="text" id="fecha_estimada" 
+							style="text-align:center;background-color:white" value="<?= $requisicion->fecha_aceptacion;?>" 
+							readonly required>
+                        
+                        <span class="input-group-addon">Fecha de autorizaci&oacute;n</span>
+						<input data-provide="datepicker" data-date-format="yyyy-mm-dd" class="form-control" type="text" id="fecha_estimada" 
+							style="text-align:center;background-color:white" value="<?= $requisicion->fecha_autorizacion;?>" 
+							readonly required>
+                        
+                        <?php } ?>
+                        
+					</div><br>
+                    <?php endif; ?>
+					
 					<div class="input-group">
 						<span class="input-group-addon">Área</span>
 						<select id="area" class="form-control" required>

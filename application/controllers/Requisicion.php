@@ -61,8 +61,8 @@ class Requisicion extends CI_Controller {
 				$data['requisiciones']=$this->requisicion_model->getOwnRequisiciones($colaborador->id);
 			break;
 			case 2:
-				if($status == 0){
-					$data['requisiciones'] = array_merge($this->requisicion_model->getRequisiciones($status),$this->requisicion_model->getRequisiciones(5));
+				if(($status == 0) && ($status != "all")){
+					$data['requisiciones'] = array_merge($this->requisicion_model->getRequisiciones(0),$this->requisicion_model->getRequisiciones(5));
 				}else{
 					$data['requisiciones'] = $this->requisicion_model->getRequisiciones($status);
 				}
@@ -331,9 +331,13 @@ class Requisicion extends CI_Controller {
 		// comprobamos si el solicitante es el director o el autorizador
 		if($datos['autorizador'] == $this->session->userdata('id')){
 			$datos['estatus']=3;
+			$datos['fecha_aceptacion'] = date('Y-m-d');
+			$datos['fecha_autorizacion'] = date('Y-m-d');
 		}elseif($datos['director'] == $this->session->userdata('id')){
 			$datos['estatus']=2;
+			$datos['fecha_aceptacion'] = date('Y-m-d');
 		}	
+
 			
 		if($requisicion = $this->requisicion_model->guardar($datos)){
 			
@@ -642,6 +646,13 @@ class Requisicion extends CI_Controller {
 	public function ch_estatus(){
 		$this->valida_sesion();
 		$datos['estatus']=$this->input->post('estatus');
+		
+		if($this->input->post('estatus') == 2){
+			$datos['fecha_aceptacion'] = date('Y-m-d');
+		}elseif($this->input->post('estatus') == 3){
+			$datos['fecha_autorizacion'] = date('Y-m-d');
+		}
+		
 		$id=$this->input->post('id');
 		if($this->requisicion_model->update($id,$datos)){
 			$requisicion=$this->requisicion_model->getById($id);
@@ -660,6 +671,10 @@ class Requisicion extends CI_Controller {
 					$data['requisicion']=$requisicion;
 					$mensaje=$this->load->view("layout/requisicion/rh",$data,true);
 					$this->requisicion_model->setAlert($id,1);
+					
+					$destinatario2 = $this->user_model->searchById($requisicion->solicita)->email;
+					$mensaje2 = $this->load->view("layout/requisicion/aut",$data,true);
+					$this->sendMail($destinatario2,$mensaje2);
 				
 				break;
 				
