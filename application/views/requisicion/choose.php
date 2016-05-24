@@ -10,7 +10,7 @@
 		<div class="col-md-6" style="padding-top:5%">
 			<p><label style="cursor:pointer;" onclick="location.href='<?= base_url("requisicion/nueva");?>';">
 				<span class="glyphicon glyphicon-chevron-right"></span>
-				Proyecto Advanzer
+				Proyecto Advanzer/Entuizer
 				<span class="glyphicon glyphicon-chevron-left"></span>
 			</label></p>
 		</div>
