@@ -166,8 +166,8 @@ class Requisicion extends CI_Controller {
 			$datos['estatus']=2;
 		if($datos['autorizador'] == $this->session->userdata('id'))
 			$datos['estatus']=3;
-		if($requisicion = $this->requisicion_model->update($id,$datos)){
-			$requisicion = $this->requisicion_model->getById($requisicion);
+		if($this->requisicion_model->update($id,$datos)){
+			$requisicion = $this->requisicion_model->getById($id);
 			$data['requisicion']=$requisicion;
 			switch ($requisicion->estatus) {
 				case 1:
@@ -335,7 +335,7 @@ class Requisicion extends CI_Controller {
 		$this->email->clear(TRUE);
 
 		$this->email->from('notificaciones.ch@advanzer.com','Requisición de Personal - Portal Personal');
-		$this->email->to('jesus.salas@advanzer.com');
+		$this->email->to($destinatario);
 		$this->email->subject('Aviso de Requisición');
 		$this->email->message($mensaje);
 
@@ -457,7 +457,7 @@ class Requisicion extends CI_Controller {
 			$objSheet->setCellValue('B1',$requisicion->id)
 			->setCellValue('B2',$requisicion->nombre_solicita)
 			->setCellValue('B4',$requisicion->fecha_solicitud)
-			->setCellValue('D2',$requisicion->nombre_posicion)
+			->setCellValue('B5',$requisicion->nombre_posicion)
 			->setCellValue('B6',1)
 			->setCellValue('B8',$empresa)
 			->setCellValue('B9',$requisicion->nombre_area)
@@ -480,7 +480,7 @@ class Requisicion extends CI_Controller {
 			->setCellValue('B32',$requisicion->observaciones)
 			->setCellValue('B34',$requisicion->entrevista);
 
-		$file_name = "requisicion_".$requisicion->id;
+		$file_name = "requisicion_".$requisicion->id.".xlsx";
 		header('Content-Type: application/vnd.ms-excel');
 		header('Content-Disposition: attachment;filename="'.$file_name.'"');
 		header('Cache-Control: max-age=0');		

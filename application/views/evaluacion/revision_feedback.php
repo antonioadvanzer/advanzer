@@ -85,8 +85,7 @@
 				<div class="form-group">
 					<label for="boton">&nbsp;</label>
 					<?php if($feedback->estatus ==0): ?>
-						<button id="guardar" type="submit" class="btn btn-lg btn-primary btn-block" style="max-width:200px;text-align:center;
-							display:none">Guardar y Enviar</button>
+						<button id="guardar" type="submit" class="btn btn-lg btn-primary btn-block" style="max-width:200px;text-align:center;">Guardar y Enviar</button>
 					<?php endif;
 					if($feedback->colaborador == $this->session->userdata('id') && $feedback->estatus !=2): ?>
 						<button id="enterado" type="button" class="btn btn-lg btn-primary btn-block" 

@@ -1,233 +1,430 @@
-2015-10-07 18:05:01 - Succesfully executed with activity:
-	Evaluation: 'Desempeño 2014' with id: 1 has been closed with no errors
-	Evaluation: 'Proyecto de prueba' with id: 2 has been closed with no errors
+Se ha enviado reporte anual2015-10-29 11:26:19 - Succesfully executed with activity:
+	Evaluation: 'Desempeño Anual' with id: 14 has been closed with no errors
 	
 
-2015-10-07 18:06:01 - Succesfully executed with no activity.
+2015-10-29 11:28:25 - Succesfully executed with activity:
+	Evaluation: 'Desempeño Anual' with id: 14 has been closed with no errors
+	Se ha enviado reporte anual
 
-2015-10-09 11:30:01 - Succesfully executed with activity:
-	Evaluation: 'Desempeño 2014' with id: 1 has been closed with no errors
+2015-10-30 01:00:07 - Succesfully executed with activity:
+	Evaluation: 'Desempeño Anual' with id: 14 has been closed with no errors
+	Se ha enviado reporte anual
+
+2015-10-31 01:00:01 - Succesfully executed with no activity.
+
+2015-11-01 01:00:02 - Succesfully executed with no activity.
+
+2015-11-02 01:00:01 - Succesfully executed with no activity.
+
+2015-11-03 01:00:01 - Succesfully executed with no activity.
+
+2015-11-04 01:00:01 - Succesfully executed with no activity.
+
+2015-11-05 01:00:02 - Succesfully executed with no activity.
+
+2015-11-06 01:00:02 - Succesfully executed with no activity.
+
+2015-11-07 01:00:02 - Succesfully executed with no activity.
+
+2015-11-08 01:00:02 - Succesfully executed with no activity.
+
+2015-11-09 01:00:02 - Succesfully executed with no activity.
+
+2015-11-11 01:00:02 - Succesfully executed with no activity.
+
+2015-11-12 01:00:01 - Succesfully executed with no activity.
+
+2015-11-13 01:00:01 - Succesfully executed with no activity.
+
+2015-11-14 01:00:01 - Succesfully executed with no activity.
+
+2015-11-15 01:00:02 - Succesfully executed with no activity.
+
+2015-11-16 01:00:01 - Succesfully executed with no activity.
+
+2015-11-17 01:00:01 - Succesfully executed with no activity.
+
+2015-11-18 01:00:02 - Succesfully executed with no activity.
+
+2015-11-19 01:00:02 - Succesfully executed with no activity.
+
+2015-11-20 01:00:03 - Succesfully executed with no activity.
+
+2015-11-21 01:00:01 - Succesfully executed with no activity.
+
+2015-11-22 01:00:02 - Succesfully executed with no activity.
+
+2015-11-23 01:00:01 - Succesfully executed with no activity.
+
+2015-11-24 01:00:02 - Succesfully executed with no activity.
+
+2015-11-25 01:00:01 - Succesfully executed with no activity.
+
+2015-11-26 01:00:02 - Succesfully executed with no activity.
+
+2015-11-27 01:00:02 - Succesfully executed with no activity.
+
+2015-11-28 01:00:02 - Succesfully executed with no activity.
+
+2015-11-29 01:00:02 - Succesfully executed with no activity.
+
+2015-11-30 01:00:01 - Succesfully executed with no activity.
+
+2015-12-01 01:00:01 - Succesfully executed with no activity.
+
+2015-12-02 01:00:01 - Succesfully executed with no activity.
+
+2015-12-03 01:00:01 - Succesfully executed with no activity.
+
+2015-12-04 01:00:01 - Succesfully executed with no activity.
+
+2015-12-05 01:00:01 - Succesfully executed with no activity.
+
+2015-12-06 01:00:01 - Succesfully executed with no activity.
+
+2015-12-07 01:00:02 - Succesfully executed with no activity.
+
+2015-12-08 01:00:01 - Succesfully executed with no activity.
+
+2015-12-09 01:00:01 - Succesfully executed with no activity.
+
+2015-12-10 01:00:02 - Succesfully executed with no activity.
+
+2015-12-11 01:00:01 - Succesfully executed with no activity.
+
+2015-12-12 01:00:01 - Succesfully executed with no activity.
+
+2015-12-13 01:00:01 - Succesfully executed with no activity.
+
+2015-12-15 01:00:02 - Succesfully executed with no activity.
+
+2015-12-16 01:00:02 - Succesfully executed with no activity.
+
+2015-12-19 01:00:02 - Succesfully executed with no activity.
+
+2015-12-20 01:00:02 - Succesfully executed with no activity.
+
+2015-12-21 01:00:02 - Succesfully executed with no activity.
+
+2015-12-22 01:00:01 - Succesfully executed with no activity.
+
+2015-12-23 01:00:02 - Succesfully executed with no activity.
+
+2015-12-24 01:00:02 - Succesfully executed with no activity.
+
+2015-12-25 01:00:01 - Succesfully executed with no activity.
+
+2015-12-26 01:00:02 - Succesfully executed with no activity.
+
+2015-12-27 01:00:02 - Succesfully executed with no activity.
+
+2015-12-28 01:00:03 - Succesfully executed with no activity.
+
+2015-12-29 01:00:01 - Succesfully executed with no activity.
+
+2015-12-30 01:00:01 - Succesfully executed with no activity.
+
+2015-12-31 01:00:01 - Succesfully executed with no activity.
+
+2016-01-01 01:00:02 - Succesfully executed with no activity.
+
+2016-01-02 01:00:01 - Succesfully executed with no activity.
+
+2016-01-03 01:00:02 - Succesfully executed with no activity.
+
+2016-01-04 01:00:01 - Succesfully executed with no activity.
+
+2016-01-05 01:00:02 - Succesfully executed with no activity.
+
+2016-01-06 01:00:01 - Succesfully executed with no activity.
+
+2016-01-07 01:00:01 - Succesfully executed with no activity.
+
+2016-01-08 01:00:01 - Succesfully executed with no activity.
+
+2016-01-09 01:00:01 - Succesfully executed with no activity.
+
+2016-01-10 01:00:01 - Succesfully executed with no activity.
+
+2016-01-11 01:00:01 - Succesfully executed with no activity.
+
+2016-01-12 01:00:01 - Succesfully executed with no activity.
+
+2016-01-14 01:00:01 - Succesfully executed with no activity.
+
+2016-01-15 01:00:02 - Succesfully executed with no activity.
+
+2016-01-16 01:00:01 - Succesfully executed with no activity.
+
+2016-01-17 01:00:02 - Succesfully executed with no activity.
+
+2016-01-18 01:00:01 - Succesfully executed with no activity.
+
+2016-01-19 01:00:02 - Succesfully executed with no activity.
+
+2016-01-20 01:00:02 - Succesfully executed with activity:
+	Evaluation: 'GESTIÓN ADMINISTRATIVA/NOMINA' with id: 11 has been closed with no errors
 	
 
-2015-10-09 11:32:19 - Succesfully executed with no activity.
+2016-01-21 01:00:01 - Succesfully executed with no activity.
 
-<br />
-<b>Fatal error</b>:  Call to undefined method Evaluacion_model::check_PeriodoEdicion() in <b>/var/www/html/advanzer/application/controllers/Main.php</b> on line <b>159</b><br />
+2016-01-22 01:00:01 - Succesfully executed with no activity.
 
-<div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+2016-01-23 01:00:01 - Succesfully executed with no activity.
 
-<h4>A PHP Error was encountered</h4>
+2016-01-24 01:00:01 - Succesfully executed with no activity.
 
-<p>Severity: Error</p>
-<p>Message:  Call to undefined method Evaluacion_model::check_PeriodoEdicion()</p>
-<p>Filename: controllers/Main.php</p>
-<p>Line Number: 159</p>
+2016-01-25 01:00:02 - Succesfully executed with no activity.
 
+2016-01-26 01:00:01 - Succesfully executed with no activity.
 
-	<p>Backtrace:</p>
-	
-		
-	
-		
-	
-		
-	
-		
-	
+2016-01-27 01:00:02 - Succesfully executed with no activity.
 
-</div><br />
-<b>Parse error</b>:  syntax error, unexpected '}' in <b>/var/www/html/advanzer/application/models/Evaluacion_model.php</b> on line <b>831</b><br />
+2016-01-28 01:00:02 - Succesfully executed with no activity.
 
-<div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+2016-01-29 01:00:02 - Succesfully executed with no activity.
 
-<h4>A PHP Error was encountered</h4>
+2016-01-30 01:00:02 - Succesfully executed with no activity.
 
-<p>Severity: Parsing Error</p>
-<p>Message:  syntax error, unexpected '}'</p>
-<p>Filename: models/Evaluacion_model.php</p>
-<p>Line Number: 831</p>
+2016-01-31 01:00:02 - Succesfully executed with no activity.
 
+2016-02-01 01:00:08 - Succesfully executed with activity:
+	Evaluation: 'Evaluación Anual 2015' with id: 1 has been closed with no errors
+	Evaluation: 'INADEM - Seguimiento' with id: 2 has been closed with no errors
+	Evaluation: 'INADEM - Mesa de Ayuda' with id: 3 has been closed with no errors
+	Evaluation: 'OAXACA' with id: 4 has been closed with no errors
+	Evaluation: 'IMSS' with id: 5 has been closed with no errors
+	Evaluation: 'SIAPA' with id: 6 has been closed with no errors
+	Evaluation: 'PROYECTOS DG' with id: 7 has been closed with no errors
+	Evaluation: 'OAXACA JG' with id: 10 has been closed with no errors
+	Evaluation: 'TELMEX' with id: 12 has been closed with no errors
+	Evaluation: 'UADC' with id: 13 has been closed with no errors
+	Evaluation: 'DIANA SEPULVEDA' with id: 14 has been closed with no errors
+	Se ha enviado reporte anual
 
-	<p>Backtrace:</p>
-	
-		
-	
-		
-	
-		
-	
-		
-	
+2016-02-02 01:00:01 - Succesfully executed with no activity.
 
-</div>2015-10-09 11:45:01 - Succesfully executed with no activity.
+2016-02-03 01:00:01 - Succesfully executed with no activity.
 
-2015-10-09 11:50:04 - Succesfully executed with no activity.
+2016-02-04 01:00:01 - Succesfully executed with no activity.
 
-<br />
-<b>Parse error</b>:  syntax error, unexpected '=', expecting ')' in <b>/var/www/html/advanzer/application/controllers/Main.php</b> on line <b>43</b><br />
+2016-02-04 10:14:31 - Succesfully executed with activity:
+	Evaluation: 'Evaluación Anual 2015' with id: 1 has been closed with no errors
+	Evaluation: 'INADEM - Seguimiento' with id: 2 has been closed with no errors
+	Evaluation: 'INADEM - Mesa de Ayuda' with id: 3 has been closed with no errors
+	Evaluation: 'OAXACA' with id: 4 has been closed with no errors
+	Evaluation: 'IMSS' with id: 5 has been closed with no errors
+	Evaluation: 'SIAPA' with id: 6 has been closed with no errors
+	Evaluation: 'PROYECTOS DG' with id: 7 has been closed with no errors
+	Evaluation: 'OAXACA JG' with id: 10 has been closed with no errors
+	Evaluation: 'TELMEX' with id: 12 has been closed with no errors
+	Evaluation: 'UADC' with id: 13 has been closed with no errors
+	Evaluation: 'DIANA SEPULVEDA' with id: 14 has been closed with no errors
+	Evaluation: 'FARMACEUTICA' with id: 15 has been closed with no errors
+	Evaluation: 'CAPITAL HUMANO' with id: 16 has been closed with no errors
+	Se ha enviado reporte anual
 
-<div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+2016-02-05 01:00:01 - Succesfully executed with no activity.
 
-<h4>A PHP Error was encountered</h4>
+2016-02-06 01:00:01 - Succesfully executed with no activity.
 
-<p>Severity: Parsing Error</p>
-<p>Message:  syntax error, unexpected '=', expecting ')'</p>
-<p>Filename: controllers/Main.php</p>
-<p>Line Number: 43</p>
+2016-02-07 01:00:02 - Succesfully executed with no activity.
 
+2016-02-08 01:00:01 - Succesfully executed with no activity.
 
-	<p>Backtrace:</p>
-	
-		
-	
-		
-	
-		
-	
-		
-	
+2016-02-09 01:00:01 - Succesfully executed with no activity.
 
-</div>2015-10-09 12:00:01 - Succesfully executed with no activity.
+2016-02-10 01:00:02 - Succesfully executed with no activity.
 
-2015-10-09 12:05:01 - Succesfully executed with no activity.
+2016-02-11 01:00:02 - Succesfully executed with no activity.
 
-2015-10-09 12:10:01 - Succesfully executed with no activity.
+2016-02-12 01:00:02 - Succesfully executed with no activity.
 
-2015-10-09 12:15:02 - Succesfully executed with no activity.
+2016-02-13 01:00:02 - Succesfully executed with no activity.
 
-2015-10-09 12:20:01 - Succesfully executed with no activity.
+2016-02-14 01:00:02 - Succesfully executed with no activity.
 
-2015-10-09 12:25:02 - Succesfully executed with no activity.
+2016-02-15 01:00:02 - Succesfully executed with no activity.
 
-2015-10-09 12:30:02 - Succesfully executed with no activity.
+2016-02-16 01:00:01 - Succesfully executed with no activity.
 
-2015-10-09 12:35:02 - Succesfully executed with no activity.
+2016-02-17 01:00:02 - Succesfully executed with no activity.
 
-2015-10-09 12:40:01 - Succesfully executed with no activity.
+2016-02-18 01:00:02 - Succesfully executed with no activity.
 
-2015-10-09 12:45:01 - Succesfully executed with no activity.
+2016-02-19 01:00:01 - Succesfully executed with no activity.
 
-2015-10-09 12:50:03 - Succesfully executed with no activity.
+2016-02-20 01:00:02 - Succesfully executed with no activity.
 
-2015-10-09 12:55:01 - Succesfully executed with no activity.
+2016-02-21 01:00:02 - Succesfully executed with no activity.
 
-2015-10-09 13:00:01 - Succesfully executed with no activity.
+2016-02-22 01:00:02 - Succesfully executed with no activity.
 
-2015-10-09 13:05:01 - Succesfully executed with no activity.
+2016-02-23 01:00:02 - Succesfully executed with no activity.
 
-2015-10-09 13:10:01 - Succesfully executed with no activity.
+2016-02-24 01:00:02 - Succesfully executed with no activity.
 
-2015-10-09 13:15:01 - Succesfully executed with no activity.
+2016-02-25 01:00:02 - Succesfully executed with no activity.
 
-2015-10-09 13:20:01 - Succesfully executed with no activity.
+2016-02-26 01:00:02 - Succesfully executed with no activity.
 
-2015-10-09 13:25:01 - Succesfully executed with no activity.
+2016-02-27 01:00:01 - Succesfully executed with no activity.
 
-2015-10-09 13:30:02 - Succesfully executed with no activity.
+2016-02-28 01:00:03 - Succesfully executed with no activity.
 
-2015-10-09 13:35:01 - Succesfully executed with no activity.
+2016-02-29 01:00:01 - Succesfully executed with no activity.
 
-2015-10-09 13:40:01 - Succesfully executed with no activity.
+2016-03-01 01:00:02 - Succesfully executed with no activity.
 
-2015-10-09 13:45:02 - Succesfully executed with no activity.
+2016-03-02 01:00:02 - Succesfully executed with no activity.
 
-2015-10-09 13:50:01 - Succesfully executed with no activity.
+2016-03-03 01:00:01 - Succesfully executed with no activity.
 
-2015-10-09 13:55:01 - Succesfully executed with no activity.
+2016-03-04 01:00:02 - Succesfully executed with no activity.
 
-2015-10-09 14:00:02 - Succesfully executed with no activity.
+2016-03-05 01:00:02 - Succesfully executed with no activity.
 
-2015-10-09 14:05:01 - Succesfully executed with no activity.
+2016-03-06 01:00:01 - Succesfully executed with no activity.
 
-2015-10-09 14:10:02 - Succesfully executed with no activity.
+2016-03-08 01:00:02 - Succesfully executed with no activity.
 
-2015-10-09 14:15:01 - Succesfully executed with no activity.
+2016-03-09 01:00:01 - Succesfully executed with no activity.
 
-2015-10-09 14:20:01 - Succesfully executed with no activity.
+2016-03-10 01:00:02 - Succesfully executed with no activity.
 
-2015-10-09 14:25:01 - Succesfully executed with no activity.
+2016-03-11 01:00:01 - Succesfully executed with no activity.
 
-2015-10-09 14:30:01 - Succesfully executed with no activity.
+2016-03-12 01:00:01 - Succesfully executed with no activity.
 
-2015-10-09 14:35:01 - Succesfully executed with no activity.
+2016-03-13 01:00:01 - Succesfully executed with no activity.
 
-2015-10-09 14:40:01 - Succesfully executed with no activity.
+2016-03-14 01:00:01 - Succesfully executed with no activity.
 
-2015-10-09 14:45:01 - Succesfully executed with no activity.
+2016-03-15 01:00:02 - Succesfully executed with no activity.
 
-2015-10-09 14:50:01 - Succesfully executed with no activity.
+2016-03-16 01:00:02 - Succesfully executed with no activity.
 
-2015-10-09 14:55:01 - Succesfully executed with no activity.
+2016-03-17 01:00:01 - Succesfully executed with no activity.
 
-2015-10-09 15:00:01 - Succesfully executed with no activity.
+2016-03-18 01:00:01 - Succesfully executed with no activity.
 
-2015-10-09 15:05:01 - Succesfully executed with no activity.
+2016-03-19 01:00:01 - Succesfully executed with no activity.
 
-2015-10-09 15:10:01 - Succesfully executed with no activity.
+2016-03-20 01:00:01 - Succesfully executed with no activity.
 
-2015-10-09 15:15:01 - Succesfully executed with no activity.
+2016-03-21 01:00:06 - Succesfully executed with no activity.
 
-2015-10-09 15:20:01 - Succesfully executed with no activity.
+2016-03-22 01:00:01 - Succesfully executed with no activity.
 
-2015-10-09 15:25:01 - Succesfully executed with no activity.
+2016-03-23 01:00:02 - Succesfully executed with no activity.
 
-2015-10-09 15:30:02 - Succesfully executed with no activity.
+2016-03-24 01:00:01 - Succesfully executed with no activity.
 
-2015-10-09 15:35:01 - Succesfully executed with no activity.
+2016-03-25 01:00:01 - Succesfully executed with no activity.
 
-2015-10-09 15:40:02 - Succesfully executed with no activity.
+2016-03-26 01:00:01 - Succesfully executed with no activity.
 
-2015-10-09 15:45:02 - Succesfully executed with no activity.
+2016-03-27 01:00:01 - Succesfully executed with no activity.
 
-2015-10-09 15:50:03 - Succesfully executed with no activity.
+2016-03-28 01:00:02 - Succesfully executed with no activity.
 
-2015-10-09 15:55:01 - Succesfully executed with no activity.
+2016-03-29 01:00:06 - Succesfully executed with no activity.
 
-2015-10-09 16:00:02 - Succesfully executed with no activity.
+2016-03-30 01:00:02 - Succesfully executed with no activity.
 
-2015-10-09 16:05:01 - Succesfully executed with no activity.
+2016-03-31 01:00:01 - Succesfully executed with no activity.
 
-2015-10-09 16:10:01 - Succesfully executed with no activity.
+2016-04-01 01:00:01 - Succesfully executed with no activity.
 
-2015-10-09 16:15:01 - Succesfully executed with no activity.
+2016-04-02 01:00:01 - Succesfully executed with no activity.
 
-2015-10-09 16:20:01 - Succesfully executed with no activity.
+2016-04-03 01:00:01 - Succesfully executed with no activity.
 
-2015-10-09 16:25:01 - Succesfully executed with no activity.
+2016-04-04 01:00:01 - Succesfully executed with no activity.
 
-2015-10-09 16:30:01 - Succesfully executed with no activity.
+2016-04-05 01:00:02 - Succesfully executed with no activity.
 
-2015-10-09 16:35:01 - Succesfully executed with no activity.
+2016-04-06 01:00:01 - Succesfully executed with no activity.
 
-2015-10-09 16:40:01 - Succesfully executed with no activity.
+2016-04-07 01:00:02 - Succesfully executed with no activity.
 
-2015-10-09 16:45:01 - Succesfully executed with no activity.
+2016-04-08 01:00:02 - Succesfully executed with no activity.
 
-2015-10-09 16:50:01 - Succesfully executed with no activity.
+2016-04-09 01:00:01 - Succesfully executed with no activity.
 
-2015-10-09 16:55:01 - Succesfully executed with no activity.
+2016-04-10 01:00:01 - Succesfully executed with no activity.
 
-2015-10-09 17:00:02 - Succesfully executed with no activity.
+2016-04-11 01:00:02 - Succesfully executed with no activity.
 
-2015-10-09 17:05:01 - Succesfully executed with no activity.
+2016-04-12 01:00:02 - Succesfully executed with no activity.
 
-2015-10-09 17:10:02 - Succesfully executed with no activity.
+2016-04-13 01:00:01 - Succesfully executed with no activity.
 
-2015-10-09 17:15:01 - Succesfully executed with no activity.
+2016-04-14 01:00:01 - Succesfully executed with no activity.
 
-2015-10-09 17:20:01 - Succesfully executed with no activity.
+2016-04-15 01:00:01 - Succesfully executed with no activity.
 
-2015-10-09 17:25:01 - Succesfully executed with no activity.
+2016-04-16 01:00:01 - Succesfully executed with no activity.
 
-2015-10-09 17:30:01 - Succesfully executed with no activity.
+2016-04-17 01:00:02 - Succesfully executed with no activity.
 
-2015-10-09 17:35:01 - Succesfully executed with no activity.
+2016-04-18 01:00:01 - Succesfully executed with no activity.
 
-2015-10-09 17:40:01 - Succesfully executed with no activity.
+2016-04-19 01:00:02 - Succesfully executed with no activity.
 
-2015-10-09 17:45:01 - Succesfully executed with no activity.
+2016-04-20 01:00:01 - Succesfully executed with no activity.
 
-2015-10-09 17:50:03 - Succesfully executed with no activity.
+2016-04-21 01:00:02 - Succesfully executed with no activity.
 
-2015-10-09 17:55:01 - Succesfully executed with no activity.
+2016-04-22 01:00:01 - Succesfully executed with no activity.
+
+2016-04-27 01:00:02 - Succesfully executed with no activity.
+
+2016-04-28 01:00:02 - Succesfully executed with no activity.
+
+2016-04-29 01:00:01 - Succesfully executed with no activity.
+
+2016-04-30 01:00:02 - Succesfully executed with no activity.
+
+2016-05-01 01:00:02 - Succesfully executed with no activity.
+
+2016-05-02 01:00:01 - Succesfully executed with no activity.
+
+2016-05-03 01:00:02 - Succesfully executed with no activity.
+
+2016-05-04 01:00:02 - Succesfully executed with no activity.
+
+2016-05-05 01:00:01 - Succesfully executed with no activity.
+
+2016-05-06 01:00:01 - Succesfully executed with no activity.
+
+2016-05-07 01:00:01 - Succesfully executed with no activity.
+
+2016-05-10 01:00:02 - Succesfully executed with no activity.
+
+2016-05-11 01:00:01 - Succesfully executed with no activity.
+
+2016-05-12 01:00:01 - Succesfully executed with no activity.
+
+2016-05-13 01:00:01 - Succesfully executed with no activity.
+
+2016-05-14 01:00:02 - Succesfully executed with no activity.
+
+2016-05-15 01:00:01 - Succesfully executed with no activity.
+
+2016-05-16 01:00:02 - Succesfully executed with no activity.
+
+2016-05-17 01:00:01 - Succesfully executed with no activity.
+
+2016-05-18 01:00:01 - Succesfully executed with no activity.
+
+2016-05-19 01:00:01 - Succesfully executed with no activity.
+
+2016-05-20 01:00:02 - Succesfully executed with no activity.
+
+2016-05-21 01:00:01 - Succesfully executed with no activity.
+
+2016-05-22 01:00:01 - Succesfully executed with no activity.
+
+2016-05-23 01:00:01 - Succesfully executed with no activity.
 

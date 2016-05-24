@@ -1,0 +1,1810 @@
+2015-10-29 14:09:02 - Succesfully executed with no activity.
+
+
+
+2015-10-29 14:15:02 - Succesfully executed with no activity.
+
+
+
+2015-10-29 14:34:26 - Succesfully executed with activity:
+
+
+Evaluation: 'Desempeño Anual' with id: 14
+
+
+
+
+2015-10-30 01:30:02 - Succesfully executed with no activity.
+
+
+
+
+<div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Warning</p>
+<p>Message:  Invalid argument supplied for foreach()</p>
+<p>Filename: controllers/Main.php</p>
+<p>Line Number: 538</p>
+
+
+	<p>Backtrace:</p>
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/application/controllers/Main.php<br />
+			Line: 538<br />
+			Function: _error_handler			</p>
+
+		
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/index.php<br />
+			Line: 292<br />
+			Function: require_once			</p>
+
+		
+	
+
+</div>2015-10-31 01:30:01 - Succesfully executed with no activity.
+
+
+
+
+<div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Warning</p>
+<p>Message:  Invalid argument supplied for foreach()</p>
+<p>Filename: controllers/Main.php</p>
+<p>Line Number: 538</p>
+
+
+	<p>Backtrace:</p>
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/application/controllers/Main.php<br />
+			Line: 538<br />
+			Function: _error_handler			</p>
+
+		
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/index.php<br />
+			Line: 292<br />
+			Function: require_once			</p>
+
+		
+	
+
+</div>2015-11-01 01:30:02 - Succesfully executed with no activity.
+
+
+
+
+<div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Warning</p>
+<p>Message:  Invalid argument supplied for foreach()</p>
+<p>Filename: controllers/Main.php</p>
+<p>Line Number: 538</p>
+
+
+	<p>Backtrace:</p>
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/application/controllers/Main.php<br />
+			Line: 538<br />
+			Function: _error_handler			</p>
+
+		
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/index.php<br />
+			Line: 292<br />
+			Function: require_once			</p>
+
+		
+	
+
+</div>2015-11-02 01:30:02 - Succesfully executed with no activity.
+
+
+
+
+<div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Warning</p>
+<p>Message:  Invalid argument supplied for foreach()</p>
+<p>Filename: controllers/Main.php</p>
+<p>Line Number: 538</p>
+
+
+	<p>Backtrace:</p>
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/application/controllers/Main.php<br />
+			Line: 538<br />
+			Function: _error_handler			</p>
+
+		
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/index.php<br />
+			Line: 292<br />
+			Function: require_once			</p>
+
+		
+	
+
+</div>2015-11-03 01:30:01 - Succesfully executed with no activity.
+
+
+
+
+<div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Warning</p>
+<p>Message:  Invalid argument supplied for foreach()</p>
+<p>Filename: controllers/Main.php</p>
+<p>Line Number: 538</p>
+
+
+	<p>Backtrace:</p>
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/application/controllers/Main.php<br />
+			Line: 538<br />
+			Function: _error_handler			</p>
+
+		
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/index.php<br />
+			Line: 292<br />
+			Function: require_once			</p>
+
+		
+	
+
+</div>2015-11-04 01:30:01 - Succesfully executed with no activity.
+
+
+
+
+<div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Warning</p>
+<p>Message:  Invalid argument supplied for foreach()</p>
+<p>Filename: controllers/Main.php</p>
+<p>Line Number: 538</p>
+
+
+	<p>Backtrace:</p>
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/application/controllers/Main.php<br />
+			Line: 538<br />
+			Function: _error_handler			</p>
+
+		
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/index.php<br />
+			Line: 292<br />
+			Function: require_once			</p>
+
+		
+	
+
+</div>2015-11-05 01:30:02 - Succesfully executed with no activity.
+
+
+
+
+<div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Warning</p>
+<p>Message:  Invalid argument supplied for foreach()</p>
+<p>Filename: controllers/Main.php</p>
+<p>Line Number: 538</p>
+
+
+	<p>Backtrace:</p>
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/application/controllers/Main.php<br />
+			Line: 538<br />
+			Function: _error_handler			</p>
+
+		
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/index.php<br />
+			Line: 292<br />
+			Function: require_once			</p>
+
+		
+	
+
+</div>2015-11-06 01:30:01 - Succesfully executed with no activity.
+
+
+
+
+<div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Warning</p>
+<p>Message:  Invalid argument supplied for foreach()</p>
+<p>Filename: controllers/Main.php</p>
+<p>Line Number: 538</p>
+
+
+	<p>Backtrace:</p>
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/application/controllers/Main.php<br />
+			Line: 538<br />
+			Function: _error_handler			</p>
+
+		
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/index.php<br />
+			Line: 292<br />
+			Function: require_once			</p>
+
+		
+	
+
+</div>2015-11-07 01:30:02 - Succesfully executed with no activity.
+
+
+
+
+<div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Warning</p>
+<p>Message:  Invalid argument supplied for foreach()</p>
+<p>Filename: controllers/Main.php</p>
+<p>Line Number: 538</p>
+
+
+	<p>Backtrace:</p>
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/application/controllers/Main.php<br />
+			Line: 538<br />
+			Function: _error_handler			</p>
+
+		
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/index.php<br />
+			Line: 292<br />
+			Function: require_once			</p>
+
+		
+	
+
+</div>2015-11-08 01:30:02 - Succesfully executed with no activity.
+
+
+
+
+<div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Warning</p>
+<p>Message:  Invalid argument supplied for foreach()</p>
+<p>Filename: controllers/Main.php</p>
+<p>Line Number: 538</p>
+
+
+	<p>Backtrace:</p>
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/application/controllers/Main.php<br />
+			Line: 538<br />
+			Function: _error_handler			</p>
+
+		
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/index.php<br />
+			Line: 292<br />
+			Function: require_once			</p>
+
+		
+	
+
+</div>2015-11-09 01:30:01 - Succesfully executed with no activity.
+
+
+
+
+<div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Warning</p>
+<p>Message:  Invalid argument supplied for foreach()</p>
+<p>Filename: controllers/Main.php</p>
+<p>Line Number: 547</p>
+
+
+	<p>Backtrace:</p>
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/application/controllers/Main.php<br />
+			Line: 547<br />
+			Function: _error_handler			</p>
+
+		
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/index.php<br />
+			Line: 292<br />
+			Function: require_once			</p>
+
+		
+	
+
+</div>2015-11-11 01:30:01 - Succesfully executed with no activity.
+
+
+
+
+<div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Warning</p>
+<p>Message:  Invalid argument supplied for foreach()</p>
+<p>Filename: controllers/Main.php</p>
+<p>Line Number: 547</p>
+
+
+	<p>Backtrace:</p>
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/application/controllers/Main.php<br />
+			Line: 547<br />
+			Function: _error_handler			</p>
+
+		
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/index.php<br />
+			Line: 292<br />
+			Function: require_once			</p>
+
+		
+	
+
+</div>2015-11-12 01:30:02 - Succesfully executed with no activity.
+
+
+
+
+<div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Warning</p>
+<p>Message:  Invalid argument supplied for foreach()</p>
+<p>Filename: controllers/Main.php</p>
+<p>Line Number: 556</p>
+
+
+	<p>Backtrace:</p>
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/application/controllers/Main.php<br />
+			Line: 556<br />
+			Function: _error_handler			</p>
+
+		
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/index.php<br />
+			Line: 292<br />
+			Function: require_once			</p>
+
+		
+	
+
+</div>2015-11-13 01:30:01 - Succesfully executed with no activity.
+
+
+
+
+<div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Warning</p>
+<p>Message:  Invalid argument supplied for foreach()</p>
+<p>Filename: controllers/Main.php</p>
+<p>Line Number: 556</p>
+
+
+	<p>Backtrace:</p>
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/application/controllers/Main.php<br />
+			Line: 556<br />
+			Function: _error_handler			</p>
+
+		
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/index.php<br />
+			Line: 292<br />
+			Function: require_once			</p>
+
+		
+	
+
+</div>2015-11-14 01:30:02 - Succesfully executed with no activity.
+
+
+
+
+<div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Warning</p>
+<p>Message:  Invalid argument supplied for foreach()</p>
+<p>Filename: controllers/Main.php</p>
+<p>Line Number: 556</p>
+
+
+	<p>Backtrace:</p>
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/application/controllers/Main.php<br />
+			Line: 556<br />
+			Function: _error_handler			</p>
+
+		
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/index.php<br />
+			Line: 292<br />
+			Function: require_once			</p>
+
+		
+	
+
+</div>2015-11-15 01:30:01 - Succesfully executed with no activity.
+
+
+
+
+<div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Warning</p>
+<p>Message:  Invalid argument supplied for foreach()</p>
+<p>Filename: controllers/Main.php</p>
+<p>Line Number: 556</p>
+
+
+	<p>Backtrace:</p>
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/application/controllers/Main.php<br />
+			Line: 556<br />
+			Function: _error_handler			</p>
+
+		
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/index.php<br />
+			Line: 292<br />
+			Function: require_once			</p>
+
+		
+	
+
+</div>2015-11-16 01:30:02 - Succesfully executed with no activity.
+
+
+
+
+<div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Warning</p>
+<p>Message:  Invalid argument supplied for foreach()</p>
+<p>Filename: controllers/Main.php</p>
+<p>Line Number: 556</p>
+
+
+	<p>Backtrace:</p>
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/application/controllers/Main.php<br />
+			Line: 556<br />
+			Function: _error_handler			</p>
+
+		
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/index.php<br />
+			Line: 292<br />
+			Function: require_once			</p>
+
+		
+	
+
+</div>2015-11-17 01:30:01 - Succesfully executed with no activity.
+
+
+
+
+<div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Warning</p>
+<p>Message:  Invalid argument supplied for foreach()</p>
+<p>Filename: controllers/Main.php</p>
+<p>Line Number: 558</p>
+
+
+	<p>Backtrace:</p>
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/application/controllers/Main.php<br />
+			Line: 558<br />
+			Function: _error_handler			</p>
+
+		
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/index.php<br />
+			Line: 292<br />
+			Function: require_once			</p>
+
+		
+	
+
+</div>2015-11-18 01:30:01 - Succesfully executed with no activity.
+
+
+
+
+<div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Warning</p>
+<p>Message:  Invalid argument supplied for foreach()</p>
+<p>Filename: controllers/Main.php</p>
+<p>Line Number: 558</p>
+
+
+	<p>Backtrace:</p>
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/application/controllers/Main.php<br />
+			Line: 558<br />
+			Function: _error_handler			</p>
+
+		
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/index.php<br />
+			Line: 292<br />
+			Function: require_once			</p>
+
+		
+	
+
+</div>2015-11-19 01:30:01 - Succesfully executed with no activity.
+
+
+
+
+<div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Warning</p>
+<p>Message:  Invalid argument supplied for foreach()</p>
+<p>Filename: controllers/Main.php</p>
+<p>Line Number: 558</p>
+
+
+	<p>Backtrace:</p>
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/application/controllers/Main.php<br />
+			Line: 558<br />
+			Function: _error_handler			</p>
+
+		
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/index.php<br />
+			Line: 292<br />
+			Function: require_once			</p>
+
+		
+	
+
+</div>2015-11-20 01:30:01 - Succesfully executed with no activity.
+
+
+
+
+<div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Warning</p>
+<p>Message:  Invalid argument supplied for foreach()</p>
+<p>Filename: controllers/Main.php</p>
+<p>Line Number: 558</p>
+
+
+	<p>Backtrace:</p>
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/application/controllers/Main.php<br />
+			Line: 558<br />
+			Function: _error_handler			</p>
+
+		
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/index.php<br />
+			Line: 292<br />
+			Function: require_once			</p>
+
+		
+	
+
+</div>2015-11-21 01:30:01 - Succesfully executed with no activity.
+
+
+
+
+<div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Warning</p>
+<p>Message:  Invalid argument supplied for foreach()</p>
+<p>Filename: controllers/Main.php</p>
+<p>Line Number: 558</p>
+
+
+	<p>Backtrace:</p>
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/application/controllers/Main.php<br />
+			Line: 558<br />
+			Function: _error_handler			</p>
+
+		
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/index.php<br />
+			Line: 292<br />
+			Function: require_once			</p>
+
+		
+	
+
+</div>2015-11-22 01:30:02 - Succesfully executed with no activity.
+
+
+
+
+<div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Warning</p>
+<p>Message:  Invalid argument supplied for foreach()</p>
+<p>Filename: controllers/Main.php</p>
+<p>Line Number: 558</p>
+
+
+	<p>Backtrace:</p>
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/application/controllers/Main.php<br />
+			Line: 558<br />
+			Function: _error_handler			</p>
+
+		
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/index.php<br />
+			Line: 292<br />
+			Function: require_once			</p>
+
+		
+	
+
+</div>2015-11-23 01:30:01 - Succesfully executed with no activity.
+
+
+
+
+<div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Warning</p>
+<p>Message:  Invalid argument supplied for foreach()</p>
+<p>Filename: controllers/Main.php</p>
+<p>Line Number: 558</p>
+
+
+	<p>Backtrace:</p>
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/application/controllers/Main.php<br />
+			Line: 558<br />
+			Function: _error_handler			</p>
+
+		
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/index.php<br />
+			Line: 292<br />
+			Function: require_once			</p>
+
+		
+	
+
+</div>2015-11-24 01:30:01 - Succesfully executed with no activity.
+
+
+
+
+<div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Warning</p>
+<p>Message:  Invalid argument supplied for foreach()</p>
+<p>Filename: controllers/Main.php</p>
+<p>Line Number: 558</p>
+
+
+	<p>Backtrace:</p>
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/application/controllers/Main.php<br />
+			Line: 558<br />
+			Function: _error_handler			</p>
+
+		
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/index.php<br />
+			Line: 292<br />
+			Function: require_once			</p>
+
+		
+	
+
+</div>2015-11-25 01:30:01 - Succesfully executed with no activity.
+
+
+
+
+<div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Warning</p>
+<p>Message:  Invalid argument supplied for foreach()</p>
+<p>Filename: controllers/Main.php</p>
+<p>Line Number: 558</p>
+
+
+	<p>Backtrace:</p>
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/application/controllers/Main.php<br />
+			Line: 558<br />
+			Function: _error_handler			</p>
+
+		
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/index.php<br />
+			Line: 292<br />
+			Function: require_once			</p>
+
+		
+	
+
+</div>2015-11-26 01:30:01 - Succesfully executed with no activity.
+
+
+
+
+<div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Warning</p>
+<p>Message:  Invalid argument supplied for foreach()</p>
+<p>Filename: controllers/Main.php</p>
+<p>Line Number: 558</p>
+
+
+	<p>Backtrace:</p>
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/application/controllers/Main.php<br />
+			Line: 558<br />
+			Function: _error_handler			</p>
+
+		
+	
+		
+	
+		
+	
+		
+			<p style="margin-left:10px">
+			File: /var/www/html/advanzer/index.php<br />
+			Line: 292<br />
+			Function: require_once			</p>
+
+		
+	
+
+</div>2015-11-27 01:30:02 - Succesfully executed with no activity.
+
+
+
+2015-11-28 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-11-29 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-11-30 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-12-01 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-12-02 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-12-03 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-12-04 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-12-05 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-12-06 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-12-07 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-12-08 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-12-09 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-12-10 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-12-11 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-12-12 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-12-13 01:30:02 - Succesfully executed with no activity.
+
+
+
+2015-12-15 01:30:02 - Succesfully executed with no activity.
+
+
+
+2015-12-16 01:30:02 - Succesfully executed with no activity.
+
+
+
+2015-12-19 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-12-20 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-12-21 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-12-22 01:30:02 - Succesfully executed with no activity.
+
+
+
+2015-12-23 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-12-24 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-12-25 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-12-26 01:30:02 - Succesfully executed with no activity.
+
+
+
+2015-12-27 01:30:02 - Succesfully executed with no activity.
+
+
+
+2015-12-28 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-12-29 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-12-30 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-12-31 01:30:01 - Succesfully executed with no activity.
+
+
+
+2016-01-01 01:30:02 - Succesfully executed with no activity.
+
+
+
+2016-01-02 01:30:01 - Succesfully executed with no activity.
+
+
+
+2016-01-03 01:30:01 - Succesfully executed with no activity.
+
+
+
+2016-01-04 01:30:01 - Succesfully executed with no activity.
+
+
+
+2016-01-05 01:30:02 - Succesfully executed with no activity.
+
+
+
+2016-01-06 07:30:02 - Succesfully executed with no activity.
+
+
+
+2016-01-07 07:30:01 - Succesfully executed with no activity.
+
+
+
+2016-01-12 10:02:30 - Succesfully executed with activity:
+
+
+Evaluation: 'Evaluación Anual 2015' with id: 1
+
+
+
+
+2016-01-14 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-01-15 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-01-16 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-01-17 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-01-18 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-01-19 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-01-20 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-01-21 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-01-22 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-01-23 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-01-24 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-01-25 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-01-26 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-01-27 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-01-28 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-01-29 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-01-30 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-01-31 10:00:22 - Succesfully executed with activity:
+
+
+Evaluation: 'Evaluación Anual 2015' with id: 1
+
+
+
+
+2016-02-01 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-02-02 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-02-03 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-02-04 10:00:04 - Succesfully executed with activity:
+
+
+Evaluation: 'Evaluación Anual 2015' with id: 1
+
+
+
+
+2016-02-05 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-02-06 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-02-07 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-02-08 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-02-09 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-02-10 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-02-11 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-02-12 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-02-13 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-02-14 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-02-15 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-02-16 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-02-17 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-02-18 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-02-19 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-02-20 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-02-21 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-02-22 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-02-23 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-02-24 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-02-25 10:00:06 - Succesfully executed with no activity.
+
+
+
+2016-02-26 10:00:07 - Succesfully executed with no activity.
+
+
+
+2016-02-27 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-02-28 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-02-29 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-03-01 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-03-02 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-03-03 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-03-04 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-03-05 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-03-06 10:00:06 - Succesfully executed with no activity.
+
+
+
+2016-03-08 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-03-09 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-03-10 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-03-11 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-03-12 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-03-13 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-03-14 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-03-15 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-03-16 10:00:03 - Succesfully executed with no activity.
+
+
+
+2016-03-17 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-03-18 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-03-19 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-03-20 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-03-21 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-03-22 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-03-23 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-03-24 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-03-25 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-03-26 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-03-27 10:00:06 - Succesfully executed with no activity.
+
+
+
+2016-03-28 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-03-29 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-03-30 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-03-31 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-04-01 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-04-02 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-04-03 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-04-04 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-04-06 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-04-07 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-04-08 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-04-09 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-04-10 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-04-11 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-04-12 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-04-13 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-04-14 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-04-15 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-04-16 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-04-17 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-04-18 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-04-19 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-04-20 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-04-21 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-04-22 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-04-27 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-04-28 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-04-29 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-04-30 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-05-01 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-05-02 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-05-03 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-05-04 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-05-05 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-05-06 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-05-09 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-05-10 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-05-11 10:00:06 - Succesfully executed with no activity.
+
+
+
+2016-05-12 10:00:06 - Succesfully executed with no activity.
+
+
+
+2016-05-13 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-05-14 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-05-15 10:00:02 - Succesfully executed with no activity.
+
+
+
+2016-05-16 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-05-17 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-05-19 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-05-20 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-05-21 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-05-22 10:00:01 - Succesfully executed with no activity.
+
+
+
+2016-05-23 10:00:01 - Succesfully executed with no activity.
+
+
+
