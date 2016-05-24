@@ -158,6 +158,17 @@ class Main extends CI_Controller {
 			$result=$this->user_model->do_login($email);
 			if ($result) {
 				$_SESSION['access_token'] = $client->getAccessToken();
+				
+				// Zona de permisos
+				$permisos = array(
+					// Permiso de administración de requisiciones
+					'administrator' =>  ($result->area == 4) && ($result->tipo == 4),
+					
+					// Permiso de creación de requisiciones, de ser asi, tambien se cuenta las que estan pendientes de atender dependiendo del tipo de usuario
+					'create_requisicion' => in_array($result->tipo,array(4,3)) || ($result->nivel_posicion <= 5),
+					'requisicion_pendiente' => count($this->requisicion_model->getRequisicionesPendenting($result->id))
+				);
+				
 				$sess_array = array(
     				'id'=>$result->id,
     				'nombre'=>$result->nombre,
@@ -168,7 +179,10 @@ class Main extends CI_Controller {
     				'area' =>$result->area,
     				'direccion'=>$result->direccion,
     				'tipo'=>$result->tipo,
-    				'periodo_edicion'=>$periodo_edicion
+    				'periodo_edicion'=>$periodo_edicion,
+					
+					// asignacion de permisos
+					'permisos' => $permisos
     			);
     			$data['email'] = $result->email;
     			$this->session->set_userdata($sess_array);
