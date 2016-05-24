@@ -29,11 +29,14 @@ class User extends CI_Controller {
     		$data['err_msg'] = $err_msg;
     	if (!empty($msg))
     		$data['msg'] = $msg;
-    	$data['user'] = $this->user_model->searchById($id);
+    	
+        $data['user'] = $this->user_model->searchById($id);
         $data['tracks'] = $this->track_model->getAll();
     	$data['areas'] = $this->area_model->getAll();
         $data['posiciones'] = $this->posicion_model->getByTrack($this->user_model->getTrackByUser($id));
         $data['jefes'] = $this->user_model->getJefes($id);
+        $data['tipo_acceso'] = $this->user_model->getPermisos($data['user']->area);
+
     	$this->layout->title('Capital Humano - Detalle Perfil');
     	$this->layout->view('user/detalle',$data);
     }
@@ -65,6 +68,22 @@ class User extends CI_Controller {
             chgrp($upload_data['file_path'], 'apache');
             redirect("user/ver/$id");
         }
+    }
+
+    public function actualiza_vacaciones() {
+        $this->valida_acceso();
+        $array=array(
+            'dias_uno' => $this->input->post('diasUno'),
+            'dias_dos' => $this->input->post('diasDos'),
+            'vencimiento_uno' => $this->input->post('vencimientoUno'),
+            'vencimiento_dos' => $this->input->post('vencimientoDos')
+        );
+        $id=$this->input->post('id');
+        if($this->user_model->actualiza_vacaciones($id,$array))
+            $response['msg'] = "ok";
+        else
+            $response['msg'] = "Error al actualizar usuario. Intenta nuevamente";
+        echo json_encode($response);
     }
 
     public function update() {
@@ -111,6 +130,8 @@ class User extends CI_Controller {
         $data['posiciones'] = $this->posicion_model->getAll();
     	$data['areas'] = $this->area_model->getAll();
         $data['jefes'] = $this->user_model->getAll();
+        $data['tipo_acceso'] = $this->user_model->getAllPermisos();
+        
     	$this->layout->title('Capital Humano - Nuevo Perfil');
     	$this->layout->view('user/nuevo',$data);
     }
@@ -131,7 +152,7 @@ class User extends CI_Controller {
         $requisicion=$this->input->post('requisicion');
         $temp=explode('@',$this->input->post('email'));
         $temp=explode('.',$temp[0]);
-        $array['password'] = md5($temp[0]);
+        $array['password'] = md5('password');
         $posicion=$this->input->post('posicion');
         $track=$this->input->post('track');
         $array['posicion_track'] = $this->posicion_model->getPosicionTrack($posicion,$track);

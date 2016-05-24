@@ -9,15 +9,16 @@
 	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/bootstrap-table.css');?>">
 	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/bootstrap-theme.css');?>">
 	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/style.css');?>">
-	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/datepicker/css/bootstrap-datepicker.min.css');?>">
+	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/datepicker/css/bootstrap-datepicker.css');?>">
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/jquery.dataTables.min.css');?>">
 	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/bootstrap-select.css');?>">
+	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/easy-modal.css');?>">
 	<script src="<?= base_url('assets/js/jquery.min.js');?>"></script>
-	<script src="<?= base_url('assets/js/bootstrap.min.js');?>"></script>
 	<!--<script src="<?= base_url('assets/js/bootstrap-table.js');?>"></script>-->
 	<script src="<?= base_url('assets/js/docs.min.js');?>"></script>
 	<script src="<?= base_url('assets/datepicker/js/bootstrap-datepicker.min.js');?>"></script>
+	<script src="<?= base_url('assets/js/bootstrap.min.js');?>"></script>
 	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 	<script src="<?= base_url('assets/js/moment.min.js');?>"></script>
 	<!--<script src="<?= base_url('assets/js/tableExport.js');?>"></script>
@@ -28,6 +29,7 @@
 	<script src="<?= base_url('assets/js/bootstrap-select.js');?>"></script>
 	<script src="<?= base_url('assets/js/highcharts/highcharts.js');?>"></script>
 	<script src="<?= base_url('assets/js/circle-progress.js');?>"></script>
+	<script src="<?= base_url('assets/js/easy-modal.js');?>"></script>
 	<title><?=$title_for_layout?></title>
 	<style type="text/css">
 		body {
@@ -82,6 +84,9 @@
 						font-family: "'+titleFont+'";\
 						src: url("<?= base_url("assets/fonts");?>/'+font+'");\
 					}\
+					.badge {\
+						background-color: '+color+';\
+					}\
 				</style>\
 			');
 		else
@@ -121,7 +126,10 @@
 			<?php if($this->session->userdata('id') != ""): ?>
 				<div id="navbar" class="navbar-collapse collapse" aria-expanded="false">
 					<ul class="nav navbar-nav">
-						<?php if(in_array($this->session->userdata('tipo'), array(4,5,6)) || $this->session->userdata('posicion') <= 3 || $this->session->userdata('area') == 4): ?>
+						<?php //if(in_array($this->session->userdata('tipo'), array(4,5,6)) || $this->session->userdata('posicion') <= 3 || $this->session->userdata('area') == 4): 
+                        
+                            if($this->session->userdata('permisos')['administrator']):
+                        ?>
 							<li class="dropdown">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
 									Administración<span class="caret"></span></a>
@@ -133,19 +141,36 @@
 													<li><a href="<?= base_url('objetivo/asignar_pesos');?>">Responsabilidades Por Área</a></li>
 												<?php //endif; ?>
 											<?php endif; 
-											if($this->session->userdata('tipo') > 3 || $this->session->userdata('area')==4): ?>
-												<li><a href="<?= base_url('requisiciones');?>">Todas las Requisiciones</a></li>
-												<!--<li><a href="<?= base_url('admin_solicitudes');?>">Todas las Solicitudes</a></li>-->
-												<?php if($this->session->userdata('tipo') > 3): ?>
+											//if($this->session->userdata('tipo') > 3 || $this->session->userdata('area')==4): 
+                                            
+                                            //echo $this->session->userdata('permisos')[];exit;
+                                            //if($this->session->userdata('permisos')['admin_requisicion']):
+                                            ?>
+												<li class="dropdown-submenu">
+                                                    <a href="#" tabindex="-1">Requisiciones</a>
+                                                    <ul class="dropdown-menu">
+                                                        <li class=""><a href="<?= base_url('requisiciones')."/?status=all";?>">Todas las Requisiciones</a></li>
+                                                        <li class=""><a href="<?= base_url('requisiciones')."/?status=1";?>">Enviadas</a></li>
+                                                        <li class=""><a href="<?= base_url('requisiciones')."/?status=2";?>">Aceptadas</a></li>
+                                                        <li class=""><a href="<?= base_url('requisiciones')."/?status=3";?>">Autorizadas</a></li>
+                                                        <li class=""><a href="<?= base_url('requisiciones')."/?status=4";?>">Rechazadas</a>
+                                                        </li>
+                                                        <li class=""><a href="<?= base_url('requisiciones')."/?status=0";?>">Canceladas</a></li>
+                                                        <li class=""><a href="<?= base_url('requisiciones')."/?status=8";?>">En Proceso</a></li>
+                                                        <li class=""><a href="<?= base_url('requisiciones')."/?status=6";?>">Cerradas</a></li>
+                                                        <li class=""><a href="<?= base_url('requisiciones')."/?status=7";?>">Stand By</a></li>
+                                                    </ul>
+                                                </li>
+												<li><a href="<?= base_url('admin_solicitudes');?>">Todas las Solicitudes</a></li>
+												<?php //if($this->session->userdata('tipo') > 3): ?>
 													<li><a href="<?= base_url('evaluacion');?>">Evaluaciones</a></li>
-													<!--<li><a href="<?= base_url('evaluacion/index/false');?>">Evaluaciones Confidencial</a></li>-->
 													<li><a href="<?= base_url('evaluacion/por_evaluador');?>">Evaluaciones por Evaluador</a></li>
 													<li><a href="<?= base_url('evaluacion/pendientes');?>">Evaluaciones Pendientes de Enviar</a></li>
-												<?php endif;
-											endif; ?>
+												<?php //endif;
+											//endif; ?>
 										</ul>
 									</li>
-									<?php if(in_array($this->session->userdata('tipo'), array(4,5,6))): ?>
+									<?php //if(in_array($this->session->userdata('tipo'), array(4,5,6))): ?>
 										<li role="separator" class="divider"></li>
 										<li class="dropdown-submenu"><a tabindex="-1" href="#">ABC</a>
 											<ul class="dropdown-menu">
@@ -162,7 +187,7 @@
 												<li><a href="<?= base_url('evaluaciones');?>">Evaluación de Desempeño</a></li>
 											</ul>
 										</li>
-									<?php endif; ?>
+									<?php //endif; ?>
 								</ul>
 							</li>
 						<?php endif; ?>
@@ -170,8 +195,12 @@
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
 								Servicios<span class="caret"></span></a>
 							<ul class="dropdown-menu">
-								<?php if($this->session->userdata('tipo') >= 3 || $this->session->userdata('posicion') <= 5):?>
-									<li><a href="<?= base_url('requisicion');?>">Requisiciones</a></li>
+								<?php //if($this->session->userdata('tipo') >= 3 || $this->session->userdata('posicion') <= 5):
+                                        
+                                if($this->session->userdata('permisos')['create_requisicion']):
+                                ?>
+                                    <!--<li><a href="<?=  base_url('requisicion');?>">Requisiciones</a></li>-->
+                                    <li class=""><a href="<?= base_url('requisiciones')."/?status=own";?>">Requisiciones</a></li>
 								<?php endif;?>
 									<li><a href="<?= base_url('evaluar');?>">Feedback</a></li>
 								<?php if(in_array($this->session->userdata('tipo'), array(1,2,5,6))): ?>
@@ -180,8 +209,8 @@
 								if($this->session->userdata('posicion') <= 5 || in_array($this->session->userdata('tipo'),array(4,5,6))): ?>
 									<li><a href="<?= base_url('evaluacion/resumen');?>">Resumen de Evaluación 360</a></li>
 								<?php endif;?>
-								<!--<li><a href="<?= base_url('vacaciones');?>">Vacaciones</a></li>-->
-								<!--<li><a href="<?= base_url('permiso');?>">Permisos de Ausencia</a></li>-->
+								<li><a href="<?= base_url('vacaciones');?>">Vacaciones</a></li>
+								<li><a href="<?= base_url('permiso');?>">Permisos de Ausencia</a></li>
 								<!--<li><a href="<?= base_url('viaticos_gastos');?>">Viáticos y Gastos de Viaje</a></li>-->
 							</ul>
 						</li>

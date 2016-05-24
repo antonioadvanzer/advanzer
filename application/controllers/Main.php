@@ -19,8 +19,45 @@ class Main extends CI_Controller {
     	$data['colaborador'] = $this->user_model->searchById($this->session->userdata('id'));
     	$data['evaluacion'] = $this->evaluacion_model->getEvaluacionAnual();
     	$data['auth_pendientes'] = $this->user_model->solicitudes_pendientes($this->session->userdata('id'));
+    	$cont=0;
+    	foreach ($data['auth_pendientes'] as $solicitud)
+    		if(!in_array($solicitud->estatus,array(0,3,4)) || $solicitud->desde == (String)date('Y-m-d'))
+    			$cont++;
     	$data['solicitudes_pendientes'] = $this->user_model->solicitudesByColaborador($this->session->userdata('id'));
-    	$data['requisiciones_pendientes'] = $this->requisicion_model->getPendientesByColaborador($this->session->userdata('id'));
+    	$data['cont_pendientes']=$cont;
+    	$cont=0;
+    	foreach ($data['solicitudes_pendientes'] as $solicitud)
+    		if(in_array($solicitud->estatus,array(1,2)))
+    			$cont++;
+    	$data['cont_solicitudes']=$cont;
+    	$cont=0;
+		foreach ($data['solicitudes_pendientes'] as $solicitud)
+    		if(in_array($solicitud->estatus,array(1,2)))
+				$cont++;
+		$data['cont']=$cont;
+    	
+		/////$data['requisiciones'] = $this->requisicion_model->getByColaborador($this->session->userdata('id'));
+    	/////$data['requisiciones_pendientes'] = $this->requisicion_model->getPendientesByColaborador($this->session->userdata('id'));
+		
+		//echo !in_array($data['colaborador']->tipo,array(5,3));exit;
+		
+		// check if user has permission to consult all or own requisiones	
+		/////$data['rp'] = count($this->requisicion_model->getRequisicionesPendenting($this->session->userdata('id')));
+		/////$data['pr'] = in_array($data['colaborador']->tipo,array(5,3)) || ($data['colaborador']->posicion <=5);
+		
+		/////($data['colaborador']->posicion <=5)
+		/////$data['rp'] = ($cr = !in_array($data['colaborador']->tipo,array(5,3))) || ($cr = count($this->requisicion_model->getRequisicionesPendenting($this->session->userdata('id')))) ? $cr : false;
+		/////$data['rp'] = !in_array($data['colaborador']->tipo,array(5,3)) ? 0 :count($this->requisicion_model->getRequisicionesPendenting($this->session->userdata('id')));
+		/////$data['pr'] = !in_array($data['colaborador']->tipo,array(5,3)) || ($data['colaborador']->posicion <=5);
+		
+		//echo !empty($data['pr']);exit;
+		
+		// Recargamos las requisiciones pendientes
+		$permisos = $this->session->userdata('permisos');
+		$permisos['requisicion_pendiente'] = count($this->requisicion_model->getRequisicionesPendenting($this->session->userdata('id')));
+		$this->session->set_userdata('permisos', $permisos);
+		
+		
 		$this->layout->title('Advanzer - Inicio');
 		$this->layout->view('main/index', $data);
 	}
@@ -35,6 +72,17 @@ class Main extends CI_Controller {
     		$password = $this->input->post('password');
     		$result = $this->user_model->do_login($email,$password);
     		if ($result) {
+				//var_dump($result->tipo);exit;
+				// Zona de permisos
+				$permisos = array(
+					// Permiso de administración de requisiciones
+					'administrator' =>  ($result->area == 4) && ($result->tipo == 4),
+					
+					// Permiso de creación de requisiciones, de ser asi, tambien se cuenta las que estan pendientes de atender dependiendo del tipo de usuario
+					'create_requisicion' => in_array($result->tipo,array(4,3)) || ($result->nivel_posicion <= 5),
+					'requisicion_pendiente' => count($this->requisicion_model->getRequisicionesPendenting($result->id))
+				);
+				
     			//$_SESSION['access_token'] = 1;
     			$sess_array = array(
     				'id'=>$result->id,
@@ -46,7 +94,10 @@ class Main extends CI_Controller {
     				'area' =>$result->area,
     				'direccion'=>$result->direccion,
     				'tipo'=>$result->tipo,
-    				'periodo_edicion'=>$periodo_edicion
+    				'periodo_edicion'=>$periodo_edicion,
+					
+					// asignacion de permisos
+					'permisos' => $permisos
     			);
     			$data['email'] = $result->email;
     			$this->session->set_userdata($sess_array);
@@ -229,7 +280,13 @@ class Main extends CI_Controller {
 		$this->email->clear(TRUE);
 
 		$this->email->from('notificaciones.ch@advanzer.com','Portal de Evaluación Advanzer-Entuizer');
+<<<<<<< HEAD
 		$this->email->to("micaela.llano@advanzer.com");
+=======
+		/*$this->email->to("micaela.llano@advanzer.com");
+		$this->email->bcc(array('jesus.salas@advanzer.com', 'enrique.bernal@advanzer.com'));
+		*/$this->email->to("antonio.baez@advanzer.com");
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 		$this->email->subject('Captura de Compromisos Internos');
 		$this->email->message('<h2>Se ha adjuntado el archivo de soporte de la captura de Compromisos Internos</h2><hr>');
 		$this->email->attach(base_url("assets/docs/$file"));
@@ -498,7 +555,13 @@ class Main extends CI_Controller {
 		$this->email->clear(TRUE);
 
 		$this->email->from('notificaciones.ch@advanzer.com','Portal de Evaluación Advanzer-Entuizer');
+<<<<<<< HEAD
 		$this->email->to("micaela.llano@advanzer.com");
+=======
+		/*$this->email->to("micaela.llano@advanzer.com");
+		$this->email->bcc(array('jesus.salas@advanzer.com', 'enrique.bernal@advanzer.com'));
+		*/$this->email->to("antonio.baez@advanzer.com");
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 		$this->email->subject('Reporte de Evaluación para Junta Anual');
 		$this->email->message('<h2>Se ha generado el archivo de Reporte de Evaluación para la Junta Anual</h2><hr>');
 		$this->email->attach(base_url("assets/docs/$file_name"));
@@ -604,7 +667,14 @@ class Main extends CI_Controller {
 		$this->email->clear(TRUE);
 
 		$this->email->from('notificaciones.ch@advanzer.com','Portal de Evaluación');
+<<<<<<< HEAD
 		$this->email->to($destinatario);
+=======
+		/*$this->email->to("micaela.llano@advanzer.com");
+		$this->email->bcc(array('enrique.bernal@advanzer.com','jesus.salas@advanzer.com'));
+		$this->email->reply_to('micaela.llano@advanzer.com');
+		*/$this->email->to("antonio.baez@advanzer.com"); //$this->email->to($destinatario);
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 		$this->email->subject('Aviso de Evaluación');
 		$this->email->message($mensaje);
 
@@ -670,7 +740,7 @@ class Main extends CI_Controller {
 		$solicitudes = $this->solicitudes_model->getAll();
 		foreach ($solicitudes as $solicitud):
 			//identificar las solicitudes que no han sido canceladas o cerradas
-			if(($solicitud->estatus==2 && $solicitud->auth_ch==1) || !in_array($solicitud->estatus,array(0,2,4))):
+			if(!in_array($solicitud->estatus,array(0,3,4))):
 				$cancelacion = strtotime('+30 days',strtotime($solicitud->fecha_ultima_modificacion));
 				$cancelacion = date('Y-m-d',$cancelacion);
 				$cancelacion = new DateTime($cancelacion);
@@ -683,4 +753,16 @@ class Main extends CI_Controller {
 			endif;
 		endforeach;
 	}
+<<<<<<< HEAD
 }
+=======
+
+	public function inicia_vacaciones() {
+		$vacaciones=$this->solicitudes_model->getVacaciones();
+		foreach ($vacaciones as $registro) :
+			$solicitud=$this->solicitudes_model->getSolicitudById($registro->id);
+			$this->actualiza_dias_disponibles($solicitud);
+		endforeach;
+	}
+}
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e

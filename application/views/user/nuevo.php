@@ -106,13 +106,23 @@
 		  <div class="form-group">
 			<label for="tipo">Tipo de Acceso:</label>
 			<select class="form-control" style="max-width:300px; text-align:center;" id="tipo">
-				<option value="0">Colaborador</option>
+				<!--<option value="0">Colaborador</option>
 				<option value="1">Capturista (Gastos de Viaje)</option>
 				<option value="2">Capturista (Harvest)</option>
 				<option value="3">Requisiciones</option>
 				<option value="4">Administrador</option>
 				<option value="5">Requisiciones y Administrador</option>
-				<option value="6">Soporte Técnico</option>
+				<option value="6">Soporte Técnico</option>-->
+                <?php 
+                    foreach($tipo_acceso as $tp){
+                ?>
+                    
+                        <option value="<?php echo $tp->access; ?>"><?php echo $tp->nombre; ?></option>
+                        
+                <?php
+                    }
+                
+                ?>
 			</select>
 		  </div>
 	  </div>

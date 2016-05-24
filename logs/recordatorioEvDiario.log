@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 2015-10-29 14:09:02 - Succesfully executed with no activity.
 
 
@@ -18,6 +19,8 @@ Evaluation: 'Desempeño Anual' with id: 14
 
 
 
+=======
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 
 <div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
 
@@ -26,7 +29,11 @@ Evaluation: 'Desempeño Anual' with id: 14
 <p>Severity: Warning</p>
 <p>Message:  Invalid argument supplied for foreach()</p>
 <p>Filename: controllers/Main.php</p>
+<<<<<<< HEAD
 <p>Line Number: 538</p>
+=======
+<p>Line Number: 558</p>
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 
 
 	<p>Backtrace:</p>
@@ -37,8 +44,13 @@ Evaluation: 'Desempeño Anual' with id: 14
 	
 		
 			<p style="margin-left:10px">
+<<<<<<< HEAD
 			File: /var/www/html/advanzer/application/controllers/Main.php<br />
 			Line: 538<br />
+=======
+			File: /var/www/html/pruebas/advanzer/application/controllers/Main.php<br />
+			Line: 558<br />
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 			Function: _error_handler			</p>
 
 		
@@ -49,14 +61,22 @@ Evaluation: 'Desempeño Anual' with id: 14
 	
 		
 			<p style="margin-left:10px">
+<<<<<<< HEAD
 			File: /var/www/html/advanzer/index.php<br />
+=======
+			File: /var/www/html/pruebas/advanzer/index.php<br />
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 			Line: 292<br />
 			Function: require_once			</p>
 
 		
 	
 
+<<<<<<< HEAD
 </div>2015-10-31 01:30:01 - Succesfully executed with no activity.
+=======
+</div>2015-11-14 01:30:01 - Succesfully executed with no activity.
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 
 
 
@@ -68,7 +88,11 @@ Evaluation: 'Desempeño Anual' with id: 14
 <p>Severity: Warning</p>
 <p>Message:  Invalid argument supplied for foreach()</p>
 <p>Filename: controllers/Main.php</p>
+<<<<<<< HEAD
 <p>Line Number: 538</p>
+=======
+<p>Line Number: 558</p>
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 
 
 	<p>Backtrace:</p>
@@ -79,8 +103,13 @@ Evaluation: 'Desempeño Anual' with id: 14
 	
 		
 			<p style="margin-left:10px">
+<<<<<<< HEAD
 			File: /var/www/html/advanzer/application/controllers/Main.php<br />
 			Line: 538<br />
+=======
+			File: /var/www/html/pruebas/advanzer/application/controllers/Main.php<br />
+			Line: 558<br />
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 			Function: _error_handler			</p>
 
 		
@@ -91,14 +120,22 @@ Evaluation: 'Desempeño Anual' with id: 14
 	
 		
 			<p style="margin-left:10px">
+<<<<<<< HEAD
 			File: /var/www/html/advanzer/index.php<br />
+=======
+			File: /var/www/html/pruebas/advanzer/index.php<br />
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 			Line: 292<br />
 			Function: require_once			</p>
 
 		
 	
 
+<<<<<<< HEAD
 </div>2015-11-01 01:30:02 - Succesfully executed with no activity.
+=======
+</div>2015-11-15 01:30:01 - Succesfully executed with no activity.
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 
 
 
@@ -110,7 +147,11 @@ Evaluation: 'Desempeño Anual' with id: 14
 <p>Severity: Warning</p>
 <p>Message:  Invalid argument supplied for foreach()</p>
 <p>Filename: controllers/Main.php</p>
+<<<<<<< HEAD
 <p>Line Number: 538</p>
+=======
+<p>Line Number: 558</p>
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 
 
 	<p>Backtrace:</p>
@@ -121,8 +162,13 @@ Evaluation: 'Desempeño Anual' with id: 14
 	
 		
 			<p style="margin-left:10px">
+<<<<<<< HEAD
 			File: /var/www/html/advanzer/application/controllers/Main.php<br />
 			Line: 538<br />
+=======
+			File: /var/www/html/pruebas/advanzer/application/controllers/Main.php<br />
+			Line: 558<br />
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 			Function: _error_handler			</p>
 
 		
@@ -133,14 +179,22 @@ Evaluation: 'Desempeño Anual' with id: 14
 	
 		
 			<p style="margin-left:10px">
+<<<<<<< HEAD
 			File: /var/www/html/advanzer/index.php<br />
+=======
+			File: /var/www/html/pruebas/advanzer/index.php<br />
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 			Line: 292<br />
 			Function: require_once			</p>
 
 		
 	
 
+<<<<<<< HEAD
 </div>2015-11-02 01:30:02 - Succesfully executed with no activity.
+=======
+</div>2015-11-16 01:30:02 - Succesfully executed with no activity.
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 
 
 
@@ -152,7 +206,11 @@ Evaluation: 'Desempeño Anual' with id: 14
 <p>Severity: Warning</p>
 <p>Message:  Invalid argument supplied for foreach()</p>
 <p>Filename: controllers/Main.php</p>
+<<<<<<< HEAD
 <p>Line Number: 538</p>
+=======
+<p>Line Number: 558</p>
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 
 
 	<p>Backtrace:</p>
@@ -163,8 +221,13 @@ Evaluation: 'Desempeño Anual' with id: 14
 	
 		
 			<p style="margin-left:10px">
+<<<<<<< HEAD
 			File: /var/www/html/advanzer/application/controllers/Main.php<br />
 			Line: 538<br />
+=======
+			File: /var/www/html/pruebas/advanzer/application/controllers/Main.php<br />
+			Line: 558<br />
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 			Function: _error_handler			</p>
 
 		
@@ -175,14 +238,22 @@ Evaluation: 'Desempeño Anual' with id: 14
 	
 		
 			<p style="margin-left:10px">
+<<<<<<< HEAD
 			File: /var/www/html/advanzer/index.php<br />
+=======
+			File: /var/www/html/pruebas/advanzer/index.php<br />
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 			Line: 292<br />
 			Function: require_once			</p>
 
 		
 	
 
+<<<<<<< HEAD
 </div>2015-11-03 01:30:01 - Succesfully executed with no activity.
+=======
+</div>2015-11-17 01:30:01 - Succesfully executed with no activity.
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 
 
 
@@ -194,7 +265,11 @@ Evaluation: 'Desempeño Anual' with id: 14
 <p>Severity: Warning</p>
 <p>Message:  Invalid argument supplied for foreach()</p>
 <p>Filename: controllers/Main.php</p>
+<<<<<<< HEAD
 <p>Line Number: 538</p>
+=======
+<p>Line Number: 558</p>
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 
 
 	<p>Backtrace:</p>
@@ -205,8 +280,13 @@ Evaluation: 'Desempeño Anual' with id: 14
 	
 		
 			<p style="margin-left:10px">
+<<<<<<< HEAD
 			File: /var/www/html/advanzer/application/controllers/Main.php<br />
 			Line: 538<br />
+=======
+			File: /var/www/html/pruebas/advanzer/application/controllers/Main.php<br />
+			Line: 558<br />
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 			Function: _error_handler			</p>
 
 		
@@ -217,14 +297,22 @@ Evaluation: 'Desempeño Anual' with id: 14
 	
 		
 			<p style="margin-left:10px">
+<<<<<<< HEAD
 			File: /var/www/html/advanzer/index.php<br />
+=======
+			File: /var/www/html/pruebas/advanzer/index.php<br />
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 			Line: 292<br />
 			Function: require_once			</p>
 
 		
 	
 
+<<<<<<< HEAD
 </div>2015-11-04 01:30:01 - Succesfully executed with no activity.
+=======
+</div>2015-11-18 01:30:01 - Succesfully executed with no activity.
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 
 
 
@@ -236,7 +324,11 @@ Evaluation: 'Desempeño Anual' with id: 14
 <p>Severity: Warning</p>
 <p>Message:  Invalid argument supplied for foreach()</p>
 <p>Filename: controllers/Main.php</p>
+<<<<<<< HEAD
 <p>Line Number: 538</p>
+=======
+<p>Line Number: 558</p>
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 
 
 	<p>Backtrace:</p>
@@ -247,8 +339,13 @@ Evaluation: 'Desempeño Anual' with id: 14
 	
 		
 			<p style="margin-left:10px">
+<<<<<<< HEAD
 			File: /var/www/html/advanzer/application/controllers/Main.php<br />
 			Line: 538<br />
+=======
+			File: /var/www/html/pruebas/advanzer/application/controllers/Main.php<br />
+			Line: 558<br />
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 			Function: _error_handler			</p>
 
 		
@@ -259,14 +356,22 @@ Evaluation: 'Desempeño Anual' with id: 14
 	
 		
 			<p style="margin-left:10px">
+<<<<<<< HEAD
 			File: /var/www/html/advanzer/index.php<br />
+=======
+			File: /var/www/html/pruebas/advanzer/index.php<br />
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 			Line: 292<br />
 			Function: require_once			</p>
 
 		
 	
 
+<<<<<<< HEAD
 </div>2015-11-05 01:30:02 - Succesfully executed with no activity.
+=======
+</div>2015-11-19 01:30:01 - Succesfully executed with no activity.
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 
 
 
@@ -278,7 +383,11 @@ Evaluation: 'Desempeño Anual' with id: 14
 <p>Severity: Warning</p>
 <p>Message:  Invalid argument supplied for foreach()</p>
 <p>Filename: controllers/Main.php</p>
+<<<<<<< HEAD
 <p>Line Number: 538</p>
+=======
+<p>Line Number: 558</p>
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 
 
 	<p>Backtrace:</p>
@@ -289,8 +398,13 @@ Evaluation: 'Desempeño Anual' with id: 14
 	
 		
 			<p style="margin-left:10px">
+<<<<<<< HEAD
 			File: /var/www/html/advanzer/application/controllers/Main.php<br />
 			Line: 538<br />
+=======
+			File: /var/www/html/pruebas/advanzer/application/controllers/Main.php<br />
+			Line: 558<br />
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 			Function: _error_handler			</p>
 
 		
@@ -301,14 +415,22 @@ Evaluation: 'Desempeño Anual' with id: 14
 	
 		
 			<p style="margin-left:10px">
+<<<<<<< HEAD
 			File: /var/www/html/advanzer/index.php<br />
+=======
+			File: /var/www/html/pruebas/advanzer/index.php<br />
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 			Line: 292<br />
 			Function: require_once			</p>
 
 		
 	
 
+<<<<<<< HEAD
 </div>2015-11-06 01:30:01 - Succesfully executed with no activity.
+=======
+</div>2015-11-20 01:30:01 - Succesfully executed with no activity.
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 
 
 
@@ -320,7 +442,11 @@ Evaluation: 'Desempeño Anual' with id: 14
 <p>Severity: Warning</p>
 <p>Message:  Invalid argument supplied for foreach()</p>
 <p>Filename: controllers/Main.php</p>
+<<<<<<< HEAD
 <p>Line Number: 538</p>
+=======
+<p>Line Number: 558</p>
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 
 
 	<p>Backtrace:</p>
@@ -331,8 +457,13 @@ Evaluation: 'Desempeño Anual' with id: 14
 	
 		
 			<p style="margin-left:10px">
+<<<<<<< HEAD
 			File: /var/www/html/advanzer/application/controllers/Main.php<br />
 			Line: 538<br />
+=======
+			File: /var/www/html/pruebas/advanzer/application/controllers/Main.php<br />
+			Line: 558<br />
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 			Function: _error_handler			</p>
 
 		
@@ -343,14 +474,22 @@ Evaluation: 'Desempeño Anual' with id: 14
 	
 		
 			<p style="margin-left:10px">
+<<<<<<< HEAD
 			File: /var/www/html/advanzer/index.php<br />
+=======
+			File: /var/www/html/pruebas/advanzer/index.php<br />
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 			Line: 292<br />
 			Function: require_once			</p>
 
 		
 	
 
+<<<<<<< HEAD
 </div>2015-11-07 01:30:02 - Succesfully executed with no activity.
+=======
+</div>2015-11-21 01:30:01 - Succesfully executed with no activity.
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 
 
 
@@ -362,7 +501,11 @@ Evaluation: 'Desempeño Anual' with id: 14
 <p>Severity: Warning</p>
 <p>Message:  Invalid argument supplied for foreach()</p>
 <p>Filename: controllers/Main.php</p>
+<<<<<<< HEAD
 <p>Line Number: 538</p>
+=======
+<p>Line Number: 558</p>
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 
 
 	<p>Backtrace:</p>
@@ -373,8 +516,13 @@ Evaluation: 'Desempeño Anual' with id: 14
 	
 		
 			<p style="margin-left:10px">
+<<<<<<< HEAD
 			File: /var/www/html/advanzer/application/controllers/Main.php<br />
 			Line: 538<br />
+=======
+			File: /var/www/html/pruebas/advanzer/application/controllers/Main.php<br />
+			Line: 558<br />
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 			Function: _error_handler			</p>
 
 		
@@ -385,14 +533,22 @@ Evaluation: 'Desempeño Anual' with id: 14
 	
 		
 			<p style="margin-left:10px">
+<<<<<<< HEAD
 			File: /var/www/html/advanzer/index.php<br />
+=======
+			File: /var/www/html/pruebas/advanzer/index.php<br />
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 			Line: 292<br />
 			Function: require_once			</p>
 
 		
 	
 
+<<<<<<< HEAD
 </div>2015-11-08 01:30:02 - Succesfully executed with no activity.
+=======
+</div>2015-11-22 01:30:01 - Succesfully executed with no activity.
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 
 
 
@@ -404,7 +560,11 @@ Evaluation: 'Desempeño Anual' with id: 14
 <p>Severity: Warning</p>
 <p>Message:  Invalid argument supplied for foreach()</p>
 <p>Filename: controllers/Main.php</p>
+<<<<<<< HEAD
 <p>Line Number: 538</p>
+=======
+<p>Line Number: 558</p>
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 
 
 	<p>Backtrace:</p>
@@ -415,8 +575,13 @@ Evaluation: 'Desempeño Anual' with id: 14
 	
 		
 			<p style="margin-left:10px">
+<<<<<<< HEAD
 			File: /var/www/html/advanzer/application/controllers/Main.php<br />
 			Line: 538<br />
+=======
+			File: /var/www/html/pruebas/advanzer/application/controllers/Main.php<br />
+			Line: 558<br />
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 			Function: _error_handler			</p>
 
 		
@@ -427,13 +592,18 @@ Evaluation: 'Desempeño Anual' with id: 14
 	
 		
 			<p style="margin-left:10px">
+<<<<<<< HEAD
 			File: /var/www/html/advanzer/index.php<br />
+=======
+			File: /var/www/html/pruebas/advanzer/index.php<br />
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 			Line: 292<br />
 			Function: require_once			</p>
 
 		
 	
 
+<<<<<<< HEAD
 </div>2015-11-09 01:30:01 - Succesfully executed with no activity.
 
 
@@ -729,6 +899,109 @@ Evaluation: 'Desempeño Anual' with id: 14
 	
 
 </div>2015-11-17 01:30:01 - Succesfully executed with no activity.
+=======
+</div>2015-11-23 01:30:38 - Succesfully executed with activity:
+
+
+Evaluation: 'Evaluación Anual' with id: 1
+
+
+
+
+2015-11-24 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-11-25 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-11-26 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-11-27 01:30:02 - Succesfully executed with no activity.
+
+
+
+2015-11-28 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-11-29 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-11-30 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-12-01 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-12-02 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-12-03 01:30:35 - Succesfully executed with activity:
+
+
+Evaluation: 'Evaluación de desempeño 2015' with id: 1
+
+
+
+
+2015-12-04 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-12-05 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-12-06 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-12-07 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-12-08 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-12-09 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-12-10 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-12-11 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-12-12 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-12-13 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-12-15 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-12-16 01:30:02 - Succesfully executed with no activity.
+
+
+
+2015-12-17 01:30:01 - Succesfully executed with no activity.
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 
 
 
@@ -737,10 +1010,17 @@ Evaluation: 'Desempeño Anual' with id: 14
 
 <h4>A PHP Error was encountered</h4>
 
+<<<<<<< HEAD
 <p>Severity: Warning</p>
 <p>Message:  Invalid argument supplied for foreach()</p>
 <p>Filename: controllers/Main.php</p>
 <p>Line Number: 558</p>
+=======
+<p>Severity: Notice</p>
+<p>Message:  Trying to get property of non-object</p>
+<p>Filename: controllers/Main.php</p>
+<p>Line Number: 559</p>
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 
 
 	<p>Backtrace:</p>
@@ -751,8 +1031,13 @@ Evaluation: 'Desempeño Anual' with id: 14
 	
 		
 			<p style="margin-left:10px">
+<<<<<<< HEAD
 			File: /var/www/html/advanzer/application/controllers/Main.php<br />
 			Line: 558<br />
+=======
+			File: /var/www/html/pruebas/advanzer/application/controllers/Main.php<br />
+			Line: 559<br />
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 			Function: _error_handler			</p>
 
 		
@@ -763,13 +1048,18 @@ Evaluation: 'Desempeño Anual' with id: 14
 	
 		
 			<p style="margin-left:10px">
+<<<<<<< HEAD
 			File: /var/www/html/advanzer/index.php<br />
+=======
+			File: /var/www/html/pruebas/advanzer/index.php<br />
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 			Line: 292<br />
 			Function: require_once			</p>
 
 		
 	
 
+<<<<<<< HEAD
 </div>2015-11-18 01:30:01 - Succesfully executed with no activity.
 
 
@@ -1805,6 +2095,33 @@ Evaluation: 'Evaluación Anual 2015' with id: 1
 
 
 2016-05-23 10:00:01 - Succesfully executed with no activity.
+=======
+</div>2015-12-18 01:30:04 - Succesfully executed with activity:
+
+
+Evaluation: 'Proyecto Anual' with id: 2
+	Mail sent to project leader2015-12-18 01:31:22 - Succesfully executed with activity:
+
+
+Evaluation: 'Desempeño Anual 2015' with id: 1
+
+
+
+
+2015-12-19 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-12-20 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-12-21 01:30:01 - Succesfully executed with no activity.
+
+
+
+2015-12-22 01:30:01 - Succesfully executed with no activity.
+>>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
 
 
 

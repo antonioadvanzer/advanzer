@@ -42,7 +42,7 @@
         </thead>
         <tbody data-link="row" class="rowlink">
           <?php foreach ($users as $user): ?>
-          <tr class="click-row">
+          <tr class="click-row" onmouseover="this.style.background=color;" onmouseout="this.style.background='transparent';">
             <td align="center"><small><a href='<?= base_url("user/ver/").'/'.$user->id;?>'><img height="40px" class="img-circle avatar avatar-original" 
               src="<?= base_url('assets/images/fotos')."/".$user->foto;?>"></a></small></td>
             <td><small><?= $user->nomina;?></small></td>

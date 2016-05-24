@@ -18,6 +18,60 @@
   	<div class="col-md-12"><div id="cargando" style="display:none; color: green;">
   		<img src="<?= base_url('assets/images/loading.gif');?>"></div></div>
   </div>
+  <nav class="navbar">
+		<div class="navbar-collapse" aria-expanded="true">
+			<ul class="nav navbar-nav">
+				<?php if($user->estatus == 1): ?>
+					<li onclick="$('#update_foto').hide('slow');$('#update').hide('slow');$('#recision').show('slow');"><a href="#">Dar de baja al colaborador</a></li>
+					<li onclick="$('#update_foto').hide('slow');$('#update').hide('slow');$('#historial').show('slow');"><a href="#">Historial de desempeño</a></li>
+				<?php elseif($user->estatus == 0): ?>
+					<li onclick="$('#update_foto').hide('slow');$('#update').hide('slow');$('#rehab').show('slow');"><a href="#">Rehabilitar al colaborador</a></li>
+				<?php endif;
+				if(isset($user->bitacora)): ?>
+					<li onclick="$('#update_foto').hide('slow');$('#update').hide('slow');$('#bitacora').show('slow');"><a href="#">Historial de Vacaciones/Permisos</a></li>
+				<?php endif; ?>
+				<li onclick="$('#update_foto').hide('slow');$('#update').hide('slow');$('#vacaciones').show('slow');"><a href="#">Consultar días de Vacaciones</a></li>
+			</ul>
+		</div>
+	</nav>
+	<hr>
+	<form id="vacaciones" style="display:none" role="form" method="post" action="javascript:" class="form-signin">
+	  <div class="row" align="center">
+	  	<div class="col-md-12">
+	  		<div class="form-group">
+			  <table class="table" style="width:60%">
+			  	<thead>
+			  		<tr>
+			  			<th></th>
+			  			<th>Días</th>
+			  			<th>Fecha de Vencimiento</th>
+			  		</tr>
+			  	</thead>
+			  	<tbody>
+			  		<tr>
+			  			<th>Próximo Vencimiento</th>
+			  			<td><input class="form-control" type="text" value="<?= $user->vacaciones->dias_uno;?>" id="diasUno"></td>
+			  			<td><input style="background-color:white" class="form-control" type="text" value="<?= $user->vacaciones->vencimiento_uno;?>" id="vencimientoUno" readonly></td>
+			  		</tr>
+			  		<tr>
+			  			<th>Recién Generadas</th>
+			  			<td><input class="form-control" type="text" value="<?= $user->vacaciones->dias_dos;?>" id="diasDos"></td>
+			  			<td><input style="background-color:white" class="form-control" type="text" value="<?= $user->vacaciones->vencimiento_dos;?>" id="vencimientoDos" readonly></td>
+			  		</tr>
+			  	</tbody>
+			  </table>
+			</div>
+		</div>
+		<div class="col-md-12" align="center">
+			<button type="submit" class="btn btn-lg btn-primary" style="text-align:center">Guardar</button>
+		</div>
+		<div class="col-md-12">
+			<span style="float:right;"><label 
+			  	onclick="$('#vacaciones').hide('slow');$('#update_foto').show('slow');$('#update').show('slow');" style="cursor:pointer;">
+			  	Cancelar</label></span>
+		</div>
+	  </div>
+	</form>
   <div class="row" align="center">
   	<form id="update_foto" role="form" method="post" enctype="multipart/form-data" action="<?= base_url('user/upload_photo');?>" class="form-signin">
 		<input type="hidden" id="id" name="id" value="<?= $user->id;?>">
@@ -128,38 +182,33 @@
 		<div class="form-group">
 			<label for="tipo">Tipo de Acceso:</label>
 			<select class="form-control" style="max-width:300px; text-align:center;" id="tipo">
-				<option value="0" <?php if($user->tipo == 0) echo "selected"; ?>>Colaborador</option>
+				<!--<option value="0" <?php if($user->tipo == 0) echo "selected"; ?>>Colaborador</option>
 				<option value="1" <?php if($user->tipo == 1) echo "selected"; ?>>Capturista (Gastos de Viaje)</option>
 				<option value="2" <?php if($user->tipo == 2) echo "selected"; ?>>Capturista (Harvest)</option>
 				<option value="3" <?php if($user->tipo == 3) echo "selected"; ?>>Requisiciones</option>
 				<option value="4" <?php if($user->tipo == 4) echo "selected"; ?>>Administrador</option>
 				<option value="5" <?php if($user->tipo == 5) echo "selected"; ?>>Requisiciones y Administrador</option>
-				<option value="6" <?php if($user->tipo == 6) echo "selected"; ?>>Soporte Técnico</option>
+				<option value="6" <?php if($user->tipo == 6) echo "selected"; ?>>Soporte Técnico</option>-->
+                
+                <?php 
+                    foreach($tipo_acceso as $tp){
+                ?>
+                    
+                        <option value="<?php echo $tp->access; ?>" <?php if($user->tipo == $tp->access) echo "selected"; ?>><?php echo $tp->nombre; ?></option>
+                        
+                <?php
+                    }
+                
+                ?>
 			</select>
 		</div>
 	  </div>
 	</div>
+	<hr>
 	<div class="row" align="center">
-	  <div class="col-md-12">
-		  <button type="submit" class="btn btn-lg btn-primary btn-block" 
-		  	style="max-width:200px; text-align:center;">Actualizar</button>
-		  <?php if($user->estatus == 1): ?>
-		  	<span style="float:right;">
-		  		<label onclick="$('#update_foto').hide('slow');$('#update').hide('slow');$('#recision').
-		  			show('slow');" style="cursor:pointer;">Dar de baja al colaborador</label>
-		  	</span>
-		  	<span style="float:left;">
-		  		<label onclick="$('#update_foto').hide('slow');$('#update').hide('slow');$('#historial').
-		  			show('slow');" style="cursor:pointer;">Historial de desempeño</label>
-		  	</span>
-		  <?php elseif($user->estatus == 0): ?>
-		  	<span style="float:right;">
-		  		<label onclick="$('#update_foto').hide('slow');$('#update').hide('slow');$('#rehab').
-		  			show('slow');" style="cursor:pointer;">Rehabilitar al colaborador</label>
-		  	</span>
-		  	<?php endif; ?>
-		  </span>
-	  </div>
+		<div class="col-md-12">
+			<button type="submit" class="btn btn-lg btn-primary btn-block" style="max-width:200px; text-align:center;">Actualizar</button>
+		</div>
 	</div>
   </form>
   <form id="historial" style="display:none" role="form" method="post" action="javascript:" class="form-signin">
@@ -246,9 +295,59 @@
 		</div>
 	  </div>
   </form>
+  <div class="row" align="center" id="bitacora" style="display:none;">
+	<table id="tbl" class="table" align="center" data-toggle="table" data-hover="true" data-striped="true">
+		<thead>
+			<tr>
+				<th style="text-align:center;">Folio</th>
+				<th style="text-align:center;">Tipo</th>
+				<th style="text-align:center;">Fecha de Solicitud</th>
+				<th style="text-align:center;">Autorizador</th>
+				<th style="text-align:center;">Días</th>
+				<th style="text-align:center;">Desde</th>
+				<th style="text-align:center;">Hasta</th>
+				<th style="text-align:center;">Estatus</th>
+			</tr>
+		</thead>
+		<tbody data-link="row" class="rowlink">
+			<?php foreach ($user->bitacora as $solicitud):
+				switch ($solicitud->estatus) {
+				 	case 0: $estatus="CANCELADA";$razon=$solicitud->razon;							break;
+				 	case 1: $estatus="ENVIADA";$razon=$solicitud->motivo;							break;
+				 	case 2: $estatus='EN REVISIÓN POR CAPITAL HUMANO';$razon=$solicitud->motivo;	break;
+					case 3: $estatus='AUTORIZADA';$razon=$solicitud->motivo;						break;
+					case 4: $estatus='RECHAZADA';$razon=$solicitud->razon;							break;
+				}
+				switch ($solicitud->tipo) {
+				 	case 1: $tipo='VACACIONES';						break;
+					case 2:	$tipo='PERMISO DE AUSENCIA CON GOCE';	break;
+					case 3:	$tipo='PERMISO DE AUSENCIA SIN GOCE';	break;
+					case 4: $tipo='VIÁTICOS Y GASTOS DE VIAJE';		break;
+					case 5: $tipo='COMPROBACIÓN DE GASTOS DE VIAJE';break;
+					default: $tipo='';								break;
+				} ?>
+				<tr onmouseover="this.style.background=color;" onmouseout="this.style.background='transparent';">
+					<td align="center"><a class="view-pdf" href="<?= base_url("servicio/ver/$solicitud->id");?>"><small><?= $solicitud->id;?></small></a></td>
+					<td align="center"><small><?= $tipo;?></small></td>
+					<td align="center"><small><?= date('Y-m-d',strtotime($solicitud->fecha_solicitud));?></small></td>
+					<td align="center"><small><?= $solicitud->nombre;?></small></td>
+					<td align="center"><small><?= $solicitud->dias;?></small></td>
+					<td align="center"><small><?= $solicitud->desde;?></small></td>
+					<td align="center"><small><?= $solicitud->hasta;?></small></td>
+					<td align="center"><small><?= $estatus;?></small></td>
+				</tr>
+			<?php endforeach; ?>
+		</tbody>
+	</table>
+	<span style="float:right;"><label 
+	  	onclick="$('#bitacora').hide('slow');$('#update_foto').show('slow');$('#update').show('slow');" style="cursor:pointer;">
+	  	Ver Perfil</label></span>
+  </div>
+
   <script type="text/javascript">
 
 	$(document).ready(function() {
+		$('#tbl').DataTable({responsive: true,info: false,order: [[ 2, "desc" ]]});
 		$('.selectpicker').selectpicker();
 		$('#update').submit(function(event){
 			id = $('#id').val();
@@ -451,6 +550,51 @@
 			event.preventDefault();
 		});
 
+		$('#vacaciones').submit(function(event){
+			id = $('#id').val();
+			diasUno = $('#diasUno').val();
+			diasDos = $('#diasDos').val();
+			vencimientoUno = $('#vencimientoUno').val();
+			vencimientoDos = $('#vencimientoDos').val();
+			$.ajax({
+				url: '<?= base_url("user/actualiza_vacaciones");?>',
+				type: 'post',
+				async: true,
+				data: {'id':id,'diasUno':diasUno,'diasDos':diasDos,'vencimientoUno':vencimientoUno,'vencimientoDos':vencimientoDos},
+				beforeSend: function() {
+					$('#vacaciones').hide('slow');
+					$('#cargando').show('slow');
+				},
+				success: function(data){
+					var returnedData = JSON.parse(data);
+					console.log(returnedData['msg']);
+					if(returnedData['msg']=="ok")
+						window.document.location='<?= base_url("administrar_usuarios");?>';
+					else{
+						$('#cargando').hide('slow');
+						$('#vacaciones').show('slow');
+						$('#alert').prop('display',true).show('slow');
+						$('#msg').html(returnedData['msg']);
+						setTimeout(function() {
+							$("#alert").fadeOut(1500);
+						},3000);
+					}
+				},
+				error: function(xhr) {
+					console.log(xhr);
+					$('#cargando').hide('slow');
+					$('#vacaciones').show('slow');
+					$('#alert').prop('display',true).show('slow');
+					$('#msg').html('Error, intenta de nuevo o contacta al Administrador de la Aplicación');
+					setTimeout(function() {
+						$("#alert").fadeOut(1500);
+					},3000);
+				}
+			});
+
+			event.preventDefault();
+		});
+
 		$("#anio_historial").change(function() {
 			$("#anio_historial option:selected").each(function() {
 				anio = $('#anio_historial').val();
@@ -499,6 +643,12 @@
 		$('#baja').datepicker({
 			dateFormat: 'yy-mm-dd',
 			maxDate: today
+		});
+		$('#vencimientoUno').datepicker({
+			dateFormat: 'yy-mm-dd'
+		});
+		$('#vencimientoDos').datepicker({
+			dateFormat: 'yy-mm-dd'
 		});
 	});
   </script>

@@ -15,75 +15,87 @@
 	</div>
 	<div class="row">
 		<div class="col-md-12">
-			Las vacaciones que generan los empleados de Advanzer y Entuizer son de acuerdo al artículo 76 de la Ley Federal del Trabajo, 
-			la tabla que indica los mismos es la siguiente:
-			<p><table width="50%" align="center" class="tbl table-condensed table-bordered">
+			Las vacaciones que generas como empleado de Advanzer/Entuizer son de acuerdo al artículo 76 de la Ley Federal del Trabajo (en rojo los días que te corresponden de acuerdo a tu antigüedad):
+			<p><table align="center" style="width:50%" class="tbl table table-condensed table-bordered">
 				<tbody>
 					<tr>
-						<th style="cursor:default">Años</th>
-						<td style="cursor:default" <?php if($date_dif->y+1 == 1) echo 'bgcolor="red"' ?>>1</td>
-						<td style="cursor:default" <?php if($date_dif->y+1 == 2) echo 'bgcolor="red"' ?>>2</td>
-						<td style="cursor:default" <?php if($date_dif->y+1 == 3) echo 'bgcolor="red"' ?>>3</td>
-						<td style="cursor:default" <?php if($date_dif->y+1 == 4) echo 'bgcolor="red"' ?>>4</td>
-						<td style="cursor:default" <?php if($date_dif->y+1 >= 5 && $date_dif->y+1 <= 9) echo 'bgcolor="red"' ?>>5-9</td>
-						<td style="cursor:default" <?php if($date_dif->y+1 >= 10 && $date_dif->y+1 <= 14) echo 'bgcolor="red"' ?>>10-14</td>
-						<td style="cursor:default" <?php if($date_dif->y+1 >= 15 && $date_dif->y+1 <= 19) echo 'bgcolor="red"' ?>>15-19</td>
-						<td style="cursor:default" <?php if($date_dif->y+1 >= 20 && $date_dif->y+1 <= 24) echo 'bgcolor="red"' ?>>20-24</td>
-						<td style="cursor:default" <?php if($date_dif->y+1 >= 25 && $date_dif->y+1 <= 29) echo 'bgcolor="red"' ?>>25-29</td>
+						<th width="10%" style="cursor:default;text-align:center;">Años</th>
+						<td width="10%" style="cursor:default;text-align:center;" <?php if($date_dif->y+1 == 1) echo 'bgcolor="red"' ?>>1</td>
+						<td width="10%" style="cursor:default;text-align:center;" <?php if($date_dif->y+1 == 2) echo 'bgcolor="red"' ?>>2</td>
+						<td width="10%" style="cursor:default;text-align:center;" <?php if($date_dif->y+1 == 3) echo 'bgcolor="red"' ?>>3</td>
+						<td width="10%" style="cursor:default;text-align:center;" <?php if($date_dif->y+1 == 4) echo 'bgcolor="red"' ?>>4</td>
+						<td width="10%" style="cursor:default;text-align:center;" <?php if($date_dif->y+1 >= 5 && $date_dif->y+1 <= 9) echo 'bgcolor="red"' ?>>5-9</td>
+						<td width="10%" style="cursor:default;text-align:center;" <?php if($date_dif->y+1 >= 10 && $date_dif->y+1 <= 14) echo 'bgcolor="red"' ?>>10-14</td>
+						<td width="10%" style="cursor:default;text-align:center;" <?php if($date_dif->y+1 >= 15 && $date_dif->y+1 <= 19) echo 'bgcolor="red"' ?>>15-19</td>
+						<td width="10%" style="cursor:default;text-align:center;" <?php if($date_dif->y+1 >= 20 && $date_dif->y+1 <= 24) echo 'bgcolor="red"' ?>>20-24</td>
+						<td width="10%" style="cursor:default;text-align:center;" <?php if($date_dif->y+1 >= 25 && $date_dif->y+1 <= 29) echo 'bgcolor="red"' ?>>25-29</td>
 					</tr>
-					<tr><th style="cursor:default">Días</th>
-						<td style="cursor:default" <?php if($date_dif->y+1 == 1) echo 'bgcolor="red"' ?>>6</td>
-						<td style="cursor:default" <?php if($date_dif->y+1 == 2) echo 'bgcolor="red"' ?>>8</td>
-						<td style="cursor:default" <?php if($date_dif->y+1 == 3) echo 'bgcolor="red"' ?>>10</td>
-						<td style="cursor:default" <?php if($date_dif->y+1 == 4) echo 'bgcolor="red"' ?>>12</td>
-						<td style="cursor:default" <?php if($date_dif->y+1 >= 5 && $date_dif->y+1 <= 9) echo 'bgcolor="red"' ?>>14</td>
-						<td style="cursor:default" <?php if($date_dif->y+1 >= 10 && $date_dif->y+1 <= 14) echo 'bgcolor="red"' ?>>16</td>
-						<td style="cursor:default" <?php if($date_dif->y+1 >= 15 && $date_dif->y+1 <= 19) echo 'bgcolor="red"' ?>>18</td>
-						<td style="cursor:default" <?php if($date_dif->y+1 >= 20 && $date_dif->y+1 <= 24) echo 'bgcolor="red"' ?>>20</td>
-						<td style="cursor:default" <?php if($date_dif->y+1 >= 25 && $date_dif->y+1 <= 29) echo 'bgcolor="red"' ?>>22</td></tr>
+					<tr><th style="cursor:default;text-align:center;">Días</th>
+						<td style="cursor:default;text-align:center;" <?php if($date_dif->y+1 == 1) echo 'bgcolor="red"' ?>>6</td>
+						<td style="cursor:default;text-align:center;" <?php if($date_dif->y+1 == 2) echo 'bgcolor="red"' ?>>8</td>
+						<td style="cursor:default;text-align:center;" <?php if($date_dif->y+1 == 3) echo 'bgcolor="red"' ?>>10</td>
+						<td style="cursor:default;text-align:center;" <?php if($date_dif->y+1 == 4) echo 'bgcolor="red"' ?>>12</td>
+						<td style="cursor:default;text-align:center;" <?php if($date_dif->y+1 >= 5 && $date_dif->y+1 <= 9) echo 'bgcolor="red"' ?>>14</td>
+						<td style="cursor:default;text-align:center;" <?php if($date_dif->y+1 >= 10 && $date_dif->y+1 <= 14) echo 'bgcolor="red"' ?>>16</td>
+						<td style="cursor:default;text-align:center;" <?php if($date_dif->y+1 >= 15 && $date_dif->y+1 <= 19) echo 'bgcolor="red"' ?>>18</td>
+						<td style="cursor:default;text-align:center;" <?php if($date_dif->y+1 >= 20 && $date_dif->y+1 <= 24) echo 'bgcolor="red"' ?>>20</td>
+						<td style="cursor:default;text-align:center;" <?php if($date_dif->y+1 >= 25 && $date_dif->y+1 <= 29) echo 'bgcolor="red"' ?>>22</td></tr>
+				</tbody>
+			</table><p>
+			<p><table align="center" style="width:50%" class="table table-bordered table-condensed">
+				<thead>
+					<tr>
+						<th>Días Disponibles</th>
+						<th>Días próximos a vencer</th>
+						<th>Fecha de vencimiento</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td style="cursor:default;text-align:center;"><?php $suma=0; if($yo->acumulados) echo$yo->disponibles + $yo->acumulados->dias_acumulados;else echo$yo->disponibles?></td>
+						<td style="cursor:default;text-align:center;"><?php if($yo->acumulados){$suma=$yo->acumulados->dias_uno+$yo->de_solicitud; if($suma>0)echo $suma;}else echo 0;?></td>
+						<td style="cursor:default;text-align:center;"><?php if($yo->acumulados) if($suma>0) echo date_format(date_create($yo->acumulados->vencimiento_uno),'j-M-Y')?></td>
+					</tr>
 				</tbody>
 			</table></p>
-			<div align="center"><a style="text-decoration:none;" class="link" href="<?= base_url('solicitar_vacaciones');?>">>>Solicitud de Vacaciones<<</a></div>
 		</div>
-		<hr>
+	</div><br>
+	<div class="row">
 		<div class="col-md-12">
 			<div class="panel panel-default" style="background-color:color;">
 				<div class="panel-heading">
-					<a href="#premisas" data-toggle="collapse" aria-expanded="false">
-						<h3 class="panel-title">Premisas Básicas</h3></a>
+						<h3 class="panel-title">Premisas Básicas</h3>
 				</div>
-				<div class="panel-body collapse" id="premisas">
-					<p><ol type="a">
-						<li>Los días que se tomarán a cuenta son los días hábiles según el horario establecido de cada empleado. 
-							(Por ejemplo: Si el empleado labora de Lunes a Viernes, solamente serán tomados a cuenta de vacaciones esos 5 días 
-							y los días Sábado y Domingo serán respetados como descanso).</li>
-						<li>El empleado podrá disfrutar de sus vacaciones al cumplir 9 meses de ingreso a la empresa.</li>
-						<li>Los días de vacaciones se disfrutarán dentro de un período de 18 meses a partir del aniversario del cual se 
-							generan. Los días de vacaciones que no se disfruten dentro del período de 18 meses establecido no se acumularán 
-							para el siguiente período. Por ningún motivo se pagarán los días no disfrutados.</li>
-						<li>La Prima Vacacional será pagada en la segunda quincena del mes que corresponda al aniversario del empleado 
-							dentro de la empresa y corresponde al 25% de los días de vacaciones generados en el período que acabe de cerrar.</li>
-						<li>El colaborador se encargará de solicitar las siguientes autorizaciones (según aplique):
+				<div class="panel-body" id="premisas">
+					<ol type="a">
+						<p><li>Los días que se consideran como hábiles, son los días que laboras de acuerdo a tus condiciones contractuales. Por ejemplo: Si laboras de Lunes a Viernes, los días hábiles son esos 5 y los días Sábado y Domingo no se contabilizan como vacaciones sino como días de descanso.</li></p>
+						<p><li>Podrás disfrutar de los días proporcionales de vacaciones que te corresponden a partir de los 9 meses de ingreso a la empresa.</li></p>
+						<p><li>A partir de tu fecha de aniversario cuentas con un período de 18 meses para disfrutar tus días de vacaciones. Los días de vacaciones que no se disfruten dentro del período de 18  meses establecido no se acumularán para el siguiente período y caducarán. Por ningún motivo se pagarán los días no disfrutados.</li></p>
+						<p><li>La Prima Vacacional será pagada en la segunda quincena del mes que corresponda a tu aniversario de la empresa y corresponde al 25% de los días de vacaciones generados en el período que acabe de cerrar.</li></p>
+						<p><li>Las vacaciones deberán solicitarse con un período mínimo de 30 días y las autorizaciones que deberás gestionar son las siguientes (según aplique):
 							<ul type="square">
-								<li>Si está en proyecto: al líder de proyecto y al superior inmediato de acuerdo a la estructura con un tiempo mínimo de 
-									anticipación de 30 días.</li>
-								<li>Si no está en proyecto o es área administrativa: al superior inmediato de acuerdo a la estructura con un tiempo 
-									mínimo de anticipación de 30 días.</li>
+								<li>Si estás en proyecto: El líder de proyecto te autorizará.</li>
+								<li>Si no está en proyecto o eres área administrativa: El superior inmediato de acuerdo a la estructura será quien autorice.</li>
 							</ul>
-						</li>
-					</ol></p>
+						</li></p>
+						<p><li>Una vez autorizadas por tu líder/superior, tu solicitud pasará a validación por parte de Capital Humano. Una vez que Capital Humano valide, se te notificará vía correo electrónico.</li></p>
+					</ol>
 				</div>
 			</div>
 		</div>
 	</div>
+	<div class="row">
+		<div align="center"><button class="btn btn-primary" onclick="location.href='<?= base_url("solicitar_vacaciones");?>';"><big>Solicitar Vacaciones</big></button></div>
+	</div>
+	<hr>
 	<script>
 		document.write('\
 			<style>\
 				.tbl > tbody > tr > th {\
 					background: '+color+'\
 				}\
-				a.link{\
-					color: '+color+'\
+				table>thead>tr>th {\
+					background: '+color+'\
 				}\
 			</style>\
 		');

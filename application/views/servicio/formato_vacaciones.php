@@ -21,18 +21,20 @@
 	<form id="update" role="form" method="post" action="javascript:" class="form-signin">
 		<input type="hidden" value="" id="ochoMeses">
 		<div class="row" align="center">
-			<div class="col-md-2"></div>
-			<div class="col-md-8">
-				<div class="input-group">
+			<div class="col-md-4"></div>
+			<div class="col-md-4">
+				<div class="input-group" style="display:<?php if($this->session->userdata('tipo')<4) echo"none";?>;">
 					<span class="input-group-addon">Colaborador</span>
 					<select class="selectpicker" data-header="Selecciona al Colaborador" data-width="300px" data-live-search="true" 
-						style="max-width:300px;text-align:center;" id="colaborador" required <?php if($this->session->userdata('tipo')<4) echo"disabled";?>>
+						style="max-width:300px;text-align:center;" id="colaborador" required>
 						<option value="" disabled selected>-- Selecciona al Colaborador --</option>
 						<?php foreach($colaboradores as $colaborador): ?>
 							<option value="<?= $colaborador->id;?>" <?php if($colaborador->id==$this->session->userdata('id'))echo"selected";?>><?= $colaborador->nombre;?></option>
 						<?php endforeach; ?>
 					</select>
-					<span class="input-group-addon">Jefe Directo / Líder</span>
+				</div>
+				<div class="input-group">
+					<span class="input-group-addon required">Autorizador</span>
 					<select class="selectpicker" data-header="Selecciona al autorizador" data-width="300px" data-live-search="true" 
 						style="max-width:300px;text-align:center;" id="autorizador" required>
 						<option value="" disabled selected>-- Selecciona al Jefe Directo / Líder --</option>
@@ -44,68 +46,53 @@
 				</div>
 			</div>
 		</div>
-		<hr>
+		<br>
 		<div class="row" align="center">
-			<div class="col-md-3"></div>
-			<div class="col-md-6">
-				<label>DATOS</label>
+			<div class="col-md-2"></div>
+			<div class="col-md-8">
 				<div class="input-group">
 					<span class="input-group-addon"># Nómina</span>
-					<input class="form-control" style="max-width:100px;text-align:center;cursor:default;background-color: #fff" value="" id="d_nomina" disabled>
+					<input class="form-control" style="text-align:center;cursor:default;background-color: #fff" value="" id="d_nomina" disabled>
 					<span class="input-group-addon">Área Actual</span>
 					<input class="form-control" style="min-width:300px;text-align:center;cursor:default;background-color: #fff" value="" id="d_area" disabled>
 				</div>
 				<br>
 				<div class="input-group">
 					<span class="input-group-addon">Fecha de Ingreso</span>
-					<input class="form-control" style="max-width:300px;text-align:center;cursor:default;background-color: #fff" value="" id="d_ingreso" disabled>
+					<input class="form-control" style="text-align:center;cursor:default;background-color: #fff" value="" id="d_ingreso" disabled>
 					<span class="input-group-addon">Antigüedad</span>
-					<input class="form-control" style="max-width:300px;text-align:center;cursor:default;background-color: #fff" value="" id="d_antiguo" disabled>
+					<input class="form-control" style="text-align:center;cursor:default;background-color: #fff" value="" id="d_antiguo" disabled>
 				</div>
+				<input type="hidden" id="disponibles">
 			</div>
 		</div>
 		<hr>
 		<div class="row" align="center">
-			<div class="col-md-2"></div>
-			<div class="col-md-8">
-				<br>
-				<div class="input-group">
-					<span class="input-group-addon" id="pendientes_label">Días del año en curso</span>
-					<input class="form-control" style="max-width:80px;text-align:center;cursor:default;background-color: #fff" id="disponibles" disabled>
-					<span class="input-group-addon">Días generados</span>
-					<input class="form-control" style="max-width:80px;text-align:center;cursor:default;background-color: #fff" id="acumulados" 
-						value="0" disabled>
-						<span class="input-group-addon">Vencimiento</span>
-					<input class="form-control" style="min-width:250px;text-align:center;cursor:default;background-color: #fff" id="vencimiento" 
-						value="" disabled>
-				</div>
-				<br>
+			<div class="col-md-1"></div>
+			<div class="col-md-10">
 				<div id="generales">
-					<label>DETALLE SOLICITUD</label>
+					<h3>Detalle de Solicitud</h3>
 					<div class="input-group">
-						<span class="input-group-addon">Días</span>
-						<input class="form-control" style="max-width:80px;text-align:center;background-color:white;cursor:default" required value="1" id="dias"
-							placeholder="# días" onkeyup="calculaFechas();$('#auth').show('slow');">
-						<span class="input-group-addon">Desde</span>
-						<input class="form-control" type="text" id="desde" style="max-width:300px; text-align:center;background-color:white;cursor:default" 
-							value="<?= date('Y-m-d');?>" required>
-						<span class="input-group-addon">Hasta</span>
-						<input class="form-control" type="text" id="hasta" style="max-width:300px; text-align:center;background-color:white;cursor:default" 
+						<span class="input-group-addon required">Días a Solicitar</span>
+						<select class="form-control" style="background-color:white;min-width:80px" required id="dias" onchange="calculaFechas();"></select>
+						<span class="input-group-addon required">Desde</span>
+						<input class="form-control" type="text" id="desde" style="text-align:center;background-color:white;cursor:default" value="<?= date('Y-m-d');?>" required>
+						<span class="input-group-addon required">Hasta</span>
+						<input class="form-control" type="text" id="hasta" style="text-align:center;background-color:white;cursor:default" 
 							value="" readonly required>
-						<span class="input-group-addon">Regresa a Laborar</span>
-						<input class="form-control" type="text" id="regresa" style="max-width:300px; text-align:center;background-color:white;cursor:default" 
+						<span class="input-group-addon required">Regresa a Laborar</span>
+						<input class="form-control" type="text" id="regresa" style="text-align:center;background-color:white;cursor:default" 
 							value="" readonly required>
 					</div>
 					<br>
 					<div class="input-group">
-						<span class="input-group-addon" style="min-width:260px">Observaciones</span>
-						<textarea class="form-control" id="observaciones" rows="4" placeholder="Observaciones" 
-							style="background-color:white;cursor:default" required></textarea>
+						<span class="input-group-addon required" style="min-width:260px">Observaciones</span>
+						<textarea class="form-control" id="observaciones" rows="4" placeholder="Agrega cualquier comentario que consideres relevante para la autorización de tus días" required></textarea>
 					</div>
 					<br>
 				</div>
-				<div id="auth" style="display:none;">
-					<h2>Si tu solicitud se excede de la política de Vacaciones, se turnará al área de Capital Humano para validación final una vez que tu Jefe/Líder haya autorizado la misma</h2>
+				<div id="auth" style="display:none;color:red;border-color:red;border-radius:10px;border-style:dashed;">
+					<h5>Estás solicitando días adicionales a los que te corresponden actualmente. Se revisará si procede tu solicitud.</h5>
 				</div>
 				<br>
 			</div>
@@ -120,6 +107,13 @@
 		</div>
 	</form>
 	<script>
+		document.write('\
+			<style>\
+				.required {\
+					background: '+color+'\
+				}\
+			</style>\
+		');
 		function getColaborador() {
 			$('#colaborador :selected').each(function(){
 				colaborador=$('#colaborador').val();
@@ -135,24 +129,18 @@
 						$('#autorizador').val(returnedData['jefe']);
 						$('#autorizador').selectpicker('refresh');
 						$('#disponibles').val(returnedData['disponibles']);
+						$('#dias').empty();
 						if(returnedData['acumulados']['dias_acumulados'] > 0){
-							$('#acumulados').val(returnedData['acumulados']['dias_acumulados']);
-							$('#vencimiento').val(returnedData['acumulados']['dias_uno']+' días vencen el '+returnedData['acumulados']['vencimiento_uno']);
-						}else{
-							//$('#disponibles').val(returnedData['disponibles']+returnedData['acumulados']['dias_acumulados']);
-							$('#acumulados').val('0');
-							$('#vencimiento').val('');
+							$('#disponibles').val(parseInt(returnedData['acumulados']['dias_acumulados']) + parseInt($('#disponibles').val()));
+						}
+						for (var i = 1; i <= (parseInt($('#disponibles').val())+parseInt(returnedData['extra'])); i++) {
+							$('#dias').append(new Option(i,i,true,true));
 						}
 						$('#d_nomina').val(returnedData['nomina']);
 						$('#d_area').val(returnedData['nombre_area']);
 						$('#d_ingreso').val(returnedData['fecha_ingreso']);
 						$('#d_antiguo').val(returnedData['diff']['y']+' años, '+returnedData['diff']['m']+' meses');
-						antiguo=parseInt(returnedData['diff']['y'])*12 + parseInt(returnedData['diff']['m']);
-						if(antiguo < 9)
-							$('#auth').show('slow');
-						else
-							$('#auth').hide('slow');
-						$('#dias').val('1');
+						$('#dias').val('');
 						$('#desde').val(returnedData['fecha_minima']);
 						calculaFechas();
 						$('#observaciones').val('');
@@ -164,8 +152,11 @@
 			}
 		}
 		function calculaFechas() {
-			patron = /^\d*$/; 
-			dias=parseInt($('#dias').val());
+			patron = /^\d*$/;
+			$('#dias :selected').each(function(){
+				dias=$('#dias').val();
+			})
+			dias=parseInt(dias);
 			if(dias > 0){
 				inicio=$('#desde').val();
 				hasta=sumaFecha(dias,inicio);
@@ -175,6 +166,10 @@
 				$('#hasta').val('');
 				$('#regresa').val('');
 			}
+			if(dias > parseInt($('#disponibles').val()))
+				$('#auth').show('slow');
+			else
+				$('#auth').hide('slow');
 		}
 		sumaFecha = function(d, fecha){
 			var Fecha = new Date();
@@ -219,7 +214,6 @@
 
 			$("#desde").change(function() {
 				calculaFechas();
-				$('#auth').show('slow');
 			});
 
 			$("#colaborador").change(function() {
@@ -227,7 +221,7 @@
 			});
 
 			$("#update").submit(function(event){
-				if(!confirm('¿Seguro que desea enviar la solicitud?'))
+				if(!confirm('SE ESTÁ ENVIANDO TU SOLICITUD A AUTORIZACION. TAN PRONTO SEA RESUELTA, SE TE NOTIFICARÁ POR CORREO.'))
 					return false;
 				//get form values
 					$("#colaborador option:selected").each(function() {
@@ -236,7 +230,9 @@
 					$("#autorizador option:selected").each(function() {
 						autorizador = $('#autorizador').val();
 					});
-					dias = $('#dias').val();
+					$('#dias :selected').each(function(){
+						dias=$('#dias').val();
+					})
 					acumulados = $('#acumulados').val();
 					disponibles = $('#disponibles').val();
 					desde = $('#desde').val();
@@ -248,7 +244,7 @@
 					url: '<?= base_url("servicio/registra_solicitud");?>',
 					type: 'post',
 					data: {'colaborador':colaborador,'autorizador':autorizador,'dias':dias,'desde':desde,'hasta':hasta,'regresa':regresa,
-						'observaciones':observaciones,'tipo':1,'ochoMeses':ochoMeses,'disponibles':disponibles,'acumulados':acumulados},
+						'observaciones':observaciones,'tipo':1,'ochoMeses':ochoMeses,'acumulados':acumulados},
 					beforeSend: function() {
 						$('#update').hide('slow');
 						$('#cargando').show('slow');

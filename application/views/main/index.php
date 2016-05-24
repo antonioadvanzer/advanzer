@@ -73,11 +73,16 @@
 					<nav class="navbar">
 						<div class="navbar-collapse" aria-expanded="false">
 							<ul class="nav navbar-nav">
-								<?php if(count($auth_pendientes)+count($solicitudes_pendientes)): ?>
-									<li><a href="<?= base_url("solicitudes");?>">Solicitudes (<?= count($auth_pendientes)+ count($solicitudes_pendientes);?>)</a></li>
+								<?php if(count($solicitudes_pendientes)): ?>
+									<li><a href="<?= base_url("solicitudes");?>">Solicitudes Propias <span class="badge"><?php if($cont_solicitudes>0) echo count($cont_solicitudes);?></span></a></li>
 								<?php endif;
-								if($requisiciones_pendientes): ?>
-									<li><a href="<?= base_url("requisicion");?>">Requisiciones (<?= $requisiciones_pendientes?>)</a></li>
+								if(count($auth_pendientes)): ?>
+									<li><a href="<?= base_url("solicitudes_pendientes");?>">Solicitudes Recibidas <span class="badge"><?php if($cont_pendientes>0) echo $cont_pendientes;?></span></a></li>
+								<?php endif;
+								/*if($requisiciones_pendientes+count($requisiciones)): $count=count($requisiciones) + $requisiciones_pendientes; */
+                                if($rp = $this->session->userdata('permisos')['requisicion_pendiente']):
+                                ?>
+									<li><a href="<?= base_url('requisiciones')."/?status=own";?>"><b>Requisiciones <span class="badge"><?php /*if($count>0) echo $count;*/ echo $rp;?></span></b></a></li>
 								<?php endif;
 								if($evaluacion): ?>
 									<li><a href="<?= base_url("evaluar");?>">Feedback</a></li>
@@ -89,7 +94,6 @@
 									<?php endif; ?>
 									<li onclick="alert('La sección está en construcción.');"><a href="#">Mi plan de Capacitación</a></li>
 								<?php endif; ?>
-								<li><a target="_blank" href="http://capitalhumano.advanzer.com">Portal de Capital Humano</a></li>
 							</ul>
 						</div>
 					</nav>
