@@ -535,40 +535,10 @@ class Requisicion extends CI_Controller {
 		);
 		
 		$id=$this->input->post('id');
-<<<<<<< HEAD
-		if($datos['director'] == $this->session->userdata('id'))
-			$datos['estatus']=2;
-		if($datos['autorizador'] == $this->session->userdata('id'))
-			$datos['estatus']=3;
-		if($this->requisicion_model->update($id,$datos)){
-			$requisicion = $this->requisicion_model->getById($id);
-			$data['requisicion']=$requisicion;
-			switch ($requisicion->estatus) {
-				case 1:
-					$destinatario=$this->user_model->searchById($requisicion->director)->email;
-					$mensaje=$this->load->view("layout/requisicion/create",$data,true);
-					break;
-				case 2:
-					$destinatario=$this->user_model->searchById($requisicion->autorizador)->email;
-					$mensaje=$this->load->view("layout/requisicion/auth",$data,true);
-					break;
-				case 3:
-					$destinatario='perla.valdezadvanzer.com';
-					$mensaje=$this->load->view("layout/requisicion/rh",$data,true);
-					break;
-			}
-			if(!$this->sendMail($destinatario,$mensaje))
-				$response['msg']="ok";
-			else
-				$response['msg']="No se pudo enviar correo de notificación";
-		}else
-			$response['msg']="Ha habido un error al actualizar la requisicion";
-=======
 		$requisicion=$this->requisicion_model->getById($id);
 
 		$response['msg'] = "null";
->>>>>>> ce8b2dfde9b819e4a7c9869cf2d3191504aa2b8e
-
+		
 		if($this->requisicion_model->update($id,$datos)){
 			
 			$data['requisicion'] = $requisicion;
