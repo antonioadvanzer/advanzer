@@ -210,7 +210,7 @@
 									<li><a href="<?= base_url('evaluacion/resumen');?>">Resumen de Evaluación 360</a></li>
 								<?php endif;?>
 								<!--<li><a href="<?= base_url('vacaciones');?>">Vacaciones</a></li>-->
-								<li><a href="<?= base_url('permiso');?>">Permisos de Ausencia</a></li>
+								<!--<li><a href="<?= base_url('permiso');?>">Permisos de Ausencia</a></li>-->
 								<!--<li><a href="<?= base_url('viaticos_gastos');?>">Viáticos y Gastos de Viaje</a></li>-->
 							</ul>
 						</li>
