@@ -13,6 +13,14 @@
 		<div class="col-md-12"><div id="cargando" style="display:none; color: green;">
 			<img src="<?= base_url('assets/images/loading.gif');?>"></div></div>
 	</div>
+    <div class="row" align="left">
+		
+        <div class="col-md-6"><button class="btn btn-primary" onclick="location.href='<?= base_url("solicitudes");?>';"><big>Solicitudes Propias</big></button></div>
+	   
+        <div class="col-md-6"><button class="btn btn-primary" onclick="location.href='<?= base_url("solicitudes_pendientes");?>';"><big>Solicitudes Recibidas</big></button></div>
+        
+    </div>
+    <br/>
 	<div class="row">
 		<div class="col-md-12">
 			Las vacaciones que generas como empleado de Advanzer/Entuizer son de acuerdo al artículo 76 de la Ley Federal del Trabajo (en rojo los días que te corresponden de acuerdo a tu antigüedad):

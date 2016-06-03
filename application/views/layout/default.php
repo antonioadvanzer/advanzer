@@ -228,6 +228,6 @@
 	<footer align="center">
 		<p>&copy; Advanzer De México, S.A de C.V. 2015</p>
 	</footer>
-	</div> <!-- /container -->
+	<!--</div> <!-- /container -->
 </body>
 </html>

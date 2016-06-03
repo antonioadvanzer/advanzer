@@ -57,7 +57,7 @@ class Solicitudes_model extends CI_Model{
 		if($result->num_rows() == 1)
 			return $result->first_row()->dias_acumulados;
 		else{
-			$result = $this->db->select('dias')->from('Solicitudes')->where(array('tipo'=>1,'colaborador'=>$colaborador))->where_not_in('estatus',array(0,4))->get();
+			$result = $this->db->select('dias')->from('Solicitudes')->where(array('tipo'=>1,'colaborador'=>$colaborador))->where_not_in('estatus',array(0,3))->get();
 			if($result->num_rows() == 1)
 				return (int)$result->first_row()->dias*-1;
 			else
@@ -84,9 +84,9 @@ class Solicitudes_model extends CI_Model{
 
 	function update_detalle_viaticos($solicitud,$datos) {
 		$result=$this->db->where('solicitud',$solicitud)->get('Detalle_Viaticos');
-		if($result->num_rows() == 1)
+		if($result->num_rows() == 1){
 			$this->db->update('Detalle_Viaticos',$datos);
-		else{
+		}else{
 			$datos['solicitud']=$solicitud;
 			$this->db->insert('Detalle_Viaticos',$datos);
 		}
@@ -157,5 +157,11 @@ class Solicitudes_model extends CI_Model{
 	function registra_comprobante($datos) {
 		$this->db->insert('Comprobantes',$datos);
 		return $this->db->insert_id();
+	}
+	
+	// To set alert if user ever seen this Solicitud
+	function setAlert($id,$alert){
+		$datos['alerta'] = $alert;
+		$this->db->where('id',$id)->update('Solicitudes',$datos);
 	}
 }

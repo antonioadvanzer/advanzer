@@ -10,24 +10,39 @@ class User_model extends CI_Model{
 
 
 	function solicitudesByColaborador($colaborador,$flag=null) {
-		$this->db->select('S.*,U.nombre')->from('Solicitudes S')->join('Users U','U.id = S.autorizador','LEFT OUTER')->where("S.colaborador = $colaborador")->order_by('S.fecha_solicitud','desc');
+		$this->db->select('S.*,U.nombre')->from('Solicitudes S')->join('Users U','U.id = S.autorizador','LEFT OUTER')->where("(S.colaborador = $colaborador)")->order_by('S.fecha_solicitud','desc');		
 		$result = $this->db->get()->result();
-		foreach ($result as $solicitud)
+		foreach ($result as $solicitud) 
 			if($solicitud->tipo == 4)
 				$solicitud->detalle = $this->db->where('solicitud',$solicitud->id)->get('Detalle_Viaticos')->first_row();
 		return $result;
 	}
+	
+	function countSolicitudesByColaborador($colaborador) {
+		
+		$this->db->select('*')->from('Solicitudes')->where("(colaborador = $colaborador) and (estatus=3 or estatus=4) and (alerta=1)")->order_by('fecha_solicitud','desc');
+		$result = $this->db->get()->result();
+		
+		return count($result);
+	}
 
 	function solicitudes_pendientes($colaborador){
-		if($this->session->userdata('area') == 4)
+		
+		/*if($this->session->userdata('area') == 4){
 			$this->db->where("((S.tipo != 4 and S.estatus=2) or (S.autorizador=$colaborador and S.estatus=1)) or (S.estatus=3 and desde='".date('Y-m-d')."')");
-		elseif($this->session->userdata('area')==9)
+		}elseif($this->session->userdata('area')==9){
 			$this->db->join('Detalle_Viaticos DV','DV.solicitud=S.id','LEFT OUTER')->where("(S.estatus=3 and S.tipo=4 and anticipo = 0) or (S.autorizador=$colaborador and S.estatus=1) or (S.tipo=5 and S.estatus=1)");
-		else
+		}else{
 			$this->db->where('S.autorizador',$colaborador);
+		}*/
+		
+		$this->db->where("(S.autorizador=$colaborador) and (S.estatus=1)");
+		
 		$this->db->select('S.*,U.nombre')->from('Solicitudes S')
-			->join('Users U','U.id = S.colaborador')->order_by('S.fecha_solicitud','desc');
+			->join('Users U','U.id = S.colaborador');
+		
 		$result = $this->db->get()->result();
+		
 		foreach ($result as $solicitud) {
 			if($solicitud->tipo == 4)
 				$solicitud->detalle = $this->db->where('solicitud',$solicitud->id)->get('Detalle_Viaticos')->first_row();
@@ -37,6 +52,37 @@ class User_model extends CI_Model{
 				$solicitud->comprobantes = $this->db->where(array('solicitud'=>$solicitud->id,'estatus'=>1))->get('Comprobantes')->result();
 		}
 		return $result;
+	}	
+	
+	function countSolicitudesPendientesAutorizar($colaborador){
+		
+		$this->db->select('*')->from('Solicitudes')->where("(autorizador = $colaborador) and (estatus=1) and (alerta=1)");
+		$result = $this->db->get()->result();
+		
+		return count($result);
+	}
+
+	// Extraer todos las solitudes qe ya esten autorizadas por el jefe directo y que solo sea caso diferente
+	function solicitudes_autorizar_ch(){
+		
+		$this->db->select('S.*,U.nombre')->from('Solicitudes S')->where("S.estatus=2")
+		->join('Users U','U.id = S.colaborador');
+		
+		$result = $this->db->get()->result();
+		
+		return $result;
+	}
+	
+	// Contar aquellos que ya se autorizaron
+	function countSolicitudesAutorizarCh(){
+		
+		$this->db->where("(estatus=2) and (alerta=1)");
+		
+		$this->db->select('*')->from('Solicitudes');
+		
+		$result = $this->db->get()->result();
+		
+		return count($result);
 	}
 
 	function getSolicitudes(){

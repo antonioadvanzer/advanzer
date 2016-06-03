@@ -105,8 +105,107 @@
 				</div>
 			</div>
 		</div>
+        
+    <div id="openModal" class="modalDialog">
+        <div>
+            <div id="title" class="title" align="center"><h2>Titulo</h2></div>
+            <a title="Close" onclick="window.history.back();" class="close">X</a>
+            <div id="body" class="body" align="center">  
+
+            </div>
+        </div>
+    </div>
+        
 	</form>
 	<script>
+        
+        function modalWindow(option){
+            
+            switch(option){
+                   
+                    // Confirmar si desea autorizar
+            case "solicitar":
+
+                document.getElementById("title").innerHTML = '<h2>Atención</h2>'
+                document.getElementById("body").innerHTML = '<p>SE ESTÁ ENVIANDO TU SOLICITUD A AUTORIZACION. TAN PRONTO SEA RESUELTA, SE TE NOTIFICARÁ POR CORREO.</p>'
+                                +'<a type="button" class="btn btn-primary" href="#procesando" onclick="solicitar();">Aceptar</a>&nbsp; &nbsp; '
+                                +'<a type="button" class="btn btn-primary" onclick="window.history.back();">Cancelar</a>';
+                window.document.location = "#openModal";
+
+            break;
+
+            case "confirm_solicitar":
+
+                document.getElementById("title").innerHTML = '<h2>Aviso</h2>'
+                document.getElementById("body").innerHTML = '<p>Se ha recibido su respuesta</p>'
+                                +'<a type="button" class="btn btn-primary" onclick="confirm_solicitar();">Aceptar</a>';
+                window.document.location = "#openModal";
+
+            break;
+            }
+        }
+        
+        function solicitar(){
+            
+            /*if(!confirm('SE ESTÁ ENVIANDO TU SOLICITUD A AUTORIZACION. TAN PRONTO SEA RESUELTA, SE TE NOTIFICARÁ POR CORREO.'))
+					return false;*/
+				//get form values
+			
+            $("#colaborador option:selected").each(function() {
+                    colaborador = $('#colaborador').val();
+                });
+                $("#autorizador option:selected").each(function() {
+                    autorizador = $('#autorizador').val();
+                });
+                $('#dias :selected').each(function(){
+                    dias=$('#dias').val();
+                })
+                acumulados = $('#acumulados').val();
+                disponibles = $('#disponibles').val();
+                desde = $('#desde').val();
+                hasta = $('#hasta').val();
+                regresa = $('#regresa').val();
+                observaciones = $('#observaciones').val();
+                ochoMeses=$('#ochoMeses').val();
+				$.ajax({
+					url: '<?= base_url("servicio/registra_solicitud");?>',
+					type: 'post',
+					data: {'colaborador':colaborador,'autorizador':autorizador,'dias':dias,'desde':desde,'hasta':hasta,'regresa':regresa,
+						'observaciones':observaciones,'tipo':1,'ochoMeses':ochoMeses,'acumulados':acumulados},
+					beforeSend: function() {
+						$('#update').hide('slow');
+						$('#cargando').show('slow');
+					},
+					success: function(data){
+						var returnedData = JSON.parse(data);
+						console.log(returnedData['msg']);
+						if(returnedData['msg']=="ok")
+							window.document.location='<?= base_url("solicitudes");?>';
+						else{
+							$('#cargando').hide('slow');
+							$('#update').show('slow');
+							$('#alert').prop('display',true).show('slow');
+							$('#msg').html(returnedData['msg']);
+							setTimeout(function() {
+								$("#alert").fadeOut(1500);
+							},3000);
+						}
+					},
+					error: function(xhr) {
+						console.log(xhr);
+						$('#cargando').hide('slow');
+						$('#update').show('slow');
+						$('#alert').prop('display',true).show('slow');
+						$('#msg').html('Error, intenta de nuevo o contacta al Administrador de la Aplicación');
+						setTimeout(function() {
+							$("#alert").fadeOut(1500);
+						},3000);
+					}
+				});
+
+				event.preventDefault();
+        }
+        
 		document.write('\
 			<style>\
 				.required {\
@@ -221,7 +320,10 @@
 			});
 
 			$("#update").submit(function(event){
-				if(!confirm('SE ESTÁ ENVIANDO TU SOLICITUD A AUTORIZACION. TAN PRONTO SEA RESUELTA, SE TE NOTIFICARÁ POR CORREO.'))
+				
+                modalWindow("solicitar");
+                
+                /*if(!confirm('SE ESTÁ ENVIANDO TU SOLICITUD A AUTORIZACION. TAN PRONTO SEA RESUELTA, SE TE NOTIFICARÁ POR CORREO.'))
 					return false;
 				//get form values
 					$("#colaborador option:selected").each(function() {
@@ -276,7 +378,7 @@
 					}
 				});
 
-				event.preventDefault();
+				event.preventDefault();*/
 			});
 		});
 	</script>

@@ -16,25 +16,36 @@ class Main extends CI_Controller {
     public function index() {
     	$this->valida_sesion();
     	$data=array();
-    	$data['colaborador'] = $this->user_model->searchById($this->session->userdata('id'));
+    	
+		$data['colaborador'] = $this->user_model->searchById($this->session->userdata('id'));
     	$data['evaluacion'] = $this->evaluacion_model->getEvaluacionAnual();
-    	$data['auth_pendientes'] = $this->user_model->solicitudes_pendientes($this->session->userdata('id'));
-    	$cont=0;
-    	foreach ($data['auth_pendientes'] as $solicitud)
+    	
+		$data['auth_pendientes'] = $this->user_model->countSolicitudesPendientesAutorizar($this->session->userdata('id')) ;
+		
+		if($this->session->userdata('permisos')['administrator']){
+			$data['auth_pendientes'] += $this->user_model->countSolicitudesAutorizarCh();
+		}
+		
+		$data['solicitudes_pendientes'] = $this->user_model->countSolicitudesByColaborador($this->session->userdata('id'));
+		
+		//$cont=0;
+		/*foreach ($data['auth_pendientes'] as $solicitud)
     		if(!in_array($solicitud->estatus,array(0,3,4)) || $solicitud->desde == (String)date('Y-m-d'))
     			$cont++;
     	$data['solicitudes_pendientes'] = $this->user_model->solicitudesByColaborador($this->session->userdata('id'));
     	$data['cont_pendientes']=$cont;
     	$cont=0;
-    	foreach ($data['solicitudes_pendientes'] as $solicitud)
+    	
+		/*foreach ($data['solicitudes_pendientes'] as $solicitud)
     		if(in_array($solicitud->estatus,array(1,2)))
     			$cont++;
     	$data['cont_solicitudes']=$cont;
     	$cont=0;
+		
 		foreach ($data['solicitudes_pendientes'] as $solicitud)
     		if(in_array($solicitud->estatus,array(1,2)))
 				$cont++;
-		$data['cont']=$cont;
+		$data['cont']=$cont;*/
     	
 		/////$data['requisiciones'] = $this->requisicion_model->getByColaborador($this->session->userdata('id'));
     	/////$data['requisiciones_pendientes'] = $this->requisicion_model->getPendientesByColaborador($this->session->userdata('id'));
@@ -57,6 +68,7 @@ class Main extends CI_Controller {
 		$permisos['requisicion_pendiente'] = count($this->requisicion_model->getRequisicionesPendenting($this->session->userdata('id')));
 		$this->session->set_userdata('permisos', $permisos);
 		
+		//$this->vacation_register();
 		
 		$this->layout->title('Advanzer - Inicio');
 		$this->layout->view('main/index', $data);
@@ -158,6 +170,17 @@ class Main extends CI_Controller {
 			$result=$this->user_model->do_login($email);
 			if ($result) {
 				$_SESSION['access_token'] = $client->getAccessToken();
+				
+				// Zona de permisos
+				$permisos = array(
+					// Permiso de administración de requisiciones
+					'administrator' =>  ($result->area == 4) && ($result->tipo == 4),
+					
+					// Permiso de creación de requisiciones, de ser asi, tambien se cuenta las que estan pendientes de atender dependiendo del tipo de usuario
+					'create_requisicion' => in_array($result->tipo,array(4,3)) || ($result->nivel_posicion <= 5),
+					'requisicion_pendiente' => count($this->requisicion_model->getRequisicionesPendenting($result->id))
+				);
+				
 				$sess_array = array(
     				'id'=>$result->id,
     				'nombre'=>$result->nombre,
@@ -168,7 +191,10 @@ class Main extends CI_Controller {
     				'area' =>$result->area,
     				'direccion'=>$result->direccion,
     				'tipo'=>$result->tipo,
-    				'periodo_edicion'=>$periodo_edicion
+    				'periodo_edicion'=>$periodo_edicion,
+					
+					// asignacion de permisos
+					'permisos' => $permisos
     			);
     			$data['email'] = $result->email;
     			$this->session->set_userdata($sess_array);
@@ -728,7 +754,7 @@ class Main extends CI_Controller {
 		$solicitudes = $this->solicitudes_model->getAll();
 		foreach ($solicitudes as $solicitud):
 			//identificar las solicitudes que no han sido canceladas o cerradas
-			if(!in_array($solicitud->estatus,array(0,3,4))):
+			if(!in_array($solicitud->estatus,array(1,2))):
 				$cancelacion = strtotime('+30 days',strtotime($solicitud->fecha_ultima_modificacion));
 				$cancelacion = date('Y-m-d',$cancelacion);
 				$cancelacion = new DateTime($cancelacion);

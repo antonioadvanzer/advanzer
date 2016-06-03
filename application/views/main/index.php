@@ -73,11 +73,11 @@
 					<nav class="navbar">
 						<div class="navbar-collapse" aria-expanded="false">
 							<ul class="nav navbar-nav">
-								<?php if(count($solicitudes_pendientes)): ?>
-									<li><a href="<?= base_url("solicitudes");?>">Solicitudes Propias <span class="badge"><?php if($cont_solicitudes>0) echo count($cont_solicitudes);?></span></a></li>
+								<?php if($solicitudes_pendientes): ?>
+									<li><a href="<?= base_url("solicitudes");?>">Solicitudes Propias <span class="badge"><?php echo $solicitudes_pendientes;?></span></a></li>
 								<?php endif;
-								if(count($auth_pendientes)): ?>
-									<li><a href="<?= base_url("solicitudes_pendientes");?>">Solicitudes Recibidas <span class="badge"><?php if($cont_pendientes>0) echo $cont_pendientes;?></span></a></li>
+								if($auth_pendientes): ?>
+									<li><a href="<?= base_url("solicitudes_pendientes");?>">Solicitudes Recibidas <span class="badge"><?php echo $auth_pendientes;?></span></a></li>
 								<?php endif;
 								/*if($requisiciones_pendientes+count($requisiciones)): $count=count($requisiciones) + $requisiciones_pendientes; */
                                 if($rp = $this->session->userdata('permisos')['requisicion_pendiente']):

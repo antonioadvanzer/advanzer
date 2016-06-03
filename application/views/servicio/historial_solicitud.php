@@ -138,14 +138,14 @@
 									case 0: $estatus='CANCELADA';$comentarios=$solicitud->razon;									break;
 									case 1: $estatus='ENVIADA';$comentarios=$solicitud->motivo;										break;
 									case 2: $estatus='EN REVISIÓN POR CAPITAL HUMANO';$comentarios=$razon=$solicitud->motivo;		break;
-									case 3: $estatus='AUTORIZADA';$comentarios=$solicitud->motivo;									break;
-									case 4: $estatus='RECHAZADA POR CAPITAL HUMANO';
-										if($solicitud->auth_uno==0&& $solicitud->tipo < 4)
+									case 3: $estatus='RECHAZADA POR CAPITAL HUMANO';
+										if(($solicitud->auth_uno == 0) && ($solicitud->tipo < 4))
 											$estatus='RECHAZADA POR AUTORIZADOR';
 										$comentarios=$solicitud->razon;																break;
+                                    case 4: $estatus='AUTORIZADA';$comentarios=$solicitud->motivo;									break;
 								endswitch; ?>
 								<tr>
-									<td style="cursor:default;" align="center"><small><a href='<?= base_url("servicio/ver/$solicitud->id");?>'><?= $solicitud->id;?></small></td>
+									<td style="cursor:default;" align="center"><small><a href='<?= base_url("servicio/ver/$solicitud->id");?>'><?= $solicitud->id;?></a></small></td>
 									<td style="cursor:default;" align="center"><small><?= date('Y-m-d',strtotime($solicitud->fecha_solicitud));?></small></td>
 									<td style="cursor:default;" align="center"><small><?= date('Y-m-d',strtotime($solicitud->fecha_ultima_modificacion));?></small></td>
 									<td style="cursor:default;" align="center"><small><?= $solicitud->nombre_autorizador;?></small></td>
@@ -162,7 +162,7 @@
 		</div>
 		<script>
 			$(document).ready(function() {
-				$('#tbl').DataTable({responsive: true,order: [[ 1, "desc" ]]});
+				$('#tbl').DataTable({responsive: true,order: [[[ 0, "desc" ],[ 2, "desc" ]]]});
 			} );
 		</script>
 	</div> <!-- /container -->

@@ -36,8 +36,8 @@
 									case 0: $estatus='CANCELADA';								break;
 									case 1: $estatus='ENVIADA';									break;
 									case 2: $estatus='EN REVISIÓN POR CAPITAL HUMANO';			break;
-									case 3: $estatus='AUTORIZADA';								break;
-									case 4: $estatus='RECHAZADA';								break;
+									case 3: $estatus='RECHAZADA';								break;
+									case 4: $estatus='AUTORIZADA';								break;
 								}
 								switch ($solicitud->tipo) {
 								 	case 1: $tipo='VACACIONES';						break;
@@ -48,7 +48,17 @@
 								 	default: $tipo='';								break;
 								 } ?>
 								<tr onmouseover="this.style.background=color;" onmouseout="this.style.background='transparent';">
-									<td align="center"><small><a class="view-pdf" href='<?= base_url("servicio/ver/$solicitud->id");?>'><?= $solicitud->id;?></small></td>
+                                    <td align="center"><small><a class="view-pdf" href='<?= base_url("servicio/ver/$solicitud->id");?>'><?= $solicitud->id;?></a></small>
+                                        
+                                        <?php if( ( ($solicitud->colaborador == $this->session->userdata('id')) 
+                                            && ($solicitud->alerta == 1)
+                                            && (($solicitud->estatus == 3) || ($solicitud->estatus == 4))
+                                            ) )
+                                        {?>    
+                                    &#09;<img height="15px" wigth="15px"  src="<?= base_url("assets/images/icons/nra.png");?>">
+                                <?php }?>
+                                        
+                                    </td>
 									<td align="center"><small><?= $tipo;?></small></td>
 									<td align="center"><small><?= date('Y-m-d',strtotime($solicitud->fecha_solicitud));?></small></td>
 									<td align="center"><small><?= $solicitud->nombre;?></small></td>
@@ -67,7 +77,7 @@
 
 	<script>
 		$(document).ready(function() {
-			$('#tbl').DataTable({responsive: true,order: [[ 2, "desc" ]]});
+			$('#tbl').DataTable({responsive: true,order: [[ 0, "desc" ],[ 2, "desc" ]]});
 		} );
 		document.write('\
 			<style>\
