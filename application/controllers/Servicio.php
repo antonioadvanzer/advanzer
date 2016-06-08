@@ -524,15 +524,15 @@ class Servicio extends CI_Controller {
 			'usuario_modificacion'=>$this->session->userdata('id')
 		);
 		
-		if($estado == 0){
-			$this->notificarJefe($solicitud->id,1);
-			$this->notificarCh($solicitud->id,1);
-		}
-		
 		$id=$this->input->post('solicitud');
 		$this->db->trans_begin();
 		$estatus=$this->solicitudes_model->getSolicitudById($id)->estatus;
 		$this->solicitudes_model->update_solicitud($id,$datos);
+		
+		if($estado == 0){
+			$this->notificarJefe($id,1);
+			$this->notificarCh($id,1);
+		}
 		
 		if($this->db->trans_status() === FALSE){
 			$this->db->trans_rollback();
@@ -542,7 +542,13 @@ class Servicio extends CI_Controller {
 			$data['solicitud']=$solicitud;
 			$destinatario=$this->user_model->searchById($solicitud->colaborador)->email;
 			$mensaje=$this->load->view("layout/solicitud/no_auth",$data,true);
-			if(!in_array($solicitud->tipo,array(4,5)))
+			//if(!in_array($solicitud->tipo,array(4,5)))
+				
+				if($estado == 0){
+					$dest=array($this->user_model->searchById($solicitud->autorizador)->email,'micaela.llano@advanzer.com');
+					$msj=$this->load->view("layout/solicitud/cancela",$data,true);
+					$this->sendMail($dest,$msj);
+				}
 				
 				if($estatus == 2){
 				

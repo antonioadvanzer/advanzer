@@ -68,6 +68,17 @@
                                                    && ($solicitud->estatus == 4)
                                                    && ($solicitud->not_ch == 1)
                                                   ) 
+                                                 ||
+                                                 ( ($solicitud->autorizador == $this->session->userdata('id')) 
+                                                    && ($solicitud->not_jefe == 1)
+                                                    && (($solicitud->estatus == 0))
+                                                    ) 
+                                                 ||
+                                                  (
+                                                    ($this->session->userdata('permisos')['administrator']) 
+                                                   && ($solicitud->estatus == 0)
+                                                   && ($solicitud->not_ch == 1)
+                                                  ) 
                                                 )
                                         {?>    
                                     &#09;<img height="15px" wigth="15px"  src="<?= base_url("assets/images/icons/nra.png");?>">

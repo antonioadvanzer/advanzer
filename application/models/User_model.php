@@ -36,7 +36,7 @@ class User_model extends CI_Model{
 			$this->db->where('S.autorizador',$colaborador);
 		}*/
 		    
-		$this->db->where("(S.autorizador=$colaborador) and ((S.estatus=1) or ((S.estatus=4) and (S.not_jefe=1)))");
+		$this->db->where("(S.autorizador=$colaborador) and ((S.estatus=1) or ((S.estatus=4) and (S.not_jefe=1)) or ((S.estatus=0) and (S.not_jefe=1)))");
 		
 		$this->db->select('S.*,U.nombre')->from('Solicitudes S')
 			->join('Users U','U.id = S.colaborador');
@@ -56,7 +56,7 @@ class User_model extends CI_Model{
 	
 	function countSolicitudesPendientesAutorizar($colaborador){
 		
-		$this->db->select('*')->from('Solicitudes')->where("(autorizador = $colaborador) and (((estatus=1) and (alerta=1)) or ((estatus=4) and (not_jefe=1)))");
+		$this->db->select('*')->from('Solicitudes')->where("(autorizador = $colaborador) and (((estatus=1) and (alerta=1)) or ((estatus=4) and (not_jefe=1)) or ((estatus=0) and (not_jefe=1)))");
 		$result = $this->db->get()->result();
 		
 		return count($result);
@@ -65,7 +65,7 @@ class User_model extends CI_Model{
 	// Extraer todos las solitudes qe ya esten autorizadas por el jefe directo y que solo sea caso diferente
 	function solicitudes_autorizar_ch(){
 		
-		$this->db->select('S.*,U.nombre')->from('Solicitudes S')->where("S.estatus=2 or (S.estatus= 4 and S.not_ch=1)")
+		$this->db->select('S.*,U.nombre')->from('Solicitudes S')->where("S.estatus=2 or (S.estatus= 4 and S.not_ch=1) or (S.estatus=0 and S.not_ch=1)")
 		->join('Users U','U.id = S.colaborador');
 		
 		$result = $this->db->get()->result();
@@ -76,7 +76,7 @@ class User_model extends CI_Model{
 	// Contar aquellos que ya se autorizaron
 	function countSolicitudesAutorizarCh(){
 		
-		$this->db->where("((estatus=2) and (alerta=1)) or ((estatus=4) and (not_ch=1))");
+		$this->db->where("((estatus=2) and (alerta=1)) or ((estatus=4) and (not_ch=1)) or (estatus=0 and not_ch=1)");
 		
 		$this->db->select('*')->from('Solicitudes');
 		
