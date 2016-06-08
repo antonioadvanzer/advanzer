@@ -1,6 +1,16 @@
 <div class="jumbotron">
 	<div class="container">
-		<h2 align="left"><b>Solicitudes</b></h2>
+		<h2 align="left"><b>Solicitudes</b> 
+            <?php 
+                
+                if($option == 1){
+                    echo "(Vacaciones)";
+                }elseif($option == 2){
+                    echo "(Permisos de Ausencia)";
+                }
+            
+            ?> 
+        </h2>
 	</div>
 </div>
 <div class="container">
@@ -9,9 +19,25 @@
 			<img src="<?= base_url('assets/images/loading.gif');?>"></div></div>
 	</div>
 	<div class="row" align="center">
-		<div class="col-md-6"><button class="btn btn-primary" onclick="location.href='<?= base_url("vacaciones");?>';"><big>Solicitar Vacaciones</big></button></div>
-		<div class="col-md-6"><button class="btn btn-primary" onclick="location.href='<?= base_url("permiso");?>';"><big>Solicitar Permiso de Ausencia</big></button></div>
-	</div>
+		
+        <?php 
+        if(($option == 1) || ($option == 3)){ 
+        ?> 
+        
+        <div class="col-md-6"><button class="btn btn-primary" onclick="location.href='<?= base_url("vacaciones");?>';"><big>Solicitar Vacaciones</big></button></div>
+        
+        <?php 
+        }    
+        if(($option == 2) || ($option == 3)){
+        ?>
+		
+        <div class="col-md-6"><button class="btn btn-primary" onclick="location.href='<?= base_url("permiso");?>';"><big>Solicitar Permiso de Ausencia</big></button></div>
+        
+        <?php 
+        } 
+        ?>
+	
+    </div>
 	<hr>
 	<div class="row">
 		<div class="col-md-12" align="center">

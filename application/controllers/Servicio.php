@@ -25,6 +25,16 @@ class Servicio extends CI_Controller {
 		$this->solicitudes_model->setAlert($solicitud, $alert);
 	}
 
+	// change alert Jefe
+	public function notificarJefe($solicitud, $alert){
+		$this->solicitudes_model->notificarJefe($solicitud, $alert);
+	}
+	
+	// change alert Capital Humano
+	public function notificarCh($solicitud, $alert){
+		$this->solicitudes_model->notificarCh($solicitud, $alert);
+	}
+	
 	// básicas
 	public function historial($tipo,$colaborador) {
 		$data['colaborador']=$this->user_model->searchById($colaborador)->nombre;
@@ -64,6 +74,10 @@ class Servicio extends CI_Controller {
 		if((($solicitud->estatus == 1) && ($this->session->userdata('id') == $solicitud->autorizador)) 
 		|| (($this->session->userdata('permisos')['administrator']) && ($solicitud->estatus == 2)) ){
 			$this->setAlert($solicitud->id,0);
+		}elseif(($this->session->userdata('id') == $solicitud->autorizador) && ($solicitud->not_jefe == 1)){
+			$this->notificarJefe($solicitud->id,0);
+		}elseif(($this->session->userdata('permisos')['administrator']) && ($solicitud->not_ch == 1)){
+			$this->notificarCh($solicitud->id,0);
 		}
 		
 		$data['solicitud'] = $solicitud;
@@ -121,16 +135,38 @@ class Servicio extends CI_Controller {
 		$this->layout->title('Advanzer - Solicita Permiso');
 		$this->layout->view('servicio/formato_permiso',$data);
 	}
+	
 	// Relación de solicitudes propias
 	public function solicitudes() {
-		$data['propias'] = $this->user_model->solicitudesByColaborador($this->session->userdata('id'));
+		
+		$tipo = $this->input->get("tipo");
+		
+		switch($tipo){
+
+			case 'vacaciones':
+				$data['propias'] = $this->user_model->getSolicitudesVacaciones($this->session->userdata('id'));
+				$data['option'] = 1;
+			break;
+			case 'permiso':
+				$data['propias'] = $this->user_model->getSolicitudesPermisosAusencia($this->session->userdata('id'));
+				$data['option'] = 2;
+			break;
+			default:
+				$data['propias'] = $this->user_model->solicitudesByColaborador($this->session->userdata('id'));
+				$data['option'] = 3;
+			break;
+		}
+		
 		if(count($data['propias']) == 0)
 			redirect();
+		
 		$this->layout->title('Advanzer - Solicitudes');
 		$this->layout->view('servicio/solicitudes',$data);
 	}
 	
-	// Relación de soliciudes por autorizar, si eres jefe o perteneces a capital humano
+	
+	
+	// Relación de solicitudes por autorizar, si eres jefe o perteneces a capital humano
 	public function solicitudes_pendientes() {
 		
 		$data['solicitudes'] = $this->user_model->solicitudes_pendientes($this->session->userdata('id'));
@@ -308,11 +344,22 @@ class Servicio extends CI_Controller {
 			'usuario_modificacion'=>$this->session->userdata('id'),
 			'alerta' => 1
 		);
-		if(in_array($datos['motivo'],array("ENFERMEDAD","MATRIMONIO","NACIMIENTO DE HIJOS","FALLECIMIENTO DE CÓNYUGE","FALLECIMIENTO DE HERMANOS","FALLECIMIENTO DE HIJOS","FALLECIMIENTO DE PADRES","FALLECIMIENTO DE PADRES POLÍTICOS")))
+		
+		$not = false;
+		
+		if(in_array($datos['motivo'],array("ENFERMEDAD","MATRIMONIO","NACIMIENTO DE HIJOS","FALLECIMIENTO DE CÓNYUGE","FALLECIMIENTO DE HERMANOS","FALLECIMIENTO DE HIJOS","FALLECIMIENTO DE PADRES","FALLECIMIENTO DE PADRES POLÍTICOS"))){
 			$datos['estatus']=4;
+			$not=true;
+		}
 		$this->db->trans_begin();
 		$solicitud=$this->solicitudes_model->registra_solicitud($datos);
 		$solicitud=$this->solicitudes_model->getSolicitudById($solicitud);
+		
+		if($not){
+			$this->notificarJefe($solicitud->id,1);
+			$this->notificarCh($solicitud->id,1);
+		}
+		
 		if($datos['tipo']==4):
 			$data=array(
 				'centro_costo'=>$this->input->post('centro'),
@@ -473,13 +520,20 @@ class Servicio extends CI_Controller {
 	public function rechazar_solicitud() {
 		$datos=array(
 			'razon'=>$this->input->post('razon'),
-			'estatus'=>$this->input->post('estatus'),
+			'estatus'=>($estado = $this->input->post('estatus')),
 			'usuario_modificacion'=>$this->session->userdata('id')
 		);
+		
+		if($estado == 0){
+			$this->notificarJefe($solicitud->id,1);
+			$this->notificarCh($solicitud->id,1);
+		}
+		
 		$id=$this->input->post('solicitud');
 		$this->db->trans_begin();
 		$estatus=$this->solicitudes_model->getSolicitudById($id)->estatus;
 		$this->solicitudes_model->update_solicitud($id,$datos);
+		
 		if($this->db->trans_status() === FALSE){
 			$this->db->trans_rollback();
 			$response['msg'] = "Error actualizando estatus de la solicitud. Intenta de nuevo";

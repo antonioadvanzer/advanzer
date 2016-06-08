@@ -698,7 +698,42 @@ class Main extends CI_Controller {
 	}
 
 	public function solicitudes() {
-		$data['solicitudes'] = $this->user_model->getSolicitudes();
+		
+		$status = 10;
+			
+			switch($this->input->get("status")){
+				
+				case 'canceladas':
+					$status = 0;
+				break;
+				case 'enviadas':
+					$status = 1;
+				break;
+				case 'autorizadas_por_jefe':
+					$status = 2;
+				break;
+				case 'rechazadas':
+					$status = 3;
+				break;
+				case 'autorizadas_por_capital_humano':
+					$status = 4;
+				break; 
+		 }
+		 
+		 $tipo = 0;
+		 
+		 switch($this->input->get("tipo")){
+			 
+			 case 'vacaciones':
+			 	$tipo = 1;
+			 break;
+			 case 'permisos':
+			 	$tipo = 2;
+			 break;
+		 }		
+		 
+		$data['solicitudes'] = $this->user_model->getSolicitudes($status,$tipo);
+		
 		$this->layout->title('Advanzer - Solicitudes');
 		$this->layout->view('servicio/admin_solicitudes',$data);
 	}

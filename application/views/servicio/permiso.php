@@ -10,7 +10,7 @@
 	</div>
     <div class="row" align="left">
 		
-        <div class="col-md-6"><button class="btn btn-primary" onclick="location.href='<?= base_url("solicitudes");?>';"><big>Solicitudes Propias</big></button></div>
+        <div class="col-md-6"><button class="btn btn-primary" onclick="location.href='<?= base_url("solicitudes")."/?tipo=permiso";?>';"><big>Solicitudes Propias</big></button></div>
         
         <div class="col-md-6"><button class="btn btn-primary" onclick="location.href='<?= base_url("solicitudes_pendientes");?>';"><big>Solicitudes Recibidas</big></button></div>
         

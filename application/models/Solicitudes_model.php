@@ -164,4 +164,16 @@ class Solicitudes_model extends CI_Model{
 		$datos['alerta'] = $alert;
 		$this->db->where('id',$id)->update('Solicitudes',$datos);
 	}
+	
+	// To set alert to send notification to Jefe
+	function notificarJefe($id,$alert){
+		$datos['not_jefe'] = $alert;
+		$this->db->where('id',$id)->update('Solicitudes',$datos);
+	}
+	
+	// To set alert to send notification to Capital Humano
+	function notificarCh($id,$alert){
+		$datos['not_ch'] = $alert;
+		$this->db->where('id',$id)->update('Solicitudes',$datos);
+	}
 }
