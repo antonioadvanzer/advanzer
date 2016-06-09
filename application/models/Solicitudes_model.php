@@ -54,14 +54,15 @@ class Solicitudes_model extends CI_Model{
 
 	function getDiasDisponibles($colaborador) {
 		$result = $this->db->select('dias_acumulados')->from('Vacaciones')->where(array('colaborador'=>$colaborador,'dias_acumulados <'=>0))->get();
-		if($result->num_rows() == 1)
+		if($result->num_rows() == 1){
 			return $result->first_row()->dias_acumulados;
-		else{
+		}else{
 			$result = $this->db->select('dias')->from('Solicitudes')->where(array('tipo'=>1,'colaborador'=>$colaborador))->where_not_in('estatus',array(0,3))->get();
-			if($result->num_rows() == 1)
+			if($result->num_rows() == 1){
 				return (int)$result->first_row()->dias*-1;
-			else
+			}else{
 				return 0;
+			}
 		}
 	}
 

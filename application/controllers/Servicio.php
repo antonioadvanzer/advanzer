@@ -79,9 +79,12 @@ class Servicio extends CI_Controller {
 		}elseif(($this->session->userdata('permisos')['administrator']) && ($solicitud->not_ch == 1)){
 			$this->notificarCh($solicitud->id,0);
 		}
+		//var_dump($this->solicitudes_model->getDiasDisponibles($solicitud->colaborador));exit;
+		
+		$data['yo'] = $this->calculaVacaciones($solicitud->colaborador);
 		
 		$data['solicitud'] = $solicitud;
-		$data['colaboradores']=$this->user_model->getAll();
+		$data['colaboradores']=$this->user_model->getAll();//var_dump($this->solicitudes_model->getAcumulados($solicitud->colaborador));exit;
 		$this->load->view('servicio/resolver',$data);
 	}
 	
@@ -182,9 +185,9 @@ class Servicio extends CI_Controller {
 		$this->layout->view('servicio/solicitudes_pendientes',$data);
 	}
 	
-	public function vacaciones() {
+	public function calculaVacaciones($colaborador){
 		$data=array();
-		$result=$this->user_model->searchById($this->session->userdata('id'));
+		$result=$this->user_model->searchById($colaborador);
 		$ingreso=new DateTime($result->fecha_ingreso);
 		$hoy=new DateTime(date('Y-m-d'));
 		$diff = $ingreso->diff($hoy);
@@ -234,11 +237,19 @@ class Servicio extends CI_Controller {
 			$result->de_solicitud=$dias_disponibles;
 			$result->disponibles += (int)$dias_disponibles;
 		}
+		
 		$result->acumulados=$this->solicitudes_model->getAcumulados($result->id);
-		$data['yo']=$result;
+		
+		return $result;
+	}
+	
+	public function vacaciones() {
+		
+		$data['yo'] = $this->calculaVacaciones($this->session->userdata('id'));
 		$this->layout->title('Advanzer - Vacaciones');
 		$this->layout->view('servicio/vacaciones',$data);
 	}
+	
 	public function formato_vacaciones() {
 		$data=array();
 		$data['yo']=$this->user_model->searchById($this->session->userdata('id'));

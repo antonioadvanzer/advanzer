@@ -167,9 +167,12 @@
 		<div class="row">
 			<div class="col-md-12">
 				<form id="justificacion" role="form" method="post" action="javascript:" class="form-signin" style="display:none">
-					<label style="color:red;border-color:red;border-radius:10px;border-style:dashed;">
+					<!--<label style="color:red;border-color:red;border-radius:10px;border-style:dashed;">
 						Favor de especificar si existe alguna razón para no descontar los días al colaborador. Se enviarán a Capital Humano.
-					</label>
+					</label>-->
+                    <div class="alert alert-warning">
+                      <strong>¡Atencion!</strong> Favor de especificar si existe alguna razón para no descontar los días al colaborador. Se enviarán a Capital Humano.
+                    </div>
 					<div class="input-group">
 						<span class="input-group-addon" style="min-width:200px">Comentarios a Capital Humano</span>
 						<textarea class="form-control" id="comentarios" rows="4" placeholder="Comentarios"></textarea>
@@ -283,6 +286,12 @@
 										</div>
 										<br>
 									<?php endif;
+                                    if($solicitud->tipo==3): ?>
+                                        <div class="input-group">
+											<span class="input-group-addon required" style="min-width:260px">Razón para no descontar los días al colaborador</span>
+											<textarea class="form-control" rows="6" readonly><?= $solicitud->razon;?></textarea>
+										</div>
+									<?php endif;
 									$filename=base_url("assets/docs/permisos/permiso_$solicitud->id");
 									$file_headers = @get_headers($filename);
 									if($file_headers[0] !== 'HTTP/1.0 404 Not Found'): ?>
@@ -352,6 +361,24 @@
 										<?php endif;?>
 									<hr>
 									<?php if($solicitud->estatus<3 && $solicitud->tipo!=5 && $solicitud->tipo!=2 && (($solicitud->autorizador==$this->session->userdata('id') && $solicitud->estatus==1) || ($this->session->userdata('area')==4 && $solicitud->estatus==2))):?>
+                                    <div class="col-md-12" align="center" style="float:right;">
+                                        <?php 
+                                        $dias = 0;
+                                        if($yo->acumulados){
+                                            $dias = $yo->disponibles + $yo->acumulados->dias_acumulados;
+                                         }else{
+                                            $dias = $yo->disponibles;
+                                        }
+                                        
+                                        if(($solicitud->tipo == 1) && ($dias < 0)){
+                                        ?>
+                                            <div class="alert alert-danger">
+                                              <strong>¡Aviso!</strong> El colaborador esta solicitando mas dias de los que tiene disponibles.
+                                            </div>
+                                        <?php 
+                                        }
+                                        ?>
+                                    </div>
 										<div class="col-md-12" align="center" style="float:right;">
 											<h5>&nbsp;</h5>
 											<div align="center" class="btn-group btn-group-lg" role="group" aria-label="...">

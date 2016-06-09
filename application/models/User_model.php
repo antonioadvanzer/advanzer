@@ -220,6 +220,9 @@ class User_model extends CI_Model{
 		$result->historial = $this->getHistorialById($result->id);
 		$result->bitacora = $this->solicitudesByColaborador($result->id,true);
 		$result->vacaciones=$this->db->where('colaborador',$result->id)->get('Vacaciones')->first_row();
+		
+		//var_dump($result->vacaciones);exit;
+		
 		return $result;
 	}
 
