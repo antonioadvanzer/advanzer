@@ -416,7 +416,7 @@
                                     
                                     ?>
 											<div class="col-md-8">
-											<label style="float:left;color:red">Puedes CANCELAR tu solicitud de <?= $tipo;?> hasta un día antes de que inicie el período que solicitaste dando click en:</label>
+											<label class="alert alert-danger">Puedes CANCELAR tu solicitud de <?= $tipo;?> hasta un día antes de que inicie el período que solicitaste dando click en:</label>
 											</div>
 											<div class="col-md-4" align="center" style="float:right;">
 												<div align="center" class="btn-group btn-group-lg" role="group" aria-label="...">

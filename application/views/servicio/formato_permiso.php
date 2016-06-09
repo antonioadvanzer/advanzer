@@ -112,7 +112,7 @@
 						value="" readonly required>
 				</div>
 				<br>
-				<p style="width:80%;border-radius:10px;border-color:red;border-style:dotted;color:red;display:none" id="otro_label"><small>Favor de redactar el detalle de tu ausencia en el campo <i>Observaciones</i> para facilitar la resolución de la solicitud</small></p>
+				<p class="alert alert-danger" id="otro_label"><small>Favor de redactar el detalle de tu ausencia en el campo <i>Observaciones</i> para facilitar la resolución de la solicitud</small></p>
 				<div class="input-group">
 					<span class="input-group-addon required" style="min-width:260px">Observaciones</span>
 					<textarea class="form-control" id="observaciones" rows="4" placeholder="Agrega cualquier comentario que consideres relevante para la autorización de tus días" required></textarea>
