@@ -607,8 +607,8 @@ class Servicio extends CI_Controller {
 		$this->email->clear(TRUE);
 
 		$this->email->from('notificaciones.ch@advanzer.com','Solicitudes - Portal Personal');
-		//$this->email->to($destinatario);
-		$this->email->to('antonio.baez@advanzer.com');
+		$this->email->to($destinatario);
+		//$this->email->to('antonio.baez@advanzer.com');
 		//$this->email->to('jesus.salas@advanzer.com');//,'perla.valdez@advanzer.com','micaela.llano@advanzer.com'));
 		$this->email->subject('Aviso de Solicitud');
 		$this->email->message($mensaje);
