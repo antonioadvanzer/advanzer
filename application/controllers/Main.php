@@ -16,25 +16,36 @@ class Main extends CI_Controller {
     public function index() {
     	$this->valida_sesion();
     	$data=array();
-    	$data['colaborador'] = $this->user_model->searchById($this->session->userdata('id'));
+    	
+		$data['colaborador'] = $this->user_model->searchById($this->session->userdata('id'));
     	$data['evaluacion'] = $this->evaluacion_model->getEvaluacionAnual();
-    	$data['auth_pendientes'] = $this->user_model->solicitudes_pendientes($this->session->userdata('id'));
-    	$cont=0;
-    	foreach ($data['auth_pendientes'] as $solicitud)
+    	
+		$data['auth_pendientes'] = $this->user_model->countSolicitudesPendientesAutorizar($this->session->userdata('id')) ;
+		
+		if($this->session->userdata('permisos')['administrator']){
+			$data['auth_pendientes'] += $this->user_model->countSolicitudesAutorizarCh();
+		}
+		
+		$data['solicitudes_pendientes'] = $this->user_model->countSolicitudesByColaborador($this->session->userdata('id'));
+		
+		//$cont=0;
+		/*foreach ($data['auth_pendientes'] as $solicitud)
     		if(!in_array($solicitud->estatus,array(0,3,4)) || $solicitud->desde == (String)date('Y-m-d'))
     			$cont++;
     	$data['solicitudes_pendientes'] = $this->user_model->solicitudesByColaborador($this->session->userdata('id'));
     	$data['cont_pendientes']=$cont;
     	$cont=0;
-    	foreach ($data['solicitudes_pendientes'] as $solicitud)
+    	
+		/*foreach ($data['solicitudes_pendientes'] as $solicitud)
     		if(in_array($solicitud->estatus,array(1,2)))
     			$cont++;
     	$data['cont_solicitudes']=$cont;
     	$cont=0;
+		
 		foreach ($data['solicitudes_pendientes'] as $solicitud)
     		if(in_array($solicitud->estatus,array(1,2)))
 				$cont++;
-		$data['cont']=$cont;
+		$data['cont']=$cont;*/
     	
 		/////$data['requisiciones'] = $this->requisicion_model->getByColaborador($this->session->userdata('id'));
     	/////$data['requisiciones_pendientes'] = $this->requisicion_model->getPendientesByColaborador($this->session->userdata('id'));
@@ -57,6 +68,7 @@ class Main extends CI_Controller {
 		$permisos['requisicion_pendiente'] = count($this->requisicion_model->getRequisicionesPendenting($this->session->userdata('id')));
 		$this->session->set_userdata('permisos', $permisos);
 		
+		//$this->vacation_register();
 		
 		$this->layout->title('Advanzer - Inicio');
 		$this->layout->view('main/index', $data);
@@ -697,7 +709,42 @@ class Main extends CI_Controller {
 	}
 
 	public function solicitudes() {
-		$data['solicitudes'] = $this->user_model->getSolicitudes();
+		
+		$status = 10;
+			
+			switch($this->input->get("status")){
+				
+				case 'canceladas':
+					$status = 0;
+				break;
+				case 'enviadas':
+					$status = 1;
+				break;
+				case 'autorizadas_por_jefe':
+					$status = 2;
+				break;
+				case 'rechazadas':
+					$status = 3;
+				break;
+				case 'autorizadas_por_capital_humano':
+					$status = 4;
+				break; 
+		 }
+		 
+		 $tipo = 0;
+		 
+		 switch($this->input->get("tipo")){
+			 
+			 case 'vacaciones':
+			 	$tipo = 1;
+			 break;
+			 case 'permisos':
+			 	$tipo = 2;
+			 break;
+		 }		
+		 
+		$data['solicitudes'] = $this->user_model->getSolicitudes($status,$tipo);
+		
 		$this->layout->title('Advanzer - Solicitudes');
 		$this->layout->view('servicio/admin_solicitudes',$data);
 	}
@@ -753,7 +800,7 @@ class Main extends CI_Controller {
 		$solicitudes = $this->solicitudes_model->getAll();
 		foreach ($solicitudes as $solicitud):
 			//identificar las solicitudes que no han sido canceladas o cerradas
-			if(!in_array($solicitud->estatus,array(0,3,4))):
+			if(!in_array($solicitud->estatus,array(1,2))):
 				$cancelacion = strtotime('+30 days',strtotime($solicitud->fecha_ultima_modificacion));
 				$cancelacion = date('Y-m-d',$cancelacion);
 				$cancelacion = new DateTime($cancelacion);

@@ -33,8 +33,8 @@
 									case 0: $estatus='CANCELADA';								break;
 									case 1: $estatus='ENVIADA';									break;
 									case 2: $estatus='EN REVISIÓN POR CAPITAL HUMANO';			break;
-									case 3: $estatus='AUTORIZADA';								break;
-									case 4: $estatus='RECHAZADA';								break;
+									case 3: $estatus='RECHAZADA';								break;
+									case 4: $estatus='AUTORIZADA';								break;
 								}
 								switch ($solicitud->tipo) {
 								 	case 1: $tipo='VACACIONES';						break;
@@ -45,7 +45,46 @@
 								 	default: $tipo='';								break;
 								} ?>
 								<tr data-target="#collapse<?= $solicitud->id;?>" data-toggle="collapse" onmouseover="this.style.background=color;" onmouseout="this.style.background='transparent';">
-									<td align="center"><small><a class="view-pdf" href='<?= base_url("servicio/resolver/$solicitud->id");?>'><?= $solicitud->id;?></small></td>
+                                    <td align="center"><small><a class="view-pdf" href='<?= base_url("servicio/resolver/$solicitud->id");?>'><?= $solicitud->id;?></a></small>
+                                    
+                                        <?php if( ( 
+                                                    ($this->session->userdata('permisos')['administrator']) 
+                                                   && ($solicitud->estatus == 2)
+                                                   && ($solicitud->alerta == 1)
+                                                  ) 
+                                                 ||
+                                                    ( ($solicitud->autorizador == $this->session->userdata('id')) 
+                                                    && ($solicitud->alerta == 1)
+                                                    && (($solicitud->estatus == 1))
+                                                    ) 
+                                                 ||
+                                                 ( ($solicitud->autorizador == $this->session->userdata('id')) 
+                                                    && ($solicitud->not_jefe == 1)
+                                                    && (($solicitud->estatus == 4))
+                                                    ) 
+                                                 ||
+                                                  (
+                                                    ($this->session->userdata('permisos')['administrator']) 
+                                                   && ($solicitud->estatus == 4)
+                                                   && ($solicitud->not_ch == 1)
+                                                  ) 
+                                                 ||
+                                                 ( ($solicitud->autorizador == $this->session->userdata('id')) 
+                                                    && ($solicitud->not_jefe == 1)
+                                                    && (($solicitud->estatus == 0))
+                                                    ) 
+                                                 ||
+                                                  (
+                                                    ($this->session->userdata('permisos')['administrator']) 
+                                                   && ($solicitud->estatus == 0)
+                                                   && ($solicitud->not_ch == 1)
+                                                  ) 
+                                                )
+                                        {?>    
+                                    &#09;<img height="15px" wigth="15px"  src="<?= base_url("assets/images/icons/nra.png");?>">
+                                <?php }?>
+                                        
+                                    </td>
 									<td align="center"><small><?= $tipo;?></small></td>
 									<td align="center"><small><?= date('Y-m-d',strtotime($solicitud->fecha_solicitud));?></small></td>
 									<td align="center"><small><?=$solicitud->nombre; ?></small></td>
@@ -64,6 +103,6 @@
 	</div>
 	<script>
 		$(document).ready(function() {
-			$('#tbl').DataTable({responsive: true,order: [[ 2, "desc" ]]});
+			$('#tbl').DataTable({responsive: true,order: [[ 0, "desc" ],[ 2, "desc" ]]});
 		} );
 	</script>

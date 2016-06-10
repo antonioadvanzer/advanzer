@@ -161,7 +161,28 @@
                                                         <li class=""><a href="<?= base_url('requisiciones')."/?status=7";?>">Stand By</a></li>
                                                     </ul>
                                                 </li>
-												<li><a href="<?= base_url('admin_solicitudes');?>">Todas las Solicitudes</a></li>
+												<li class="dropdown-submenu">
+                                                    <a href="#" tabindex="-1">Vacaciones</a>
+                                                    <ul class="dropdown-menu">
+                                                        <li class=""><a href="<?= base_url('admin_solicitudes')."/?status=all&tipo=vacaciones";?>">Todas las Solicitudes de Vacaciones</a></li>
+                                                        <li class=""><a href="<?= base_url('admin_solicitudes')."/?status=canceladas&tipo=vacaciones";?>">Canceladas</a></li>
+                                                        <li class=""><a href="<?= base_url('admin_solicitudes')."/?status=enviadas&tipo=vacaciones";?>">Enviadas</a></li>
+                                                        <li class=""><a href="<?= base_url('admin_solicitudes')."/?status=autorizadas_por_jefe";?>">Rechazadas</a></li>
+                                                        <li class=""><a href="<?= base_url('admin_solicitudes')."/?status=rechazadas&tipo=vacaciones";?>">Autorizadas por Jefe</a></li>
+                                                        <li class=""><a href="<?= base_url('admin_solicitudes')."/?status=autorizadas_por_capital_humano&tipo=vacaciones";?>">Autorizadas por Capital Humano</a></li>
+                                                    </ul>
+                                                </li>
+                                                <li class="dropdown-submenu">
+                                                    <a href="#" tabindex="-1">Permisos de Ausencia</a>
+                                                    <ul class="dropdown-menu">
+                                                        <li class=""><a href="<?= base_url('admin_solicitudes')."/?status=all&tipo=permisos";?>">Todas las Solicitudes de Permisos de Ausencia</a></li>
+                                                        <li class=""><a href="<?= base_url('admin_solicitudes')."/?status=canceladas&tipo=permisos";?>">Canceladas</a></li>
+                                                        <li class=""><a href="<?= base_url('admin_solicitudes')."/?status=enviadas&tipo=permisos";?>">Enviadas</a></li>
+                                                        <li class=""><a href="<?= base_url('admin_solicitudes')."/?status=autorizadas_por_jefe&tipo=permisos";?>">Rechazadas</a></li>
+                                                        <li class=""><a href="<?= base_url('admin_solicitudes')."/?status=rechazadas&tipo=permisos&tipo=permisos";?>">Autorizadas por Jefe</a></li>
+                                                        <li class=""><a href="<?= base_url('admin_solicitudes')."/?status=autorizadas_por_capital_humano&tipo=permisos";?>">Autorizadas por Capital Humano</a></li>
+                                                    </ul>
+                                                </li>
 												<?php //if($this->session->userdata('tipo') > 3): ?>
 													<li><a href="<?= base_url('evaluacion');?>">Evaluaciones</a></li>
 													<li><a href="<?= base_url('evaluacion/por_evaluador');?>">Evaluaciones por Evaluador</a></li>
@@ -228,6 +249,6 @@
 	<footer align="center">
 		<p>&copy; Advanzer De México, S.A de C.V. 2015</p>
 	</footer>
-	</div> <!-- /container -->
+	<!--</div> <!-- /container -->
 </body>
 </html>

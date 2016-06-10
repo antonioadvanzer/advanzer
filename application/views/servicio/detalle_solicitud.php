@@ -226,11 +226,11 @@
 									</div>
 									<br>
 									<?php if($solicitud->tipo < 4):
-										if($solicitud->tipo==2 || $solicitud->tipo==3):
+										if($solicitud->tipo==2):
 											$filename=base_url("assets/docs/permisos/permiso_$solicitud->id"); ?>
 											<div class="input-group">
 												<?php if(file_exists($filename)): ?>
-													<span class="input-group-addon">Comprbante</span>
+													<span class="input-group-addon">Comprobante</span>
 													<a href="<?= $filename;?>;?>" download><span class="glyphicon glyphicon-download-alt"></span> descargar</a>
 												<?php endif; ?>
 												<span class="input-group-addon">Motivo</span>
@@ -273,11 +273,11 @@
 									if($file_headers[0] !== 'HTTP/1.0 404 Not Found'): ?>
 										<h3>Comprobante</h3>
 										<div class="col-md-12">
-											<a class="view-pdf" href="<?= $filename;?>"><span class="glyphicon glyphicon-eye-open"></span> Ver Comprobante</a></p>
+											<a class="view-pdf" href="<?= $filename;?>"><span class="glyphicon glyphicon-eye-open"></span> Ver Comprobante</a>
 										</div>
 									<?php endif;
 									if(!in_array($solicitud->motivo,array("ENFERMEDAD","MATRIMONIO","NACIMIENTO DE HIJOS","FALLECIMIENTO DE CÓNYUGE","FALLECIMIENTO DE HERMANOS","FALLECIMIENTO DE HIJOS","FALLECIMIENTO DE PADRES","FALLECIMIENTO DE PADRES POLÍTICOS")))
-										if($solicitud->estatus!=0): ?>
+										if(($solicitud->estatus != 0) && ($solicitud->estatus != 3)): ?>
 											<h3>Autorizaciones</h3>
 											<table class="table table-striped table-hover" style="width:90%">
 												<thead>
@@ -291,11 +291,11 @@
 													<tr>
 														<td></td>
 														<td style="text-align:center;cursor:text;">
-															<?php if($solicitud->estatus==1): ?>
+															<?php if($solicitud->estatus == 1): ?>
 																<span class="glyphicon glyphicon-eye-open"></span> VALIDANDO
-															<?php elseif($solicitud->estatus==2 || $solicitud->auth_uno==1): ?>
+															<?php elseif($solicitud->estatus == 2 || $solicitud->auth_uno == 1): ?>
 																<span class="glyphicon glyphicon-ok"></span> AUTORIZADO
-															<?php elseif($solicitud->estatus==4 && $solicitud->auth_uno==0): ?>
+															<?php elseif($solicitud->estatus == 3 && $solicitud->auth_uno == 0): ?>
 																<span class="glyphicon glyphicon-remove"></span> RECHAZADO
 															<?php elseif($solicitud->motivo=="ENFERMEDAD"): ?>
 																<span class="glyphicon glyphicon-ok"></span> ENTERADO
@@ -303,13 +303,13 @@
 														</td>
 														<?php if($solicitud->tipo < 4): ?>
 															<td style="text-align:center;cursor:text;">
-																<?php if($solicitud->estatus==2): ?>
+																<?php if($solicitud->estatus == 2): ?>
 																	<span class="glyphicon glyphicon-eye-open"></span> VALIDANDO
-																<?php elseif($solicitud->estatus==3 && $solicitud->auth_uno==1): ?>
+																<?php elseif($solicitud->estatus == 4 && $solicitud->auth_uno == 1): ?>
 																	<span class="glyphicon glyphicon-ok"></span> AUTORIZADO
-																<?php elseif($solicitud->estatus==4 && $solicitud->auth_uno==1): ?>
+																<?php elseif($solicitud->estatus == 3 && $solicitud->auth_uno == 1): ?>
 																	<span class="glyphicon glyphicon-remove"></span> RECHAZADO
-																<?php elseif($solicitud->estatus==1): ?>
+																<?php elseif($solicitud->estatus == 1): ?>
 																	<span class="glyphicon glyphicon glyphicon-time"></span> PENDIENTE
 																<?php elseif($solicitud->motivo=="ENFERMEDAD"): ?>
 																	<span class="glyphicon glyphicon-ok"></span> ENTERADO
@@ -317,7 +317,7 @@
 															</td>
 														<?php endif;?>
 													</tr>
-													<?php if($solicitud->estatus==4): ?>
+													<?php if($solicitud->estatus==3): ?>
 														<tr>
 															<td style="text-align:right;cursor:default;">Motivo</td>
 															<?php if($solicitud->auth_uno==0): ?>
@@ -339,17 +339,24 @@
 									<?php 
 									$desde=new DateTime($solicitud->desde);
 									$hoy=new DateTime(date('Y-m-d'));
-									if($solicitud->estatus != 0 && $solicitud->colaborador == $this->session->userdata('id')):
-										if(($solicitud->tipo==4 && $solicitud->estatus!=3) || !in_array($solicitud->tipo,array(4,5)) && $solicitud->estatus!=4 && $desde->diff($hoy)->format('%r')): ?>
-											<div class="col-md-8">
-											<label style="float:left;color:red">Puedes CANCELAR tu solicitud de <?= $tipo;?> hasta un día antes de que inicie el período que solicitaste dando click en:</label>
-											</div>
-											<div class="col-md-4" align="center" style="float:right;">
-												<div align="center" class="btn-group btn-group-lg" role="group" aria-label="...">
-													<button onclick="$('#update').hide('slow');$('#razon').show('slow');$('#estatus').val(0);" type="button" class="btn btn-primary" style="text-align:center;display:inline;">Cancelar Solicitud</button>
-												</div>
-											</div>
-										<?php endif;
+									
+                                    if(($solicitud->estatus == 4) && ($solicitud->colaborador == $this->session->userdata('id'))
+                                       && (($solicitud->tipo == 1) || ($solicitud->tipo == 3)) && ($desde->diff($hoy)->format('%r'))):
+                                    
+                                    //if($solicitud->estatus != 0 && $solicitud->colaborador == $this->session->userdata('id')):
+										
+                                        /*if(($solicitud->tipo==4 && $solicitud->estatus!=3) || !in_array($solicitud->tipo,array(4,5)) && $solicitud->estatus!=4 && $desde->diff($hoy)->format('%r')):*/ ?>
+										
+                                        <div class="col-md-8">
+											<label class="alert alert-danger">Puedes CANCELAR tu solicitud de <?= $tipo;?> hasta un día antes de que inicie el período que solicitaste dando click en:</label>
+                                        </div>
+                                        <div class="col-md-4" align="center" style="float:right;">
+                                            <div align="center" class="btn-group btn-group-lg" role="group" aria-label="...">
+                                                <button onclick="$('#update').hide('slow');$('#razon').show('slow');$('#estatus').val(0);" type="button" class="btn btn-primary" style="text-align:center;display:inline;">Cancelar Solicitud</button>
+                                            </div>
+                                        </div>
+										
+                                        <?php //endif;
 									endif; ?>
 								</div>
 								<br>
@@ -376,7 +383,7 @@
 											<tr>
 												<td style="text-align:center;cursor:text;"><?php $filename=base_url("assets/docs/facturas/$comprobante->id.xml");
 												if(file_exists($filename)): ?>
-													<a href="<?= $filename;?>;?>" download><span class="glyphicon glyphicon-download-alt"></span> descargar</a>
+													<a href="<?= $filename;?>" download><span class="glyphicon glyphicon-download-alt"></span> descargar</a>
 												<?php endif; ?></td>
 												<td style="text-align:center;cursor:text;"><?= $comprobante->centro_costo;?></td>
 												<td style="text-align:center;cursor:text;"><?= $comprobante->fecha;?></td>
@@ -401,9 +408,110 @@
 				</form>
 			</div>
 		</div>
+        
+    <div id="openModal" class="modalDialog">
+        <div>
+            <div id="title" class="title" align="center"><h2>Titulo</h2></div>
+            <a title="Close" onclick="window.history.back();" class="close">X</a>
+            <div id="body" class="body" align="center">  
+
+            </div>
+        </div>
+    </div>
+        
 		<script>
+            
+            function modalWindow(option){
+                
+                switch(option){
+                     
+                        // Confirmar si desea autorizar
+                        case "cancelar":
+
+                            document.getElementById("title").innerHTML = '<h2>Atención</h2>'
+                            document.getElementById("body").innerHTML = '<p>¿Seguro que deseas cancelar la solicitud?</p>'
+                                            +'<a type="button" class="btn btn-primary" href="#procesando" onclick="cancelar();">Aceptar</a>&nbsp; &nbsp; '
+                                            +'<a type="button" class="btn btn-primary" onclick="window.history.back();">Cancelar</a>';
+                            window.document.location = "#openModal";
+
+                        break;
+
+                        case "confirm_cancelar":
+
+                            document.getElementById("title").innerHTML = '<h2>Aviso</h2>'
+                            document.getElementById("body").innerHTML = '<p>Se ha recibido su respuesta</p>'
+                                            +'<a type="button" class="btn btn-primary" onclick="confirm_cancelar();">Aceptar</a>';
+                            window.document.location = "#openModal";
+
+                        break;
+                }
+            }
+            
+            function cancelar(){
+                
+                razon = $("#razon_txt").val();
+				estatus = $("#estatus").val();
+				solicitud = $("#solicitud").val();
+				
+                /*if(!confirm("¿Seguro que deseas cancelar la solicitud?"))
+					return false;*/
+                
+				$.ajax({
+					url: '<?= base_url("servicio/rechazar_solicitud");?>',
+					type: 'post',
+					data: {'solicitud':solicitud,'estatus':estatus,'razon':razon},
+					beforeSend: function() {
+						$('#razon').hide('slow');
+						$('#cargando').show('slow');
+					},
+					success: function(data){
+						var returnedData = JSON.parse(data);
+						console.log(returnedData['msg']);
+						if(returnedData['msg']=="ok"){
+							
+                            /*alert('Se ha recibido su respuesta');
+							window.document.location.reload();*/
+                            
+                            $('#razon').show('slow');
+                            $('#cargando').hide('slow');
+                            
+                            window.modalWindow("confirm_cancelar");
+                            
+						}else{
+							$('#razon_txt').val("");
+							$('#cargando').hide('slow');
+							$('#tbl').show('slow');
+							$('#alert').prop('display',true).show('slow');
+							$('#msg').html(returnedData['msg']);
+							setTimeout(function() {
+								$("#alert").fadeOut(1500);
+							},3000);
+						}
+					},
+					error: function(xhr) {
+						console.log(xhr.statusText);
+						$('#cargando').hide('slow');
+						$('#razon').show('slow');
+						$('#alert').prop('display',true).show('slow');
+						$('#msg').html('Error, intenta de nuevo o contacta al Administrador de la Aplicación');
+						setTimeout(function() {
+							$("#alert").fadeOut(1500);
+						},3000);
+					}
+				});
+
+				event.preventDefault();
+            }
+            
+            function confirm_cancelar(){
+                parent.location.reload();
+            }
+            
 			$("#razon").submit(function(event) {
-				razon = $("#razon_txt").val();
+				
+                modalWindow("cancelar");
+                
+                /*razon = $("#razon_txt").val();
 				estatus = $("#estatus").val();
 				solicitud = $("#solicitud").val();
 				if(!confirm("¿Seguro que deseas cancelar la solicitud?"))
@@ -445,7 +553,7 @@
 					}
 				});
 
-				event.preventDefault();
+				event.preventDefault();*/
 			});
 		</script>
 	</div> <!-- /container -->

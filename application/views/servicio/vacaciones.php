@@ -13,10 +13,19 @@
 		<div class="col-md-12"><div id="cargando" style="display:none; color: green;">
 			<img src="<?= base_url('assets/images/loading.gif');?>"></div></div>
 	</div>
+    <div class="row" align="left">
+		
+        <div class="col-md-6"><button class="btn btn-primary" onclick="location.href='<?= base_url("solicitudes")."/?tipo=vacaciones";?>';"><big>Solicitudes Propias</big></button></div>
+	   
+        <div class="col-md-6"><button class="btn btn-primary" onclick="location.href='<?= base_url("solicitudes_pendientes");?>';"><big>Solicitudes Recibidas</big></button></div>
+        
+    </div>
+    <br/>
 	<div class="row">
 		<div class="col-md-12">
 			Las vacaciones que generas como empleado de Advanzer/Entuizer son de acuerdo al artículo 76 de la Ley Federal del Trabajo (en rojo los días que te corresponden de acuerdo a tu antigüedad):
-			<p><table align="center" style="width:50%" class="tbl table table-condensed table-bordered">
+			<p>
+                <table align="center" style="width:50%" class="tbl table table-condensed table-bordered">
 				<tbody>
 					<tr>
 						<th width="10%" style="cursor:default;text-align:center;">Años</th>
@@ -41,8 +50,10 @@
 						<td style="cursor:default;text-align:center;" <?php if($date_dif->y+1 >= 20 && $date_dif->y+1 <= 24) echo 'bgcolor="red"' ?>>20</td>
 						<td style="cursor:default;text-align:center;" <?php if($date_dif->y+1 >= 25 && $date_dif->y+1 <= 29) echo 'bgcolor="red"' ?>>22</td></tr>
 				</tbody>
-			</table><p>
-			<p><table align="center" style="width:50%" class="table table-bordered table-condensed">
+            </table>
+            </p>
+			<p>
+            <table align="center" style="width:50%" class="table table-bordered table-condensed">
 				<thead>
 					<tr>
 						<th>Días Disponibles</th>
@@ -52,14 +63,34 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td style="cursor:default;text-align:center;"><?php $suma=0; if($yo->acumulados) echo$yo->disponibles + $yo->acumulados->dias_acumulados;else echo$yo->disponibles?></td>
+						<td style="cursor:default;text-align:center;"><?php $cantdias=0; $suma=0; 
+                            if($yo->acumulados){ 
+                                $cantdias = $yo->disponibles + $yo->acumulados->dias_acumulados;
+                            }else{ 
+                                $cantdias = $yo->disponibles;
+                            }
+                            
+                            echo $cantdias;
+                            
+                            ?></td>
 						<td style="cursor:default;text-align:center;"><?php if($yo->acumulados){$suma=$yo->acumulados->dias_uno+$yo->de_solicitud; if($suma>0)echo $suma;}else echo 0;?></td>
 						<td style="cursor:default;text-align:center;"><?php if($yo->acumulados) if($suma>0) echo date_format(date_create($yo->acumulados->vencimiento_uno),'j-M-Y')?></td>
 					</tr>
 				</tbody>
-			</table></p>
+			</table>
+            </p>
 		</div>
 	</div><br>
+    
+    <?php
+    if($cantdias <= 0){
+    ?>    
+    <div class="alert alert-warning" align="center">
+        <strong>¡Atención!</strong> Ya no tienes dias disponibles, te sugerimos solicitar un permiso de ausencia.
+    </div>
+    <?php 
+        }
+    ?>
 	<div class="row">
 		<div class="col-md-12">
 			<div class="panel panel-default" style="background-color:color;">

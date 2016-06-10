@@ -112,7 +112,7 @@
 						value="" readonly required>
 				</div>
 				<br>
-				<p style="width:80%;border-radius:10px;border-color:red;border-style:dotted;color:red;display:none" id="otro_label"><small>Favor de redactar el detalle de tu ausencia en el campo <i>Observaciones</i> para facilitar la resolución de la solicitud</small></p>
+				<p class="alert alert-danger" id="otro_label"><small>Favor de redactar el detalle de tu ausencia en el campo <i>Observaciones</i> para facilitar la resolución de la solicitud</small></p>
 				<div class="input-group">
 					<span class="input-group-addon required" style="min-width:260px">Observaciones</span>
 					<textarea class="form-control" id="observaciones" rows="4" placeholder="Agrega cualquier comentario que consideres relevante para la autorización de tus días" required></textarea>
@@ -130,7 +130,127 @@
 			</div>
 		</div>
 	</form>
+    
+    <div id="openModal" class="modalDialog">
+        <div>
+            <div id="title" class="title" align="center"><h2>Titulo</h2></div>
+            <a title="Close" onclick="window.history.back();" class="close">X</a>
+            <div id="body" class="body" align="center">  
+
+            </div>
+        </div>
+    </div>
+    
 	<script>
+        
+        function modalWindow(option){
+            
+            switch(option){
+                 
+                    // Confirmar si desea autorizar
+                    case "enviar":
+                        
+                        document.getElementById("title").innerHTML = '<h2>Atención</h2>'
+                        document.getElementById("body").innerHTML = '<p>¿Seguro que desea enviar la solicitud?</p>'
+                                        +'<a type="button" class="btn btn-primary" href="#procesando" onclick="enviar();">Aceptar</a>&nbsp; &nbsp; '
+                                        +'<a type="button" class="btn btn-primary" onclick="window.history.back();">Cancelar</a>';
+                        window.document.location = "#openModal";
+                    
+                    break;
+                    
+                    case "confirm_envio":
+                    
+                        document.getElementById("title").innerHTML = '<h2>Aviso</h2>'
+                        document.getElementById("body").innerHTML = '<p>Se ha enviado la solicitud</p>'
+                                        +'<a type="button" class="btn btn-primary" onclick="confirm_envio();">Aceptar</a>';
+                        window.document.location = "#openModal";
+                    
+                    break;
+            }
+        }
+        
+        function enviar(){
+            
+            var formData = new FormData($('#update')[0]);
+					$("#colaborador option:selected").each(function() {
+						colaborador = $('#colaborador').val();
+					});
+					formData.append('colaborador',colaborador);
+					$("#autorizador option:selected").each(function() {
+						autorizador = $('#autorizador').val();
+					});
+					formData.append('autorizador',autorizador);
+					m = $('#motivo option:selected').val();
+					if(m=='Otro')
+						tipo=3;
+					else
+						tipo=2;
+					formData.append('tipo',tipo);
+					motivo = $("#motivo option:selected").text();
+					if(motivo=='Otro')
+						motivo=$('#especifique').val();
+					formData.append('motivo',String(motivo));
+					$('#dias :selected').each(function(){
+						dias=$('#dias').val();
+					})
+					formData.append('dias',dias);
+					formData.append('desde',$('#desde').val());
+					formData.append('hasta',$('#hasta').val());
+					formData.append('observaciones',$('#observaciones').val());
+				$.ajax({
+					url: '<?= base_url("servicio/registra_solicitud");?>',
+					type: 'post',
+					cache: false,
+					contentType: false,
+					processData: false,
+					resetForm: true,
+					data: formData,
+					beforeSend: function() {
+						$('#update').hide('slow');
+						$('#cargando').show('slow');
+					},
+					success: function(data){
+						var returnedData = JSON.parse(data);
+						console.log(returnedData['msg']);
+						if(returnedData['msg']=="ok"){
+							//alert('Se ha enviado la solicitud');
+							//window.document.location='<?= base_url("solicitudes");?>';
+                            
+                            $('#update').show('slow');
+                            $('#cargando').hide('slow');
+
+                            // Si ha sido exitoso la autorización, se confirmara
+                            window.modalWindow("confirm_envio");
+                            
+						}else{
+							$('#cargando').hide('slow');
+							$('#update').show('slow');
+							$('#alert').prop('display',true).show('slow');
+							$('#msg').html(returnedData['msg']);
+							setTimeout(function() {
+								$("#alert").fadeOut(1500);
+							},3000);
+						}
+					},
+					error: function(xhr) {
+						console.log(xhr);
+						$('#cargando').hide('slow');
+						$('#update').show('slow');
+						$('#alert').prop('display',true).show('slow');
+						$('#msg').html('Error, intenta de nuevo o contacta al Administrador de la Aplicación');
+						setTimeout(function() {
+							$("#alert").fadeOut(1500);
+						},3000);
+					}
+				});
+
+				event.preventDefault();
+        }
+        
+        function confirm_envio(){
+            window.document.location='<?= base_url("main");?>';
+        }
+        
 		document.write('\
 			<style>\
 				.required {\
@@ -254,7 +374,11 @@
 			});
 
 			$("#update").submit(function(event){
-				if(!confirm('¿Seguro que desea enviar la solicitud?'))
+				
+                modalWindow("enviar");
+                
+                /*
+                if(!confirm('¿Seguro que desea enviar la solicitud?'))
 					return false;
 				//get form values
 					var formData = new FormData($('#update')[0]);
@@ -324,6 +448,7 @@
 				});
 
 				event.preventDefault();
+                */
 			});
 		});
 	</script>

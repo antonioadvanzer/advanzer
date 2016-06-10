@@ -19,8 +19,23 @@ class Servicio extends CI_Controller {
 		if($this->session->userdata('id') == "")
 			redirect('login');
 	}
+	
+	// change alert to activate or deactivate
+	public function setAlert($solicitud, $alert){
+		$this->solicitudes_model->setAlert($solicitud, $alert);
+	}
 
-	//básicas
+	// change alert Jefe
+	public function notificarJefe($solicitud, $alert){
+		$this->solicitudes_model->notificarJefe($solicitud, $alert);
+	}
+	
+	// change alert Capital Humano
+	public function notificarCh($solicitud, $alert){
+		$this->solicitudes_model->notificarCh($solicitud, $alert);
+	}
+	
+	// básicas
 	public function historial($tipo,$colaborador) {
 		$data['colaborador']=$this->user_model->searchById($colaborador)->nombre;
 		$data['solicitudes']=$this->solicitudes_model->getSolicitudByTipoColaborador($tipo,$colaborador);
@@ -33,16 +48,46 @@ class Servicio extends CI_Controller {
 		$data['tipo']=$tipo;
 		$this->load->view('servicio/historial_solicitud',$data);
 	}
+	
+	// Propia
 	public function ver($solicitud) {
-		$data['solicitud']=$this->solicitudes_model->getSolicitudById($solicitud);
-		$data['colaboradores']=$this->user_model->getAll();
+		//echo "aaa";exit;
+		
+		$solicitud = $this->solicitudes_model->getSolicitudById($solicitud);
+		
+		if(($solicitud->estatus == 3) || ($solicitud->estatus == 4)){
+			$this->setAlert($solicitud->id,0);
+		}
+		
+		$data['solicitud'] = $solicitud;
+		$data['colaboradores'] = $this->user_model->getAll();
+		$data['title_for_layout'] = "Advanzer - Detalle Solicitud";
 		$this->load->view('servicio/detalle_solicitud',$data);
 	}
+	
+	// Por autorizar
 	public function resolver($solicitud) {
-		$data['solicitud']=$this->solicitudes_model->getSolicitudById($solicitud);
-		$data['colaboradores']=$this->user_model->getAll();
+		//echo "bbb";exit;
+		
+		$solicitud = $this->solicitudes_model->getSolicitudById($solicitud);
+		
+		if((($solicitud->estatus == 1) && ($this->session->userdata('id') == $solicitud->autorizador)) 
+		|| (($this->session->userdata('permisos')['administrator']) && ($solicitud->estatus == 2)) ){
+			$this->setAlert($solicitud->id,0);
+		}elseif(($this->session->userdata('id') == $solicitud->autorizador) && ($solicitud->not_jefe == 1)){
+			$this->notificarJefe($solicitud->id,0);
+		}elseif(($this->session->userdata('permisos')['administrator']) && ($solicitud->not_ch == 1)){
+			$this->notificarCh($solicitud->id,0);
+		}
+		//var_dump($this->solicitudes_model->getDiasDisponibles($solicitud->colaborador));exit;
+		
+		$data['yo'] = $this->calculaVacaciones($solicitud->colaborador);
+		
+		$data['solicitud'] = $solicitud;
+		$data['colaboradores']=$this->user_model->getAll();//var_dump($this->solicitudes_model->getAcumulados($solicitud->colaborador));exit;
 		$this->load->view('servicio/resolver',$data);
 	}
+	
 	public function formato_comprobacion() {
 		$data=array();
 		$data['yo']=$this->user_model->searchById($this->session->userdata('id'));
@@ -85,6 +130,7 @@ class Servicio extends CI_Controller {
 		$this->layout->title('Advanzer - Permiso');
 		$this->layout->view('servicio/permiso',$data);
 	}
+	
 	public function formato_permiso() {
 		$data=array();
 		$data['yo']=$this->user_model->searchById($this->session->userdata('id'));
@@ -92,23 +138,56 @@ class Servicio extends CI_Controller {
 		$this->layout->title('Advanzer - Solicita Permiso');
 		$this->layout->view('servicio/formato_permiso',$data);
 	}
+	
+	// Relación de solicitudes propias
 	public function solicitudes() {
-		$data['propias'] = $this->user_model->solicitudesByColaborador($this->session->userdata('id'));
+		
+		$tipo = $this->input->get("tipo");
+		
+		switch($tipo){
+
+			case 'vacaciones':
+				$data['propias'] = $this->user_model->getSolicitudesVacaciones($this->session->userdata('id'));
+				$data['option'] = 1;
+			break;
+			case 'permiso':
+				$data['propias'] = $this->user_model->getSolicitudesPermisosAusencia($this->session->userdata('id'));
+				$data['option'] = 2;
+			break;
+			default:
+				$data['propias'] = $this->user_model->solicitudesByColaborador($this->session->userdata('id'));
+				$data['option'] = 3;
+			break;
+		}
+		
 		if(count($data['propias']) == 0)
 			redirect();
+		
 		$this->layout->title('Advanzer - Solicitudes');
 		$this->layout->view('servicio/solicitudes',$data);
 	}
+	
+	
+	
+	// Relación de solicitudes por autorizar, si eres jefe o perteneces a capital humano
 	public function solicitudes_pendientes() {
+		
 		$data['solicitudes'] = $this->user_model->solicitudes_pendientes($this->session->userdata('id'));
+		
+		if($this->session->userdata('permisos')['administrator']){
+			$data['solicitudes'] = array_merge($data['solicitudes'],$this->user_model->solicitudes_autorizar_ch());
+		}
+		
 		if(count($data['solicitudes']) == 0)
 			redirect();
+		
 		$this->layout->title('Advanzer - Solicitudes');
 		$this->layout->view('servicio/solicitudes_pendientes',$data);
 	}
-	public function vacaciones() {
+	
+	public function calculaVacaciones($colaborador){
 		$data=array();
-		$result=$this->user_model->searchById($this->session->userdata('id'));
+		$result=$this->user_model->searchById($colaborador);
 		$ingreso=new DateTime($result->fecha_ingreso);
 		$hoy=new DateTime(date('Y-m-d'));
 		$diff = $ingreso->diff($hoy);
@@ -158,11 +237,19 @@ class Servicio extends CI_Controller {
 			$result->de_solicitud=$dias_disponibles;
 			$result->disponibles += (int)$dias_disponibles;
 		}
+		
 		$result->acumulados=$this->solicitudes_model->getAcumulados($result->id);
-		$data['yo']=$result;
+		
+		return $result;
+	}
+	
+	public function vacaciones() {
+		
+		$data['yo'] = $this->calculaVacaciones($this->session->userdata('id'));
 		$this->layout->title('Advanzer - Vacaciones');
 		$this->layout->view('servicio/vacaciones',$data);
 	}
+	
 	public function formato_vacaciones() {
 		$data=array();
 		$data['yo']=$this->user_model->searchById($this->session->userdata('id'));
@@ -265,13 +352,25 @@ class Servicio extends CI_Controller {
 			'tipo'=>$this->input->post('tipo'),
 			'motivo'=>$this->input->post('motivo'),
 			'fecha_solicitud'=>date('Y-m-d'),
-			'usuario_modificacion'=>$this->session->userdata('id')
+			'usuario_modificacion'=>$this->session->userdata('id'),
+			'alerta' => 1
 		);
-		if(in_array($datos['motivo'],array("ENFERMEDAD","MATRIMONIO","NACIMIENTO DE HIJOS","FALLECIMIENTO DE CÓNYUGE","FALLECIMIENTO DE HERMANOS","FALLECIMIENTO DE HIJOS","FALLECIMIENTO DE PADRES","FALLECIMIENTO DE PADRES POLÍTICOS")))
-			$datos['estatus']=3;
+		
+		$not = false;
+		
+		if(in_array($datos['motivo'],array("ENFERMEDAD","MATRIMONIO","NACIMIENTO DE HIJOS","FALLECIMIENTO DE CÓNYUGE","FALLECIMIENTO DE HERMANOS","FALLECIMIENTO DE HIJOS","FALLECIMIENTO DE PADRES","FALLECIMIENTO DE PADRES POLÍTICOS"))){
+			$datos['estatus']=4;
+			$not=true;
+		}
 		$this->db->trans_begin();
 		$solicitud=$this->solicitudes_model->registra_solicitud($datos);
 		$solicitud=$this->solicitudes_model->getSolicitudById($solicitud);
+		
+		if($not){
+			$this->notificarJefe($solicitud->id,1);
+			$this->notificarCh($solicitud->id,1);
+		}
+		
 		if($datos['tipo']==4):
 			$data=array(
 				'centro_costo'=>$this->input->post('centro'),
@@ -355,10 +454,12 @@ class Servicio extends CI_Controller {
 				$this->db->trans_rollback();
 				$response['msg']="No se pudo enviar correo de notificación. Intenta de nuevo";
 			}
-		}
+		} $this->setAlert($solicitud->id,1);
 		echo json_encode($response);
 	}
+	
 	public function autorizar_solicitud() {
+	
 		$id = $this->input->post('solicitud');
 		$datos['estatus']=$this->input->post('estatus');
 		$datos['razon']=$this->input->post('comentarios');
@@ -366,6 +467,7 @@ class Servicio extends CI_Controller {
 		$datos['usuario_modificacion']=$this->session->userdata('id');
 		$this->db->trans_begin();
 		$this->solicitudes_model->update_solicitud($id,$datos);
+		
 		if($this->db->trans_status() === FALSE){
 			$this->db->trans_rollback();
 			$response['msg'] = "Error actualizando estatus de la solicitud. Intenta de nuevo";
@@ -385,6 +487,9 @@ class Servicio extends CI_Controller {
 					$this->sendMail($dest,$msj);
 				}
 			}
+			
+			/*$this->setAlert($solicitud->id,1);
+			$this->db->trans_commit();$response['msg']="ok";*/
 			if(!$this->sendMail($destinatario,$mensaje)){
 				$this->db->trans_commit();
 				$response['msg']="ok";
@@ -394,8 +499,10 @@ class Servicio extends CI_Controller {
 				$response['msg']="No se pudo enviar correo de notificación. Intenta de nuevo";
 			}
 		}
+		$this->setAlert($solicitud->id,1);
 		echo json_encode($response);
 	}
+	
 	public function confirmar_anticipo() {
 		$datos['anticipo']=$this->input->post('anticipo');
 		$id=$this->input->post('solicitud');
@@ -424,13 +531,20 @@ class Servicio extends CI_Controller {
 	public function rechazar_solicitud() {
 		$datos=array(
 			'razon'=>$this->input->post('razon'),
-			'estatus'=>$this->input->post('estatus'),
+			'estatus'=>($estado = $this->input->post('estatus')),
 			'usuario_modificacion'=>$this->session->userdata('id')
 		);
+		
 		$id=$this->input->post('solicitud');
 		$this->db->trans_begin();
 		$estatus=$this->solicitudes_model->getSolicitudById($id)->estatus;
 		$this->solicitudes_model->update_solicitud($id,$datos);
+		
+		if($estado == 0){
+			$this->notificarJefe($id,1);
+			$this->notificarCh($id,1);
+		}
+		
 		if($this->db->trans_status() === FALSE){
 			$this->db->trans_rollback();
 			$response['msg'] = "Error actualizando estatus de la solicitud. Intenta de nuevo";
@@ -439,16 +553,29 @@ class Servicio extends CI_Controller {
 			$data['solicitud']=$solicitud;
 			$destinatario=$this->user_model->searchById($solicitud->colaborador)->email;
 			$mensaje=$this->load->view("layout/solicitud/no_auth",$data,true);
-			if(!in_array($solicitud->tipo,array(4,5)))
-				if($estatus == 2){
-					$dest=$this->user_model->searchById($solicitud->autorizador)->email;
-					$msj=$this->load->view("layout/solicitud/cancela",$data,true);
-					$this->sendMail($dest,$msj);
-				}elseif($estatus == 3){
+			//if(!in_array($solicitud->tipo,array(4,5)))
+				
+				if($estado == 0){
 					$dest=array($this->user_model->searchById($solicitud->autorizador)->email,'micaela.llano@advanzer.com');
 					$msj=$this->load->view("layout/solicitud/cancela",$data,true);
 					$this->sendMail($dest,$msj);
 				}
+				
+				if($estatus == 2){
+				
+					//$this->setAlert($solicitud->id,1);
+					$dest=$this->user_model->searchById($solicitud->autorizador)->email;
+					$msj=$this->load->view("layout/solicitud/cancela",$data,true);
+					$this->sendMail($dest,$msj);
+				
+				}elseif($estatus == 3){
+					//$this->setAlert($solicitud->id,1);
+					$dest=array($this->user_model->searchById($solicitud->autorizador)->email,'micaela.llano@advanzer.com');
+					$msj=$this->load->view("layout/solicitud/cancela",$data,true);
+					$this->sendMail($dest,$msj);
+				}
+				/*$this->db->trans_commit();
+				$response['msg']="ok";*/
 			if(!$this->sendMail($destinatario,$mensaje)){
 				$this->db->trans_commit();
 				$response['msg']="ok";
@@ -458,7 +585,7 @@ class Servicio extends CI_Controller {
 				$response['msg']="No se pudo enviar correo de notificación. Intenta de nuevo";
 			}
 		}
-
+		$this->setAlert($solicitud->id,1);
 		echo json_encode($response);
 	}
 
@@ -480,7 +607,9 @@ class Servicio extends CI_Controller {
 		$this->email->clear(TRUE);
 
 		$this->email->from('notificaciones.ch@advanzer.com','Solicitudes - Portal Personal');
-		$this->email->to('jesus.salas@advanzer.com');//,'perla.valdez@advanzer.com','micaela.llano@advanzer.com'));//$this->email->to($destinatario);
+		//$this->email->to($destinatario);
+		$this->email->to('antonio.baez@advanzer.com');
+		//$this->email->to('jesus.salas@advanzer.com');//,'perla.valdez@advanzer.com','micaela.llano@advanzer.com'));
 		$this->email->subject('Aviso de Solicitud');
 		$this->email->message($mensaje);
 

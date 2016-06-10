@@ -77,7 +77,7 @@
 							}
 							if($requisicion->empresa == '1')
 								$empresa="Advanzer";
-							elseif($requisicion->empresa == '0')
+							elseif($requisicion->empresa == '2')
 								$empresa="Entuizer";
 							else
 								$empresa=$requisicion->empresa;
