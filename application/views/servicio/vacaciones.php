@@ -65,7 +65,7 @@
 					<tr>
 						<td style="cursor:default;text-align:center;"><?php $cantdias=0; $suma=0; 
                             if($yo->acumulados){ 
-                                $cantdias = $yo->disponibles + $yo->acumulados->dias_acumulados;
+                                $cantdias = $yo->disponibles + $yo->acumulados->dias_uno + $yo->acumulados->dias_dos;
                             }else{ 
                                 $cantdias = $yo->disponibles;
                             }
@@ -110,6 +110,7 @@
 							</ul>
 						</li></p>
 						<p><li>Una vez autorizadas por tu líder/superior, tu solicitud pasará a validación por parte de Capital Humano. Una vez que Capital Humano valide, se te notificará vía correo electrónico.</li></p>
+						<p><li>Los dias mostrados como disponibles, son los dias proporcionales disponibles al día de hoy.</li></p>
 					</ol>
 				</div>
 			</div>
