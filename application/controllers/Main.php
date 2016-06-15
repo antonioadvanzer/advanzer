@@ -69,6 +69,7 @@ class Main extends CI_Controller {
 		$this->session->set_userdata('permisos', $permisos);
 		
 		//$this->vacation_register();
+		$this->vacation_expired();
 		
 		$this->layout->title('Advanzer - Inicio');
 		$this->layout->view('main/index', $data);
@@ -738,11 +739,13 @@ class Main extends CI_Controller {
 		$this->layout->view('servicio/admin_solicitudes',$data);
 	}
 
+	// Delete days if those has expired
 	public function vacation_expired() {
 		$vacaciones=$this->solicitudes_model->getVacacionesExpired();
 		foreach ($vacaciones as $registro) :
 			$datos=array(
-				'dias_acumulados'=>(int)$registro->dias_acumulados-(int)$registro->dias_uno,
+				//'dias_acumulados'=>((int)$registro->dias_acumulados - (int)$registro->dias_uno) + (int)$registro->dias_dos,
+				'dias_acumulados'=>(int)$registro->dias_acumulados - (int)$registro->dias_uno,
 				'dias_uno'=>$registro->dias_dos,
 				'vencimiento_uno'=>$registro->vencimiento_dos,
 				'dias_dos'=>null,
