@@ -50,12 +50,22 @@
 			  	<tbody>
 			  		<tr>
 			  			<th>Próximo Vencimiento</th>
-			  			<td><input class="form-control" type="text" value="<?= $user->vacaciones->dias_uno;?>" id="diasUno"></td>
+			  			<?php 
+			  				$cantdias=0;
+                            $suma=0;
+                            if($yo->acumulados){ 
+                                $cantdias = $yo->disponibles + $yo->acumulados->dias_acumulados + $yo->acumulados->dias_dos;
+                            }else{ 
+                                $cantdias = $yo->disponibles;
+                            }
+                            
+                        ?>
+			  			<td><input class="form-control" type="text" value="<?= /*$user->vacaciones->dias_uno;*/ ($cantdias - $yo->disp);?>" id="diasUno"></td>
 			  			<td><input style="background-color:white" class="form-control" type="text" value="<?= $user->vacaciones->vencimiento_uno;?>" id="vencimientoUno" readonly></td>
 			  		</tr>
 			  		<tr>
 			  			<th>Recién Generadas</th>
-			  			<td><input class="form-control" type="text" value="<?= $user->vacaciones->dias_dos;?>" id="diasDos"></td>
+			  			<td><input class="form-control" type="text" value="<?php /*$user->vacaciones->dias_dos;*/ echo $yo->disponibles; ?>" id="diasDos"></td>
 			  			<td><input style="background-color:white" class="form-control" type="text" value="<?= $user->vacaciones->vencimiento_dos;?>" id="vencimientoDos" readonly></td>
 			  		</tr>
 			  	</tbody>
@@ -315,8 +325,9 @@
 				 	case 0: $estatus="CANCELADA";$razon=$solicitud->razon;							break;
 				 	case 1: $estatus="ENVIADA";$razon=$solicitud->motivo;							break;
 				 	case 2: $estatus='EN REVISIÓN POR CAPITAL HUMANO';$razon=$solicitud->motivo;	break;
-					case 3: $estatus='AUTORIZADA';$razon=$solicitud->motivo;						break;
-					case 4: $estatus='RECHAZADA';$razon=$solicitud->razon;							break;
+					case 3: $estatus='RECHAZADA';$razon=$solicitud->razon;							break;
+					case 4: $estatus='AUTORIZADA';$razon=$solicitud->motivo;						break;
+					
 				}
 				switch ($solicitud->tipo) {
 				 	case 1: $tipo='VACACIONES';						break;

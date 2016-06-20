@@ -69,6 +69,7 @@ class Main extends CI_Controller {
 		$this->session->set_userdata('permisos', $permisos);
 		
 		//$this->vacation_register();
+		$this->vacation_expired();
 		
 		$this->layout->title('Advanzer - Inicio');
 		$this->layout->view('main/index', $data);

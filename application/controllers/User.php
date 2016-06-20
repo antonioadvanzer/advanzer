@@ -13,6 +13,7 @@ class User extends CI_Controller {
         $this->load->model('track_model');
         $this->load->model('posicion_model');
         $this->load->model('requisicion_model');
+		$this->load->model('solicitudes_model');
     }
 
     public function index($flag=null){
@@ -36,7 +37,10 @@ class User extends CI_Controller {
         $data['posiciones'] = $this->posicion_model->getByTrack($this->user_model->getTrackByUser($id));
         $data['jefes'] = $this->user_model->getJefes($id);
         $data['tipo_acceso'] = $this->user_model->getPermisos($data['user']->area);
-
+		
+		// Calular vacaciones en base a solicitudes existentes
+		$data['yo'] = $this->calculaVacaciones($id);
+		
     	$this->layout->title('Capital Humano - Detalle Perfil');
     	$this->layout->view('user/detalle',$data);
     }
@@ -244,4 +248,63 @@ class User extends CI_Controller {
         if($this->session->userdata('tipo') < 3)
         redirect();
     }
+	
+	public function calculaVacaciones($colaborador){
+		$data=array();
+		$result=$this->user_model->searchById($colaborador);
+		$ingreso=new DateTime($result->fecha_ingreso);
+		$hoy=new DateTime(date('Y-m-d'));
+		$diff = $ingreso->diff($hoy);
+		switch($diff->y){
+			case 0:
+				$dias=0;
+				$dias2=6;
+				$disponibles=floor(($diff->days-($diff->y*365))*6/365);
+				break;
+			case 1:
+				$dias=6;
+				$dias2=8;
+				break;
+			case 2:
+				$dias=8;
+				$dias2=10;
+				break;
+			case 3:
+				$dias=10;
+				$dias2=12;
+				break;
+			case 4:case 5:case 6:case 7:case 8:
+				$dias=10;
+				$dias2=14;
+				break;
+			case 9:case 10:case 11:case 12:case 13:
+				$dias=14;
+				$dias2=16;
+				break;
+			case 14:case 15:case 16:case 17:case 18:
+				$dias=16;
+				$dias2=18;
+				break;
+			case 19:case 20:case 21:case 22:case 23:
+				$dias=18;
+				$dias2=20;
+				break;
+			default:
+				$dias=20;
+				$dias2=22;
+				break;
+		}
+		$result->disponibles=floor(($diff->days-($diff->y*365))*$dias2/365);
+		$result->disp = $result->disponibles;
+		$result->extra=$dias2-$result->disponibles;
+		$result->de_solicitud=0;
+		if($dias_disponibles=$this->solicitudes_model->getDiasDisponibles($result->id)){
+			$result->de_solicitud=$dias_disponibles;
+			$result->disponibles += (int)$dias_disponibles;
+		}
+		
+		$result->acumulados=$this->solicitudes_model->getAcumulados($result->id);
+		
+		return $result;
+	}
 }
