@@ -21,16 +21,17 @@
   <nav class="navbar">
 		<div class="navbar-collapse" aria-expanded="true">
 			<ul class="nav navbar-nav">
+				<li onclick="pestañeo(1);"><a href="#">General</a></li>
 				<?php if($user->estatus == 1): ?>
-					<li onclick="$('#update_foto').hide('slow');$('#update').hide('slow');$('#recision').show('slow');"><a href="#">Dar de baja al colaborador</a></li>
-					<li onclick="$('#update_foto').hide('slow');$('#update').hide('slow');$('#historial').show('slow');"><a href="#">Historial de desempeño</a></li>
+					<li onclick="pestañeo(2);"><a href="#">Dar de baja al colaborador</a></li>
+					<li onclick="pestañeo(3);"><a href="#">Historial de desempeño</a></li>
 				<?php elseif($user->estatus == 0): ?>
-					<li onclick="$('#update_foto').hide('slow');$('#update').hide('slow');$('#rehab').show('slow');"><a href="#">Rehabilitar al colaborador</a></li>
+					<li onclick="pestañeo(4);"><a href="#">Rehabilitar al colaborador</a></li>
 				<?php endif;
 				if(isset($user->bitacora)): ?>
-					<li onclick="$('#update_foto').hide('slow');$('#update').hide('slow');$('#bitacora').show('slow');"><a href="#">Historial de Vacaciones/Permisos</a></li>
+					<li onclick="pestañeo(5);"><a href="#">Historial de Vacaciones/Permisos</a></li>
 				<?php endif; ?>
-				<li onclick="$('#update_foto').hide('slow');$('#update').hide('slow');$('#vacaciones').show('slow');"><a href="#">Consultar días de Vacaciones</a></li>
+				<li onclick="pestañeo(6);"><a href="#">Consultar días de Vacaciones</a></li>
 			</ul>
 		</div>
 	</nav>
@@ -65,7 +66,7 @@
 			  		</tr>
 			  		<tr>
 			  			<th>Recién Generadas</th>
-			  			<td><input class="form-control" type="text" value="<?php /*$user->vacaciones->dias_dos;*/ echo $yo->disponibles; ?>" id="diasDos"></td>
+			  			<td><input class="form-control" type="text" value="<?php /*$user->vacaciones->dias_dos;*/ echo $yo->disp; ?>" id="diasDos"></td>
 			  			<td><input style="background-color:white" class="form-control" type="text" value="<?= $user->vacaciones->vencimiento_dos;?>" id="vencimientoDos" readonly></td>
 			  		</tr>
 			  	</tbody>
@@ -356,6 +357,67 @@
   </div>
 
   <script type="text/javascript">
+  
+  	function pestañeo(option){
+  		
+  		switch(option){
+  			
+  			case 1:
+  				$('#update_foto').show('slow');
+  				$('#update').show('slow');
+  				$('#recision').hide('slow');
+  				$('#historial').hide('slow');
+  				$('#rehab').hide('slow');
+  				$('#bitacora').hide('slow');
+  				$('#vacaciones').hide('slow');
+  			break;
+  			case 2:
+  				$('#update_foto').hide('slow');
+  				$('#update').hide('slow');
+  				$('#recision').show('slow');
+  				$('#historial').hide('slow');
+  				$('#rehab').hide('slow');
+  				$('#bitacora').hide('slow');
+  				$('#vacaciones').hide('slow');
+  			break;
+  			case 3:
+  				$('#update_foto').hide('slow');
+  				$('#update').hide('slow');
+  				$('#recision').hide('slow');
+  				$('#historial').show('slow');
+  				$('#rehab').hide('slow');
+  				$('#bitacora').hide('slow');
+  				$('#vacaciones').hide('slow');
+  			break;
+  			case 4:
+  				$('#update_foto').hide('slow');
+  				$('#update').hide('slow');
+  				$('#recision').hide('slow');
+  				$('#historial').hide('slow');
+  				$('#rehab').show('slow');
+  				$('#bitacora').hide('slow');
+  				$('#vacaciones').hide('slow');
+  			break;
+  			case 5:
+  				$('#update_foto').hide('slow');
+  				$('#update').hide('slow');
+  				$('#recision').hide('slow');
+  				$('#historial').hide('slow');
+  				$('#rehab').hide('slow');
+  				$('#bitacora').show('slow');
+  				$('#vacaciones').hide('slow');
+  			break;
+  			case 6:
+  				$('#update_foto').hide('slow');
+  				$('#update').hide('slow');
+  				$('#recision').hide('slow');
+  				$('#historial').hide('slow');
+  				$('#rehab').hide('slow');
+  				$('#bitacora').hide('slow');
+  				$('#vacaciones').show('slow');
+  			break;
+  		}
+  	}
 
 	$(document).ready(function() {
 		$('#tbl').DataTable({responsive: true,info: false,order: [[ 2, "desc" ]]});
