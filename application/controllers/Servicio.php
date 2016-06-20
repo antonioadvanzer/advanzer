@@ -239,7 +239,7 @@ class Servicio extends CI_Controller {
 		}
 		
 		$result->acumulados=$this->solicitudes_model->getAcumulados($result->id);
-		
+		//var_dump($result->acumulados);exit;
 		return $result;
 	}
 	
