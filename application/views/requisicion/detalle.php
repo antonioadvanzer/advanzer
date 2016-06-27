@@ -420,7 +420,7 @@
                         
                         document.getElementById("title").innerHTML = '<h2>Atención</h2>'
                         document.getElementById("body").innerHTML = '<p>¿Seguro que desea autorizar la requisición?</p>'
-                                        +'<a type="button" class="btn btn-primary" href="#procesando" onclick="autorizar();">Aceptar</a>&nbsp; &nbsp; '
+                                        +'<a class="btn btn-primary" href="#procesando" onclick="autoriza();">Aceptar</a>&nbsp; &nbsp; '
                                         +'<a type="button" class="btn btn-primary" onclick="window.history.back();">Cancelar</a>';
                         window.document.location = "#openModal";
                     
@@ -440,7 +440,7 @@
                         
                         document.getElementById("title").innerHTML = '<h2>Atención</h2>'
                         document.getElementById("body").innerHTML = '<p>¿Aceptar y enviar al autorizador final?</p>'
-                                        +'<a type="button" class="btn btn-primary" href="#procesando" onclick="aceptar();">Aceptar</a>&nbsp; &nbsp; '
+                                        +'<a type="button" class="btn btn-primary" href="#procesando" onclick="acepta();">Aceptar</a>&nbsp; &nbsp; '
                                         +'<a type="button" class="btn btn-primary" onclick="window.history.back();">Cancelar</a>';
                         window.document.location = "#openModal";
                     
@@ -460,7 +460,7 @@
                     
                         document.getElementById("title").innerHTML = '<h2>Atención</h2>'
                         document.getElementById("body").innerHTML = '<p>¿Seguro que desea rechazar la requisición?</p>'
-                                        +'<a type="button" class="btn btn-primary" href="#procesando" onclick="rechazar();">Aceptar</a>&nbsp; &nbsp; '
+                                        +'<a type="button" class="btn btn-primary" href="#procesando" onclick="rechaza();">Aceptar</a>&nbsp; &nbsp; '
                                         +'<a type="button" class="btn btn-primary" onclick="window.history.back();">Cancelar</a>';
                         window.document.location = "#openModal";
                     
@@ -480,7 +480,7 @@
                     
                         document.getElementById("title").innerHTML = '<h2>Atención</h2>'
                         document.getElementById("body").innerHTML = '<p>¿Seguro que desea cancelar la requisición?</p>'
-                                        +'<a type="button" class="btn btn-primary" href="#procesando" onclick="cancelar();">Aceptar</a>&nbsp; &nbsp; '
+                                        +'<a type="button" class="btn btn-primary" href="#procesando" onclick="cancela();">Aceptar</a>&nbsp; &nbsp; '
                                         +'<a type="button" class="btn btn-primary" onclick="window.history.back();">Cancelar</a>';
                         window.document.location = "#openModal";
                     
@@ -541,7 +541,7 @@
                         
                         document.getElementById("title").innerHTML = '<h2>Atención</h2>'
                         document.getElementById("body").innerHTML = '<p>¿Seguro(a) que desea reanudar la requisición?</p>'
-                                        +'<a type="button" class="btn btn-primary" href="#procesando" onclick="reanudar();">Aceptar</a>&nbsp; &nbsp; '
+                                        +'<a type="button" class="btn btn-primary" href="#procesando" onclick="reanuda();">Aceptar</a>&nbsp; &nbsp; '
                                         +'<a type="button" class="btn btn-primary" onclick="window.history.back();">Cancelar</a>';
                         window.document.location = "#openModal";
                     
@@ -561,7 +561,7 @@
                         
                         document.getElementById("title").innerHTML = '<h2>Atención</h2>'
                         document.getElementById("body").innerHTML = '<p>¿Seguro(a) que desea atender la requisición?</p>'
-                                        +'<a type="button" class="btn btn-primary" href="#procesando" onclick="atender();">Aceptar</a>&nbsp; &nbsp; '
+                                        +'<a type="button" class="btn btn-primary" href="#procesando" onclick="atiende();">Aceptar</a>&nbsp; &nbsp; '
                                         +'<a type="button" class="btn btn-primary" onclick="window.history.back();">Cancelar</a>';
                         window.document.location = "#openModal";
                     
@@ -600,7 +600,7 @@
             }
         
             // Se autoriza la requisición
-            function autorizar(){
+            function autoriza(){
                 
                 id = $('#id').val();
 				$.ajax({
@@ -654,7 +654,7 @@
             }
             
             // Se acepta la requisición por parte del director del area
-            function aceptar(){
+            function acepta(){
                 id = $('#id').val();
 				$.ajax({
 					url: '<?= base_url("requisicion/ch_estatus");?>',
@@ -706,7 +706,7 @@
             }
             
             // Se rechaza la requisición
-            function rechazar(){
+            function rechaza(){
                                                 
                 razon = $("#razon_txt").val();
 				accion = $("#accion").val();
@@ -763,7 +763,7 @@
             }
             
             // Se cancela la requisición
-            function cancelar(){           
+            function cancela(){           
                 
                 razon = $("#razon_txt").val();
 				accion = $("#accion").val();
@@ -1000,7 +1000,7 @@
                 window.document.location='<?= base_url("main");?>';
             }
         
-            function reanudar(){
+            function reanuda(){
                 
                 /*if(!confirm('¿Seguro(a) que desea reanudar la requisición?'))
 					return false;*/
@@ -1054,7 +1054,7 @@
                 window.document.location='<?= base_url("main");?>';
             }
             
-            function atender(){
+            function atiende(){
                 
                 /*if(!confirm('¿Seguro(a) que desea atender la requisición?'))
 					return false;*/

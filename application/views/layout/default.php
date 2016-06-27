@@ -15,6 +15,7 @@
 	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/bootstrap-select.css');?>">
 	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/easy-modal.css');?>">
 	<script src="<?= base_url('assets/js/jquery.min.js');?>"></script>
+	<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>-->
 	<!--<script src="<?= base_url('assets/js/bootstrap-table.js');?>"></script>-->
 	<script src="<?= base_url('assets/js/docs.min.js');?>"></script>
 	<script src="<?= base_url('assets/datepicker/js/bootstrap-datepicker.min.js');?>"></script>
