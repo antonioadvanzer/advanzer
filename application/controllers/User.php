@@ -254,12 +254,15 @@ class User extends CI_Controller {
 		$result=$this->user_model->searchById($colaborador);
 		$ingreso=new DateTime($result->fecha_ingreso);
 		$hoy=new DateTime(date('Y-m-d'));
-		$diff = $ingreso->diff($hoy);
-		switch($diff->y){
+        $diff = $ingreso->diff($hoy);
+        /*var_dump($diff);exit;
+        echo $result->fecha_ingreso;
+        var_dump($diff);*/
+        switch($diff->y){
 			case 0:
 				$dias=0;
 				$dias2=6;
-				$disponibles=floor(($diff->days-($diff->y*365))*6/365);
+				//$disponibles=floor(($diff->days-($diff->y*365))*6/365);
 				break;
 			case 1:
 				$dias=6;
@@ -294,7 +297,14 @@ class User extends CI_Controller {
 				$dias2=22;
 				break;
 		}
-		$result->disponibles=floor(($diff->days-($diff->y*365))*$dias2/365);
+        
+        //echo $dias2/12;exit;
+		
+        //$result->disponibles=floor(($diff->days-($diff->y*365))*$dias2/365);
+
+        //echo $result->disponibles." ".(($dias2/12) * $diff->m);exit;
+        $result->disponibles = floor(($dias2/12) * $diff->m);
+
 		$result->disp = $result->disponibles;
 		$result->extra=$dias2-$result->disponibles;
 		$result->de_solicitud=0;
