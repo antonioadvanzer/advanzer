@@ -74,7 +74,7 @@
                             echo $cantdias;
                             
                             ?></td>
-						<td style="cursor:default;text-align:center;"><?php if($yo->acumulados){$suma=$yo->acumulados->dias_uno+$yo->de_solicitud; if($suma>0)echo $suma;}else echo 0;?></td>
+						<td style="cursor:default;text-align:center;"><?php if($yo->acumulados){$suma=$yo->acumulados->dias_uno+$yo->de_solicitud; if($suma>0)echo ($suma);}else echo 0;?></td>
 						<td style="cursor:default;text-align:center;"><?php if($yo->acumulados) if($suma>0) echo date_format(date_create($yo->acumulados->vencimiento_uno),'j-M-Y')?></td>
 					</tr>
 				</tbody>

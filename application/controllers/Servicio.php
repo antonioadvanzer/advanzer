@@ -195,7 +195,7 @@ class Servicio extends CI_Controller {
 			case 0:
 				$dias=0;
 				$dias2=6;
-				$disponibles=floor(($diff->days-($diff->y*365))*6/365);
+				//$disponibles=floor(($diff->days-($diff->y*365))*6/365);
 				break;
 			case 1:
 				$dias=6;
@@ -230,7 +230,8 @@ class Servicio extends CI_Controller {
 				$dias2=22;
 				break;
 		}
-		$result->disponibles=floor(($diff->days-($diff->y*365))*$dias2/365);
+		//$result->disponibles=floor(($diff->days-($diff->y*365))*$dias2/365);
+		$result->disponibles = floor(($dias2/12) * $diff->m);
 		$result->extra=$dias2-$result->disponibles;
 		$result->de_solicitud=0;
 		if($dias_disponibles=$this->solicitudes_model->getDiasDisponibles($result->id)){

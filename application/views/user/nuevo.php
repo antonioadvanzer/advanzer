@@ -164,7 +164,7 @@
 	  		$("#tipo option:selected").each(function() {
 				tipo = $('#tipo').val();
 			});
-			if(jefe != null || track != null || posicion != null)
+			if(jefe != null || track != null || posicion != null){
 				$.ajax({
 					url: '<?= base_url("user/create");?>',
 					type: 'post',
@@ -201,9 +201,9 @@
 						},3000);
 					}
 				});
-			else
+		}else{
 				alert("elige al jefe");
-
+		}
 			event.preventDefault();
 		});
 

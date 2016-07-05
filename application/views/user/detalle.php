@@ -52,22 +52,46 @@
 			  		<tr>
 			  			<th>Próximo Vencimiento</th>
 			  			<?php 
-			  				$cantdias=0;
+			  				
+							$cantdias=0;
                             $suma=0;
+
+							$diasVencimiento = 0;
+							$fechaVenvimiento = "";
+
+							$diasGenerados = 0;
+
                             if($yo->acumulados){ 
-                                $cantdias = $yo->disponibles + $yo->acumulados->dias_acumulados + $yo->acumulados->dias_dos;
+                                //$cantdias = $yo->disponibles + $yo->acumulados->dias_uno;
+
+								if(($diasVencimiento = ($yo->acumulados->dias_uno + $yo->de_solicitud)) >= 0){
+									
+									$fechaVenvimiento = ($diasVencimiento == 0 ? " " : $user->vacaciones->vencimiento_uno);
+
+								}elseif( ($diasVencimiento += $yo->acumulados->dias_dos ) >= 0){
+
+									$fechaVenvimiento = ($diasVencimiento == 0 ? " " : $user->vacaciones->vencimiento_dos);
+
+								}elseif(($diasVencimiento += $yo->disp ) >= 0){
+
+								}
+
                             }else{ 
                                 $cantdias = $yo->disponibles;
                             }
-                            
-                        ?>
-			  			<td><input class="form-control" type="text" value="<?= /*$user->vacaciones->dias_uno;*/ ($cantdias - $yo->disp);?>" id="diasUno"></td>
-			  			<td><input style="background-color:white" class="form-control" type="text" value="<?= $user->vacaciones->vencimiento_uno;?>" id="vencimientoUno" readonly></td>
+						
+							//echo $yo->de_solicitud;
+                            //echo var_dump($yo->acumulados).$yo->disponibles." ".$yo->acumulados->dias_acumulados." ".$yo->acumulados->dias_dos;
+							//$cantdias-=$yo->disp;
+                        
+						?>
+			  			<td><input class="form-control" type="text" value="<?= /*$user->vacaciones->dias_uno; ($cantdias<0 ? 0 : $cantdias);*/ $diasVencimiento; ?>" id="diasUno"></td>
+			  			<td><input style="background-color:white" class="form-control" type="text" value="<?= /*$user->vacaciones->vencimiento_uno;*/ $fechaVenvimiento;?>" id="vencimientoUno" readonly></td>
 			  		</tr>
 			  		<tr>
 			  			<th>Recién Generadas</th>
-			  			<td><input class="form-control" type="text" value="<?php /*$user->vacaciones->dias_dos;*/ echo $yo->disp; ?>" id="diasDos"></td>
-			  			<td><input style="background-color:white" class="form-control" type="text" value="<?= $user->vacaciones->vencimiento_dos;?>" id="vencimientoDos" readonly></td>
+			  			<td><input class="form-control" type="text" value="<?php /*$user->vacaciones->dias_dos;*/ echo ($yo->disp); ?>" id="diasDos"></td>
+			  			<td><input style="background-color:white" class="form-control" type="text" value="" id="vencimientoDos" readonly></td>
 			  		</tr>
 			  	</tbody>
 			  </table>
