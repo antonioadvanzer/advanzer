@@ -650,6 +650,41 @@ class Servicio extends CI_Controller {
 		$this->solicitudes_model->actualiza_dias_vacaciones($colaborador->id,$datos);
 	}
 
+	// function to gen view with formta to create a new carta
+	public function formato_cartas() {
+		
+		$this->layout->title('Advanzer - Carta y Constancia Laboral');
+		$this->layout->view('servicio/formato_carta');
+	}
+
+	// function to send forma with data added
+	public function enviar_carta(){
+
+		$data['solicitud'] = array (
+								"nombre" => $this->input->post('name'), 
+								"person" => $this->input->post('person'),
+								"observaciones" => $this->input->post('observaciones'),
+								"sueldo" => $this->input->post('sueldo'), 
+								"imss" => $this->input->post('imss'),
+								"rfc" => $this->input->post('rfc'),
+								"curp" => $this->input->post('curp'),
+								"antiguedad" => $this->input->post('antiguedad'),
+								"puesto" => $this->input->post('puesto'),
+								"domicilio" => $this->input->post('domicilio')
+								);
+
+		$destinatario = "micaela.llano@advanzer.com";
+		$mensaje=$this->load->view("layout/solicitud/carta",$data,true);
+
+		if(!$this->sendMail($destinatario,$mensaje)){
+			$response['msg']="ok";
+		}else{
+			$response['msg']="cancel";
+		}
+
+		echo json_encode($response);
+	}
+
 	private function genera_excel($solicitud) {
 		$this->load->library('excel');
 
