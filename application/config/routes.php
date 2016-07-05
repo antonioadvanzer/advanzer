@@ -79,6 +79,8 @@ $route['solicitar_permiso'] = 'servicio/formato_permiso';
 $route['viaticos_gastos'] = 'servicio/viaticos_gastos';
 $route['solicitar_viaticos_gastos'] = 'servicio/formato_viaticos_gastos';
 $route['comprobar_gastos'] = 'servicio/formato_comprobacion';
+$route['solicitar_carta'] = 'servicio/formato_cartas';
+$route['enviar_carta'] = 'servicio/enviar_carta';
 /*
 $route['estructura_organizacional'] = 'info/estructura';
 $route['cartas_constancias'] = 'info/cartas_constancias';
