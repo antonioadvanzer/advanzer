@@ -232,6 +232,8 @@ class Servicio extends CI_Controller {
 		}
 		//$result->disponibles=floor(($diff->days-($diff->y*365))*$dias2/365);
 		$result->disponibles = floor(($dias2/12) * $diff->m);
+		
+		$result->disp = $result->disponibles;
 		$result->extra=$dias2-$result->disponibles;
 		$result->de_solicitud=0;
 		if($dias_disponibles=$this->solicitudes_model->getDiasDisponibles($result->id)){

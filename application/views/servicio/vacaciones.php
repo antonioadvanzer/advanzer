@@ -67,6 +67,7 @@
                             if($yo->acumulados){ 
                                 //$cantdias = $yo->disponibles + $yo->acumulados->dias_acumulados + $yo->acumulados->dias_dos;
                                 $cantdias = $yo->disponibles + $yo->acumulados->dias_uno + $yo->acumulados->dias_dos;
+								
                             }else{ 
                                 $cantdias = $yo->disponibles;
                             }

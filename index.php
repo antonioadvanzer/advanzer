@@ -282,6 +282,9 @@ switch (ENVIRONMENT)
 
 	define('VIEWPATH', $view_folder);
 
+// Timezone	
+date_default_timezone_set('America/Monterrey');
+
 /*
  * --------------------------------------------------------------------
  * LOAD THE BOOTSTRAP FILE
