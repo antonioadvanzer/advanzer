@@ -89,7 +89,8 @@ class Main extends CI_Controller {
 				// Zona de permisos
 				$permisos = array(
 					// Permiso de administración de requisiciones
-					'administrator' =>  ($result->area == 4) && ($result->tipo == 4),
+					//'administrator' =>  ($result->area == 4) && ($result->tipo == 4),
+					'administrator' =>  (($result->area == 4) && ($result->tipo == 4)) || (($result->area == 26)),
 					
 					// Permiso de creación de requisiciones, de ser asi, tambien se cuenta las que estan pendientes de atender dependiendo del tipo de usuario
 					'create_requisicion' => in_array($result->tipo,array(4,3)) || ($result->nivel_posicion <= 5),
@@ -175,7 +176,8 @@ class Main extends CI_Controller {
 				// Zona de permisos
 				$permisos = array(
 					// Permiso de administración de requisiciones
-					'administrator' =>  ($result->area == 4) && ($result->tipo == 4),
+					//'administrator' =>  ($result->area == 4) && ($result->tipo == 4),
+					'administrator' =>  ( (($result->area == 4) || ($result->area == 26)) && ($result->tipo == 4) ),
 					
 					// Permiso de creación de requisiciones, de ser asi, tambien se cuenta las que estan pendientes de atender dependiendo del tipo de usuario
 					'create_requisicion' => in_array($result->tipo,array(4,3)) || ($result->nivel_posicion <= 5),
@@ -800,7 +802,8 @@ class Main extends CI_Controller {
 	}
 
 	public function solicitud_expired() {
-		$solicitudes = $this->solicitudes_model->getAll();
+		// Código de cancelacion, aun esta en fase de analisis para resolver el problemad en ejecución sin control
+		/*$solicitudes = $this->solicitudes_model->getAll();
 		foreach ($solicitudes as $solicitud):
 			//identificar las solicitudes que no han sido canceladas o cerradas
 			if(!in_array($solicitud->estatus,array(1,2))):
@@ -814,7 +817,7 @@ class Main extends CI_Controller {
 					$this->solicitudes_model->update_solicitud($solicitud->id,$datos);
 				endif;
 			endif;
-		endforeach;
+		endforeach;*/
 	}
 
 	public function inicia_vacaciones() {

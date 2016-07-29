@@ -84,7 +84,7 @@ class Requisicion extends CI_Controller {
 	
 	// Verificar las requisiciones actuales, en general
 	private function updateRequisicionExpire(){
-		$this->requisicion_model->expireRequisicion(30);
+		//$this->requisicion_model->expireRequisicion(30);
 	}
 	
 	public function ver($id){
@@ -880,7 +880,7 @@ class Requisicion extends CI_Controller {
 	}
 
 	public function check_to_cancel(){
-		$requisiciones = $this->requisicion_model->getRequisiciones(true,true);
+		/*$requisiciones = $this->requisicion_model->getRequisiciones(true,true);
 		foreach ($requisiciones as $requisicion) :
 			$plazo = strtotime('+30 days',strtotime($requisicion->fecha_ultima_modificacion));
 			$plazo=date('Y-m-d H:i',$plazo);
@@ -893,7 +893,7 @@ class Requisicion extends CI_Controller {
 				$datos['usuario_modificacion']=null;
 				$this->requisicion_model->update($requisicion->id,$datos);
 			endif;
-		endforeach;
+		endforeach;*/
 	}
 	public function exportar($requisicion){
 		$requisicion = $this->requisicion_model->getById($requisicion);
