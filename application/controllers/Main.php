@@ -68,7 +68,7 @@ class Main extends CI_Controller {
 		$permisos['requisicion_pendiente'] = count($this->requisicion_model->getRequisicionesPendenting($this->session->userdata('id')));
 		$this->session->set_userdata('permisos', $permisos);
 		
-		//$this->vacation_register();
+		$this->vacation_register();
 		$this->vacation_expired();
 		
 		$this->layout->title('Advanzer - Inicio');
@@ -766,15 +766,53 @@ class Main extends CI_Controller {
 		endforeach;
 	}
 
+	// Update each row with vacations information
 	public function vacation_register() {
 		$colaboradores=$this->user_model->getPagination(null);
+
 		foreach ($colaboradores as $colaborador):
-			$aniversario=date('m-d',strtotime($colaborador->fecha_ingreso));
+			
+			$aniversario = date('m-d',strtotime($colaborador->fecha_ingreso));
+
+			/*$ingreso = new DateTime($colaborador->fecha_ingreso);
+			$hoy = new DateTime(date('Y-m-d'));
+			$diferencia = $ingreso->diff($hoy);
+			$ingreso->add(new DateInterval('P'.$diferencia->y.'Y'));
+			$actualidad = new DateTime($ingreso->format('Y-m-d'));
+			$actualidad->add(new DateInterval('P18M'));
+			$caducidad = $actualidad->format('Y-m-d');
+			
+			echo $colaborador->id."<br>".$colaborador->nombre."<br>Ingreso: ".$colaborador->fecha_ingreso."<br>Años: ".$diferencia->y."<br>Cumplimiento: ".$ingreso->format('Y-m-d')."<br>Caducidad: ".$caducidad."<br><br>";*/
+//-----------------------------
+			/*echo "<br>".$colaborador->id."<br>".$colaborador->nombre."<br>Ingreso: ".$colaborador->fecha_ingreso;
+			$fecha = new DateTime($colaborador->fecha_ingreso);
+
+			$hoy = new DateTime(date('Y-m-d'));
+
+			
+			$diff = $fecha->diff($hoy);
+
+			$fecha->add(new DateInterval('P'.$diff->y.'Y'));
+			echo "<br>Cumplimiento: ".$fecha->format('Y-m-d')."<br> Años: ".$diff->y."<br>";
+			//echo "<br>".$diff->y;
+
+			$fv = new DateTime($fecha->format('Y-m-d'));
+			$fv->add(new DateInterval('P18M'));
+			echo "Caducidad: ".$fv->format('Y-m-d')."<br>";*/
+			//echo strtotime('+18 month',strtotime($colaborador->fecha_ingreso))."<br>";
+
+			/*$fecha = new DateTime($colaborador->fecha_ingreso);
+					echo $fecha->add(new DateInterval('P18M'))->format('Y-m-d')."<br>";*/
+		// ---------------------------
+
 			if($aniversario == date('m-d')):
+
 				$ingreso=new DateTime($colaborador->fecha_ingreso);
 				$hoy=new DateTime(date('Y-m-d'));
 				$diff = $ingreso->diff($hoy);
+				
 				switch ($diff->y):
+					case 0: $dias=0;
 					case 1: $dias=6;										break;
 					case 2: $dias=8;										break;
 					case 3: $dias=10;										break;
@@ -785,18 +823,43 @@ class Main extends CI_Controller {
 					case 20:case 21:case 22:case 23:case 24: $dias=20;		break;
 					default: $dias=22;										break;
 				endswitch;
-				if($acumulados = $this->solicitudes_model->getAcumulados($colaborador->id)):
-					$datos['dias_dos']=$dias;
+				
+				$ingreso = new DateTime($colaborador->fecha_ingreso);
+				$hoy = new DateTime(date('Y-m-d'));
+				$diferencia = $ingreso->diff($hoy);
+				$ingreso->add(new DateInterval('P'.$diferencia->y.'Y'));
+				$actualidad = new DateTime($ingreso->format('Y-m-d'));
+				$actualidad->add(new DateInterval('P18M'));
+				$caducidad = $actualidad->format('Y-m-d');
+
+				if($acumulados = $this->solicitudes_model->getAcumulados($colaborador->id)){
+					
+					/*$datos['dias_dos']=$dias;
 					$datos['vencimiento_dos'] = strtotime('+18 month',strtotime($colaborador->fecha_ingreso));
+					$datos['dias_acumulados'] = (int)$acumulados->dias_acumulados + (int)$dias;*/
+
+					$datos['dias_dos'] = $dias;
+					$datos['vencimiento_dos'] = $caducidad;
 					$datos['dias_acumulados'] = (int)$acumulados->dias_acumulados + (int)$dias;
-				else:
-					$datos['dias_uno']=$dias;
+				
+				}else{
+
+					/*$datos['dias_uno']=$dias;
 					$datos['vencimiento_uno'] = strtotime('+18 month',strtotime($colaborador->fecha_ingreso));
+					$datos['dias_acumulados'] = $dias;*/
+
+					$datos['dias_uno'] = $dias;
+					$datos['vencimiento_uno'] = $caducidad;
 					$datos['dias_acumulados'] = $dias;
-				endif;
+				
+				}
+				
 				$this->solicitudes_model->actualiza_dias_vacaciones($colaborador->id,$datos);
+
 			endif;
+
 		endforeach;
+//exit;
 	}
 
 	public function solicitud_expired() {

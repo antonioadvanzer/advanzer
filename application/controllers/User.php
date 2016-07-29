@@ -40,6 +40,55 @@ class User extends CI_Controller {
 		
 		// Calular vacaciones en base a solicitudes existentes
 		$data['yo'] = $this->calculaVacaciones($id);
+
+        // datos de vacaciones acumulados
+            //echo $data['yo']->de_solicitud;exit;
+        $vs = array(
+            "proximo_vencimiento" => 0,
+            "recien_generadas" => 0,
+            "proporcionales" => $data['yo']->disp,
+            "vencimiento_uno" => "",
+            "vencimiento_dos" => ""
+        );
+
+        if($vans = $data['user']->vacaciones){
+            $vs['proximo_vencimiento'] = $vans->dias_uno;
+            $vs['recien_generadas'] = $vans->dias_dos;
+            $vs['vencimiento_uno'] = $vans->vencimiento_uno;
+            $vs['vencimiento_dos'] = $vans->vencimiento_dos;
+
+            // Calcular dias en base a solicitudes realizadas y aprobadas
+            if($data['yo']->de_solicitud != 0){
+               
+                while(true){
+
+                    if($vs['proximo_vencimiento'] > 0){
+                        $vs['proximo_vencimiento'] = $vs['proximo_vencimiento'] + $data['yo']->de_solicitud;
+                        if($vs['proximo_vencimiento'] >= 0){
+                            break;
+                        }
+                    }elseif($vs['recien_generadas'] > 0){
+                        $vs['recien_generadas'] = $vs['recien_generadas'] + $vs['proximo_vencimiento'];
+                        $vs['proximo_vencimiento'] = 0;
+                        $vs['vencimiento_uno'] = "";
+                        if($vs['recien_generadas'] >= 0){
+                            break;
+                        }
+                    }elseif($vs['proporcionales'] > 0){
+                        $vs['proporcionales'] = $vs['proporcionales'] + $vs['recien_generadas'];
+                        $vs['recien_generadas'] = 0;
+                        $vs['vencimiento_dos'] = "";
+                            break;
+                    }else{break;}
+
+                }
+
+            }
+
+
+        }
+
+        $data['vs'] = $vs;
 		
     	$this->layout->title('Capital Humano - Detalle Perfil');
     	$this->layout->view('user/detalle',$data);
