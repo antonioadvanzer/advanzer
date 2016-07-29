@@ -84,7 +84,7 @@ class Requisicion extends CI_Controller {
 	
 	// Verificar las requisiciones actuales, en general
 	private function updateRequisicionExpire(){
-		$this->requisicion_model->expireRequisicion(30);
+		//$this->requisicion_model->expireRequisicion(30);
 	}
 	
 	public function ver($id){
