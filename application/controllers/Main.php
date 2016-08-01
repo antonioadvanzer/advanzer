@@ -754,15 +754,15 @@ class Main extends CI_Controller {
 
 	// Delete days if those has expired
 	public function vacation_expired() {
-		$vacaciones=$this->solicitudes_model->getVacacionesExpired();
+		$vacaciones = $this->solicitudes_model->getVacacionesExpired();
 		foreach ($vacaciones as $registro) :
-			$datos=array(
+			$datos = array(
 				//'dias_acumulados'=>((int)$registro->dias_acumulados - (int)$registro->dias_uno) + (int)$registro->dias_dos,
-				'dias_acumulados'=>(int)$registro->dias_acumulados - (int)$registro->dias_uno,
-				'dias_uno'=>$registro->dias_dos,
-				'vencimiento_uno'=>$registro->vencimiento_dos,
-				'dias_dos'=>null,
-				'vencimiento_dos'=>null,
+				'dias_acumulados' => (int)$registro->dias_acumulados - (int)$registro->dias_uno,
+				'dias_uno' => $registro->dias_dos,
+				'vencimiento_uno' => $registro->vencimiento_dos,
+				'dias_dos' => null,
+				'vencimiento_dos' => null,
 			);
 			$this->solicitudes_model->actualiza_dias_vacaciones($registro->colaborador,$datos);
 		endforeach;
@@ -782,9 +782,9 @@ class Main extends CI_Controller {
 			$ingreso->add(new DateInterval('P'.$diferencia->y.'Y'));
 			$actualidad = new DateTime($ingreso->format('Y-m-d'));
 			$actualidad->add(new DateInterval('P18M'));
-			$caducidad = $actualidad->format('Y-m-d');
+			$caducidad = $actualidad->format('Y-m-d');*/
 			
-			echo $colaborador->id."<br>".$colaborador->nombre."<br>Ingreso: ".$colaborador->fecha_ingreso."<br>Años: ".$diferencia->y."<br>Cumplimiento: ".$ingreso->format('Y-m-d')."<br>Caducidad: ".$caducidad."<br><br>";*/
+			//echo $colaborador->id."<br>".$colaborador->nombre."<br>Ingreso: ".$colaborador->fecha_ingreso."<br>Años: ".$diferencia->y."<br>Cumplimiento: ".$ingreso->format('Y-m-d')."<br>Caducidad: ".$caducidad."<br><br>";
 //-----------------------------
 			/*echo "<br>".$colaborador->id."<br>".$colaborador->nombre."<br>Ingreso: ".$colaborador->fecha_ingreso;
 			$fecha = new DateTime($colaborador->fecha_ingreso);
@@ -866,7 +866,7 @@ class Main extends CI_Controller {
 
 	public function solicitud_expired() {
 
-		// Código de cancelacion, aun esta en fase de analisis para resolver el problemad en ejecución sin control
+		// Código de cancelacion, aun esta en fase de analisis para resolver el problema en ejecución sin control
 		/*$solicitudes = $this->solicitudes_model->getAll();
 		foreach ($solicitudes as $solicitud):
 			//identificar las solicitudes que no han sido canceladas o cerradas
@@ -885,9 +885,9 @@ class Main extends CI_Controller {
 	}
 
 	public function inicia_vacaciones() {
-		$vacaciones=$this->solicitudes_model->getVacaciones();
+		$vacaciones = $this->solicitudes_model->getVacaciones();
 		foreach ($vacaciones as $registro) :
-			$solicitud=$this->solicitudes_model->getSolicitudById($registro->id);
+			$solicitud = $this->solicitudes_model->getSolicitudById($registro->id);
 			$this->actualiza_dias_disponibles($solicitud);
 		endforeach;
 	}

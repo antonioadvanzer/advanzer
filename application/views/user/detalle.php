@@ -44,7 +44,7 @@
 			  	<thead>
 			  		<tr>
 			  			<th></th>
-			  			<th>Días</th>
+			  			<th>D&iacute;as</th>
 			  			<th>Fecha de Vencimiento</th>
 			  		</tr>
 			  	</thead>
@@ -63,6 +63,11 @@
 			  			<th>Proporcionales</th>
 			  			<td><input class="form-control" type="text" value="<?= $vs['proporcionales']?>" id="diasProporcionalea"></td>
 			  		</tr>
+					<tr class="alert alert-success">
+						<td><h3>Total</h3></td>
+						<td><h3><?= ( $vs['proximo_vencimiento'] + $vs['recien_generadas'] + $vs['proporcionales'] )?></h3></td>
+						<td></td>
+					</tr>
 			  	</tbody>
 			  </table>
 			</div>

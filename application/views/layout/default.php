@@ -168,8 +168,8 @@
                                                         <li class=""><a href="<?= base_url('admin_solicitudes')."/?status=all&tipo=vacaciones";?>">Todas las Solicitudes de Vacaciones</a></li>
                                                         <li class=""><a href="<?= base_url('admin_solicitudes')."/?status=canceladas&tipo=vacaciones";?>">Canceladas</a></li>
                                                         <li class=""><a href="<?= base_url('admin_solicitudes')."/?status=enviadas&tipo=vacaciones";?>">Enviadas</a></li>
-                                                        <li class=""><a href="<?= base_url('admin_solicitudes')."/?status=autorizadas_por_jefe";?>">Rechazadas</a></li>
-                                                        <li class=""><a href="<?= base_url('admin_solicitudes')."/?status=rechazadas&tipo=vacaciones";?>">Autorizadas por Jefe</a></li>
+                                                        <li class=""><a href="<?= base_url('admin_solicitudes')."/?status=rechazadas&tipo=vacaciones";?>">Rechazadas</a></li>
+                                                        <li class=""><a href="<?= base_url('admin_solicitudes')."/?status=autorizadas_por_jefe&tipo=vacaciones";?>">Autorizadas por Jefe</a></li>
                                                         <li class=""><a href="<?= base_url('admin_solicitudes')."/?status=autorizadas_por_capital_humano&tipo=vacaciones";?>">Autorizadas por Capital Humano</a></li>
                                                     </ul>
                                                 </li>
@@ -179,8 +179,8 @@
                                                         <li class=""><a href="<?= base_url('admin_solicitudes')."/?status=all&tipo=permisos";?>">Todas las Solicitudes de Permisos de Ausencia</a></li>
                                                         <li class=""><a href="<?= base_url('admin_solicitudes')."/?status=canceladas&tipo=permisos";?>">Canceladas</a></li>
                                                         <li class=""><a href="<?= base_url('admin_solicitudes')."/?status=enviadas&tipo=permisos";?>">Enviadas</a></li>
-                                                        <li class=""><a href="<?= base_url('admin_solicitudes')."/?status=autorizadas_por_jefe&tipo=permisos";?>">Rechazadas</a></li>
-                                                        <li class=""><a href="<?= base_url('admin_solicitudes')."/?status=rechazadas&tipo=permisos&tipo=permisos";?>">Autorizadas por Jefe</a></li>
+                                                        <li class=""><a href="<?= base_url('admin_solicitudes')."/?status=rechazadas&tipo=permisos";?>">Rechazadas</a></li>
+                                                        <li class=""><a href="<?= base_url('admin_solicitudes')."/?status=autorizadas_por_jefe&tipo=permisos";?>">Autorizadas por Jefe</a></li>
                                                         <li class=""><a href="<?= base_url('admin_solicitudes')."/?status=autorizadas_por_capital_humano&tipo=permisos";?>">Autorizadas por Capital Humano</a></li>
                                                     </ul>
                                                 </li>
