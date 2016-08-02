@@ -814,7 +814,7 @@ class Main extends CI_Controller {
 				$diff = $ingreso->diff($hoy);
 				
 				switch ($diff->y):
-					case 0: $dias=0;
+					case 0: $dias=0;										break;
 					case 1: $dias=6;										break;
 					case 2: $dias=8;										break;
 					case 3: $dias=10;										break;

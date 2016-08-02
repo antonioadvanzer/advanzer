@@ -50,12 +50,12 @@
 			  	</thead>
 			  	<tbody>
 			  		<tr>
-			  			<th>Próximo Vencimiento</th>
+			  			<th>Pr&oacute;ximo Vencimiento</th>
 			  			<td><input class="form-control" type="text" value="<?= $vs['proximo_vencimiento'] ?>" id="diasUno"></td>
 			  			<td><input style="background-color:white" class="form-control" type="text" value="<?= $vs['vencimiento_uno'] ?>" id="vencimientoUno" readonly></td>
 			  		</tr>
 			  		<tr>
-			  			<th>Recién Generadas</th>
+			  			<th>Reci&eacute;n Generadas</th>
 			  			<td><input class="form-control" type="text" value="<?= $vs['recien_generadas'] ?>" id="diasDos"></td>
 			  			<td><input style="background-color:white" class="form-control" type="text" value="<?= $vs['vencimiento_dos'] ?>" id="vencimientoDos" readonly></td>
 			  		</tr>

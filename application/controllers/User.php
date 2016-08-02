@@ -59,8 +59,10 @@ class User extends CI_Controller {
 
             // Calcular dias en base a solicitudes realizadas y aprobadas
             if($data['yo']->de_solicitud != 0){
-               
-                while(true){
+
+                $diasSolicitados = $data['yo']->de_solicitud;
+
+                /*while(true){
 
                     if($vs['proximo_vencimiento'] > 0){
                         $vs['proximo_vencimiento'] = $vs['proximo_vencimiento'] + $data['yo']->de_solicitud;
@@ -79,6 +81,31 @@ class User extends CI_Controller {
                         $vs['recien_generadas'] = 0;
                         $vs['vencimiento_dos'] = "";
                             break;
+                    }else{break;}
+
+                }*/
+
+                while(true){
+
+                    if($vs['proximo_vencimiento'] > 0){
+                        $vs['proximo_vencimiento'] = $vs['proximo_vencimiento'] + $diasSolicitados;
+                        if($vs['proximo_vencimiento'] >= 0){
+                            break;
+                        }
+                        $diasSolicitados = $vs['proximo_vencimiento'];
+                    }elseif($vs['recien_generadas'] > 0){
+                        $vs['recien_generadas'] = $vs['recien_generadas'] + $diasSolicitados;
+                        $vs['proximo_vencimiento'] = 0;
+                        $vs['vencimiento_uno'] = "";
+                        if($vs['recien_generadas'] >= 0){
+                            break;
+                        }
+                        $diasSolicitados = $vs['recien_generadas'];
+                    }elseif($vs['proporcionales'] > 0){
+                        $vs['proporcionales'] = $vs['proporcionales'] + $diasSolicitados;
+                        $vs['recien_generadas'] = 0;
+                        $vs['vencimiento_dos'] = "";
+                        break;
                     }else{break;}
 
                 }

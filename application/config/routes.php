@@ -88,6 +88,7 @@ $route['sap'] = 'info/certificacion_sap';
 $route['viaticos'] = 'info/viaticos_gastos';
 $route['vacaciones'] = 'info/vacaciones';
 $route['permisos'] = 'info/permisos';
-$route['vestimenta'] = 'info/vestimenta';*/
+$route['vestimenta'] = 'info/vestimenta';
+*/
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
