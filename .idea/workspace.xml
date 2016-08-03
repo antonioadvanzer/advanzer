@@ -3,10 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="71dbc008-db5f-4aa0-910e-b983f4017f64" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/config/routes.php" afterPath="$PROJECT_DIR$/application/config/routes.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/controllers/Main.php" afterPath="$PROJECT_DIR$/application/controllers/Main.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/controllers/User.php" afterPath="$PROJECT_DIR$/application/controllers/User.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/user/detalle.php" afterPath="$PROJECT_DIR$/application/views/user/detalle.php" />
     </list>
     <ignored path="advanzer.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -30,8 +27,8 @@
       <file leaf-file-name="Main.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/application/controllers/Main.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-64">
-              <caret line="824" column="68" selection-start-line="824" selection-start-column="68" selection-end-line="824" selection-end-column="68" />
+            <state relative-caret-position="319">
+              <caret line="855" column="16" selection-start-line="855" selection-start-column="16" selection-end-line="855" selection-end-column="16" />
               <folding>
                 <element signature="n#index#0;n#Main#0;n#!!top" expanded="false" />
                 <element signature="e#1088#1756#0#PHP" expanded="false" />
@@ -54,18 +51,18 @@
                 <element signature="e#31297#31643#0#PHP" expanded="false" />
                 <element signature="e#31898#32437#0#PHP" expanded="false" />
                 <element signature="n#solicitud_expired#0;n#Main#0;n#!!top" expanded="false" />
-                <marker date="1470164876000" expanded="true" signature="25391:25412" ph="..." />
-                <marker date="1470164876000" expanded="true" signature="25462:25584" ph="..." />
-                <marker date="1470164876000" expanded="true" signature="25495:25580" ph="..." />
-                <marker date="1470164876000" expanded="true" signature="26565:26586" ph="..." />
-                <marker date="1470164876000" expanded="true" signature="26636:26758" ph="..." />
-                <marker date="1470164876000" expanded="true" signature="26669:26754" ph="..." />
-                <marker date="1470164876000" expanded="true" signature="27547:27568" ph="..." />
-                <marker date="1470164876000" expanded="true" signature="27618:27740" ph="..." />
-                <marker date="1470164876000" expanded="true" signature="27651:27736" ph="..." />
-                <marker date="1470164876000" expanded="true" signature="27778:27799" ph="..." />
-                <marker date="1470164876000" expanded="true" signature="27849:27971" ph="..." />
-                <marker date="1470164876000" expanded="true" signature="27882:27967" ph="..." />
+                <marker date="1470242190000" expanded="true" signature="25391:25412" ph="..." />
+                <marker date="1470242190000" expanded="true" signature="25462:25584" ph="..." />
+                <marker date="1470242190000" expanded="true" signature="25495:25580" ph="..." />
+                <marker date="1470242190000" expanded="true" signature="26565:26586" ph="..." />
+                <marker date="1470242190000" expanded="true" signature="26636:26758" ph="..." />
+                <marker date="1470242190000" expanded="true" signature="26669:26754" ph="..." />
+                <marker date="1470242190000" expanded="true" signature="27547:27568" ph="..." />
+                <marker date="1470242190000" expanded="true" signature="27618:27740" ph="..." />
+                <marker date="1470242190000" expanded="true" signature="27651:27736" ph="..." />
+                <marker date="1470242190000" expanded="true" signature="27778:27799" ph="..." />
+                <marker date="1470242190000" expanded="true" signature="27849:27971" ph="..." />
+                <marker date="1470242190000" expanded="true" signature="27882:27967" ph="..." />
               </folding>
             </state>
           </provider>
@@ -74,8 +71,8 @@
       <file leaf-file-name="User.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/application/controllers/User.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="350">
-              <caret line="103" column="30" selection-start-line="103" selection-start-column="30" selection-end-line="103" selection-end-column="30" />
+            <state relative-caret-position="375">
+              <caret line="107" column="30" selection-start-line="107" selection-start-column="30" selection-end-line="107" selection-end-column="30" />
               <folding>
                 <element signature="e#2349#3390#0#PHP" expanded="false" />
               </folding>
@@ -86,7 +83,7 @@
       <file leaf-file-name="Solicitudes_model.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/application/models/Solicitudes_model.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="96">
+            <state relative-caret-position="276">
               <caret line="62" column="14" selection-start-line="62" selection-start-column="14" selection-end-line="62" selection-end-column="14" />
               <folding>
                 <element signature="n#getSolicitudById#0;n#Solicitudes_model#0;n#!!top" expanded="false" />
@@ -145,8 +142,8 @@
         <option value="$PROJECT_DIR$/application/views/layout/default.php" />
         <option value="$PROJECT_DIR$/application/views/user/detalle.php" />
         <option value="$PROJECT_DIR$/application/config/routes.php" />
-        <option value="$PROJECT_DIR$/application/controllers/Main.php" />
         <option value="$PROJECT_DIR$/application/models/Solicitudes_model.php" />
+        <option value="$PROJECT_DIR$/application/controllers/Main.php" />
         <option value="$PROJECT_DIR$/application/controllers/User.php" />
       </list>
     </option>
@@ -389,12 +386,13 @@
       <option name="presentableId" value="Default" />
       <updated>1470062848377</updated>
       <workItem from="1470062850387" duration="17427000" />
-      <workItem from="1470148245240" duration="7685000" />
+      <workItem from="1470148245240" duration="8183000" />
+      <workItem from="1470234771196" duration="6089000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="25112000" />
+    <option name="totallyTimeSpent" value="31699000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1280" height="725" extended-state="6" />
@@ -439,6 +437,101 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/application/controllers/Main.php">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="12360">
+          <caret line="824" column="68" selection-start-line="824" selection-start-column="68" selection-end-line="824" selection-end-column="68" />
+          <folding>
+            <element signature="n#index#0;n#Main#0;n#!!top" expanded="false" />
+            <element signature="e#1088#1756#0#PHP" expanded="false" />
+            <element signature="n#login#0;n#Main#0;n#!!top" expanded="false" />
+            <element signature="n#historial#0;n#Main#0;n#!!top" expanded="false" />
+            <element signature="n#load_historial#0;n#Main#0;n#!!top" expanded="false" />
+            <element signature="n#load_graph#0;n#Main#0;n#!!top" expanded="false" />
+            <element signature="n#logout#0;n#Main#0;n#!!top" expanded="false" />
+            <element signature="n#verify_session#0;n#Main#0;n#!!top" expanded="false" />
+            <element signature="n#valida_sesion#0;n#Main#0;n#!!top" expanded="false" />
+            <element signature="n#check_evaluation_period#0;n#Main#0;n#!!top" expanded="false" />
+            <element signature="n#sendMail#0;n#Main#0;n#!!top" expanded="false" />
+            <element signature="n#exportAnualFile#0;n#Main#0;n#!!top" expanded="false" />
+            <element signature="n#recordatorioEvProyecto#0;n#Main#0;n#!!top" expanded="false" />
+            <element signature="n#recordatorioEvAnual#0;n#Main#0;n#!!top" expanded="false" />
+            <element signature="n#recordatorioDiario#0;n#Main#0;n#!!top" expanded="false" />
+            <element signature="n#enviaRecordatorio#0;n#Main#0;n#!!top" expanded="false" />
+            <element signature="n#solicitudes#0;n#Main#0;n#!!top" expanded="false" />
+            <element signature="n#vacation_expired#0;n#Main#0;n#!!top" expanded="false" />
+            <element signature="e#31297#31643#0#PHP" expanded="false" />
+            <element signature="e#31898#32437#0#PHP" expanded="false" />
+            <element signature="n#solicitud_expired#0;n#Main#0;n#!!top" expanded="false" />
+            <marker date="1470242190000" expanded="true" signature="25391:25412" ph="..." />
+            <marker date="1470242190000" expanded="true" signature="25462:25584" ph="..." />
+            <marker date="1470242190000" expanded="true" signature="25495:25580" ph="..." />
+            <marker date="1470242190000" expanded="true" signature="26565:26586" ph="..." />
+            <marker date="1470242190000" expanded="true" signature="26636:26758" ph="..." />
+            <marker date="1470242190000" expanded="true" signature="26669:26754" ph="..." />
+            <marker date="1470242190000" expanded="true" signature="27547:27568" ph="..." />
+            <marker date="1470242190000" expanded="true" signature="27618:27740" ph="..." />
+            <marker date="1470242190000" expanded="true" signature="27651:27736" ph="..." />
+            <marker date="1470242190000" expanded="true" signature="27778:27799" ph="..." />
+            <marker date="1470242190000" expanded="true" signature="27849:27971" ph="..." />
+            <marker date="1470242190000" expanded="true" signature="27882:27967" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/controllers/User.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#2349#3390#0#PHP" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/models/Solicitudes_model.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="62" column="14" selection-start-line="62" selection-start-column="14" selection-end-line="62" selection-end-column="14" />
+          <folding>
+            <element signature="n#getSolicitudById#0;n#Solicitudes_model#0;n#!!top" expanded="false" />
+            <element signature="n#getSolicitudByTipoColaborador#0;n#Solicitudes_model#0;n#!!top" expanded="false" />
+            <element signature="n#getViaticosInfo#0;n#Solicitudes_model#0;n#!!top" expanded="false" />
+            <element signature="n#getAcumulados#0;n#Solicitudes_model#0;n#!!top" expanded="false" />
+            <element signature="n#registra_solicitud#0;n#Solicitudes_model#0;n#!!top" expanded="false" />
+            <element signature="n#update_detalle_viaticos#0;n#Solicitudes_model#0;n#!!top" expanded="false" />
+            <element signature="n#update_comprobante#0;n#Solicitudes_model#0;n#!!top" expanded="false" />
+            <element signature="n#getComprobantesPendientes#0;n#Solicitudes_model#0;n#!!top" expanded="false" />
+            <element signature="n#getByColaborador#0;n#Solicitudes_model#0;n#!!top" expanded="false" />
+            <element signature="n#getByAutorizador#0;n#Solicitudes_model#0;n#!!top" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/user/detalle.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="570">
+          <caret line="38" column="24" selection-start-line="38" selection-start-column="14" selection-end-line="38" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/models/User_model.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3795">
+          <caret line="253" column="23" selection-start-line="253" selection-start-column="23" selection-end-line="253" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/config/routes.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="855">
+          <caret line="57" column="31" selection-start-line="57" selection-start-column="27" selection-end-line="57" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/controllers/Main.php">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="13290">
           <caret line="886" column="37" selection-start-line="886" selection-start-column="20" selection-end-line="886" selection-end-column="37" />
           <folding>
@@ -463,18 +556,18 @@
             <element signature="e#31297#31643#0#PHP" expanded="false" />
             <element signature="e#31898#32437#0#PHP" expanded="false" />
             <element signature="n#solicitud_expired#0;n#Main#0;n#!!top" expanded="false" />
-            <marker date="1470164876000" expanded="true" signature="25391:25412" ph="..." />
-            <marker date="1470164876000" expanded="true" signature="25462:25584" ph="..." />
-            <marker date="1470164876000" expanded="true" signature="25495:25580" ph="..." />
-            <marker date="1470164876000" expanded="true" signature="26565:26586" ph="..." />
-            <marker date="1470164876000" expanded="true" signature="26636:26758" ph="..." />
-            <marker date="1470164876000" expanded="true" signature="26669:26754" ph="..." />
-            <marker date="1470164876000" expanded="true" signature="27547:27568" ph="..." />
-            <marker date="1470164876000" expanded="true" signature="27618:27740" ph="..." />
-            <marker date="1470164876000" expanded="true" signature="27651:27736" ph="..." />
-            <marker date="1470164876000" expanded="true" signature="27778:27799" ph="..." />
-            <marker date="1470164876000" expanded="true" signature="27849:27971" ph="..." />
-            <marker date="1470164876000" expanded="true" signature="27882:27967" ph="..." />
+            <marker date="1470242190000" expanded="true" signature="25391:25412" ph="..." />
+            <marker date="1470242190000" expanded="true" signature="25462:25584" ph="..." />
+            <marker date="1470242190000" expanded="true" signature="25495:25580" ph="..." />
+            <marker date="1470242190000" expanded="true" signature="26565:26586" ph="..." />
+            <marker date="1470242190000" expanded="true" signature="26636:26758" ph="..." />
+            <marker date="1470242190000" expanded="true" signature="26669:26754" ph="..." />
+            <marker date="1470242190000" expanded="true" signature="27547:27568" ph="..." />
+            <marker date="1470242190000" expanded="true" signature="27618:27740" ph="..." />
+            <marker date="1470242190000" expanded="true" signature="27651:27736" ph="..." />
+            <marker date="1470242190000" expanded="true" signature="27778:27799" ph="..." />
+            <marker date="1470242190000" expanded="true" signature="27849:27971" ph="..." />
+            <marker date="1470242190000" expanded="true" signature="27882:27967" ph="..." />
           </folding>
         </state>
       </provider>
@@ -608,7 +701,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/application/models/Solicitudes_model.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="96">
+        <state relative-caret-position="276">
           <caret line="62" column="14" selection-start-line="62" selection-start-column="14" selection-end-line="62" selection-end-column="14" />
           <folding>
             <element signature="n#getSolicitudById#0;n#Solicitudes_model#0;n#!!top" expanded="false" />
@@ -627,8 +720,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/application/controllers/Main.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-64">
-          <caret line="824" column="68" selection-start-line="824" selection-start-column="68" selection-end-line="824" selection-end-column="68" />
+        <state relative-caret-position="319">
+          <caret line="855" column="16" selection-start-line="855" selection-start-column="16" selection-end-line="855" selection-end-column="16" />
           <folding>
             <element signature="n#index#0;n#Main#0;n#!!top" expanded="false" />
             <element signature="e#1088#1756#0#PHP" expanded="false" />
@@ -651,26 +744,26 @@
             <element signature="e#31297#31643#0#PHP" expanded="false" />
             <element signature="e#31898#32437#0#PHP" expanded="false" />
             <element signature="n#solicitud_expired#0;n#Main#0;n#!!top" expanded="false" />
-            <marker date="1470164876000" expanded="true" signature="25391:25412" ph="..." />
-            <marker date="1470164876000" expanded="true" signature="25462:25584" ph="..." />
-            <marker date="1470164876000" expanded="true" signature="25495:25580" ph="..." />
-            <marker date="1470164876000" expanded="true" signature="26565:26586" ph="..." />
-            <marker date="1470164876000" expanded="true" signature="26636:26758" ph="..." />
-            <marker date="1470164876000" expanded="true" signature="26669:26754" ph="..." />
-            <marker date="1470164876000" expanded="true" signature="27547:27568" ph="..." />
-            <marker date="1470164876000" expanded="true" signature="27618:27740" ph="..." />
-            <marker date="1470164876000" expanded="true" signature="27651:27736" ph="..." />
-            <marker date="1470164876000" expanded="true" signature="27778:27799" ph="..." />
-            <marker date="1470164876000" expanded="true" signature="27849:27971" ph="..." />
-            <marker date="1470164876000" expanded="true" signature="27882:27967" ph="..." />
+            <marker date="1470242190000" expanded="true" signature="25391:25412" ph="..." />
+            <marker date="1470242190000" expanded="true" signature="25462:25584" ph="..." />
+            <marker date="1470242190000" expanded="true" signature="25495:25580" ph="..." />
+            <marker date="1470242190000" expanded="true" signature="26565:26586" ph="..." />
+            <marker date="1470242190000" expanded="true" signature="26636:26758" ph="..." />
+            <marker date="1470242190000" expanded="true" signature="26669:26754" ph="..." />
+            <marker date="1470242190000" expanded="true" signature="27547:27568" ph="..." />
+            <marker date="1470242190000" expanded="true" signature="27618:27740" ph="..." />
+            <marker date="1470242190000" expanded="true" signature="27651:27736" ph="..." />
+            <marker date="1470242190000" expanded="true" signature="27778:27799" ph="..." />
+            <marker date="1470242190000" expanded="true" signature="27849:27971" ph="..." />
+            <marker date="1470242190000" expanded="true" signature="27882:27967" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/application/controllers/User.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="350">
-          <caret line="103" column="30" selection-start-line="103" selection-start-column="30" selection-end-line="103" selection-end-column="30" />
+        <state relative-caret-position="375">
+          <caret line="107" column="30" selection-start-line="107" selection-start-column="30" selection-end-line="107" selection-end-column="30" />
           <folding>
             <element signature="e#2349#3390#0#PHP" expanded="false" />
           </folding>

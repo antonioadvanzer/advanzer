@@ -96,20 +96,21 @@ class User extends CI_Controller {
                     }elseif($vs['recien_generadas'] > 0){
                         $vs['recien_generadas'] = $vs['recien_generadas'] + $diasSolicitados;
                         $vs['proximo_vencimiento'] = 0;
-                        $vs['vencimiento_uno'] = "";
+
                         if($vs['recien_generadas'] >= 0){
                             break;
                         }
                         $diasSolicitados = $vs['recien_generadas'];
                     }elseif($vs['proporcionales'] > 0){
                         $vs['proporcionales'] = $vs['proporcionales'] + $diasSolicitados;
+                        $vs['proximo_vencimiento'] = 0;
                         $vs['recien_generadas'] = 0;
-                        $vs['vencimiento_dos'] = "";
                         break;
                     }else{break;}
 
                 }
-
+                $vs['vencimiento_uno'] = ($vs['proximo_vencimiento']  == 0) ? "" : $vs['vencimiento_uno'];
+                $vs['vencimiento_dos'] = ($vs['recien_generadas']  == 0) ? "" : $vs['vencimiento_dos'];
             }
 
 
