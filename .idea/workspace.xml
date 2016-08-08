@@ -3,8 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="71dbc008-db5f-4aa0-910e-b983f4017f64" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/config/database.php" afterPath="$PROJECT_DIR$/application/config/database.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/controllers/Main.php" afterPath="$PROJECT_DIR$/application/controllers/Main.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/models/Solicitudes_model.php" afterPath="$PROJECT_DIR$/application/models/Solicitudes_model.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/servicio/formato_vacaciones.php" afterPath="$PROJECT_DIR$/application/views/servicio/formato_vacaciones.php" />
     </list>
     <ignored path="advanzer.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -25,15 +25,14 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Main.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Main.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/application/controllers/Main.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="232">
-              <caret line="1002" column="34" selection-start-line="1002" selection-start-column="28" selection-end-line="1002" selection-end-column="34" />
+            <state relative-caret-position="409">
+              <caret line="107" column="29" selection-start-line="107" selection-start-column="21" selection-end-line="107" selection-end-column="29" />
               <folding>
                 <element signature="e#1083#1751#0#PHP" expanded="false" />
                 <element signature="e#2366#2407#0#PHP" expanded="false" />
-                <element signature="n#login#0;n#Main#0;n#!!top" expanded="false" />
                 <element signature="n#historial#0;n#Main#0;n#!!top" expanded="false" />
                 <element signature="n#load_historial#0;n#Main#0;n#!!top" expanded="false" />
                 <element signature="n#load_graph#0;n#Main#0;n#!!top" expanded="false" />
@@ -69,70 +68,15 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="User.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/application/controllers/User.php">
+      <file leaf-file-name="formato_vacaciones.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/application/views/servicio/formato_vacaciones.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="900">
-              <caret line="60" column="24" selection-start-line="60" selection-start-column="24" selection-end-line="60" selection-end-column="24" />
+            <state relative-caret-position="3015">
+              <caret line="220" column="26" selection-start-line="220" selection-start-column="15" selection-end-line="220" selection-end-column="26" />
               <folding>
-                <element signature="e#2490#3531#0#PHP" expanded="false" />
+                <marker date="1470688812000" expanded="true" signature="9476:9541" ph="..." />
+                <marker date="1470688812000" expanded="true" signature="9493:9529" ph="{...}" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="detalle.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/application/views/user/detalle.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1080">
-              <caret line="72" column="165" selection-start-line="72" selection-start-column="165" selection-end-line="72" selection-end-column="165" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Servicio.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/application/controllers/Servicio.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="9615">
-              <caret line="641" column="0" selection-start-line="641" selection-start-column="0" selection-end-line="641" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Solicitudes_model.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/application/models/Solicitudes_model.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="904">
-              <caret line="185" column="33" selection-start-line="185" selection-start-column="13" selection-end-line="185" selection-end-column="33" />
-              <folding>
-                <element signature="n#getSolicitudById#0;n#Solicitudes_model#0;n#!!top" expanded="false" />
-                <element signature="n#getSolicitudByTipoColaborador#0;n#Solicitudes_model#0;n#!!top" expanded="false" />
-                <element signature="n#getViaticosInfo#0;n#Solicitudes_model#0;n#!!top" expanded="false" />
-                <element signature="n#registra_solicitud#0;n#Solicitudes_model#0;n#!!top" expanded="false" />
-                <element signature="n#update_detalle_viaticos#0;n#Solicitudes_model#0;n#!!top" expanded="false" />
-                <element signature="n#update_comprobante#0;n#Solicitudes_model#0;n#!!top" expanded="false" />
-                <element signature="n#getComprobantesPendientes#0;n#Solicitudes_model#0;n#!!top" expanded="false" />
-                <element signature="n#getByColaborador#0;n#Solicitudes_model#0;n#!!top" expanded="false" />
-                <element signature="n#getByAutorizador#0;n#Solicitudes_model#0;n#!!top" expanded="false" />
-                <element signature="n#update_solicitud#0;n#Solicitudes_model#0;n#!!top" expanded="false" />
-                <element signature="n#getVacacionesExpired#0;n#Solicitudes_model#0;n#!!top" expanded="false" />
-                <element signature="n#registra_comprobante#0;n#Solicitudes_model#0;n#!!top" expanded="false" />
-                <element signature="n#setAlert#0;n#Solicitudes_model#0;n#!!top" expanded="false" />
-                <element signature="n#notificarJefe#0;n#Solicitudes_model#0;n#!!top" expanded="false" />
-                <element signature="n#notificarCh#0;n#Solicitudes_model#0;n#!!top" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="database.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/application/config/database.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="229">
-              <caret line="66" column="4" selection-start-line="66" selection-start-column="4" selection-end-line="66" selection-end-column="4" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -148,12 +92,13 @@
         <option value="$PROJECT_DIR$/application/views/layout/default.php" />
         <option value="$PROJECT_DIR$/application/config/routes.php" />
         <option value="$PROJECT_DIR$/application/views/servicio/vacaciones.php" />
-        <option value="$PROJECT_DIR$/application/models/Solicitudes_model.php" />
         <option value="$PROJECT_DIR$/application/controllers/Servicio.php" />
         <option value="$PROJECT_DIR$/application/controllers/User.php" />
         <option value="$PROJECT_DIR$/application/views/user/detalle.php" />
         <option value="$PROJECT_DIR$/application/config/database.php" />
         <option value="$PROJECT_DIR$/application/controllers/Main.php" />
+        <option value="$PROJECT_DIR$/application/models/Solicitudes_model.php" />
+        <option value="$PROJECT_DIR$/application/views/servicio/formato_vacaciones.php" />
       </list>
     </option>
   </component>
@@ -422,12 +367,12 @@
       <workItem from="1470321415310" duration="7422000" />
       <workItem from="1470407231249" duration="14128000" />
       <workItem from="1470616268211" duration="5344000" />
-      <workItem from="1470666529178" duration="9618000" />
+      <workItem from="1470666529178" duration="11822000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="69490000" />
+    <option name="totallyTimeSpent" value="71694000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1280" height="725" extended-state="6" />
@@ -470,14 +415,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/application/views/user/detalle.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1080">
-          <caret line="72" column="165" selection-start-line="72" selection-start-column="165" selection-end-line="72" selection-end-column="165" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/application/controllers/Servicio.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="9615">
@@ -525,7 +462,6 @@
           <folding>
             <element signature="e#1083#1751#0#PHP" expanded="false" />
             <element signature="e#2366#2407#0#PHP" expanded="false" />
-            <element signature="n#login#0;n#Main#0;n#!!top" expanded="false" />
             <element signature="n#historial#0;n#Main#0;n#!!top" expanded="false" />
             <element signature="n#load_historial#0;n#Main#0;n#!!top" expanded="false" />
             <element signature="n#load_graph#0;n#Main#0;n#!!top" expanded="false" />
@@ -606,6 +542,11 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="960">
           <caret line="64" column="24" selection-start-line="64" selection-start-column="24" selection-end-line="64" selection-end-column="24" />
+          <folding>
+            <marker date="1470414530000" expanded="true" signature="7782:7920" ph="..." />
+            <marker date="1470414530000" expanded="true" signature="7812:7848" ph="{...}" />
+            <marker date="1470414530000" expanded="true" signature="7872:7908" ph="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -624,7 +565,6 @@
           <folding>
             <element signature="e#1083#1751#0#PHP" expanded="false" />
             <element signature="e#2366#2407#0#PHP" expanded="false" />
-            <element signature="n#login#0;n#Main#0;n#!!top" expanded="false" />
             <element signature="n#historial#0;n#Main#0;n#!!top" expanded="false" />
             <element signature="n#load_historial#0;n#Main#0;n#!!top" expanded="false" />
             <element signature="n#load_graph#0;n#Main#0;n#!!top" expanded="false" />
@@ -730,7 +670,6 @@
           <folding>
             <element signature="e#1083#1751#0#PHP" expanded="false" />
             <element signature="e#2366#2407#0#PHP" expanded="false" />
-            <element signature="n#login#0;n#Main#0;n#!!top" expanded="false" />
             <element signature="n#historial#0;n#Main#0;n#!!top" expanded="false" />
             <element signature="n#load_historial#0;n#Main#0;n#!!top" expanded="false" />
             <element signature="n#load_graph#0;n#Main#0;n#!!top" expanded="false" />
@@ -836,7 +775,6 @@
           <folding>
             <element signature="e#1083#1751#0#PHP" expanded="false" />
             <element signature="e#2366#2407#0#PHP" expanded="false" />
-            <element signature="n#login#0;n#Main#0;n#!!top" expanded="false" />
             <element signature="n#historial#0;n#Main#0;n#!!top" expanded="false" />
             <element signature="n#load_historial#0;n#Main#0;n#!!top" expanded="false" />
             <element signature="n#load_graph#0;n#Main#0;n#!!top" expanded="false" />
@@ -934,7 +872,6 @@
           <folding>
             <element signature="e#1083#1751#0#PHP" expanded="false" />
             <element signature="e#2366#2407#0#PHP" expanded="false" />
-            <element signature="n#login#0;n#Main#0;n#!!top" expanded="false" />
             <element signature="n#historial#0;n#Main#0;n#!!top" expanded="false" />
             <element signature="n#load_historial#0;n#Main#0;n#!!top" expanded="false" />
             <element signature="n#load_graph#0;n#Main#0;n#!!top" expanded="false" />
@@ -1081,43 +1018,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/servicio/vacaciones.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="64" column="24" selection-start-line="64" selection-start-column="24" selection-end-line="64" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/controllers/User.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="900">
-          <caret line="60" column="24" selection-start-line="60" selection-start-column="24" selection-end-line="60" selection-end-column="24" />
-          <folding>
-            <element signature="e#2490#3531#0#PHP" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/user/detalle.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1080">
-          <caret line="72" column="165" selection-start-line="72" selection-start-column="165" selection-end-line="72" selection-end-column="165" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/controllers/Servicio.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="9615">
-          <caret line="641" column="0" selection-start-line="641" selection-start-column="0" selection-end-line="641" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/application/models/Solicitudes_model.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="904">
-          <caret line="185" column="33" selection-start-line="185" selection-start-column="13" selection-end-line="185" selection-end-column="33" />
+        <state relative-caret-position="409">
+          <caret line="159" column="47" selection-start-line="159" selection-start-column="47" selection-end-line="159" selection-end-column="47" />
           <folding>
             <element signature="n#getSolicitudById#0;n#Solicitudes_model#0;n#!!top" expanded="false" />
             <element signature="n#getSolicitudByTipoColaborador#0;n#Solicitudes_model#0;n#!!top" expanded="false" />
@@ -1146,14 +1050,51 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/application/controllers/Servicio.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-555">
+          <caret line="641" column="0" selection-start-line="641" selection-start-column="0" selection-end-line="641" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/user/detalle.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="72" column="165" selection-start-line="72" selection-start-column="165" selection-end-line="72" selection-end-column="165" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/controllers/User.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="379">
+          <caret line="385" column="61" selection-start-line="385" selection-start-column="61" selection-end-line="385" selection-end-column="61" />
+          <folding>
+            <element signature="e#2490#3531#0#PHP" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/servicio/vacaciones.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="64" column="24" selection-start-line="64" selection-start-column="24" selection-end-line="64" selection-end-column="24" />
+          <folding>
+            <marker date="1470414530000" expanded="true" signature="7782:7920" ph="..." />
+            <marker date="1470414530000" expanded="true" signature="7812:7848" ph="{...}" />
+            <marker date="1470414530000" expanded="true" signature="7872:7908" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/application/controllers/Main.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="232">
-          <caret line="1002" column="34" selection-start-line="1002" selection-start-column="28" selection-end-line="1002" selection-end-column="34" />
+        <state relative-caret-position="409">
+          <caret line="107" column="29" selection-start-line="107" selection-start-column="21" selection-end-line="107" selection-end-column="29" />
           <folding>
             <element signature="e#1083#1751#0#PHP" expanded="false" />
             <element signature="e#2366#2407#0#PHP" expanded="false" />
-            <element signature="n#login#0;n#Main#0;n#!!top" expanded="false" />
             <element signature="n#historial#0;n#Main#0;n#!!top" expanded="false" />
             <element signature="n#load_historial#0;n#Main#0;n#!!top" expanded="false" />
             <element signature="n#load_graph#0;n#Main#0;n#!!top" expanded="false" />
@@ -1184,6 +1125,17 @@
             <marker date="1470685334000" expanded="true" signature="27803:27824" ph="..." />
             <marker date="1470685334000" expanded="true" signature="27874:27996" ph="..." />
             <marker date="1470685334000" expanded="true" signature="27907:27992" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/servicio/formato_vacaciones.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3015">
+          <caret line="220" column="26" selection-start-line="220" selection-start-column="15" selection-end-line="220" selection-end-column="26" />
+          <folding>
+            <marker date="1470688812000" expanded="true" signature="9476:9541" ph="..." />
+            <marker date="1470688812000" expanded="true" signature="9493:9529" ph="{...}" />
           </folding>
         </state>
       </provider>

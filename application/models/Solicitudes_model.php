@@ -157,7 +157,7 @@ class Solicitudes_model extends CI_Model{
 	}
 
 	function getVacaciones() {
-		return $this->db->where(array('desde <'=>date('Y-m-d'),'estatus'=>4, 'tipo'=>1, 'used'=>0))->get('Solicitudes')->result();
+		return $this->db->where(array('desde <='=>date('Y-m-d'),'estatus'=>4, 'tipo'=>1, 'used'=>0))->get('Solicitudes')->result();
 	}
 
 	function registra_comprobante($datos) {
