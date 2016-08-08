@@ -43,12 +43,14 @@ class User extends CI_Controller {
 
         // datos de vacaciones acumulados
             //echo $data['yo']->de_solicitud;exit;
+            //echo $data['yo']->disp;exit;
         $vs = array(
             "proximo_vencimiento" => 0,
             "recien_generadas" => 0,
             "proporcionales" => $data['yo']->disp,
             "vencimiento_uno" => "",
-            "vencimiento_dos" => ""
+            "vencimiento_dos" => "",
+            "dias_acumulados" => ""
         );
 
         if($vans = $data['user']->vacaciones){
@@ -56,6 +58,7 @@ class User extends CI_Controller {
             $vs['recien_generadas'] = $vans->dias_dos;
             $vs['vencimiento_uno'] = $vans->vencimiento_uno;
             $vs['vencimiento_dos'] = $vans->vencimiento_dos;
+            $vs['dias_acumulados'] = $vans->dias_acumulados;
 
             // Calcular dias en base a solicitudes realizadas y aprobadas
             if($data['yo']->de_solicitud != 0){
@@ -96,7 +99,6 @@ class User extends CI_Controller {
                     }elseif($vs['recien_generadas'] > 0){
                         $vs['recien_generadas'] = $vs['recien_generadas'] + $diasSolicitados;
                         $vs['proximo_vencimiento'] = 0;
-
                         if($vs['recien_generadas'] >= 0){
                             break;
                         }

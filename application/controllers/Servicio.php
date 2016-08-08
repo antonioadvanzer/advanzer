@@ -622,18 +622,25 @@ class Servicio extends CI_Controller {
 			return false;
 	}
 
-	private function actualiza_dias_disponibles($solicitud) {
+	// bajo revisión y reparación
+	public function actualiza_dias_disponibles($solicitud) {
+
 		$acumulados=$this->solicitudes_model->getAcumulados($solicitud->colaborador);
 		$colaborador = $this->user_model->searchById($solicitud->colaborador);
-		if($acumulados){
+
+        if($acumulados){
 			$dias_acumulados=(int)$acumulados->dias_dos+(int)$acumulados->dias_uno-$solicitud->dias;
-			if($solicitud->dias > $acumulados->dias_uno){
-				$datos['dias_uno']=null;
+
+            if($solicitud->dias > $acumulados->dias_uno){
+
+                $datos['dias_uno']=null;
 				$datos['vencimiento_uno']=null;
 				$dias_acumulados=$acumulados->dias_uno - $solicitud->dias;
-				if($acumulados->dias_dos){
+
+                if($acumulados->dias_dos){
 					$dias_acumulados=($acumulados->dias_uno+$acumulados->dias_dos) - $solicitud->dias;
-					if($solicitud->dias > $acumulados->dias_dos+$acumulados->dias_uno){
+
+                    if($solicitud->dias > $acumulados->dias_dos+$acumulados->dias_uno){
 						$datos['dias_dos']=null;
 						$datos['vencimiento_dos']=null;
 					}else{
@@ -643,10 +650,12 @@ class Servicio extends CI_Controller {
 						$datos['vencimiento_dos']=null;
 					}
 				}
-			}else{
+
+            }else{
 				$datos['dias_uno']=$dias_acumulados;
 			}
-		}else{
+
+        }else{
 			$dias_acumulados=$solicitud->dias * -1;
 		}
 		$datos['dias_acumulados']=$dias_acumulados;

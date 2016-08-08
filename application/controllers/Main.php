@@ -70,6 +70,7 @@ class Main extends CI_Controller {
 		
 		$this->vacation_register();
 		$this->vacation_expired();
+		//$this->inicia_vacaciones();
 		
 		$this->layout->title('Advanzer - Inicio');
 		$this->layout->view('main/index', $data);
@@ -768,23 +769,23 @@ class Main extends CI_Controller {
 		endforeach;
 	}
 
-	// Update each row with vacations information
-	public function vacation_register() {
+	// Old function to update vacations information by employed
+	public function vacation_registerPT() {
 		$colaboradores=$this->user_model->getPagination(null);
 
 		foreach ($colaboradores as $colaborador):
 			
 			$aniversario = date('m-d',strtotime($colaborador->fecha_ingreso));
 
-			/*$ingreso = new DateTime($colaborador->fecha_ingreso);
+			$ingreso = new DateTime($colaborador->fecha_ingreso);
 			$hoy = new DateTime(date('Y-m-d'));
 			$diferencia = $ingreso->diff($hoy);
 			$ingreso->add(new DateInterval('P'.$diferencia->y.'Y'));
 			$actualidad = new DateTime($ingreso->format('Y-m-d'));
 			$actualidad->add(new DateInterval('P18M'));
-			$caducidad = $actualidad->format('Y-m-d');*/
+			$caducidad = $actualidad->format('Y-m-d');
 			
-			//echo $colaborador->id."<br>".$colaborador->nombre."<br>Ingreso: ".$colaborador->fecha_ingreso."<br>Años: ".$diferencia->y."<br>Cumplimiento: ".$ingreso->format('Y-m-d')."<br>Caducidad: ".$caducidad."<br><br>";
+			echo $colaborador->id."<br>".$colaborador->nombre."<br>Ingreso: ".$colaborador->fecha_ingreso."<br>Años: ".$diferencia->y."<br>Cumplimiento: ".$ingreso->format('Y-m-d')."<br>Caducidad: ".$caducidad."<br><br>";
 //-----------------------------
 			/*echo "<br>".$colaborador->id."<br>".$colaborador->nombre."<br>Ingreso: ".$colaborador->fecha_ingreso;
 			$fecha = new DateTime($colaborador->fecha_ingreso);
@@ -861,7 +862,56 @@ class Main extends CI_Controller {
 			endif;
 
 		endforeach;
-//exit;
+exit;
+	}
+
+	// Update each row with vacations information
+	public function vacation_register() {
+
+		// Get all users
+		$colaboradores=$this->user_model->getPagination(null);
+
+		foreach ($colaboradores as $colaborador){
+
+			//Calculo de aniversario y expiracion de vacaciones generadas
+			$ingreso = new DateTime($colaborador->fecha_ingreso);
+			$hoy = new DateTime(date('Y-m-d'));
+			$diferencia = $ingreso->diff($hoy);
+			$ingreso->add(new DateInterval('P'.$diferencia->y.'Y'));
+			$actualidad = new DateTime($ingreso->format('Y-m-d'));
+			$actualidad->add(new DateInterval('P18M'));
+			$caducidad = $actualidad->format('Y-m-d');
+
+			$dias = 0;
+
+			//Calculo de dias correspondientes al año transcurrido
+			switch ($diferencia->y):
+				case 1: $dias=6;										break;
+				case 2: $dias=8;										break;
+				case 3: $dias=10;										break;
+				case 4: $dias=12;										break;
+				case 5:case 6:case 7:case 8:case 9: $dias=14;			break;
+				case 10:case 11:case 12:case 13:case 14: $dias=16;		break;
+				case 15:case 16:case 17:case 18:case 19: $dias=18;		break;
+				case 20:case 21:case 22:case 23:case 24: $dias=20;		break;
+				default: $dias=22;										break;
+			endswitch;
+			echo "<br>"."<br>".$colaborador->id."<br>".$colaborador->nombre;
+			if( ($acumulados = $this->solicitudes_model->getAcumulados($colaborador->id) ) && ($diferencia->y > $acumulados->anos) ){
+				//echo "<br>Aniversario";
+				$datos['dias_dos'] = $dias;
+				$datos['vencimiento_dos'] = $caducidad;
+				//$datos['dias_acumulados'] = (int)$acumulados->dias_acumulados + (int)$dias;
+			}elseif(!$acumulados && $diferencia->y == 1){
+				//echo "<br>Primer Aniversario";
+				$datos['dias_uno'] = $dias;
+				$datos['vencimiento_uno'] = $caducidad;
+				//$datos['dias_acumulados'] = $dias;
+			}else{
+				//echo "<br>Normal";
+			}
+
+		}//exit;
 	}
 
 	public function solicitud_expired() {
@@ -885,10 +935,66 @@ class Main extends CI_Controller {
 	}
 
 	public function inicia_vacaciones() {
+
+		// Get all awaiting request
 		$vacaciones = $this->solicitudes_model->getVacaciones();
-		foreach ($vacaciones as $registro) :
-			$solicitud = $this->solicitudes_model->getSolicitudById($registro->id);
-			$this->actualiza_dias_disponibles($solicitud);
-		endforeach;
+
+		//var_dump($vacaciones);exit;
+
+		foreach ($vacaciones as $solicitud) {
+
+			//echo $solicitud->colaborador;
+
+			//$solicitud = $this->solicitudes_model->getSolicitudById($registro->id);
+			//$this->actualiza_dias_disponibles($solicitud);
+
+			$diasSolicitados = $solicitud->dias;
+
+			// if exists row with vacations by user
+			if($acumulados = $this->solicitudes_model->getAcumulados($colaborador = $solicitud->colaborador)){
+
+				$datos = array(
+					"dias_uno" => $acumulados->dias_uno,
+					"dias_dos" =>  $acumulados->dias_dos,
+					"vencimiento_uno" => $acumulados->vencimiento_uno,
+					"vencimiento_dos" => $acumulados->vencimiento_dos,
+					"dias_acumulados" => $acumulados->dias_acumulados
+				);
+
+				$diasSolicitados*=(-1);
+
+				while(true){
+
+					if($datos['dias_uno'] > 0){
+						$datos['dias_uno'] = $datos['dias_uno'] + $diasSolicitados;
+						if($datos['dias_uno'] >= 0){
+							break;
+						}
+						$diasSolicitados = $datos['dias_uno'];
+					}elseif($datos['dias_dos'] > 0){
+						$datos['dias_dos'] = $datos['dias_dos'] + $diasSolicitados;
+						$datos['dias_uno'] = 0;
+						if($datos['dias_dos'] >= 0){
+							break;
+						}
+						$diasSolicitados = $datos['dias_dos'];
+					}else{
+						$datos['dias_acumulados'] = $datos['dias_acumulados'] + $diasSolicitados;
+						$vs['dias_uno'] = 0;
+						$vs['dias_dos'] = 0;
+						break;
+					}
+
+				}
+
+				$datos['vencimiento_uno'] = ($datos['dias_uno']  == 0) ? null : $datos['vencimiento_uno'];
+				$datos['vencimiento_dos'] = ($datos['dias_dos']  == 0) ? null : $datos['vencimiento_dos'];
+
+				$this->solicitudes_model->actualiza_dias_vacaciones($colaborador,$datos);
+
+			}
+			$this->solicitudes_model->useSolicitudVacation($solicitud->id);
+		}
+		//exit;
 	}
 }

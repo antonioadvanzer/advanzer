@@ -61,13 +61,26 @@
 			  		</tr>
 			  		<tr>
 			  			<th>Proporcionales</th>
-			  			<td><input class="form-control" type="text" value="<?= $vs['proporcionales']?>" id="diasProporcionalea"></td>
+			  			<td><input class="form-control" type="text" value="<?= $vs['proporcionales']?>" id="diasProporcionales"></td>
 			  		</tr>
+					<?php if($vs['dias_acumulados']<0){?>
+					<tr>
+						<th>Pendientes</th>
+						<td><input class="form-control" type="text" value="<?= -$vs['dias_acumulados']?>" id="diasProporcionales"></td>
+					</tr>
+					<tr class="alert alert-success">
+						<td><h3>Total</h3></td>
+						<td><h3><?= ($rs = (($vs['proximo_vencimiento'] + $vs['recien_generadas'] + $vs['proporcionales']) + ($vs['dias_acumulados']))) < 0 ? 0 : $rs ?></h3></td>
+						<!--<td><h3><?= ( $vs['proximo_vencimiento'] + $vs['recien_generadas'] + $vs['proporcionales'] )?></h3></td>-->
+						<td></td>
+					</tr>
+					<?php }else{ ?>
 					<tr class="alert alert-success">
 						<td><h3>Total</h3></td>
 						<td><h3><?= ( $vs['proximo_vencimiento'] + $vs['recien_generadas'] + $vs['proporcionales'] )?></h3></td>
 						<td></td>
 					</tr>
+					<?php } ?>
 			  	</tbody>
 			  </table>
 			</div>

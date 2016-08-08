@@ -61,7 +61,8 @@ class Solicitudes_model extends CI_Model{
 			return $result->first_row()->dias_acumulados;
 		}else{
 			//$result = $this->db->select('dias')->from('Solicitudes')->where(array('tipo'=>1,'colaborador'=>$colaborador))->where_not_in('estatus',array(0,3))->get();
-            $result = $this->db->select('SUM(dias) AS dias', FALSE)->from('Solicitudes')->where(array('tipo'=>1,'colaborador'=>$colaborador))->where_not_in('estatus',array(0,3))->get();
+            //$result = $this->db->select('SUM(dias) AS dias', FALSE)->from('Solicitudes')->where(array('tipo'=>1,'colaborador'=>$colaborador))->where_not_in('estatus',array(0,3))->get();
+            $result = $this->db->select('SUM(dias) AS dias', FALSE)->from('Solicitudes')->where(array('tipo'=>1,'colaborador'=>$colaborador,'desde >' => date('Y-m-d')))->where_not_in('estatus',array(0,3))->get();
             if($result->num_rows() == 1){
 				return (int)$result->first_row()->dias*-1;
 			}else{
@@ -156,7 +157,7 @@ class Solicitudes_model extends CI_Model{
 	}
 
 	function getVacaciones() {
-		return $this->db->where(array('desde'=>'CURDATE()','estatus'=>3))->get('Vacaciones')->result();
+		return $this->db->where(array('desde <'=>date('Y-m-d'),'estatus'=>4, 'tipo'=>1, 'used'=>0))->get('Solicitudes')->result();
 	}
 
 	function registra_comprobante($datos) {
@@ -181,4 +182,9 @@ class Solicitudes_model extends CI_Model{
 		$datos['not_ch'] = $alert;
 		$this->db->where('id',$id)->update('Solicitudes',$datos);
 	}
+
+	function useSolicitudVacation($id){
+        $datos['used'] = 1;
+        $this->db->where('id',$id)->update('Solicitudes',$datos);
+    }
 }
