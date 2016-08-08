@@ -16,7 +16,7 @@ class Main extends CI_Controller {
     public function index() {
     	$this->valida_sesion();
     	$data=array();
-    	
+
 		$data['colaborador'] = $this->user_model->searchById($this->session->userdata('id'));
     	$data['evaluacion'] = $this->evaluacion_model->getEvaluacionAnual();
     	
@@ -70,7 +70,7 @@ class Main extends CI_Controller {
 		
 		$this->vacation_register();
 		$this->vacation_expired();
-		//$this->inicia_vacaciones();
+		$this->inicia_vacaciones();
 		
 		$this->layout->title('Advanzer - Inicio');
 		$this->layout->view('main/index', $data);
@@ -882,7 +882,8 @@ exit;
 			$actualidad->add(new DateInterval('P18M'));
 			$caducidad = $actualidad->format('Y-m-d');
 
-			$dias = 0;
+			$dias = null;
+			$datos = array();
 
 			//Calculo de dias correspondientes al año transcurrido
 			switch ($diferencia->y):
@@ -896,20 +897,51 @@ exit;
 				case 20:case 21:case 22:case 23:case 24: $dias=20;		break;
 				default: $dias=22;										break;
 			endswitch;
-			echo "<br>"."<br>".$colaborador->id."<br>".$colaborador->nombre;
+
+			//echo "<br>"."<br>".$colaborador->id."<br>".$colaborador->nombre;
+
 			if( ($acumulados = $this->solicitudes_model->getAcumulados($colaborador->id) ) && ($diferencia->y > $acumulados->anos) ){
 				//echo "<br>Aniversario";
-				$datos['dias_dos'] = $dias;
+
+				if(($acumulados = $acumulados->dias_acumulados) < 0){
+
+					$dias+=$acumulados;
+
+					if($dias < 0){
+						$datos['dias_dos'] = 0;
+						$datos['vencimiento_dos'] = null;
+						$datos['dias_acumulados'] = $dias;
+					}else{
+						$datos['dias_dos'] = $dias;
+						$datos['vencimiento_dos'] = $caducidad;
+						$datos['dias_acumulados'] = $acumulados->dias_uno + $dias;
+					}
+				}else{
+					$datos['dias_dos'] = $dias;
+					$datos['vencimiento_dos'] = $caducidad;
+					$datos['dias_acumulados'] = $acumulados->dias_uno + $dias;
+				}
+
+				/*$datos['dias_dos'] = $dias;
 				$datos['vencimiento_dos'] = $caducidad;
-				//$datos['dias_acumulados'] = (int)$acumulados->dias_acumulados + (int)$dias;
+				$datos['dias_acumulados'] = (int)$acumulados->dias_acumulados + (int)$dias;
+				$datos['anos'] = $diferencia->y;*/
+
+				$this->solicitudes_model->actualiza_dias_vacaciones($colaborador->id,$datos);
 			}elseif(!$acumulados && $diferencia->y == 1){
 				//echo "<br>Primer Aniversario";
+
 				$datos['dias_uno'] = $dias;
 				$datos['vencimiento_uno'] = $caducidad;
-				//$datos['dias_acumulados'] = $dias;
+				$datos['dias_acumulados'] = $dias;
+				$datos['anos'] = $diferencia->y;
+
+				$this->solicitudes_model->actualiza_dias_vacaciones($colaborador->id,$datos);
 			}else{
 				//echo "<br>Normal";
 			}
+
+			//$this->solicitudes_model->actualiza_dias_vacaciones($colaborador->id,$datos);
 
 		}//exit;
 	}
@@ -968,6 +1000,7 @@ exit;
 					if($datos['dias_uno'] > 0){
 						$datos['dias_uno'] = $datos['dias_uno'] + $diasSolicitados;
 						if($datos['dias_uno'] >= 0){
+							$datos['dias_acumulados'] = $datos['dias_acumulados'] + $diasSolicitados;
 							break;
 						}
 						$diasSolicitados = $datos['dias_uno'];
@@ -975,6 +1008,7 @@ exit;
 						$datos['dias_dos'] = $datos['dias_dos'] + $diasSolicitados;
 						$datos['dias_uno'] = 0;
 						if($datos['dias_dos'] >= 0){
+							$datos['dias_acumulados'] = $datos['dias_acumulados'] + $diasSolicitados;
 							break;
 						}
 						$diasSolicitados = $datos['dias_dos'];
