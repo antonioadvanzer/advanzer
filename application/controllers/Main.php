@@ -903,9 +903,9 @@ exit;
 			if( ($acumulados = $this->solicitudes_model->getAcumulados($colaborador->id) ) && ($diferencia->y > $acumulados->anos) ){
 				//echo "<br>Aniversario";
 
-				if(($acumulados = $acumulados->dias_acumulados) < 0){
+				if(($acumulado = $acumulados->dias_acumulados) < 0){
 
-					$dias+=$acumulados;
+					$dias+=$acumulado;
 
 					if($dias < 0){
 						$datos['dias_dos'] = 0;
@@ -920,6 +920,7 @@ exit;
 					$datos['dias_dos'] = $dias;
 					$datos['vencimiento_dos'] = $caducidad;
 					$datos['dias_acumulados'] = $acumulados->dias_uno + $dias;
+					 
 				}
 
 				/*$datos['dias_dos'] = $dias;
