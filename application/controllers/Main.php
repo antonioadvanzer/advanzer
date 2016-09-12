@@ -11,6 +11,8 @@ class Main extends CI_Controller {
     	$this->load->model('evaluacion_model');
     	$this->load->model('requisicion_model');
     	$this->load->model('solicitudes_model');
+    	$this->load->model('valores_model');
+
     }
  
     public function index() {
@@ -71,7 +73,11 @@ class Main extends CI_Controller {
 		$this->vacation_register();
 		$this->vacation_expired();
 		$this->inicia_vacaciones();
-		
+
+		//No tocar, solo modo prueba -------
+		//$this->cargarDatosValores();
+		//----------------------------------
+
 		$this->layout->title('Advanzer - Inicio');
 		$this->layout->view('main/index', $data);
 	}
@@ -1032,4 +1038,59 @@ exit;
 		}
 		//exit;
 	}
+
+	// Solo uso para cargar datos iniciales
+	private function cargarDatosValores(){
+
+		$colaboradores = $this->user_model->getPagination(null);
+
+		foreach ($colaboradores as $colaborador){
+			
+			$this->valores_model->create_actividades_mes($colaborador->id,1);
+				$this->valores_model->create_actividades_mes($colaborador->id,2);
+					$this->valores_model->create_actividades_mes($colaborador->id,3);
+						$this->valores_model->create_actividades_mes($colaborador->id,4);
+							$this->valores_model->create_actividades_mes($colaborador->id,5);
+								$this->valores_model->create_actividades_mes($colaborador->id,6);
+		}
+	}
+
+	public function runActivity(){
+
+		$this->valida_sesion();
+
+		/* valor en numero, actividad
+		 *
+		 * 1-5 Valores
+		 *
+		 * a1 = pieza 1, a2 = pieza 2, a3 = pieza 3,
+		 *
+		 * */
+		$this->valores_model->update_actividades_mes($this->session->userdata('id'), 1 , 'a1');
+		//-----------------------------
+
+		$this->layout->view('valor/valor');
+	}
+
+	// permitir una descarga de archivo (No utilizado)
+	public function getActivity(){
+		// file_get_contents('assets/valores/Albert_Einstein.pdf'); exit;
+		//var_dump( pathinfo(base_url('assets/valores/Albert_Einstein.pdf')));exit;
+
+		//header("Content-type: application/pdf");
+		//header("Content-disposition: attachment;filename=Albert_Einstein.pdf");
+		//readfile(base_url('assets/valores/Albert_Einstein.pdf'));*/
+
+		//readfile("http://localhost:8080/advanzer/assets/valores/Albert_Einstein.pdf");
+
+		/*ob_clean();
+		$this->load->helper('download');
+		$this->load->helper('file');
+		$data = file_get_contents(base_url().'assets/valores/Albert_Einstein.pdf');
+		$name = 'Albert_Einstein.pdf';
+
+		force_download($name, $data);*/
+
+	}
+
 }
