@@ -92,3 +92,11 @@ $route['vestimenta'] = 'info/vestimenta';
 */
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
+
+// Vista para visualizar progreso en el armado del rompecabezas
+$route['valores_mes'] = 'user/show_uvm';
+// Procedimiento temporal para registrar visitas
+$route['actividad'] = 'main/runActivity';
+// Procedimiento para descargar el archivo de la actividad correspondiente del mes
+// NO UTILIZADO-----
+$route['descargar'] = 'main/getActivity';

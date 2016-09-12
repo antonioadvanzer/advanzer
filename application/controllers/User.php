@@ -14,6 +14,7 @@ class User extends CI_Controller {
         $this->load->model('posicion_model');
         $this->load->model('requisicion_model');
 		$this->load->model('solicitudes_model');
+        $this->load->model('valores_model');
     }
 
     public function index($flag=null){
@@ -40,6 +41,8 @@ class User extends CI_Controller {
 		
 		// Calular vacaciones en base a solicitudes existentes
 		$data['yo'] = $this->calculaVacaciones($id);
+
+        $data['avm'] = $this->valores_model->getRelationActividades($id);
 
         // datos de vacaciones acumulados
             //echo $data['yo']->de_solicitud;exit;
@@ -392,4 +395,12 @@ class User extends CI_Controller {
 		
 		return $result;
 	}
+
+	// Enlace a relación de actividades para cada usuario
+    public function show_uvm(){
+        //$this->valida_acceso();
+        $data['avm'] = $this->valores_model->getRelationActividades($this->session->userdata('id'));
+        $this->layout->title('Advanzer - Valores por Mes');
+        $this->layout->view('user/valor_mes',$data);
+    }
 }

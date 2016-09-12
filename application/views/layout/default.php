@@ -235,6 +235,7 @@
 								<li><a href="<?= base_url('permiso');?>">Permisos de Ausencia</a></li>
 								<!--<li><a href="<?= base_url('viaticos_gastos');?>">Viáticos y Gastos de Viaje</a></li>-->
 								<li><a href="<?= base_url('solicitar_carta');?>">Cartas y Constancias Laborales</a></li>
+								<li><a href="<?= base_url('valores_mes');?>">Valores por Mes</a></li>
 							</ul>
 						</li>
 					</ul>

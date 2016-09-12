@@ -32,6 +32,7 @@
 					<li onclick="pestañeo(5);"><a href="#">Historial de Vacaciones/Permisos</a></li>
 				<?php endif; ?>
 				<li onclick="pestañeo(6);"><a href="#">Consultar días de Vacaciones</a></li>
+				<li onclick="pestañeo(7);"><a href="#">Valores por Mes</a></li>
 			</ul>
 		</div>
 	</nav>
@@ -318,7 +319,7 @@
 		</div>
 	  </div>
   </form>
-  <div class="row" align="center" id="bitacora" style="display:none;">
+  <div class="row" align="center" id="historial" style="display:none;">
 	<table id="tbl" class="table" align="center" data-toggle="table" data-hover="true" data-striped="true">
 		<thead>
 			<tr>
@@ -367,6 +368,91 @@
 	  	onclick="$('#bitacora').hide('slow');$('#update_foto').show('slow');$('#update').show('slow');" style="cursor:pointer;">
 	  	Ver Perfil</label></span>
   </div>
+  <div id="vpm" class="row" align="center" style="display:none">
+	  	<div class="col-md-12">
+	  		<div class="form-group">
+			  <table class="table" style="width:70%">
+			  	<thead>
+			  		<tr>
+			  			<th>Mes</th>
+			  			<th>Valor</th>	
+			  			<th>Actividad 1</th>
+			  			<th>Actividad 2</th>
+			  			<th>Actividad 3</th>
+			  		</tr>
+			  	</thead>
+			  	<tbody>
+			  		<!--<tr>
+			  			<th>Septiembre</th>
+			  			<td>Integridad</td>
+			  			<td></td>
+			  			<td></td>
+			  			<td></td>
+			  		</tr>
+			  		<tr>
+			  			<th>Octubre</th>
+			  			<td>Proactividad</td>
+			  			<td></td>
+			  			<td></td>
+			  			<td></td>
+			  		</tr>
+			  		<tr>
+			  			<th>Noviembre</th>
+			  			<td>Compromiso</td>
+			  			<td></td>
+			  			<td></td>
+			  			<td></td>
+			  		</tr>
+					<tr>
+			  			<th>Diciembre</th>
+			  			<td>Colaboraci&oacute;n</td>
+			  			<td></td>
+			  			<td></td>
+			  			<td></td>
+			  		</tr>
+			  		<tr>
+			  			<th>Enero</th>
+			  			<td>Gesti&oacute;n al Cambio</td>
+			  			<td></td>
+			  			<td></td>
+			  			<td></td>
+			  		</tr>
+			  		<tr>
+			  			<th>Febrero</th>
+			  			<td>Pensamiento Creativo</td>
+			  			<td></td>
+			  			<td></td>
+			  			<td></td>
+			  		</tr>-->
+
+			  		<?php foreach ($avm as $r): ?>
+			  			<tr>
+			  			<th><?= $r->mes ?></th>
+			  			<td><?= $r->nombre ?></td>
+			  			<td>
+			  				<?php if($r->a1):?>
+			  					<img class="img-circle " height="15px" src="<?= base_url("assets/images/check.png");?>">
+			  				<?php endif;?>
+			  			</td>
+			  			<td>
+			  				<?php if($r->a2):?>
+			  					<img class="img-circle " height="15px" src="<?= base_url("assets/images/check.png");?>">
+			  				<?php endif;?>
+		  				</td>
+			  			<td>
+			  				<?php if($r->a3):?>
+			  					<img class="img-circle " height="15px" src="<?= base_url("assets/images/check.png");?>">
+			  				<?php endif;?>
+		  				</td>
+			  			</tr>
+			  		<?php endforeach; ?>
+
+			  	</tbody>
+			  </table>
+			</div>
+		</div>
+		
+	  </div>
 
   <script type="text/javascript">
   
@@ -382,6 +468,7 @@
   				$('#rehab').hide('slow');
   				$('#bitacora').hide('slow');
   				$('#vacaciones').hide('slow');
+  				$('#vpm').hide('slow');
   			break;
   			case 2:
   				$('#update_foto').hide('slow');
@@ -391,6 +478,7 @@
   				$('#rehab').hide('slow');
   				$('#bitacora').hide('slow');
   				$('#vacaciones').hide('slow');
+  				$('#vpm').hide('slow');
   			break;
   			case 3:
   				$('#update_foto').hide('slow');
@@ -400,6 +488,7 @@
   				$('#rehab').hide('slow');
   				$('#bitacora').hide('slow');
   				$('#vacaciones').hide('slow');
+  				$('#vpm').hide('slow');
   			break;
   			case 4:
   				$('#update_foto').hide('slow');
@@ -409,6 +498,7 @@
   				$('#rehab').show('slow');
   				$('#bitacora').hide('slow');
   				$('#vacaciones').hide('slow');
+  				$('#vpm').hide('slow');
   			break;
   			case 5:
   				$('#update_foto').hide('slow');
@@ -418,6 +508,7 @@
   				$('#rehab').hide('slow');
   				$('#bitacora').show('slow');
   				$('#vacaciones').hide('slow');
+  				$('#vpm').hide('slow');
   			break;
   			case 6:
   				$('#update_foto').hide('slow');
@@ -427,6 +518,17 @@
   				$('#rehab').hide('slow');
   				$('#bitacora').hide('slow');
   				$('#vacaciones').show('slow');
+  				$('#vpm').hide('slow');
+  			break;
+  			case 7:
+  				$('#update_foto').hide('slow');
+  				$('#update').hide('slow');
+  				$('#recision').hide('slow');
+  				$('#historial').hide('slow');
+  				$('#rehab').hide('slow');
+  				$('#bitacora').hide('slow');
+  				$('#vacaciones').hide('slow');
+  				$('#vpm').show('slow');
   			break;
   		}
   	}
