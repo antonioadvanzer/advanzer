@@ -154,8 +154,7 @@
                                                         <li class=""><a href="<?= base_url('requisiciones')."/?status=1";?>">Enviadas</a></li>
                                                         <li class=""><a href="<?= base_url('requisiciones')."/?status=2";?>">Aceptadas</a></li>
                                                         <li class=""><a href="<?= base_url('requisiciones')."/?status=3";?>">Autorizadas</a></li>
-                                                        <li class=""><a href="<?= base_url('requisiciones')."/?status=4";?>">Rechazadas</a>
-                                                        </li>
+                                                        <li class=""><a href="<?= base_url('requisiciones')."/?status=4";?>">Rechazadas</a></li>
                                                         <li class=""><a href="<?= base_url('requisiciones')."/?status=0";?>">Canceladas</a></li>
                                                         <li class=""><a href="<?= base_url('requisiciones')."/?status=8";?>">En Proceso</a></li>
                                                         <li class=""><a href="<?= base_url('requisiciones')."/?status=6";?>">Cerradas</a></li>
