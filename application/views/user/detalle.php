@@ -32,7 +32,7 @@
 					<li onclick="pestañeo(5);"><a href="#">Historial de Vacaciones/Permisos</a></li>
 				<?php endif; ?>
 				<li onclick="pestañeo(6);"><a href="#">Consultar días de Vacaciones</a></li>
-				<li onclick="pestañeo(7);"><a href="#">Valores por Mes</a></li>
+				<!--<li onclick="pestañeo(7);"><a href="#">Empresas con Valor</a></li>-->
 			</ul>
 		</div>
 	</nav>
@@ -65,22 +65,22 @@
 			  			<td><input class="form-control" type="text" value="<?= $vs['proporcionales']?>" id="diasProporcionales"></td>
 			  		</tr>
 					<?php if($vs['dias_acumulados']<0){?>
-					<tr>
+					<!--<tr>
 						<th>Pendientes</th>
 						<td><input class="form-control" type="text" value="<?= -$vs['dias_acumulados']?>" id="diasProporcionales"></td>
 					</tr>
 					<tr class="alert alert-success">
 						<td><h3>Total</h3></td>
 						<td><h3><?= ($rs = (($vs['proximo_vencimiento'] + $vs['recien_generadas'] + $vs['proporcionales']) + ($vs['dias_acumulados']))) < 0 ? 0 : $rs ?></h3></td>
-						<!--<td><h3><?= ( $vs['proximo_vencimiento'] + $vs['recien_generadas'] + $vs['proporcionales'] )?></h3></td>-->
+						<!--<td><h3><?= ( $vs['proximo_vencimiento'] + $vs['recien_generadas'] + $vs['proporcionales'] )?></h3></td>--
 						<td></td>
-					</tr>
+					</tr>-->
 					<?php }else{ ?>
-					<tr class="alert alert-success">
+					<!--<tr class="alert alert-success">
 						<td><h3>Total</h3></td>
 						<td><h3><?= ( $vs['proximo_vencimiento'] + $vs['recien_generadas'] + $vs['proporcionales'] )?></h3></td>
 						<td></td>
-					</tr>
+					</tr>-->
 					<?php } ?>
 			  	</tbody>
 			  </table>
@@ -319,7 +319,7 @@
 		</div>
 	  </div>
   </form>
-  <div class="row" align="center" id="historial" style="display:none;">
+  <div id="bitacora" class="row" align="center"  style="display:none;">
 	<table id="tbl" class="table" align="center" data-toggle="table" data-hover="true" data-striped="true">
 		<thead>
 			<tr>
@@ -368,7 +368,7 @@
 	  	onclick="$('#bitacora').hide('slow');$('#update_foto').show('slow');$('#update').show('slow');" style="cursor:pointer;">
 	  	Ver Perfil</label></span>
   </div>
-  <div id="vpm" class="row" align="center" style="display:none">
+  <!--<div id="vpm" class="row" align="center" style="display:none">
 	  	<div class="col-md-12">
 	  		<div class="form-group">
 			  <table class="table" style="width:70%">
@@ -382,49 +382,7 @@
 			  		</tr>
 			  	</thead>
 			  	<tbody>
-			  		<!--<tr>
-			  			<th>Septiembre</th>
-			  			<td>Integridad</td>
-			  			<td></td>
-			  			<td></td>
-			  			<td></td>
-			  		</tr>
-			  		<tr>
-			  			<th>Octubre</th>
-			  			<td>Proactividad</td>
-			  			<td></td>
-			  			<td></td>
-			  			<td></td>
-			  		</tr>
-			  		<tr>
-			  			<th>Noviembre</th>
-			  			<td>Compromiso</td>
-			  			<td></td>
-			  			<td></td>
-			  			<td></td>
-			  		</tr>
-					<tr>
-			  			<th>Diciembre</th>
-			  			<td>Colaboraci&oacute;n</td>
-			  			<td></td>
-			  			<td></td>
-			  			<td></td>
-			  		</tr>
-			  		<tr>
-			  			<th>Enero</th>
-			  			<td>Gesti&oacute;n al Cambio</td>
-			  			<td></td>
-			  			<td></td>
-			  			<td></td>
-			  		</tr>
-			  		<tr>
-			  			<th>Febrero</th>
-			  			<td>Pensamiento Creativo</td>
-			  			<td></td>
-			  			<td></td>
-			  			<td></td>
-			  		</tr>-->
-
+			  		
 			  		<?php foreach ($avm as $r): ?>
 			  			<tr>
 			  			<th><?= $r->mes ?></th>
@@ -452,7 +410,7 @@
 			</div>
 		</div>
 		
-	  </div>
+	 </div>-->
 
   <script type="text/javascript">
   
@@ -520,7 +478,7 @@
   				$('#vacaciones').show('slow');
   				$('#vpm').hide('slow');
   			break;
-  			case 7:
+  			/*case 7:
   				$('#update_foto').hide('slow');
   				$('#update').hide('slow');
   				$('#recision').hide('slow');
@@ -529,7 +487,7 @@
   				$('#bitacora').hide('slow');
   				$('#vacaciones').hide('slow');
   				$('#vpm').show('slow');
-  			break;
+  			break;*/
   		}
   	}
 

@@ -18,7 +18,7 @@ switch($this->session->userdata('empresa')){
 <div class="jumbotron">
 	<div class="container">
 		
-		<div class="col-md-6" align="right"><h2>Valores por Mes</h2></div>
+		<div class="col-md-6" align="center"><h2>EMPRESAS CON VALOR</h2></div>
 	</div>
 </div>
 <div class="container">
@@ -75,7 +75,7 @@ switch($this->session->userdata('empresa')){
 						  		}
 						  ?>
 
-						  	<img class="" height="200px" src="<?= base_url($ip);?>">
+						  	<img class="" height="180px" src="<?= base_url($ip);?>">
 
 						  	<h3><?= $r->nombre ?></h3>
 						  	<h3><?= $r->mes ?></h3>
