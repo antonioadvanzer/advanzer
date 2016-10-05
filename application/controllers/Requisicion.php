@@ -42,7 +42,7 @@ class Requisicion extends CI_Controller {
 		// Evaluamos primero el puesto despues el area, y al final los permisos especiales (tipo de acceso)
 		if((($colaborador->nivel_posicion <= 5) || ($colaborador->tipo == 3) || ($colaborador->tipo == 4)) && ($status == "own")){
 			$option = 1;
-		}elseif((($colaborador->tipo == 4) && ($colaborador->area == 4)) && ($status == "all" || $status == 0 || $status == 1 || $status == 2 || $status == 3 || $status == 4 || $status == 5 || $status == 6 || $status == 7 || $status == 8)){
+		}elseif((($colaborador->tipo == 4) && ($colaborador->area == 4)) && ($status == 10 || $status == 0 || $status == 1 || $status == 2 || $status == 3 || $status == 4 || $status == 5 || $status == 6 || $status == 7 || $status == 8)){
 			$option = 2;
 		}/*elseif(((($tipo = $colaborador->tipo) == 5) || ($tipo == 3)) && ($status == "own")){
 			$option = 1;
@@ -84,7 +84,7 @@ class Requisicion extends CI_Controller {
 	
 	// Verificar las requisiciones actuales, en general
 	private function updateRequisicionExpire(){
-		//$this->requisicion_model->expireRequisicion(30);
+		$this->requisicion_model->expireRequisicion(30);
 	}
 	
 	public function ver($id){
