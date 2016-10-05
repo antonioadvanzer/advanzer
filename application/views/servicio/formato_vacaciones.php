@@ -36,7 +36,7 @@
 				<div class="input-group">
 					<span class="input-group-addon required">Autorizador</span>
 					<select class="selectpicker" data-header="Selecciona al autorizador" data-width="300px" data-live-search="true" 
-						style="max-width:300px;text-align:center;" id="autorizador" required <?php echo ($this->session->userdata('posicion') <= 3) ? "" :"disabled=disabled" ?>>
+						style="max-width:300px;text-align:center;" id="autorizador" required <?php echo ($this->session->userdata('posicion') <= 4) ? "" :"disabled=disabled" ?>>
 						<option value="" disabled selected>-- Selecciona al Jefe Directo / Líder --</option>
 
 						<?php foreach($colaboradores as $colaborador)
@@ -80,10 +80,10 @@
 						<input class="form-control" type="text" id="desde" style="text-align:center;background-color:white;cursor:default" value="<?= date('Y-m-d');?>" required>
 						<span class="input-group-addon required">Hasta</span>
 						<input class="form-control" type="text" id="hasta" style="text-align:center;background-color:white;cursor:default" 
-							value="" readonly required>
+							value="" readonly required disabled>
 						<span class="input-group-addon required">Regresa a Laborar</span>
 						<input class="form-control" type="text" id="regresa" style="text-align:center;background-color:white;cursor:default" 
-							value="" readonly required>
+							value="" readonly required disabled>
 					</div>
 					<br>
 					<div class="input-group">
@@ -292,19 +292,25 @@
 			var fechaFinal = anno+'-'+mes+'-'+dia;
 			return (fechaFinal);
 		}
-		$(document).ready(function() {
+		$(document).ready(function() {//alert(pascua(2016)+" "+lunes_pascua(pascua(2016)));
+			// set location
+			$.datepicker.setDefaults($.datepicker.regional['es']);
+
 			$('#razon').hide('slow');
 			calculaFechas();
 			getColaborador();
 			$('#desde').datepicker({
 				dateFormat: 'yy-mm-dd',
-				minDate: '<?= date("Y-m-d");?>'
+				minDate: '<?= date("Y-m-d");?>',
+				beforeShowDay: noWeekendsOrHolidays
 			});
 			$('#hasta').datepicker({
-				dateFormat: 'yy-mm-dd'
+				dateFormat: 'yy-mm-dd',
+				beforeShowDay: $.datepicker.noWeekends
 			});
 			$('#regresa').datepicker({
-				dateFormat: 'yy-mm-dd'
+				dateFormat: 'yy-mm-dd',
+				beforeShowDay: $.datepicker.noWeekends
 			});
 			$('#hasta').change(function() {
 				hasta=$('#hasta').val();
@@ -382,4 +388,71 @@
 				event.preventDefault();*/
 			});
 		});
+
+		//date and calculate holidays
+		var now = new Date();
+		var disabledDates = [
+			'01/01/'+ now.getFullYear(),
+			'01/04/'+ now.getFullYear(),
+			'16/09/'+ now.getFullYear(),
+			'24/12/'+ now.getFullYear(),
+			'25/12/'+ now.getFullYear(),
+			'31/12/'+ now.getFullYear()
+		];
+
+		function noWeekendsOrHolidays(date) {
+			var noWeekend = $.datepicker.noWeekends(date);
+			if (noWeekend[0]) {
+				return disableDays(date);
+			} else {
+				return noWeekend;
+			}
+		}
+
+		function disableDays(date) {
+			for (var i = 0; i < disabledDates.length; i++) {
+				if (new Date(disabledDates[i]).toString() == date.toString()) {
+					return [false];
+				}
+			}
+			return [true];
+		}
+
+		function pascua($annio) {
+			if      ($annio>1583 && $annio<1699) { $M=22; $N=2; }
+			else if ($annio>1700 && $annio<1799) { $M=23; $N=3; }
+			else if ($annio>1800 && $annio<1899) { $M=23; $N=4; }
+			else if ($annio>1900 && $annio<2099) { $M=24; $N=5; }
+			else if ($annio>2100 && $annio<2199) { $M=24; $N=6; }
+			else if ($annio>2200 && $annio<2299) { $M=25; $N=0; }
+			$a = $annio % 19;
+			$b = $annio % 4;
+			$c = $annio % 7;
+			$d = ((19*$a) + $M) % 30;
+			$e = ((2*$b) + (4*$c) + (6*$d) + $N) % 7;
+			$f = $d + $e;
+			if ($f < 10) {
+				$dia = $f + 22;
+				$mes = 2;
+			} else  {
+				$dia = $f - 9;
+				$mes = 3;
+			};
+			if ($dia == 26 && $mes == 4){
+				$dia = 19;
+			};
+			if ($dia == 25 && $mes == 4 && $d == 28 && $e == 6 && $a > 10){
+				$dia = 18;
+			};
+			$pascua = new Date($annio,$mes,$dia);
+			return $pascua;
+		};
+
+		function lunes_pascua($pascua){
+			$time = $pascua.getTime();
+			$dias = 6*24*60*60*1000 //recuerda que en javascript se expresa en milisegundos
+			$lunes = $time-$dias;
+			$lunes = new Date($lunes);
+			return $lunes;
+		}
 	</script>

@@ -45,9 +45,9 @@ class Requisicion_model extends CI_Model{
 			elseif($colaborador->nivel_posicion <= 3)
 				$this->db->or_where('R.director',$colaborador->id);
 		endif;*/
-		
+
 		// Determinate requisiciones status
-		if($status!="all"):
+		if(($status >= 0) && ($status <= 8)):
 			$this->db->where('R.estatus',$status);
 		endif;
 				
@@ -103,7 +103,7 @@ class Requisicion_model extends CI_Model{
 		
 		$datos['estatus'] = 0;
 		$datos['razon'] = "Requisición fuera del rango de espera";
-		$this->db->where("((datediff(now(),fecha_solicitud))>".$time.") and ((estatus=1) or (estatus=2)) and (razon!='')")->update('Requisiciones',$datos);
+		$this->db->where("((datediff(now(),fecha_solicitud))>".$time.") and (estatus=1) and (razon!='')")->update('Requisiciones',$datos);
 		
 		//$this->db->where()->update('Requisiciones',$datos)
 		

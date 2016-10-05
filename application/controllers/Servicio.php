@@ -247,7 +247,7 @@ class Servicio extends CI_Controller {
 	}
 	
 	public function vacaciones() {
-		
+
 		$data['yo'] = $this->calculaVacaciones($this->session->userdata('id'));
 		$this->layout->title('Advanzer - Vacaciones');
 		$this->layout->view('servicio/vacaciones',$data);
