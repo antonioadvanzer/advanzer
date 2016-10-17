@@ -36,13 +36,14 @@
 				<div class="input-group">
 					<span class="input-group-addon required">Autorizador</span>
 					<select class="selectpicker" data-header="Selecciona al autorizador" data-width="300px" data-live-search="true" 
-						style="max-width:300px;text-align:center;" id="autorizador" required <?php echo ($this->session->userdata('posicion') <= 4) ? "" :"disabled=disabled" ?>>
+						style="max-width:300px;text-align:center;" id="autorizador" required <?php //echo ($this->session->userdata('posicion') <= 4) ? "" :"disabled=disabled" ?>>
 						<option value="" disabled selected>-- Selecciona al Jefe Directo / Líder --</option>
-
-						<?php foreach($colaboradores as $colaborador)
-							if($colaborador->id != $this->session->userdata('id')): ?>
+						
+						<?php foreach($colaboradores as $colaborador):
+							if(($colaborador->id != $this->session->userdata('id')) && ($colaborador->nivel_posicion <= 4)): ?>
 								<option value="<?= $colaborador->id;?>" <?php if($colaborador->id==$yo->jefe)echo"selected";?>><?= $colaborador->nombre;?></option>
-						<?php endif; ?>
+						<?php endif;
+							endforeach; ?>
 					</select>
 				</div>
 			</div>
