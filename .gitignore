@@ -4,3 +4,8 @@
 */cache/*
 */cache/!index.html
 */cache/!.htaccess
+
+*/ files will be ignored
+
+application/config/database.php
+application/views/main/login.php
