@@ -9,7 +9,11 @@ class Evaluacion_model extends CI_Model{
 	}
 
 	function getInfoCaptura() {
-		return $this->db->where(array('accion'=>3,'descripcion'=>$this->session->userdata('tipo')))->get('Bitacora')->result();
+	    //print_r($this->getEvaluacionAnualVigente()->inicio);exit;
+	    //print_r(array('accion'=>3,'descripcion'=>$this->session->userdata('tipo')));
+        //print_r($this->db->where(array('accion'=>3,'descripcion'=>$this->session->userdata('tipo')))->get('Bitacora')->result());exit;
+        //return $this->db->where(array('accion'=>3,'descripcion'=>$this->session->userdata('tipo')))->get('Bitacora')->result();
+        return $this->db->where(array('accion'=>3,'descripcion'=>$this->session->userdata('tipo'),'fecha>='=>$this->getEvaluacionAnualVigente()->inicio))->get('Bitacora')->result();
 	}
 
 	function getComportamientoByCompetencia($competencia,$posicion,$asignacion=null) {
@@ -1085,7 +1089,7 @@ class Evaluacion_model extends CI_Model{
 	}
 
 	function getEvaluacionAnualVigente() {
-		$result = $this->db->select('MAX(id) id,anio')->where_in('estatus',array(1))
+		$result = $this->db->select('MAX(id) id,anio, inicio,fin')->where_in('estatus',array(1))
 			->where(array('tipo'=>1,'inicio <='=>date('Y-m-d'),'fin >='=>date('Y-m-d')))->get('Evaluaciones');
 		if($result->num_rows() != 0)
 			return $result->first_row();

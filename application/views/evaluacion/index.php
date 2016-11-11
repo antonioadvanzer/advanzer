@@ -84,7 +84,7 @@
 								if(isset($colab->feedback->estatus)){
 									if($colab->feedback->estatus == 1) echo"Enviado"; 
 									elseif($colab->feedback->estatus == 2) echo"Enterado";
-									else echo"Pendiente";
+									else echo"En Proceso";
 								}else echo"Pendiente";?>
 							</small></td>
 						</tr>
