@@ -19,7 +19,8 @@
 	</div>
 	<hr>
 	<?php if(isset($evaluacion)):
-		if(count($info_archivos) == 0):?>
+		//if(count($info_archivos) == 0):
+		if(empty($info_archivos)):?>
 			<div class="row">
 				<div class="col-md-12">
 					<h3><b>Colaboradores:</b></h3>

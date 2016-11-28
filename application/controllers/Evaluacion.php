@@ -15,7 +15,7 @@ class Evaluacion extends CI_Controller {
     }
 
     //basicas
-    public function index() {
+    public function index() {//print_r($this->evaluacion_model->getEvaluacionAnualVigente());exit;
         $this->valida_acceso();
         $data['colaboradores'] = $this->evaluacion_model->getEvaluados();
         $this->layout->title('Advanzer - Evaluaciones');
@@ -121,10 +121,16 @@ class Evaluacion extends CI_Controller {
 
     public function ci() {
         $this->valida_acceso('ci');
-        $data['colaboradores'] = $this->evaluacion_model->getEvaluados();
-        $data['info_archivos'] = $this->evaluacion_model->getInfoCaptura();
-        //var_dump($data['info_archivos']);exit;
-        $data['evaluacion'] = $this->evaluacion_model->getEvaluacionById($this->evaluacion_model->getEvaluacionAnual());
+
+        $data['colaboradores'] = null;
+        $data['info_archivos'] = null;
+        $data['evaluacion'] = null;
+        
+        if($this->evaluacion_model->getEvaluacionAnualVigente()){
+            $data['evaluacion'] = $this->evaluacion_model->getEvaluacionById($this->evaluacion_model->getEvaluacionAnual());
+            $data['colaboradores'] = $this->evaluacion_model->getEvaluados();
+            $data['info_archivos'] = $this->evaluacion_model->getInfoCaptura($this->evaluacion_model->getEvaluacionAnual());
+        }
         $this->layout->title('Advanzer - Compromisos Internos');
         $this->layout->view('evaluacion/ci',$data);
     }

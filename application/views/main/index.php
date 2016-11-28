@@ -85,7 +85,7 @@
 									<li><a href="<?= base_url('requisiciones')."/?status=own";?>"><b>Requisiciones <span class="badge"><?php /*if($count>0) echo $count;*/ echo $rp;?></span></b></a></li>
 								<?php endif;
 								if($evaluacion): ?>
-									<li><a href="<?= base_url("evaluar");?>">Feedback</a></li>
+									<li><a href="<?= base_url("evaluar");?>"><?= $this->session->userdata('evaluacion')?'Evaluaci&oacute;n de Desempeño':'Feedback';?></a></li>
 								<?php endif;
 								if($this->session->userdata('posicion') <= 8 && !in_array($this->session->userdata('id'), array(1,2,51))): ?>
 									<li><a href="<?= base_url("evaluacion/perfil");?>">¿Qué me evalúan?</a></li>

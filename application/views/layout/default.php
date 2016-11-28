@@ -224,7 +224,7 @@
                                     <li class=""><a href="<?= base_url('requisiciones')."/?status=own";?>">Requisiciones</a></li>
 								<?php endif;?>
 									<!--<li><a href="<?= base_url('evaluar');?>">Feedback</a></li>-->
-                                    <li><a href="<?= base_url('evaluar');?>">Evaluaci&oacute;n</a></li>
+                                    <li><a href="<?= base_url('evaluar');?>"><?= $this->session->userdata('evaluacion')?'Evaluaci&oacute;n':'Feedback';?></a></li>
 								<?php if(in_array($this->session->userdata('tipo'), array(1,2,4,5,6))): ?>
 									<li><a href="<?= base_url('evaluacion/ci');?>">Compromisos Internos</a></li>
 								<?php endif;

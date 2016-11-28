@@ -29,10 +29,12 @@
 									<div class="col-md-6">
 										<select class="form-control" style="max-width:160px;" id="anio">
 											<option selected disabled>- Selecciona año -</option>
-											<?php foreach($info as $evaluacion)
-												if($evaluacion->flag==1): ?>
+											<?php //print_r($info);exit;
+											foreach($info as $evaluacion){
+												//if($evaluacion->flag==1): ?>
 													<option><?= $evaluacion->anio;?></option>
-												<?php endif; ?>
+											<?php //endif;
+											}?>
 										</select>
 									</div>
 								<?php else: ?>
@@ -41,11 +43,13 @@
 									</div>
 								<?php endif; ?>
 								<div align="center"><div id="cargando" style="display:none; color: green;">
-									<img src="<?= base_url('assets/images/loading.gif');?>"></div></div>
-								<div class="col-md-6" style="display:none" id="result"></div>
+									<img src="<?= base_url('assets/images/loading.gif');?>"></div>
+                                </div>
+
 							</div>
 						</div>
 					</div>
+                    <div id="result" class="col-md-12" style="display:none" ></div>
 					<div id="resultados">
 						<div class="row" id="chart">
 							<div class="col-md-12">
@@ -150,6 +154,7 @@
 						$('#cargando').show();
 					},
 					success: function(data) {
+						console.log(data);
 						$('#cargando').hide();
 						$("#result").show().html(data);
 					}
@@ -166,7 +171,8 @@
 						$('#chart').hide('slow');
 					},
 					success: function (data) {
-						console.log(data.data);
+						console.log(data);
+						//console.log(data.data);
 						$('#resultados').show('slow');
 						if(data.data != undefined){
 							$('#chart').show('slow');

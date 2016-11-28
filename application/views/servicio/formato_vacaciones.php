@@ -40,7 +40,7 @@
 						<option value="" disabled selected>-- Selecciona al Jefe Directo / Líder --</option>
 						
 						<?php foreach($colaboradores as $colaborador):
-							if(($colaborador->id != $this->session->userdata('id')) && ($colaborador->nivel_posicion <= 4)): ?>
+							if(($colaborador->id != $this->session->userdata('id')) && ($colaborador->nivel_posicion <= 5)): ?>
 								<option value="<?= $colaborador->id;?>" <?php if($colaborador->id==$yo->jefe)echo"selected";?>><?= $colaborador->nombre;?></option>
 						<?php endif;
 							endforeach; ?>
