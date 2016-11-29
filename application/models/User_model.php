@@ -8,6 +8,21 @@ class User_model extends CI_Model{
 		parent::__construct();
 	}
 
+    function getUserException(array $users) {
+
+        $query = "";
+        $c = count($users);
+        foreach($users as $u){
+            $query.=" id=".$u." ";
+            $c--;
+
+            if($c != 0){
+                $query.="or";
+            }
+        }
+
+        return $this->db->where($query)->get('Users')->result();
+    }
 
 	function solicitudesByColaborador($colaborador,$flag=null) {
 		$this->db->select('S.*,U.nombre')->from('Solicitudes S')->join('Users U','U.id = S.autorizador','LEFT OUTER')->where("(S.colaborador = $colaborador)")->order_by('S.fecha_solicitud','desc');		

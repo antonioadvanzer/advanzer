@@ -44,6 +44,9 @@
 								<option value="<?= $colaborador->id;?>" <?php if($colaborador->id==$yo->jefe)echo"selected";?>><?= $colaborador->nombre;?></option>
 						<?php endif;
 							endforeach; ?>
+                        <?php foreach($autorizadores as $aut):?>
+                            <option value="<?= $aut->id;?>" <?php if($aut->id==$yo->jefe)echo"selected";?>><?= $aut->nombre;?></option>
+                        <?php endforeach; ?>
 					</select>
 				</div>
 			</div>
@@ -226,14 +229,23 @@
 					data: {'colaborador':colaborador,'tipo':1},
 					success: function(data){
 						var returnedData = JSON.parse(data);
+
+						/*alert(returnedData['maxdays']
+							+" "+returnedData['acumulados']['dias_uno']
+							+" "+returnedData['acumulados']['dias_dos']
+							+" "+returnedData['acumulados']['dias_acumulados']
+							+" "+returnedData['disponibles']
+							+" "+returnedData['extra']);*/
+
 						$('#ochoMeses').val(returnedData['ochoMeses']);
 						$('#autorizador').val(returnedData['jefe']);
 						$('#autorizador').selectpicker('refresh');
-						$('#disponibles').val(returnedData['disponibles']);
+						//$('#disponibles').val(returnedData['disponibles']);
+						$('#disponibles').val(returnedData['maxdays']);
 						$('#dias').empty();
-						if(returnedData['acumulados']['dias_acumulados'] > 0){
+						/*if(returnedData['acumulados']['dias_acumulados'] > 0){
 							$('#disponibles').val(parseInt(returnedData['acumulados']['dias_acumulados']) + parseInt($('#disponibles').val()));
-						}
+						}*/
 						for (var i = 1; i <= (parseInt($('#disponibles').val())+parseInt(returnedData['extra'])); i++) {
 							$('#dias').append(new Option(i,i,true,true));
 						}

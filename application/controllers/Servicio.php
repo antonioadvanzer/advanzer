@@ -240,9 +240,10 @@ class Servicio extends CI_Controller {
 			$result->de_solicitud=$dias_disponibles;
 			$result->disponibles += (int)$dias_disponibles;
 		}
-		
+
 		$result->acumulados=$this->solicitudes_model->getAcumulados($result->id);
 		//var_dump($result->acumulados);exit;
+
 		return $result;
 	}
 	
@@ -257,6 +258,12 @@ class Servicio extends CI_Controller {
 		$data=array();
 		$data['yo']=$this->user_model->searchById($this->session->userdata('id'));
 		$data['colaboradores']=$this->user_model->getAll();
+        //print_r($data['colaboradores']);exit;
+
+        $data['autorizadores'] = $this->user_model->getUserException(array(5,21));
+
+        //print_r($data['autorizadores']);exit;
+
 		$this->layout->title('Advanzer - Solicita Vacaciones');
 		$this->layout->view('servicio/formato_vacaciones',$data);
 	}
@@ -329,15 +336,23 @@ class Servicio extends CI_Controller {
 			$result->fecha_minima = date('Y-m-d');
 		else
 			$result->fecha_minima = $fecha_minima;
-		$ochoMeses = strtotime ( '+8 month' , strtotime ( $result->fecha_ingreso ) ) ;
+
+        $ochoMeses = strtotime ( '+8 month' , strtotime ( $result->fecha_ingreso ) ) ;
 		$ochoMeses = date ( 'Y-m-d' , $ochoMeses );
 		$ochoMeses = new DateTime($ochoMeses);
-		$result->disponibles=floor(($result->diff->days-($result->diff->y*365))*$dias2/365);
+
+        //$result->disponibles=floor(($result->diff->days-($result->diff->y*365))*$dias2/365);
+        $result->disponibles = floor(($dias2/12) * $result->diff->m);
 		$result->extra=$dias2-$result->disponibles;
-		if($dias_disponibles=$this->solicitudes_model->getDiasDisponibles($result->id))
+
+        if($dias_disponibles=$this->solicitudes_model->getDiasDisponibles($result->id))
 			$result->disponibles += (int)$dias_disponibles;
 		$result->acumulados=$this->solicitudes_model->getAcumulados($result->id);
-		if($hoy->diff($ochoMeses)->format('%r'))
+
+        $result->maxdays = ($result->acumulados ? $result->disponibles + $result->acumulados->dias_uno + $result->acumulados->dias_dos : $result->disponibles);
+        //$result->maxdays = 10;
+
+        if($hoy->diff($ochoMeses)->format('%r'))
 			$result->ochoMeses=1;
 		else
 			$result->ochoMeses=0;
