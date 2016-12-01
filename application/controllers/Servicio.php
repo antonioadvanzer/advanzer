@@ -260,7 +260,7 @@ class Servicio extends CI_Controller {
 		$data['colaboradores']=$this->user_model->getAll();
         //print_r($data['colaboradores']);exit;
 
-        $data['autorizadores'] = $this->user_model->getUserException(array(5,21));
+        $data['autorizadores'] = $this->user_model->getUserException(array(5,21,33));
 
         //print_r($data['autorizadores']);exit;
 
