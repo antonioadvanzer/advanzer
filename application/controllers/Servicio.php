@@ -615,7 +615,7 @@ class Servicio extends CI_Controller {
 			'smtp_host' => 'ssl://smtp.gmail.com',
 			'smtp_port' => 465,
 			'smtp_user' => 'notificaciones.ch@advanzer.com',
-			'smtp_pass' => 'CapitalAdv1',
+			'smtp_pass' => 'CapitalAdv16',
 			'mailtype' => 'html',
 			'charset' => 'utf-8',
 			'newline' => "\r\n",

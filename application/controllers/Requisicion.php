@@ -382,7 +382,7 @@ class Requisicion extends CI_Controller {
 					
 					//$destinatario='perla.valdezadvanzer.com';
 					## harcodeado, por el momento, no existen atributos para diferenciar a la unica persona que recibira el correo
-					$destinatario1 = 'perla.valdez@advanzer.com';					
+                    $destinatario1='melissa.perez@advanzer.com';
 					
 					$mensaje1 = $this->load->view("layout/requisicion/rh",$data,true);
 					
@@ -612,7 +612,8 @@ class Requisicion extends CI_Controller {
 					$mensaje=$this->load->view("layout/requisicion/auth",$data,true);
 					break;
 				case '3': //para capital humano
-					$destinatario='perla.valdez@advanzer.com';
+					//$destinatario='perla.valdez@advanzer.com';
+                    $destinatario='melissa.perez@advanzer.com';
 					$data['requisicion']=$requisicion;
 					$mensaje=$this->load->view("layout/requisicion/rh",$data,true);
 					
@@ -622,7 +623,8 @@ class Requisicion extends CI_Controller {
 					break;
 				case '7': //stand by
 					if($requisicion->usuario_modificacion == $requisicion->solicita) //el mismo solicitante cambió a stand by
-						$destinatario='perla.valdez@advanzer.com';
+						//$destinatario='perla.valdez@advanzer.com';
+                        $destinatario='melissa.perez@advanzer.com';
 					else
 						$destinatario=$this->user_model->searchById($requisicion->solicita)->email;
 					$data['requisicion']=$requisicion;
@@ -667,7 +669,8 @@ class Requisicion extends CI_Controller {
 				
 				case '3': //para capital humano
 					
-					$destinatario='perla.valdez@advanzer.com';
+					//$destinatario='perla.valdez@advanzer.com';
+                    $destinatario='melissa.perez@advanzer.com';
 					$data['requisicion']=$requisicion;
 					$mensaje=$this->load->view("layout/requisicion/rh",$data,true);
 					$this->requisicion_model->setAlert($id,1);
@@ -679,10 +682,12 @@ class Requisicion extends CI_Controller {
 				break;
 				
 				case '7': //stand by
-					if($requisicion->usuario_modificacion == $requisicion->solicita) //el mismo solicitante cambió a stand by
-						$destinatario='perla.valdez@advanzer.com';
-					else
+					if($requisicion->usuario_modificacion == $requisicion->solicita) { //el mismo solicitante cambió a stand by
+                        //$destinatario='perla.valdez@advanzer.com';
+                        $destinatario='melissa.perez@advanzer.com';
+                    }else{
 						$destinatario=$this->user_model->searchById($requisicion->solicita)->email;
+                    }
 					$data['requisicion']=$requisicion;
 					$mensaje=$this->load->view("layout/requisicion/stand_by",$data,true);
 				default: # code...
@@ -711,7 +716,8 @@ class Requisicion extends CI_Controller {
 			$requisicion = $this->requisicion_model->getById($id);
 			
 			if($requisicion->usuario_modificacion == $requisicion->solicita){ //el mismo solicitante cambió a stand by
-				$destinatario='perla.valdez@advanzer.com';
+				//$destinatario='perla.valdez@advanzer.com';
+                $destinatario='melissa.perez@advanzer.com';
 			}else{
 				$destinatario=$this->user_model->searchById($requisicion->solicita)->email;
 			}
@@ -856,7 +862,7 @@ class Requisicion extends CI_Controller {
 			'smtp_host' => 'ssl://smtp.gmail.com',
 			'smtp_port' => 465,
 			'smtp_user' => 'notificaciones.ch@advanzer.com',
-			'smtp_pass' => 'CapitalAdv1',
+			'smtp_pass' => 'CapitalAdv16',
 			'mailtype' => 'html',
 			'charset' => 'utf-8',
 			'newline' => "\r\n",
