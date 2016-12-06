@@ -739,7 +739,7 @@ class Main extends CI_Controller {
 
 	public function recordatorioEvAnual() {
 		$msg="";
-		$evaluacion = $this->evaluacion_model->getEvaluacionById($this->evaluacion_model->getEvaluacionAnualVigente()->id);
+		$evaluacion = $this->evaluacion_model->getEvaluacionById($this->evaluacion_model->getEvaluacionAnualVigente()['id']);
 		if($evaluacion):
 			if($evaluacion->inicio < date('Y-m-d') && $evaluacion->fin > date('Y-m-d')):
 				$msg2 = "Evaluation: '".$evaluacion->nombre."' with id: ".$evaluacion->id."\n";
@@ -765,7 +765,7 @@ class Main extends CI_Controller {
 
 	public function recordatorioDiario() {
 		$msg="";
-		$evaluacion = $this->evaluacion_model->getEvaluacionById($this->evaluacion_model->getEvaluacionAnualVigente()->id);
+		$evaluacion = $this->evaluacion_model->getEvaluacionById($this->evaluacion_model->getEvaluacionAnualVigente()['id']);
 		if($evaluacion)
 			if($evaluacion->inicio == date('Y-m-d') || $evaluacion->fin == date('Y-m-d')):
 				if($evaluacion->fin == date('Y-m-d'))

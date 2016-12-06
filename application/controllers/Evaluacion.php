@@ -125,7 +125,7 @@ class Evaluacion extends CI_Controller {
         $data['colaboradores'] = null;
         $data['info_archivos'] = null;
         $data['evaluacion'] = null;
-        
+
         if($this->evaluacion_model->getEvaluacionAnualVigente()){
             $data['evaluacion'] = $this->evaluacion_model->getEvaluacionById($this->evaluacion_model->getEvaluacionAnual());
             $data['colaboradores'] = $this->evaluacion_model->getEvaluados();
