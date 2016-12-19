@@ -64,7 +64,7 @@
 				<tbody>
 					<tr>
 						<td style="cursor:default;text-align:center;"><?php $cantdias=0; $suma=0; 
-                            if($yo->acumulados){ 
+                            if($yo->acumulados){
                                 //$cantdias = $yo->disponibles + $yo->acumulados->dias_acumulados + $yo->acumulados->dias_dos;
                                 $cantdias = $yo->disponibles + $yo->acumulados->dias_uno + $yo->acumulados->dias_dos;
 								

@@ -8,8 +8,24 @@ class Evaluacion_model extends CI_Model{
 		parent::__construct();
 	}
 
-	function getInfoCaptura() {
-		return $this->db->where(array('accion'=>3,'descripcion'=>$this->session->userdata('tipo')))->get('Bitacora')->result();
+	function getInfoCaptura($idEvaluacion) {
+
+	    //$dato = $this->getEvaluacionAnualVigente();
+        //print_r($dato);exit;
+        //echo empty($dato);exit;
+
+        //print_r($this->getEvaluacionAnualVigente());exit;
+	    //print_r($this->getEvaluacionAnualVigente()->inicio);exit;
+        //print_r($this->getEvaluacionAnual());exit;
+	    //print_r(array('accion'=>3,'descripcion'=>$this->session->userdata('tipo')));
+        //print_r($this->db->where(array('accion'=>3,'descripcion'=>$this->session->userdata('tipo')))->get('Bitacora')->result());exit;
+        //return $this->db->where(array('accion'=>3,'descripcion'=>$this->session->userdata('tipo')))->get('Bitacora')->result();
+
+        $result = $this->evaluacion_model->getEvaluacionById($idEvaluacion);
+        //print_r($result);exit;
+
+        return $this->db->where(array('accion'=>3,'descripcion'=>$this->session->userdata('tipo'),'fecha>='=>$result->inicio,'fecha<='=>$result->fin))->get('Bitacora')->result();
+
 	}
 
 	function getComportamientoByCompetencia($competencia,$posicion,$asignacion=null) {
@@ -176,22 +192,22 @@ class Evaluacion_model extends CI_Model{
 		$evaluacion=$this->getEvaluacionAnualVigente();
 		$this->db->distinct()->select('U.id,U.foto,U.nombre,U.email')->from('Evaluadores Ev')->join('Evaluaciones E','E.id = Ev.evaluacion')
 			->join('Users U','Ev.evaluador = U.id')
-			->where(array('E.anio'=>$evaluacion->anio,'U.estatus'=>1))->order_by('U.nombre');
+			->where(array('E.anio'=>$evaluacion['anio'],'U.estatus'=>1))->order_by('U.nombre');
 		$result = $this->db->get()->result();
 		foreach ($result as $evaluador) :
 			if($estatus == "" && $tipo == ""):
 				$this->db->select('count(id) total')->from('Evaluadores')
-					->where(array('evaluador'=>$evaluador->id,'evaluacion'=>$evaluacion->id,'estatus !='=>2,'anual'=>1));
+					->where(array('evaluador'=>$evaluador->id,'evaluacion'=>$evaluacion['id'],'estatus !='=>2,'anual'=>1));
 				$evaluador->anuales=$this->db->get()->first_row()->total;
 				$this->db->select('count(id) total')->from('Evaluadores')
-					->where(array('evaluador'=>$evaluador->id,'evaluado !='=>$evaluador->id,'evaluacion'=>$evaluacion->id,'estatus !='=>2,'anual'=>0));
+					->where(array('evaluador'=>$evaluador->id,'evaluado !='=>$evaluador->id,'evaluacion'=>$evaluacion['id'],'estatus !='=>2,'anual'=>0));
 				$evaluador->tres60=$this->db->get()->first_row()->total;
 				$this->db->select('count(id) total')->from('Evaluadores')
-					->where(array('evaluador'=>$evaluador->id,'evaluado'=>$evaluador->id,'evaluacion'=>$evaluacion->id,'estatus !='=>2,));
+					->where(array('evaluador'=>$evaluador->id,'evaluado'=>$evaluador->id,'evaluacion'=>$evaluacion['id'],'estatus !='=>2,));
 				$res=$this->db->get();
 				($res->num_rows() > 0) ? $evaluador->auto=$res->first_row()->total : $evaluador->auto=0;
 				$this->db->select('count(E.id) total')->from('Evaluadores E')->join('Evaluaciones Ev','Ev.id = E.evaluacion')
-					->where(array('Ev.anio'=>$evaluacion->anio,'E.evaluador'=>$evaluador->id,'E.evaluado !='=>$evaluador->id,'E.estatus !='=>2,'Ev.tipo'=>0));
+					->where(array('Ev.anio'=>$evaluacion['anio'],'E.evaluador'=>$evaluador->id,'E.evaluado !='=>$evaluador->id,'E.estatus !='=>2,'Ev.tipo'=>0));
 				$res=$this->db->get();
 				($res->num_rows() > 0) ? $evaluador->proyectos=$res->first_row()->total : $evaluador->proyectos=0;
 			else:
@@ -202,23 +218,23 @@ class Evaluacion_model extends CI_Model{
 				switch ($tipo) {
 					case '360':
 						$this->db->select('count(E.id) total')->from('Evaluadores E')
-							->where(array('E.evaluador'=>$evaluador->id,'E.evaluado !='=>$evaluador->id,'E.evaluacion'=>$evaluacion->id,'E.anual'=>0));
+							->where(array('E.evaluador'=>$evaluador->id,'E.evaluado !='=>$evaluador->id,'E.evaluacion'=>$evaluacion['id'],'E.anual'=>0));
 						break;
 					case 'anual':
 						$this->db->select('count(E.id) total')->from('Evaluadores E')
-							->where(array('E.evaluador'=>$evaluador->id,'E.evaluacion'=>$evaluacion->id,'E.anual'=>1));
+							->where(array('E.evaluador'=>$evaluador->id,'E.evaluacion'=>$evaluacion['id'],'E.anual'=>1));
 						break;
 					case 'auto':
 						$this->db->select('count(E.id) total')->from('Evaluadores E')
-							->where(array('E.evaluador'=>$evaluador->id,'E.evaluado'=>$evaluador->id,'E.evaluacion'=>$evaluacion->id));
+							->where(array('E.evaluador'=>$evaluador->id,'E.evaluado'=>$evaluador->id,'E.evaluacion'=>$evaluacion['id']));
 						break;
 					case 'proyecto':
 						$this->db->select('count(E.id) total')->from('Evaluadores E')->join('Evaluaciones Ev','Ev.id = E.evaluacion')
-							->where(array('E.evaluador'=>$evaluador->id,'E.evaluado !='=>$evaluador->id,'Ev.tipo'=>0,'Ev.anio'=>$evaluacion->anio));
+							->where(array('E.evaluador'=>$evaluador->id,'E.evaluado !='=>$evaluador->id,'Ev.tipo'=>0,'Ev.anio'=>$evaluacion['id']));
 						break;
 					default:
 						$this->db->select('count(E.id) total')->from('Evaluadores E')
-							->where(array('E.evaluador'=>$evaluador->id,'E.evaluacion'=>$evaluacion));
+							->where(array('E.evaluador'=>$evaluador->id,'E.evaluacion'=>$evaluacion['id']));
 						break;
 				}
 				$evaluador->resultado=$this->db->get()->first_row()->total;
@@ -400,6 +416,18 @@ class Evaluacion_model extends CI_Model{
 		return false;
 	}
 
+	// Allows get feedback by user
+    function getFeedback($id,$anio) {
+        $result = $this->db
+            //->select('RE.rating,F.id feedback,F.estatus estatus_f')
+            ->from('Resultados_Evaluacion RE')->join('Feedbacks F','F.resultado = RE.id')
+            ->join('Evaluaciones E','E.id = RE.evaluacion')
+            ->where(array('RE.colaborador'=>$id,'E.anio'=>$anio,'F.estatus >'=>0))->get();
+        if($result->num_rows() == 1)
+            return $result->result()[0];
+        return false;
+    }
+
 	function getEvaluacionesByEvaluador($evaluador) {
 		if($ev = $this->getActiveEvaluation())
 			if($evaluacion=$this->getEvaluacionById($ev->id)):
@@ -503,9 +531,13 @@ class Evaluacion_model extends CI_Model{
 		return false;
 	}
 
-	function getResultadosByColaborador($colaborador) {
-		$evaluacion=$this->getEvaluacionAnual();
-		($evaluacion) ? $anio=$this->getEvaluacionById($evaluacion)->anio : $anio=null;
+	function getResultadosByColaborador($colaborador, $evaluacion = null) {
+
+	    if(empty($evaluacion)){
+            $evaluacion=$this->getEvaluacionAnual();
+        }
+
+        ($evaluacion) ? $anio=$this->getEvaluacionById($evaluacion)->anio : $anio=null;
 		$res=$this->db->from('Resultados_Evaluacion')->where(array('colaborador'=>$colaborador->id,'evaluacion'=>$evaluacion))->get();
 		if($res->num_rows() == 1){
 			$colaborador->rating = $res->first_row()->rating;
@@ -639,7 +671,7 @@ class Evaluacion_model extends CI_Model{
 	function calculaResultado($asignacion) {
 		$ev = $this->getEvaluacionAnualVigente();
 		$r_anual=0;
-		if($evaluacion=$this->getEvaluacionById($ev->id)):
+		if($evaluacion=$this->getEvaluacionById($ev['id'])):
 			$posicion=$this->getPosicionByColaborador($asignacion->evaluado);
 			$jefe=$this->db->select('evaluador')->where(array('evaluado'=>$asignacion->evaluado,'anual'=>1,'evaluacion'=>$evaluacion->id))
 				->get('Evaluadores');
@@ -1084,12 +1116,41 @@ class Evaluacion_model extends CI_Model{
 			return false;
 	}
 
+	// Check if there are current Evaluation
 	function getEvaluacionAnualVigente() {
-		$result = $this->db->select('MAX(id) id,anio')->where_in('estatus',array(1))
+		$result = $this->db->select('MAX(id) id, anio, inicio,fin')->where_in('estatus',array(1))
 			->where(array('tipo'=>1,'inicio <='=>date('Y-m-d'),'fin >='=>date('Y-m-d')))->get('Evaluaciones');
-		if($result->num_rows() != 0)
-			return $result->first_row();
-		return false;
+
+
+
+        $rows = $result->first_row();
+        $row = json_decode(json_encode($rows), true);
+        //print_r($row);
+        //echo empty($row); exit;
+
+        // clean out empty values before checking (generally done to prevent exploding weird strings)
+        foreach ($row as $key => $value) {
+            if (empty($value)) {
+                unset($row[$key]);
+            }
+        }
+
+        /*if (empty($row)) {
+            echo "empty array";
+        }*/
+
+        //print_r($row);
+        //echo empty($row); exit;
+
+
+		//if($result->num_rows() != 0)
+        if (!empty($row)){
+			//return $result->first_row();
+            return $row;
+        }else{
+            return false;
+        }
+
 	}
 	
 	function getEvaluacionAnual() {
@@ -1131,7 +1192,7 @@ class Evaluacion_model extends CI_Model{
 	function check_for_evaluations() {
 		$new=strtotime('-1 day',strtotime(date('Y-m-d')));
 		$fin=date('Y-m-d',$new);
-		$result = $this->db->from('Evaluaciones')->where(array('estatus'=>1,'fin'=>$fin))->get();
+		$result = $this->db->from('Evaluaciones')->where(array('estatus'=>1,'fin<='=>$fin))->get();
 		if($result->num_rows() != 0)
 			return $result->result();
 		return false;

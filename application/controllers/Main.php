@@ -116,6 +116,7 @@ class Main extends CI_Controller {
     				'direccion'=>$result->direccion,
     				'tipo'=>$result->tipo,
     				'periodo_edicion'=>$periodo_edicion,
+					'evaluacion' => ($this->evaluacion_model->getEvaluacionById($this->evaluacion_model->getEvaluacionAnual())->fin < date('Y-m-d'))?false:true,
 					
 					// asignacion de permisos
 					'permisos' => $permisos
@@ -202,6 +203,7 @@ class Main extends CI_Controller {
     				'direccion'=>$result->direccion,
     				'tipo'=>$result->tipo,
     				'periodo_edicion'=>$periodo_edicion,
+					'evaluacion' => ($this->evaluacion_model->getEvaluacionById($this->evaluacion_model->getEvaluacionAnual()))?true:false,
 					
 					// asignacion de permisos
 					'permisos' => $permisos
@@ -231,6 +233,7 @@ class Main extends CI_Controller {
     	$id=$this->session->userdata('id');
     	$data['colaborador'] = $this->user_model->searchById($this->session->userdata('id'));
     	$data['info'] = $this->user_model->getHistorialById($id);
+		//print_r($data['info']);exit;
     	$this->layout->title('Advanzer - Mi Historial de Desempeño');
     	$this->layout->view('main/historial',$data);
     }
@@ -238,19 +241,108 @@ class Main extends CI_Controller {
     public function load_historial() {
     	$id=$this->session->userdata('id');
     	$anio=$this->input->post('anio');
-    	$info=$this->user_model->getHistorialByIdAnio($id,$anio);
-    	if(isset($info->rating)):
-    	?>
-    		<span class="text-muted">Rating Obtenido: </span><?= $info->rating;?>
-    	<?php endif;
+		$info=$this->evaluacion_model->getFeedback($id,$anio);
+
+		if(!empty($info)){//print_r($info);
+			$evaluaciones = $this->evaluacion_model->getResultadosByColaborador($this->user_model->searchById($id),$info->evaluacion);
+			?>
+			<br><hr>
+			<div class="row" align="center">
+				<div>
+					<div class="col-md-3">Rating: <span><?= $info->rating;?></span></div>
+					<div class="col-md-3">Gastos de Viaje: <span class="<?php if(isset($info->cumple_gastos) && $info->cumple_gastos == "SI") echo"glyphicon glyphicon-ok"; else echo"glyphicon glyphicon-remove";?>"></span></div>
+					<div class="col-md-3">Asignaciones en Harvest: <span class="<?php if(isset($info->cumple_harvest) && $info->cumple_harvest == "SI") echo"glyphicon glyphicon-ok"; else echo"glyphicon glyphicon-remove";?>"></span></div>
+					<div class="col-md-3">Actualización de CV: <span class="<?php if(isset($info->cumple_cv) && $info->cumple_cv == "SI") echo"glyphicon glyphicon-ok"; else echo"glyphicon glyphicon-remove";?>"></span></div></h4>
+				</div>
+			</div><hr>
+			<div class="row" align="center">
+				<div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label for="fortalezas">Fortalezas/Logros:</label>
+							<p style="text-align:center;font-size: 13pt;"><?= $info->fortalezas;?></p>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label for="oportunidad">Área(s) de Oportunidad:</label>
+							<p style="text-align:center;font-size: 13pt;"><?= $info->oportunidad;?></p>
+						</div>
+					</div>
+				</div>
+			</div><hr>
+			<div class="row" align="center">
+				<div>
+					<div class="col-md-12">
+						<div class="form-group">
+							<label for="compromisos">Compromisos:</label>
+							<p style="text-align:center;font-size: 13pt;"><?= $info->compromisos;?></p>
+						</div>
+					</div>
+				</div>
+			</div><hr><br>
+
+			<?php if($info->estatus == 2): ?>
+				<h3><b>Detalle de tu evaluación:</b></h3>
+				<table id="tbl" align="center" class="table table-hover table-condensed table-striped">
+					<thead>
+					<tr>
+						<th data-halign="center">Evaluación</th>
+						<th data-halign="center">Comentarios</th>
+					</tr>
+					</thead>
+					<tbody data-link="row">
+					<?php foreach ($evaluaciones->evaluadores as $evaluador):?>
+						<tr>
+							<td><small><a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion");?>">Anual</a></small></td>
+							<td><small><?php if($evaluador->comentarios) echo $evaluador->comentarios;?></small></td>
+						</tr>
+					<?php endforeach;
+					if(isset($evaluaciones->evaluadores360) && count($evaluaciones->evaluadores360) > 0)
+						foreach ($evaluaciones->evaluadores360 as $evaluador):?>
+							<tr>
+								<td><small><a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion");?>">360</a></small></td>
+								<td><small><?= $evaluador->comentarios;?></small></td>
+							</tr>
+						<?php endforeach;
+					if(isset($evaluaciones->evaluadoresProyecto) && count($evaluaciones->evaluadoresProyecto) > 0)
+						foreach ($evaluaciones->evaluadoresProyecto as $evaluador):?>
+							<tr>
+								<td><small><a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/$evaluador->asignacion/1");?>">
+											Proyecto - <?= $evaluador->evaluacion;?></a></small></td>
+								<td><small><?php if($evaluador->comentarios) echo $evaluador->comentarios;?></small></td>
+							</tr>
+						<?php endforeach; ?>
+					<tr>
+						<td><small><?php if($evaluaciones->auto):?>
+									<a target="_blank" href="<?= base_url("evaluacion/detalle_asignacion/".$evaluaciones->auto->asignacion);?>">
+										AUTOEVALUACIÓN</a>
+								<?php else: ?>AUTOEVALUACIÓN
+								<?php endif;?>
+							</small></td>
+						<td><small><?php if($evaluaciones->auto) echo $evaluaciones->auto->comentarios;?></small></td>
+					</tr>
+					</tbody>
+				</table><br>
+			<?php endif; ?>
+
+			<?php
+		}else{
+			$info=$this->user_model->getHistorialByIdAnio($id,$anio);
+
+			?>
+				<br><br>
+				<span class="text-muted">Rating Obtenido: </span><?= $info->rating;?>
+			<?php
+		}
     }
     public function load_graph() {
     	$resumen=new stdClass();
     	$id=$this->session->userdata('id');
 		$anio=$this->input->post('anio');
-    	if($this->evaluacion_model->hasFeedback($anio,$id)):
+    	//if($this->evaluacion_model->hasFeedback($anio,$id)):
     		$resumen=$this->evaluacion_model->getResumen($anio,$id);
-    	endif;
+    	//endif;
     	echo json_encode($resumen, JSON_NUMERIC_CHECK);
     }
 
@@ -320,8 +412,8 @@ class Main extends CI_Controller {
 		$this->email->to("micaela.llano@advanzer.com");
 
 		/*$this->email->to("micaela.llano@advanzer.com");
-		$this->email->bcc(array('jesus.salas@advanzer.com', 'enrique.bernal@advanzer.com'));
-		$this->email->to("antonio.baez@advanzer.com");*/
+		$this->email->bcc(array('jesus.salas@advanzer.com', 'enrique.bernal@advanzer.com'));*/
+		//$this->email->to("antonio.baez@advanzer.com");
 		
 		$this->email->subject('Captura de Compromisos Internos');
 		$this->email->message('<h2>Se ha adjuntado el archivo de soporte de la captura de Compromisos Internos</h2><hr>');
@@ -349,10 +441,11 @@ class Main extends CI_Controller {
 
 		$objSheet = $objPHPExcel->getActiveSheet(0);
 		$objSheet->setTitle('Junta_Anual');
-		$objSheet->getStyle('A1:Q1')->getFont()->setBold(true)->setName('Verdana')->setSize(11)->getColor()->setRGB('FFFFFF');
-		$objSheet->getStyle('A1:Q1')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-		$objSheet->getStyle('A1:Q1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-		$objSheet->getStyle('A1:Q1')->getFill('')->applyFromArray(array('type'=>PHPExcel_Style_Fill::FILL_SOLID, 'startcolor'=>array('rgb'=>'000A75')));
+		$objSheet->getStyle('A1:R1')->getFont()->setBold(true)->setName('Verdana')->setSize(11)->getColor()->setRGB('FFFFFF');
+		$objSheet->getStyle('A1:R1')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+		$objSheet->getStyle('A1:R1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		//$objSheet->getStyle('A1:R1')->getFill('')->applyFromArray(array('type'=>PHPExcel_Style_Fill::FILL_SOLID, 'startcolor'=>array('rgb'=>'000A75')));
+        $objSheet->getStyle('A1:R1')->getFill('')->applyFromArray(array('type'=>PHPExcel_Style_Fill::FILL_SOLID, 'startcolor'=>array('rgb'=>'C0D339')));
 		$objSheet->getRowDimension(1)->setRowHeight(50);
 
 		// write header
@@ -364,15 +457,16 @@ class Main extends CI_Controller {
 			$objSheet->getCell('F1')->setValue('Evaluadores');
 			$objSheet->getCell('G1')->setValue('Competencias');
 			$objSheet->getCell('H1')->setValue('Responsabilidades');
-			$objSheet->getCell('I1')->setValue('Promedio');
+			$objSheet->getCell('I1')->setValue('Resultado');
 			$objSheet->getCell('J1')->setValue('Rating 2012');
 			$objSheet->getCell('K1')->setValue('Rating 2013');
 			$objSheet->getCell('L1')->setValue('Rating 2014');
 			$objSheet->getCell('M1')->setValue('Rating 2015');
-			$objSheet->getCell('N1')->setValue('Encargado de Feedback');
-			$objSheet->getCell('O1')->setValue('Comentarios de Desempeño');
-			$objSheet->getCell('P1')->setValue('Observaciones de la Junta');
-			$objSheet->getCell('Q1')->setValue('Acciones a Tomar');
+			$objSheet->getCell('N1')->setValue('Rating 2016');
+			$objSheet->getCell('O1')->setValue('Encargado de Feedback');
+			$objSheet->getCell('P1')->setValue('Comentarios de Desempeño');
+			$objSheet->getCell('Q1')->setValue('Observaciones de la Junta');
+			$objSheet->getCell('R1')->setValue('Acciones a Tomar');
 
 		$column=1;
 		foreach ($colaboradores as $colaborador) :
@@ -380,18 +474,22 @@ class Main extends CI_Controller {
 
 			$total_c=0;
 			$total_r=0;
-			if($colaborador->nivel_posicion<=5)
+			if($colaborador->nivel_posicion<=5){
 				$total_c= ($colaborador->autoevaluacion + $colaborador->tres60 + $colaborador->competencias)/3;
-			else
+			}else{
 				$total_c= ($colaborador->autoevaluacion + $colaborador->competencias)/2;
-			if(isset($colaborador->proyectos))
+			}if(isset($colaborador->proyectos)){
 				$total_r=($colaborador->responsabilidades+$colaborador->proyectos)/2;
-			else
+			}else{
 				$total_r=$colaborador->responsabilidades;
+			}
 
 			($res=$this->user_model->getHistorialByIdAnio($colaborador->id,'2012')) ? $colaborador->rating_2012=$res->rating : $colaborador->rating_2012=null;;
 			($res=$this->user_model->getHistorialByIdAnio($colaborador->id,'2013')) ? $colaborador->rating_2013=$res->rating : $colaborador->rating_2013=null;;
 			($res=$this->user_model->getHistorialByIdAnio($colaborador->id,'2014')) ? $colaborador->rating_2014=$res->rating : $colaborador->rating_2014=null;;
+			($res=$this->user_model->getHistorialByIdAnio($colaborador->id,'2015')) ? $colaborador->rating_2015=$res->rating : $colaborador->rating_2015=null;;
+			($res=$this->user_model->getHistorialByIdAnio($colaborador->id,'2016')) ? $colaborador->rating_2016=$res->rating : $colaborador->rating_2016=null;;
+
 			$evaluadores="";
 			$comentarios="";
 			foreach ($colaborador->evaluadores as $evaluador) :
@@ -427,7 +525,9 @@ class Main extends CI_Controller {
 			$objSheet->getCell('J'.$column)->setValue($colaborador->rating_2012);
 			$objSheet->getCell('K'.$column)->setValue($colaborador->rating_2013);
 			$objSheet->getCell('L'.$column)->setValue($colaborador->rating_2014);
-			$objSheet->getCell('O'.$column)->setValue($comentarios);
+			$objSheet->getCell('M'.$column)->setValue($colaborador->rating_2015);
+			$objSheet->getCell('N'.$column)->setValue($colaborador->rating_2016);
+			$objSheet->getCell('P'.$column)->setValue($comentarios);
 			$objSheet->getStyle('A'.$column.':'.'Q'.$column)->getAlignment()->setWrapText(true);
 			$objSheet->getRowDimension($column)->setRowHeight(-1);
 		endforeach;
@@ -436,18 +536,23 @@ class Main extends CI_Controller {
 		$objSheet->getStyle('A2:Q'.$column)->getFont()->setSize(12);
 		$objSheet->getStyle('G2:H'.$column)->getFont()->setSize(16);
 		$objSheet->getStyle('I2:I'.$column)->getFont()->setSize(18);
-		$objSheet->getStyle('M2:M'.$column)->getFont()->setSize(24);
-		$objSheet->getStyle('A2:Q'.$column)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+        $objSheet->getStyle('J2:J'.$column)->getFont()->setSize(18);
+        $objSheet->getStyle('K2:K'.$column)->getFont()->setSize(18);
+        $objSheet->getStyle('L2:L'.$column)->getFont()->setSize(18);
+        $objSheet->getStyle('M2:M'.$column)->getFont()->setSize(18);
+        $objSheet->getStyle('N2:N'.$column)->getFont()->setSize(18);
+		$objSheet->getStyle('P2:P'.$column)->getFont()->setSize(18);
+		$objSheet->getStyle('A2:R'.$column)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
 		// create some borders
 			// first, create the whole grid around the table
-			$objSheet->getStyle('A1:Q'.$column)->getBorders()->
+			$objSheet->getStyle('A1:R'.$column)->getBorders()->
 			getAllBorders()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 			// create medium border around the table
-			$objSheet->getStyle('A1:Q'.$column)->getBorders()->
+			$objSheet->getStyle('A1:R'.$column)->getBorders()->
 			getOutline()->setBorderStyle(PHPExcel_Style_Border::BORDER_MEDIUM);
 			// create a medium border on the header line
-			$objSheet->getStyle('A1:Q1')->getBorders()->
+			$objSheet->getStyle('A1:R1')->getBorders()->
 			getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_MEDIUM);
 
 		// autosize the columns
@@ -464,10 +569,11 @@ class Main extends CI_Controller {
 			$objSheet->getColumnDimension('K')->setAutoSize(true);
 			$objSheet->getColumnDimension('L')->setAutoSize(true);
 			$objSheet->getColumnDimension('M')->setAutoSize(true);
-			$objSheet->getColumnDimension('N')->setWidth(20);
+			$objSheet->getColumnDimension('N')->setAutoSize(true);
 			$objSheet->getColumnDimension('O')->setWidth(40);
-			$objSheet->getColumnDimension('P')->setWidth(40);
+			$objSheet->getColumnDimension('P')->setWidth(60);
 			$objSheet->getColumnDimension('Q')->setWidth(40);
+			$objSheet->getColumnDimension('R')->setWidth(40);
 
 
 		//tabla de resumen en hoja principal
@@ -595,8 +701,8 @@ class Main extends CI_Controller {
 		$this->email->to("micaela.llano@advanzer.com");
 
 		/*$this->email->to("micaela.llano@advanzer.com");
-		$this->email->bcc(array('jesus.salas@advanzer.com', 'enrique.bernal@advanzer.com'));
-		$this->email->to("antonio.baez@advanzer.com");*/
+		$this->email->bcc(array('jesus.salas@advanzer.com', 'enrique.bernal@advanzer.com'));*/
+		//$this->email->to("antonio.baez@advanzer.com");
 
 		$this->email->subject('Reporte de Evaluación para Junta Anual');
 		$this->email->message('<h2>Se ha generado el archivo de Reporte de Evaluación para la Junta Anual</h2><hr>');
@@ -633,7 +739,7 @@ class Main extends CI_Controller {
 
 	public function recordatorioEvAnual() {
 		$msg="";
-		$evaluacion = $this->evaluacion_model->getEvaluacionById($this->evaluacion_model->getEvaluacionAnualVigente()->id);
+		$evaluacion = $this->evaluacion_model->getEvaluacionById($this->evaluacion_model->getEvaluacionAnualVigente()['id']);
 		if($evaluacion):
 			if($evaluacion->inicio < date('Y-m-d') && $evaluacion->fin > date('Y-m-d')):
 				$msg2 = "Evaluation: '".$evaluacion->nombre."' with id: ".$evaluacion->id."\n";
@@ -659,7 +765,7 @@ class Main extends CI_Controller {
 
 	public function recordatorioDiario() {
 		$msg="";
-		$evaluacion = $this->evaluacion_model->getEvaluacionById($this->evaluacion_model->getEvaluacionAnualVigente()->id);
+		$evaluacion = $this->evaluacion_model->getEvaluacionById($this->evaluacion_model->getEvaluacionAnualVigente()['id']);
 		if($evaluacion)
 			if($evaluacion->inicio == date('Y-m-d') || $evaluacion->fin == date('Y-m-d')):
 				if($evaluacion->fin == date('Y-m-d'))
@@ -705,10 +811,13 @@ class Main extends CI_Controller {
 		$this->email->from('notificaciones.ch@advanzer.com','Portal de Evaluación');
 		$this->email->to($destinatario);
 		
-		/*$this->email->to("micaela.llano@advanzer.com");
-		$this->email->bcc(array('enrique.bernal@advanzer.com','jesus.salas@advanzer.com'));
-		$this->email->reply_to('micaela.llano@advanzer.com');
-		$this->email->to("antonio.baez@advanzer.com");*/ 
+		//$this->email->to("antonio.baez@advanzer.com");
+		//$this->email->bcc("micaela.llano@advanzer.com");
+		//$this->email->to("micaela.llano@advanzer.com");
+		/*$this->email->bcc(array('enrique.bernal@advanzer.com','jesus.salas@advanzer.com'));
+		$this->email->reply_to('micaela.llano@advanzer.com');*/
+		//$this->email->to("antonio.baez@advanzer.com");
+
 		
 		$this->email->subject('Aviso de Evaluación');
 		$this->email->message($mensaje);
